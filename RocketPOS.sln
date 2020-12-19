@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketPOS", "eRestaurant\RocketPOS.csproj", "{AF57515E-B8A6-4C29-A871-8780F60E9524}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketPOS.Repository", "eRestaurant.Repository\RocketPOS.Repository.csproj", "{ECB5D2F7-9462-44C3-89A9-1D57A9B4FED0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketPOS.Interface", "eRestaurant.Interface\RocketPOS.Interface.csproj", "{12C02AFC-E2CD-44B4-BCC5-F24C16C7EF2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketPOS.Models", "eRestaurant.Models\RocketPOS.Models.csproj", "{2640D2FA-B574-42D9-BB07-CFA0D37374BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RocketPOS.Services", "RocketPOS.Services\RocketPOS.Services.csproj", "{9BB4C2D1-1009-42C6-9FCC-A8B331AB9481}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RocketPOS.Framework", "RocketPOS.Framework\RocketPOS.Framework.csproj", "{4C73ACC0-0894-4BDA-A044-EDBFC75A77A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF57515E-B8A6-4C29-A871-8780F60E9524}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF57515E-B8A6-4C29-A871-8780F60E9524}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF57515E-B8A6-4C29-A871-8780F60E9524}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF57515E-B8A6-4C29-A871-8780F60E9524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECB5D2F7-9462-44C3-89A9-1D57A9B4FED0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECB5D2F7-9462-44C3-89A9-1D57A9B4FED0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECB5D2F7-9462-44C3-89A9-1D57A9B4FED0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECB5D2F7-9462-44C3-89A9-1D57A9B4FED0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12C02AFC-E2CD-44B4-BCC5-F24C16C7EF2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C02AFC-E2CD-44B4-BCC5-F24C16C7EF2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C02AFC-E2CD-44B4-BCC5-F24C16C7EF2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C02AFC-E2CD-44B4-BCC5-F24C16C7EF2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2640D2FA-B574-42D9-BB07-CFA0D37374BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2640D2FA-B574-42D9-BB07-CFA0D37374BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2640D2FA-B574-42D9-BB07-CFA0D37374BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2640D2FA-B574-42D9-BB07-CFA0D37374BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BB4C2D1-1009-42C6-9FCC-A8B331AB9481}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BB4C2D1-1009-42C6-9FCC-A8B331AB9481}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BB4C2D1-1009-42C6-9FCC-A8B331AB9481}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BB4C2D1-1009-42C6-9FCC-A8B331AB9481}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C73ACC0-0894-4BDA-A044-EDBFC75A77A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C73ACC0-0894-4BDA-A044-EDBFC75A77A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C73ACC0-0894-4BDA-A044-EDBFC75A77A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C73ACC0-0894-4BDA-A044-EDBFC75A77A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {077D02BF-BE8F-4855-BEA9-36A1588E7C27}
+	EndGlobalSection
+EndGlobal

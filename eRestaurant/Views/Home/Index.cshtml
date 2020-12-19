@@ -1,0 +1,10 @@
+﻿@model RocketPOS.Models.CountryModel
+@using RocketPOS.Framework
+<!DOCTYPE html>
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Forms</h4>
+            <select asp-for="CountryDropdown" asp-items="Html.GetEnumSelectList<Country>()"></select>
+        </div>
+    </div>

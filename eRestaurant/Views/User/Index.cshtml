@@ -1,0 +1,122 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.UserModel>
+@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@{
+    ViewData["Title"] = "User";
+}
+<h2>User</h2>
+<p>
+    <a asp-action="User" class="pull-right btn btn-primary">Create New</a>
+</p>
+
+@if (!string.IsNullOrEmpty(ViewBag.msg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.msg");
+    </script>
+}
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OutletId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ThumbToken)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RollTypeId)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.LastLogin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastLogout)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IPAdress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Counter)
+            </th>*@
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var tm = "#myModal" + item.Id;
+            var mid = "myModal" + item.Id;
+
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OutletId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Username)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Password)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ThumbToken)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RollTypeId)
+                </td>
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.LastLogin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastLogout)
+                </td>*@
+                @*<td>
+                    @Html.DisplayFor(modelItem => item.IPAdress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Counter)
+                </td>*@
+                <td>
+                    <a asp-action="User" class="btn btn-primary" asp-route-Id="@item.Id">Edit</a> |
+                    <a class="btn btn-primary" data-toggle="modal" data-target="@tm">Delete</a>
+                </td>
+            </tr>
+            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                        </div>
+                        <div class="modal-body">
+                            @SharedLocalizer["DeleteConfrim"];
+                            @*Are you sure want to delete this item?*@
+                        </div>
+                        <div class="modal-footer">
+                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </tbody>
+</table>

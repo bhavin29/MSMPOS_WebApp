@@ -1,0 +1,173 @@
+﻿using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using RocketPOS.Models;
+using RocketPOS.Interface.Services;
+using RocketPOS.Interface.Repository;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
+
+namespace RocketPOS.Services
+{
+    public class DropDownService : IDropDownService
+    {
+        private readonly IDropDownRepository _dropDownRepository;
+
+        public DropDownService(IDropDownRepository dropDownRepository)
+        {
+            _dropDownRepository = dropDownRepository;
+        }
+
+        public List<SelectListItem> GetIngredientCategoryList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetIngredientCategoryList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+
+        public List<SelectListItem> GetUnitList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetUnitList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+        public List<SelectListItem> GetOutletList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetOutletList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+        public List<SelectListItem> GetStoreList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetStoreList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+      
+        public List<SelectListItem> GetFoodMenuList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+
+        public List<SelectListItem> GetFoodMenuCategoryList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuCategoryList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+
+        public List<SelectListItem> GetEmployeeList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetEmployeeList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
+
+        public List<SelectListItem> GetSupplierList()
+        {
+            List<SelectListItem> supplierList = new List<SelectListItem>();
+
+            supplierList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> supplierListResult = _dropDownRepository.GetSupplierList().ToList();
+            if (supplierListResult != null && supplierListResult.Count > 0)
+            {
+                foreach (var item in supplierListResult)
+                {
+                    supplierList.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return supplierList;
+        }
+
+        public List<SelectListItem> GetIngredientList()
+        {
+            List<SelectListItem> ingredientList = new List<SelectListItem>();
+
+            ingredientList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> ingredientListResult = _dropDownRepository.GetIngredientList().ToList();
+            if (ingredientListResult != null && ingredientListResult.Count > 0)
+            {
+                foreach (var item in ingredientListResult)
+                {
+                    ingredientList.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return ingredientList;
+        }
+    }
+}

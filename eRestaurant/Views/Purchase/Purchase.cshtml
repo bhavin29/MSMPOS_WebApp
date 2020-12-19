@@ -1,0 +1,249 @@
+﻿@model RocketPOS.Models.PurchaseModel
+
+@{
+    ViewData["Title"] = "Purchase";
+}
+
+<h1>Purchase</h1>
+<hr />
+
+<form asp-action="SavePurchase" method="post" role="form">
+    <div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="ReferenceNo" class="control-label"></label>
+                    <input asp-for="ReferenceNo" class="form-control" />
+                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="SupplierList" class="control-label">Supplier</label>
+                    <select asp-for="SupplierId"
+                            class="form-control"
+                            asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))">
+                    </select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                    <select asp-for="IngredientId"
+                            class="form-control"
+                            asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                    </select>
+                    <span asp-validation-for="IngredientId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div >
+                    <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                    <button style="margin-right:5px" id="addMore" class="btn btn-primary pull-right">Add New</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3 style="margin-top:10px">Order Details</h3>
+
+    <table id="detailsTable" class="table">
+        <thead>
+            <tr>
+                <th style="width:35%">Product</th>
+                <th style="width:20%">Unit Price</th>
+                <th style="width:15%">Quantity</th>
+                <th style="width:20%">Amount</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div id="orderDetailsModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Order Details</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <input type="hidden" id="detailId" />
+                            <label class="control-label col-md-3">
+                                Product Name
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" id="productName" placeholder="Product Name" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-3">
+                                Price
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" id="price" placeholder="Product Price" class="form-control" />
+                            </div>
+                            <label class="control-label col-md-2">
+                                Quanity
+                            </label>
+                            <div class="col-md-3">
+                                <select class="form-control" id="quantity">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 col-lg-offset-9">
+                                <a id="addToList" class="btn btn-default">Add To List</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="saveOrder" type="submit" class="btn btn-primary">Save Order</button>
+    </div>
+</form>
+
+@section scripts {
+    <script>
+
+          var saveUrl = '@Url.Action("SavePurchase", "Purchase", new { area=""})';
+
+
+        function saveOrder(data) {
+            console.log(data);
+                return $.ajax({
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    type: 'POST',
+                    url: saveUrl,
+                    data: data
+                });
+        }
+
+         $("#saveOrder").click(function (e) {
+                e.preventDefault();
+
+                var orderArr = [];
+                orderArr.length = 0;
+
+                $.each($("#detailsTable tbody tr"), function () {
+                    orderArr.push({
+                        inIngredientCode : 0,
+                        UnitPrice: 20.00,
+                        Quantity: 5.00,
+                        Total: 100.00
+
+                        //ProductName: $(this).find('td:eq(0)').html(),
+                        //Quantity: $(this).find('td:eq(2)').html(),
+                        //Amount: $(this).find('td:eq(1)').html()
+                    });
+                });
+
+                     var data = JSON.stringify({
+                               ReferenceNo: 1,
+                               SupplierId: 1,
+                               IngredientId: 1,
+                               Date: "0001-01-01T00:00:00",
+                               GrandTotal: 50.00,
+                               Due: 10.00,
+                               Paid: 40.00,
+                               SupplierList: [],
+                               IngredientList: [],
+                            //CustomerName: $("#customerName").val(),
+                            //Address: $("#address").val(),
+                            PurchaseDetails: orderArr
+                     });
+            
+                $.when(saveOrder(data)).then(function (response) {
+                    console.log(response);
+                }).fail(function (err) {
+                    console.log(err);
+                });
+            });
+
+        $("#addNewItem").click(function (e) {
+            e.preventDefault();
+            $("#customerName").val('');
+            $("#address").val('');
+            $("#orderMasterId").val('');
+            $("#detailsTable tbody tr").remove();
+            $("#saveOrder").html("Save Order");
+            $('#newOrderModal').modal('show');
+        });
+
+        $("#addMore").click(function (e) {
+            e.preventDefault();
+            $('#orderDetailsModal').modal('show');
+        });
+
+        $("#addToList").click(function (e) {
+            e.preventDefault();
+
+            if ($.trim($("#productName").val()) == "" || $.trim($("#price").val()) == "" || $.trim($("#quantity").val()) == "") return;
+
+            var productName = $("#productName").val(),
+                price = $("#price").val(),
+                quantity = $("#quantity").val(),
+                detailsTableBody = $("#detailsTable tbody");
+
+            var productItem = '<tr><td>' + productName + '</td><td>' + price + '</td><td>' + quantity + '</td><td>' + (parseFloat(price) * parseInt(quantity)) + '</td><td><a data-itemId="0" href="#" class="deleteItem">Remove</a></td></tr>';
+            detailsTableBody.append(productItem);
+             $('#orderDetailsModal').modal('hide');
+            clearItem();
+        });
+
+          $(document).on('click', 'a.deleteItem', function (e) {
+                e.preventDefault();
+                var $self = $(this);
+                if ($(this).attr('data-itemId') == "0") {
+                    $(this).parents('tr').css("background-color", "#FF3700").fadeOut(800, function () {
+                        $(this).remove();
+                    });
+                } else {
+                    $.when(deleteOrderItem($(this).attr('data-itemId'))).then(function (res) {
+                        $self.parents('tr').css("background-color", "#FF3700").fadeOut(800, function () {
+                            $(this).remove();
+                        });
+                    }).fail(function (err) {
+
+                    });
+                }
+            });
+         function clearItem() {
+                $("#productName").val('');
+                $("#price").val('');
+                $("#quantity").val('');
+            }
+    </script>
+}

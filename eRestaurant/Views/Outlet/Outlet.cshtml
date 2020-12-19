@@ -1,0 +1,155 @@
+﻿@model RocketPOS.Models.OutletModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    //  ViewData["Title"] = "Outlet";
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add Outlet</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Outlet" method="post" role="form">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @*<div class="form-group">
+                                        <label asp-for="Id" class="control-label"></label>
+                                        <input asp-for="Id" class="form-control" />
+                                        <span asp-validation-for="Id" class="text-danger"></span>
+                                    </div>
+                                <div class="form-group">
+                                    <label asp-for="StoreId" class="control-label"></label>
+                                    <input asp-for="StoreId" class="form-control" />
+                                    <span asp-validation-for="StoreId" class="text-danger"></span>
+                                </div>*@
+                                <div class="form-group">
+                                    <label asp-for="StoreList" class="control-label">Store</label>
+                                    @if (Model != null)
+                                    {
+                                        <select asp-for="StoreId" class="form-control"
+                                                asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                                        </select>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OutletName" class="control-label"></label>
+                                    <input asp-for="OutletName" class="form-control" />
+                                    <span asp-validation-for="OutletName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OutletAddress1" class="control-label"></label>
+                                    <input asp-for="OutletAddress1" class="form-control" />
+                                    <span asp-validation-for="OutletAddress1" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OutletAddress2" class="control-label"></label>
+                                    <input asp-for="OutletAddress2" class="form-control" />
+                                    <span asp-validation-for="OutletAddress2" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OutletPhone" class="control-label"></label>
+                                    <input asp-for="OutletPhone" class="form-control" />
+                                    <span asp-validation-for="OutletPhone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="OutletEmail" class="control-label"></label>
+                                    <input asp-for="OutletEmail" class="form-control" />
+                                    <span asp-validation-for="OutletEmail" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="InvoiceHeader" class="control-label"></label>
+                                    <input asp-for="InvoiceHeader" class="form-control" />
+                                    <span asp-validation-for="InvoiceHeader" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="InvoiceFooter" class="control-label"></label>
+                                    <input asp-for="InvoiceFooter" class="form-control" />
+                                    <span asp-validation-for="InvoiceFooter" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsCollectTax" class="control-label"></label>
+                                    <input asp-for="IsCollectTax" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsPreorPostPayment" class="control-label"></label>
+                                    <input asp-for="IsPreorPostPayment" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsActive" class="control-label"></label>
+                                    <input asp-for="IsActive" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsLock" class="control-label"></label>
+                                    <input asp-for="IsLock" class="form-control" />
+                                </div>
+                                @*<div class="form-group">
+                                        <label asp-for="UserId" class="control-label"></label>
+                                        <input asp-for="UserId" class="form-control" />
+                                        <span asp-validation-for="UserId" class="text-danger"></span>
+                                    </div>*@
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                    }
+                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "/../Outlet/Index";
+        });
+    </script>
+}

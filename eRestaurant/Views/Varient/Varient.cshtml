@@ -1,0 +1,113 @@
+﻿@model RocketPOS.Models.VarientModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Varient";
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add Varient</h2>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Varient">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @*<div class="form-group">
+                                            <label asp-for="Id" class="control-label"></label>
+                                            <input asp-for="Id" class="form-control" />
+                                            <span asp-validation-for="Id" class="text-danger"></span>
+                                        </div>
+                                    <div class="form-group">
+                                        <label asp-for="FoodId" class="control-label"></label>
+                                        <input asp-for="FoodId" class="form-control" />
+                                        <span asp-validation-for="FoodId" class="text-danger"></span>
+                                    </div>*@
+                                <div class="form-group">
+                                    <label asp-for="FoodMenuList" class="control-label">Food Menu</label>
+                                    @if (Model != null)
+                                    {
+                                        <select asp-for="FoodId" class="form-control"
+                                                asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                        </select>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="VarientName" class="control-label"></label>
+                                    <input asp-for="VarientName" class="form-control" />
+                                    <span asp-validation-for="VarientName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Price" class="control-label"></label>
+                                    <input asp-for="Price" class="form-control" />
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsActive" class="control-label"></label>
+                                    <input asp-for="IsActive" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                    }
+                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "/../Varient/Index";
+        });
+    </script>
+}

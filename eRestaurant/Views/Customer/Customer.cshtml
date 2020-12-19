@@ -1,0 +1,133 @@
+﻿@model RocketPOS.Models.CustomerModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    //  ViewData["Title"] = "Customer";
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add Addons</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Customer">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                @*<div class="form-group">
+            <label asp-for="Id" class="control-label"></label>
+            <input asp-for="Id" class="form-control" />
+            <span asp-validation-for="Id" class="text-danger"></span>
+        </div>*@
+                                <div class="form-group">
+                                    <label asp-for="CustomerTypeId" class="control-label"></label>
+                                    <input asp-for="CustomerTypeId" class="form-control" />
+                                    <span asp-validation-for="CustomerTypeId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerNumber" class="control-label"></label>
+                                    <input asp-for="CustomerNumber" class="form-control" />
+                                    <span asp-validation-for="CustomerNumber" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerName" class="control-label"></label>
+                                    <input asp-for="CustomerName" class="form-control" />
+                                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerEmail" class="control-label"></label>
+                                    <input asp-for="CustomerEmail" class="form-control" />
+                                    <span asp-validation-for="CustomerEmail" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerAddress1" class="control-label"></label>
+                                    <input asp-for="CustomerAddress1" class="form-control" />
+                                    <span asp-validation-for="CustomerAddress1" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerAddress2" class="control-label"></label>
+                                    <input asp-for="CustomerAddress2" class="form-control" />
+                                    <span asp-validation-for="CustomerAddress2" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerPhone" class="control-label"></label>
+                                    <input asp-for="CustomerPhone" class="form-control" />
+                                    <span asp-validation-for="CustomerPhone" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CustomerImage" class="control-label"></label>
+                                    <input asp-for="CustomerImage" class="form-control" />
+                                    <span asp-validation-for="CustomerImage" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FavDeliveryAddress" class="control-label"></label>
+                                    <input asp-for="FavDeliveryAddress" class="form-control" />
+                                    <span asp-validation-for="FavDeliveryAddress" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="IsActive" class="control-label"></label>
+                                    <input asp-for="IsActive" class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                    }
+                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "/../Customer/Index";
+        });
+    </script>
+}

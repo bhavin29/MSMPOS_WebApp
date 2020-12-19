@@ -1,86 +1,97 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.AddonsModel>
-@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = "Addons";
-}
-<h2>Addons</h2>
-<p>
-    <a asp-action="Addons" class="pull-right btn btn-primary">Create New</a>
-</p>
-
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Addons");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Addons");
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.AddonsName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.UserId)
-                </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var tm = "#myModal" + item.Id;
-            var mid = "myModal" + item.Id;
-            <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.AddonsName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.UserId)
-                    </td>*@
-                <td>
-                    <a asp-action="Addons" class="btn btn-primary" asp-route-Id="@item.Id">Edit</a> |
-                    <a class="btn btn-primary" data-toggle="modal" data-target="@tm">Delete</a>
-                </td>
-            </tr>
-            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            @SharedLocalizer["DeleteConfrim"];
-                            @*Are you sure want to delete this item?*@
-                        </div>
-                        <div class="modal-footer">
-                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a asp-action="Addons" class="pull-right btn btn-primary">Add</a>
+                    <h2>Addons</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="col-sm-12">
+                                <table id="@SharedLocalizer.GetLocalizedHtmlString("Addons")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr role="row">
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Addons Name")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Price")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr role="row">
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Addons Name")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Price")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
+                                            <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var tm = "#myModal" + item.Id;
+                                            var mid = "myModal" + item.Id;
+                                            <tr role="row">
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.AddonsName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Price)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                                </td>
+                                                <td>
+                                                    <div class="form-button-action">
+                                                        <a asp-action="Addons" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+}

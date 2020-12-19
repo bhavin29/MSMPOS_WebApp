@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
-
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 namespace RocketPOS.Models
 {
    public class UserModel
@@ -16,6 +17,9 @@ namespace RocketPOS.Models
 
         public string OutletName { get; set; }
         public List<SelectListItem> OutletList { get; set; }
+
+        [DisplayName("UserName")]
+        [Required]
         public string Username { get; set; }
         public string Password { get; set; }
 

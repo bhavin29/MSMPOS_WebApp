@@ -1,8 +1,14 @@
-﻿namespace RocketPOS.Models
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace RocketPOS.Models
 {
     public class SupplierModel
     {
         public int Id { get; set; }
+
+        [DisplayName("Supplier Name")]
+        [Required]
         public string SupplierName { get; set; }
         public int TaxType { get; set;}
         public string SupplierAddress1 { get; set; }

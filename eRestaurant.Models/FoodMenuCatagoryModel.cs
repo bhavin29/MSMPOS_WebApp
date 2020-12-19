@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace RocketPOS.Models
 {
     public class FoodMenuCatagoryModel
     {
         public int Id { get; set; }
+
+        [DisplayName("FoodMenu Category Name")]
+        [Required]
         public string FoodMenuCategoryName { get; set; }
 
         public string Notes { get; set; }

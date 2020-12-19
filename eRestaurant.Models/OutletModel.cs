@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace RocketPOS.Models
 {
@@ -12,6 +14,9 @@ namespace RocketPOS.Models
         public string StoreName { get; set; }
 
         public List<SelectListItem> StoreList { get; set; }
+
+        [DisplayName("Outlet Name")]
+        [Required]
         public string OutletName { get; set;  }
         public string OutletAddress1 { get; set; }
         public string OutletAddress2 { get; set; }

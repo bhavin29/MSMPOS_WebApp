@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace RocketPOS.Models
 {
     public class AddonsModel
     {
         public int Id { get; set; }
-        
-        [Required(ErrorMessage = "Enter addons name")]
+       
+        [DisplayName("Addons Name")]
+        [Required]
         public string AddonsName { get; set; }
 
         public decimal Price { get; set; }

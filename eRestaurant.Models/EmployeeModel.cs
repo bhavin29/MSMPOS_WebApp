@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RocketPOS.Models
 {
     public class EmployeeModel
     {
         public int Id { get; set; }
+
+        [DisplayName("First Name")]
+        [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
+        [DisplayName("Last Name")]
+        [Required] 
         public string LastName { get; set; }
         public string Designation { get; set; }
         public string Email { get; set; }

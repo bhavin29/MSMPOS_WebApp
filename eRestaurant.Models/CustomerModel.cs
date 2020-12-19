@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RocketPOS.Models
 {
@@ -9,6 +11,9 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public int CustomerTypeId { get; set; }
         public string CustomerNumber { get; set; }
+
+        [DisplayName("Customer Name")]
+        [Required]
         public string CustomerName { get; set; }
         public string CustomerEmail { get; set; }
         public string CustomerAddress1 { get; set; }

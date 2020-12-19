@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RocketPOS.Models
 {
@@ -12,6 +14,9 @@ namespace RocketPOS.Models
 
         public string FoodMenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
+
+        [DisplayName("Varient Name")]
+        [Required]
         public string VarientName { get; set; }
         public decimal Price { get; set; }
 

@@ -15,7 +15,9 @@ namespace RocketPOS.Models
         [DisplayName("Customer Name")]
         [Required]
         public string CustomerName { get; set; }
+        [DisplayName("Email")]
         public string CustomerEmail { get; set; }
+        [DisplayName("Address")]
         public string CustomerAddress1 { get; set; }
         public string CustomerAddress2 { get; set; }
         public string CustomerPhone { get; set; }

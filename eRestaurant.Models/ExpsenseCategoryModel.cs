@@ -11,7 +11,7 @@ namespace RocketPOS.Models
 
         public int Id { get; set; }
 
-        [DisplayName("Customer Name")]
+        [DisplayName("Expense Category")]
         [Required]
         public string ExpenseCategory { get; set; }
 

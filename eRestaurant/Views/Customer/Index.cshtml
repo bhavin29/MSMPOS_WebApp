@@ -1,124 +1,120 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.CustomerModel>
-@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
 
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = "Customer";
-}
-<h2>Customer</h2>
-<p>
-    <a asp-action="Customer" class="pull-right btn btn-primary">Create New</a>
-</p>
-
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Customer");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Customer");
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerNumber)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CustomerAddress1)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.CustomerAddress2)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CustomerImage)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FavDeliveryAddress)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var tm = "#myModal" + item.Id;
-            var mid = "myModal" + item.Id;
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a asp-action="Customer" class="pull-right btn btn-primary">Add</a>
+                    <h2>Customer</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="col-sm-12">
+                                <table id="@SharedLocalizer.GetLocalizedHtmlString("Customer")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr role="row">
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerEmail)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerAddress1)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsActive)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr role="row">
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerEmail)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.CustomerAddress1)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsActive)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var tm = "#myModal" + item.Id;
+                                            var mid = "myModal" + item.Id;
 
-            <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerNumber)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustomerAddress1)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.CustomerAddress2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CustomerImage)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FavDeliveryAddress)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    <a asp-action="Customer" class="btn btn-primary" asp-route-Id="@item.Id">Edit</a> |
-                    <a class="btn btn-primary" data-toggle="modal" data-target="@tm">Delete</a>
-                </td>
-            </tr>
-            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            @SharedLocalizer["DeleteConfrim"];
-                            @*Are you sure want to delete this item?*@
-                        </div>
-                        <div class="modal-footer">
-                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CustomerName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CustomerEmail)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CustomerAddress1)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                                </td>
+                                                <td>
+                                                    <div class="form-button-action">
+                                                        <a asp-action="Customer" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+}

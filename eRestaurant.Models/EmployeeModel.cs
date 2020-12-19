@@ -10,7 +10,7 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
 
-        [DisplayName("First Name")]
+        [DisplayName("Employee Name")]
         [Required]
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

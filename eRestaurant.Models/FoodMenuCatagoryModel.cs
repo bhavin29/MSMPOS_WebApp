@@ -10,7 +10,7 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
 
-        [DisplayName("FoodMenu Category Name")]
+        [DisplayName("FoodMenu Category")]
         [Required]
         public string FoodMenuCategoryName { get; set; }
 

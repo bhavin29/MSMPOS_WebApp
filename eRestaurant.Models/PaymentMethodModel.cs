@@ -10,10 +10,12 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
 
-        [DisplayName("Payment Method Name")]
+        [DisplayName("Payment Method")]
         [Required]
         public string PaymentMethodName { get; set; }
+        [DisplayName("Bank")]
         public bool IsBank { get; set; }
+        [DisplayName("Integration")]
         public bool IsIntegration { get; set; }
         public bool IsActive { get; set; }
     }

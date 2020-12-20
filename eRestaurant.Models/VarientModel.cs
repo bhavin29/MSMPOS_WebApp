@@ -10,12 +10,13 @@ namespace RocketPOS.Models
     public class VarientModel
     {
         public int Id { get; set; }
-        public int FoodId { get; set; }
+        public int FoodMenuId { get; set; }
 
+        [DisplayName("Food Menu")]
         public string FoodMenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
 
-        [DisplayName("Varient Name")]
+        [DisplayName("Varient")]
         [Required]
         public string VarientName { get; set; }
         public decimal Price { get; set; }

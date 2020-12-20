@@ -14,6 +14,7 @@ namespace RocketPOS.Models
         [Required]
         public string StoreName { get; set; }
 
+        [DisplayName("Main Store")]
         public bool IsMainStore { get; set; }
         public string Notes { get; set; }
         public bool IsActive { get; set; }

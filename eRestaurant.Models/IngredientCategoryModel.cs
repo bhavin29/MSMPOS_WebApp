@@ -15,6 +15,7 @@ namespace RocketPOS.Models
         [Required]
         public string IngredientCategoryName { get; set; }
 
+        [DisplayName("Raw Material Type")]
         public int RawMaterialType { get; set; }
 
         public string Notes { get; set; }

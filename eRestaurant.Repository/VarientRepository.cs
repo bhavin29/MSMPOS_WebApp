@@ -26,7 +26,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT V.Id,VarientName,FoodId,FM.FoodMenuName,V.IsActive FROM Varient V INNER JOIN FoodMenu FM ON V.FoodId = FM.Id  WHERE V.IsDeleted = 0 " +
+                var query = "SELECT V.Id,VarientName,FoodMenuId,FM.FoodMenuName,V.IsActive FROM Varient V INNER JOIN FoodMenu FM ON V.FoodMenuId = FM.Id  WHERE V.IsDeleted = 0 " +
                             "ORDER BY VarientName ";
                 VarientModel = con.Query<VarientModel>(query).ToList();
             }
@@ -41,10 +41,10 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Varient (VarientName,FoodId," +
+                var query = "INSERT INTO Varient (VarientName,FoodMenuId," +
                             "Price, " +
                             "IsActive)" +
-                            "VALUES (@VarientName,@FoodId," +
+                            "VALUES (@VarientName,@FoodMenuId," +
                             "@Price," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, varientModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -69,7 +69,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE Varient SET VarientName =@VarientName,FoodId=@FoodId," +
+                var query = "UPDATE Varient SET VarientName =@VarientName,FoodMenuId=@FoodMenuId," +
                             "Price = @Price, " +
                             "IsActive = @IsActive " +
                             "WHERE Id = @Id;";

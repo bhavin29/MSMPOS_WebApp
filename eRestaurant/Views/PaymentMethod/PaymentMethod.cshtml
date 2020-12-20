@@ -1,26 +1,19 @@
 ﻿@model RocketPOS.Models.PaymentMethodModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    //   ViewData["Title"] = "PaymentMethod";
-}
+
 <div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Payment Method</h2>
+                    <h2>Manage Payment Method</h2>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
                             <form asp-action="PaymentMethod">
                                 <div asp-validation-summary="All" class="text-danger"></div>
-                                @*<div class="form-group">
-                                        <label asp-for="Id" class="control-label"></label>
-                                        <input asp-for="Id" class="form-control" />
-                                        <span asp-validation-for="Id" class="text-danger"></span>
-                                    </div>*@
                                 <div class="form-group">
                                     <label asp-for="PaymentMethodName" class="control-label"></label>
                                     <input asp-for="PaymentMethodName" class="form-control" />
@@ -62,7 +55,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

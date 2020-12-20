@@ -2,16 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    @*<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - RocketPOS</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" />*@
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>RocketPOS</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <link rel="icon" href="~/img/icon.ico" type="image/x-icon" />
 
+    <script src="../js/plugin/webfont/webfont.min.js"></script>
     <script>
         WebFont.load({
             google: { "families": ["Lato:300,400,700,900"] },
@@ -21,6 +17,7 @@
             }
         });
     </script>
+
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/atlantis.min.css" />
@@ -337,7 +334,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a asp-area="" asp-controller="Purchase" asp-action="Index">
+                            <a asp-area="" asp-controller="PurchaseList" asp-action="Index">
                                 <i class="fas fa-desktop"></i>
                                 <span>Purchase</span>
                             </a>
@@ -391,6 +388,8 @@
                                     </li>
                                 </ul>
                             </div>
+                        </li>
+                        <li class="nav-item">
                             <a data-toggle="collapse" href="#Reports">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Reports</p>
@@ -415,7 +414,8 @@
                                     </li>
                                 </ul>
                             </div>
-
+                        </li>
+                        <li class="nav-item">
                             <a data-toggle="collapse" href="#Foodmenu">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Food Menu</p>
@@ -460,6 +460,8 @@
                                     </li>
                                 </ul>
                             </div>
+                        </li>
+                        <li class="nav-item">
                             <a data-toggle="collapse" href="#master">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Master</p>
@@ -531,7 +533,7 @@
             <footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">
-                        <ul class="nav">
+                        @*<ul class="nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="https://www.themekita.com">
                                     ThemeKita
@@ -547,10 +549,10 @@
                                     Licenses
                                 </a>
                             </li>
-                        </ul>
+                        </ul>*@
                     </nav>
                     <div class="copyright ml-auto">
-                        2018, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.themekita.com">ThemeKita</a>
+                        2020, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.RocketPOS.com">Rocket POS</a>
                     </div>
                 </div>
             </footer>

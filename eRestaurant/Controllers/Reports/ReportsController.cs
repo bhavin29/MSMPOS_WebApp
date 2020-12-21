@@ -30,16 +30,30 @@ namespace RocketPOS.Controllers.Reports
 
         public IActionResult Index()
         {
+
             return View();
         }
 
         public ViewResult Inventory()
         {
+
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
 
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
         }
+
+        [HttpPost]
+        public ViewResult Inventory(InventoryReportParamModel inventoryReportParamModel)
+        {
+
+            List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
+  
+            inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
+            return View(inventoryReportModel);
+        }
+
+
     }
 }

@@ -7,12 +7,7 @@ namespace RocketPOS.Models
 {
     public class PurchaseModel
     {
-        public PurchaseModel()
-        {
-            this.PurchaseDetails = new List<PurchaseDetailsModel>();
-            this.SupplierList = new List<SelectListItem>();
-            this.IngredientList = new List<SelectListItem>();
-        }
+      
         public long ReferenceNo { get; set; }
         public int SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
@@ -24,7 +19,7 @@ namespace RocketPOS.Models
         public decimal Paid { get; set; }
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
     }
-
+   
     public class PurchaseDetailsModel
     {
         public int IngredientCode { get; set; }

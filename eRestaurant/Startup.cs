@@ -74,6 +74,7 @@ namespace RocketPOS
                 });
 
             services.AddRazorPages();
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             services.AddOptions<IngredientModel>().ValidateDataAnnotations();
             services.AddControllersWithViews();

@@ -18,6 +18,7 @@ namespace RocketPOS.Controllers.Transaction
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
+        
         public PurchaseController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
@@ -53,15 +54,15 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // POST: Purchase/Create
-        //[ValidateAntiForgeryToken]
         [HttpPost]
-        public ActionResult SavePurchase(PurchaseModel purchaseModel)
+        [ValidateAntiForgeryToken]
+        public IActionResult SavePurchase(PurchaseModel purchaseModel)
         {
             try
             {
-                // TODO: Add insert logic here
+              
 
-                return RedirectToAction(nameof(PurchaseList));
+                return RedirectToAction(nameof(Purchase));
             }
             catch
             {

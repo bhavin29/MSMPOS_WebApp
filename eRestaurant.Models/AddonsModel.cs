@@ -12,7 +12,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
        
         [DisplayName("Addons Name")]
-        [Required]
+       
         public string AddonsName { get; set; }
 
         public decimal Price { get; set; }

@@ -14,65 +14,76 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-12 col-lg-10">
+                        <div class="col-md-12">
                             <form asp-action="Ingredient" method="post" role="form">
-                                <div asp-validation-summary="All"></div>
-                                <div class="form-group">
-                                    <label asp-for="IngredientName" class="control-label">Ingredent Name</label>
-                                    <input asp-for="IngredientName" class="form-control" />
-                                    <span asp-validation-for="IngredientName"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="IngredientCategoryList" class="control-label">Category</label>
-                                    <select asp-for="CategoryId"
-                                            class="form-control"
-                                            asp-items="@(new SelectList(Model.IngredientCategoryList, "Value", "Text"))">
-                                    </select>
-                                </div>
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label asp-for="IngredientName" class="control-label">Ingredent Name</label>
+                                            <input asp-for="IngredientName" class="form-control" />
+                                            <span asp-validation-for="IngredientName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="IngredientCategoryList" class="control-label">Category</label>
+                                            <select asp-for="CategoryId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.IngredientCategoryList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                        </div>
 
-                                <div class="form-group">
-                                    <label asp-for="UnitList" class="control-label">Unit</label>
-                                    <select asp-for="UnitId"
-                                            class="form-control"
-                                            asp-items="@(new SelectList(Model.UnitList, "Value", "Text"))">
-                                    </select>
+                                        <div class="form-group">
+                                            <label asp-for="UnitList" class="control-label">Unit</label>
+                                            <select asp-for="UnitId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.UnitList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="UnitId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="PurchasePrice" class="control-label">Purchase Price</label>
+                                            <input asp-for="PurchasePrice" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="form-group">
+                                            <label asp-for="SalesPrice" class="control-label">Sales Price</label>
+                                            <input asp-for="SalesPrice" class="form-control" />
+                                            <span asp-validation-for="SalesPrice" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="AlterQty" class="control-label">Alter Qty</label>
+                                            <input asp-for="AlterQty" class="form-control" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Code" class="control-label">Code</label>
+                                            <input asp-for="Code" class="form-control" />
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="orm-check-label">
+                                                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                                                <span class="form-check-sign">Is Active</span>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="PurchasePrice" class="control-label">Purchase Price</label>
-                                    <input asp-for="PurchasePrice" class="form-control" />
-                                    @*<span class="alert-danger" asp-validation-for="IngredientName"></span>*@
-                                </div>
+                                <div class="row">
+                                    <div class="col-md-8">
 
-                                <div class="form-group">
-                                    <label asp-for="SalesPrice" class="control-label">Sales Price</label>
-                                    <input asp-for="SalesPrice" class="form-control" />
-                                    @*<span class="alert-danger" asp-validation-for="IngredientName"></span>*@
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="AlterQty" class="control-label">Alter Qty</label>
-                                    <input asp-for="AlterQty" class="form-control" />
-                                    @*<span class="alert-danger" asp-validation-for="IngredientName"></span>*@
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Code" class="control-label">Code</label>
-                                    <input asp-for="Code" class="form-control" />
-                                    @*<span class="alert-danger" asp-validation-for="IngredientName"></span>*@
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="IsActive" class="control-label"></label>
-                                    <input asp-for="IsActive" class="form-control" />
-                                    @* <span class="alert-danger" asp-validation-for="IsActive"></span>*@
-                                </div>
-                                <div class="form-group">
-                                    @if (Model.Id > 0)
-                                    {
-                                        <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                    }
-                                    else
-                                    {
-                                        <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                    }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-button-action">
+                                            @if (Model.Id > 0)
+                                            {
+                                                <input type="submit" value="Edit" class="btn btn-primary" />
+                                            }
+                                            else
+                                            {
+                                                <input type="submit" value="Add" class="btn btn-primary" />
+                                            }
+                                            <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
 
@@ -102,6 +113,22 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="vModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Validate
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="OK" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 @{
     if (ViewBag.Result != null)
     {
@@ -113,11 +140,26 @@
             });
         </script>
     }
+    if (ViewBag.Validate != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#vModal").modal('show');
+            });
+        </script>
+    }
 }
 @section Scripts{
     <script>
         $('#save').click(function () {
             window.location.href = "/Ingredient/Index";
         });
+        $('#OK').click(function () {
+            $("#IngredientName").prev().focus();
+            $("#vModal").modal('hide');
+        });
     </script>
+<partial name="_ValidationScriptsPartial" />
 }

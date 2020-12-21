@@ -1,13 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Options;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using RocketPOS.Models;
 using RocketPOS.Interface.Repository;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RocketPOS.Repository
 {

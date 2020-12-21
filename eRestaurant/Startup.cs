@@ -75,6 +75,7 @@ namespace RocketPOS
             services.AddOptions<IngredientModel>().ValidateDataAnnotations();
             services.AddControllersWithViews();
 
+
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
             services.AddScoped<IDropDownService, DropDownService>();

@@ -1,28 +1,18 @@
 ﻿@model RocketPOS.Models.SupplierModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    // ViewData["Title"] = "Supplier";
-}
-
 <div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Supplier</h2>
+                    <h2>Manage Supplier</h2>
                 </div>
                 <div class="card-body">
-
                     <div class="row">
                         <div class="col-md-4">
                             <form asp-action="Supplier">
                                 <div asp-validation-summary="All" class="text-danger"></div>
-                                @*<div class="form-group">
-                                        <label asp-for="Id" class="control-label"></label>
-                                        <input asp-for="Id" class="form-control" />
-                                        <span asp-validation-for="Id" class="text-danger"></span>
-                                    </div>*@
                                 <div class="form-group">
                                     <label asp-for="SupplierName" class="control-label"></label>
                                     <input asp-for="SupplierName" class="form-control" />
@@ -62,11 +52,6 @@
                                     <label asp-for="IsActive" class="control-label"></label>
                                     <input asp-for="IsActive" class="form-control" />
                                 </div>
-                                @*<div class="form-group">
-                                        <label asp-for="UserId" class="control-label"></label>
-                                        <input asp-for="UserId" class="form-control" />
-                                        <span asp-validation-for="UserId" class="text-danger"></span>
-                                    </div>*@
                                 <div class="form-group">
                                     @if (Model != null)
                                     {
@@ -80,18 +65,15 @@
                                         }
                                     }
                                     <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

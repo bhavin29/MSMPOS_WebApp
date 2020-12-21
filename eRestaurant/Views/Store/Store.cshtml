@@ -1,14 +1,6 @@
 ﻿@model RocketPOS.Models.StoreModel
-
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@{
-    // ViewData["Title"] = "Addons";
-}
-
-@*<p>
-        <a asp-action="Addons" class="pull-right btn btn-primary">Add Addons</a>
-    </p>*@
 @if (!string.IsNullOrEmpty(ViewBag.msg))
 {
     <script type="text/javascript">
@@ -22,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Store</h2>
+                    <h2>Manage Store</h2>
                 </div>
                 <div class="card-body">
 
@@ -30,11 +22,6 @@
                         <div class="col-md-4">
                             <form asp-action="Store">
                                 <div asp-validation-summary="All" class="text-danger"></div>
-                                @*<div class="form-group">
-                                    <label asp-for="Id" class="control-label"></label>
-                                    <input asp-for="Id" class="form-control" />
-                                    <span asp-validation-for="Id" class="text-danger"></span>
-                                </div>*@
                                 <div class="form-group">
                                     <label asp-for="StoreName" class="control-label"></label>
                                     <input asp-for="StoreName" class="form-control" />
@@ -57,36 +44,29 @@
                                     <label asp-for="IsLock" class="control-label"></label>
                                     <input asp-for="IsLock" class="form-control" />
                                 </div>
-                                @*<div class="form-group">
-        <label asp-for="UserId" class="control-label"></label>
-        <input asp-for="UserId" class="form-control" />
-        <span asp-validation-for="UserId" class="text-danger"></span>*@
-                            <div class="form-group">
-                                @if (Model != null)
-                                {
-                                    @if (Model.Id > 0)
+                                <div class="form-group">
+                                    @if (Model != null)
                                     {
-                                        <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
                                     }
-                                    else
-                                    {
-                                        <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                    }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-                                }
                                 </div>
                             </form>
                         </div>
                     </div>
 
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

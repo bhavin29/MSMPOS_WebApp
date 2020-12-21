@@ -18,7 +18,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Bank</h2>
+                    <h2>Manage Bank</h2>
                 </div>
                 <div class="card-body">
 
@@ -26,11 +26,6 @@
                         <div class="col-md-4">
                             <form asp-action="Bank">
                                 <div asp-validation-summary="All" class="text-danger"></div>
-                                @*<div class="form-group">
-                                        <label asp-for="Id" class="control-label"></label>
-                                        <input asp-for="Id" class="form-control" />
-                                        <span asp-validation-for="Id" class="text-danger"></span>
-                                    </div>*@
                                 <div class="form-group">
                                     <label asp-for="BankName" class="control-label"></label>
                                     <input asp-for="BankName" class="form-control" />
@@ -56,33 +51,25 @@
                                     <input asp-for="SignaturePicture" class="form-control" />
                                     <span asp-validation-for="SignaturePicture" class="text-danger"></span>
                                 </div>
-                                @*<div class="form-group">
-                                        <label asp-for="UserId" class="control-label"></label>
-                                        <input asp-for="UserId" class="form-control" />
-                                        <span asp-validation-for="UserId" class="text-danger"></span>
-                                    </div>*@
-                            <div class="form-group">
-                                @if (Model != null)
-                                {
-                                    @if (Model.Id > 0)
+                                <div class="form-group">
+                                    @if (Model != null)
                                     {
-                                        <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
                                     }
-                                    else
-                                    {
-                                        <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                    }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-                                }
                                 </div>
                             </form>
                         </div>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>

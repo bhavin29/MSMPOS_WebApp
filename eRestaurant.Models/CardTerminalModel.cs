@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 using System.Web.Mvc;
 
 namespace RocketPOS.Models
@@ -12,6 +13,10 @@ namespace RocketPOS.Models
         public int OutletId { get; set; }
         public string Outlet { get; set; }
         public List<SelectListItem> OutletList { get; set; }
+
+
+        [DisplayName("Card Terminal Name")]
+        [Required]
         public string CardTerminalName { get; set; }
 
         public bool IsActive { get; set; }

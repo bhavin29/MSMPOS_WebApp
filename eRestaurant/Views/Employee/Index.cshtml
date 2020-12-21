@@ -1,400 +1,119 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.EmployeeModel>
-@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
 
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Employee");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Employee");
 }
 
-<h1>Employee</h1>
-<p>
-    <a asp-action="Employee" class="pull-right btn btn-primary">Create New</a>
-</p>
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a asp-action="Employee" class="pull-right btn btn-primary">Add</a>
+                    <h2>Customer</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="col-sm-12">
+                                <table id="@SharedLocalizer.GetLocalizedHtmlString("Employee")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead role="row">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FirstName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Designation)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Email)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Phone)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot role="row">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.FirstName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Designation)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Email)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.Phone)
+                                            </th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var tm = "#myModal" + item.Id;
+                                            var mid = "myModal" + item.Id;
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.LastName)  @Html.DisplayFor(modelItem => item.MiddleName)  @Html.DisplayFor(modelItem => item.FirstName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Designation)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Email)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Phone)
+                                                </td>
+                                                <td>
+                                                    <div class="form-button-action">
+                                                        <a asp-action="Employee" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    </div>
 
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
-}
-
-<table class="table">
-    <thead>
-        <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.MiddleName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LastName)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.Designation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.AlterPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PresentAdress)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PermanentAdress)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.picture)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DegreeName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UniversityName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CGP)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PassingYear)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CompanyName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.WorkingPeriod)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Duties)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Suoervisor)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Signature)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.State)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.City)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Zip)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CitizenShip)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HireDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OriginalHireDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TerminationDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TerminationReason)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.VolunteryTermination)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RehireDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RateType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Rate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PayFrequency)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PayFrequencyTxt)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HourlyRate2)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HourlyRate3)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DOB)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Gender)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Country)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.MaritalStatus)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EthnicGroup)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.SSN)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.WorkInState)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.LiveInState)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HomeEmail)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BusinessEmail)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HomePhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BUsinessPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CellPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmergConct)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmergHPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmergWPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.EmergContctRelation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AltEmContct)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AltEmgHPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.AltEmgWPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IsActive)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.UserId)
-                </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var tm = "#myModal" + item.Id;
-            var mid = "myModal" + item.Id;
-            <tr>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.Id)
-                    </td>*@
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)  @Html.DisplayFor(modelItem => item.MiddleName)  @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Designation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
-                </td>
-                @*<td>
-                        @Html.DisplayFor(modelItem => item.AlterPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PresentAdress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PermanentAdress)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.picture)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DegreeName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UniversityName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CGP)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PassingYear)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CompanyName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WorkingPeriod)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Duties)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Suoervisor)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Signature)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.State)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.City)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Zip)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CitizenShip)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HireDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.OriginalHireDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TerminationDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TerminationReason)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.VolunteryTermination)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RehireDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RateType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Rate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayFrequency)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PayFrequencyTxt)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HourlyRate2)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HourlyRate3)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DOB)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Gender)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Country)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MaritalStatus)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EthnicGroup)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SSN)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.WorkInState)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.LiveInState)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HomeEmail)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BusinessEmail)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.HomePhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.BUsinessPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CellPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmergConct)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmergHPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmergWPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EmergContctRelation)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AltEmContct)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AltEmgHPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AltEmgWPhone)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsActive)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserId)
-                    </td>*@
-                <td>
-                    <a asp-action="Employee" class="btn btn-primary" asp-route-Id="@item.Id">Edit</a> |
-                    <a class="btn btn-primary" data-toggle="modal" data-target="@tm">Delete</a>
-                </td>
-            </tr>
-            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            @SharedLocalizer["DeleteConfrim"];
-                            @*Are you sure want to delete this item?*@
-                        </div>
-                        <div class="modal-footer">
-                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+}

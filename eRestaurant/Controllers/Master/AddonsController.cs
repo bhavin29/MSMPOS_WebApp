@@ -16,11 +16,13 @@ namespace RocketPOS.Controllers
     {
         private readonly IAddonsService _iAddonsService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
-        public AddonsController(IAddonsService addonsService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public AddonsController(IAddonsService addonsService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iAddonsService = addonsService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace RocketPOS.Models
 {
@@ -8,6 +10,9 @@ namespace RocketPOS.Models
     {
 
         public int Id { get; set; }
+
+        [DisplayName("Expense Category")]
+        [Required]
         public string ExpenseCategory { get; set; }
 
         public string Notes { get; set; }

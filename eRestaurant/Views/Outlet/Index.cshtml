@@ -1,141 +1,137 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.OutletModel>
 @inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = "Outlet";
-}
-<h2>Outlet</h2>
-<p>
-    <a asp-action="Outlet" class="pull-right btn btn-primary">Create New</a>
-</p>
-
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Outlet");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Outlet");
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>*@
-            <th>
-                    @Html.DisplayNameFor(model => model.StoreName)
-                </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OutletName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OutletAddress1)
-            </th>
-            @*<th>
-                    @Html.DisplayNameFor(model => model.OutletAddress2)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OutletPhone)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.OutletEmail)
-                </th>*@
-            @*<th>
-                    @Html.DisplayNameFor(model => model.InvoiceHeader)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.InvoiceFooter)
-                </th>*@
-            <th>
-                @Html.DisplayNameFor(model => model.IsCollectTax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPreorPostPayment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            @* <th>
-                     @Html.DisplayNameFor(model => model.IsLock)
-                 </th>
-                <th>
-                     @Html.DisplayNameFor(model => model.UserId)
-                 </th>*@
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var tm = "#myModal" + item.Id;
-            var mid = "myModal" + item.Id;
-        <tr>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.StoreName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OutletName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OutletAddress1)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.OutletAddress2)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OutletPhone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OutletEmail)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InvoiceHeader)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InvoiceFooter)
-        </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.IsCollectTax)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPreorPostPayment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            @*<td>
-            @Html.DisplayFor(modelItem => item.IsLock)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserId)
-        </td>*@
-
-            <td>
-                <a asp-action="Outlet" class="btn btn-primary" asp-route-Id="@item.Id">Edit</a> |
-                <a class="btn btn-primary" data-toggle="modal" data-target="@tm">Delete</a>
-            </td>
-        </tr>
-            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                        </div>
-                        <div class="modal-body">
-                            @SharedLocalizer["DeleteConfrim"];
-                            @*Are you sure want to delete this item?*@
-                        </div>
-                        <div class="modal-footer">
-                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a asp-action="Outlet" class="pull-right btn btn-primary">Add</a>
+                    <h2>Outlet</h2>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                            <div class="col-sm-12">
+                                <table id="@SharedLocalizer.GetLocalizedHtmlString("Outlet")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead role="row">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.StoreName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OutletName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OutletAddress1)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsCollectTax)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsPreorPostPayment)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsActive)
+                                            </th>
+                                            <th>@Html.DisplayName("Action")</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot role="row">
+                                        <tr>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.StoreName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OutletName)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.OutletAddress1)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsCollectTax)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsPreorPostPayment)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => model.IsActive)
+                                            </th>
+                                            <th>
+                                            <th> @Html.DisplayName("Action")</th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            var tm = "#myModal" + item.Id;
+                                            var mid = "myModal" + item.Id;
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.StoreName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.OutletName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.OutletAddress1)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsCollectTax)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsPreorPostPayment)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                                </td>
+                                                <td>
+                                                    <div class="form-button-action">
+                                                        <a asp-action="Outlet" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        }
-    </tbody>
-</table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+}

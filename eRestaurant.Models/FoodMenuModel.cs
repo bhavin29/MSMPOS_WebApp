@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Web.Mvc;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace RocketPOS.Models
 {
@@ -10,9 +12,16 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public int FoodCategoryId { get; set; }
 
+        [DisplayName("Food Category")]
+        [Required]
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
+
+        [DisplayName("Food Menu")]
+        [Required]
         public string FoodMenuName { get; set; }
+
+        [DisplayName("Food Menu Code")] 
         public string FoodMenuCode { get; set; }
         public string ColourCode { get; set; }
         public string BigThumb { get; set; }

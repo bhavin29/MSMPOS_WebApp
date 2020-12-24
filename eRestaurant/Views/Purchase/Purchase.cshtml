@@ -1,252 +1,236 @@
-﻿@model RocketPOS.Models.PurchaseModel
-
+﻿@using System.Web.Helpers
+@model RocketPOS.Models.PurchaseModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-    ViewData["Title"] = "Purchase";
-    List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
+    //ViewData["Title"] = "Purchase";
+    //List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
 }
 
-<h1>Purchase</h1>
 <hr />
-
-<form asp-action="Purchase" method="post" role="form">
-    <div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="ReferenceNo" class="control-label"></label>
-                    <input asp-for="ReferenceNo" class="form-control" value="" />
-                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="SupplierList" class="control-label">Supplier</label>
-                    <select asp-for="SupplierId"
-                            class="form-control"
-                            asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))">
-                    </select>
-                    <span asp-validation-for="SupplierId" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label asp-for="Date" class="control-label"></label>
-                    <input asp-for="Date" class="form-control" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        @*<div class="row">
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <label asp-for="IngredientList" class="control-label">Ingredient</label>
-                        <select asp-for="IngredientId"
-                                class="form-control"
-                                asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
-                        </select>
-                        <span asp-validation-for="IngredientId" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>*@
-    </div>
-    <h3 style="margin-top:10px">Order Details</h3>
-    <div>
-        <div class="row">
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="card">
+                <div class="card-header">
+                    <h2>Add Purchase</h2>
+                </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
-                            @*<div class="form-group">
-                                    <label class="control-label">ingredient Id</label>
-                                    <input class="form-control" type="text" id="ingredientcode" />
-                                </div>*@
-                            <div class="form-group">
-                                <label asp-for="IngredientList" class="control-label">Ingredient</label>
-                                <select asp-for="IngredientId"
-                                        class="form-control"
-                                        asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
-                                </select>
-                                <span asp-validation-for="IngredientId" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Unit Price</label>
-                                <input class="form-control" type="text" id="UnitPrice" />
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Quantity</label>
-                                <input class="form-control" type="text" id="Quantity" />
-                            </div>
-                        </div>
-                        @*<div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Amount</label>
-                                <input class="form-control" type="text" disabled="disabled" id="Amount" />
-                            </div>
-                        </div>*@
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label"></label>
-                                <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-10">
-                            <table id="PurchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
-                                    <tr>
-                                        <th style="width:35%">IngredientCode</th>
-                                        <th style="width:35%">Ingredient</th>
-                                        <th style="width:20%">Unit Price</th>
-                                        <th style="width:15%">Quantity</th>
-                                        <th style="width:20%">Amount</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 col-lg-4"></div>
-                            <div class="col-md-6 col-lg-4"></div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="form-group form-inline fc-right">
-                                    <label asp-for="GrandTotal" class="col-md-3 col-form-label">Grand Total</label>
-                                    <div class="col-md-9 p-0">
-                                        <input type="text" asp-for="GrandTotal" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                        <div class="col-md-12">
+                            <form asp-action="Purchase" method="post" id="purchase" role="form">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="ReferenceNo" class="control-label"></label>
+                                                <input asp-for="ReferenceNo" class="form-control" />
+                                                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="SupplierList" class="control-label">Supplier</label>
+                                                <select asp-for="SupplierId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="Date" class="control-label"></label>
+                                                <input asp-for="Date" type="date" class="form-control" />
+                                                <span asp-validation-for="Date" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group form-inline">
-                                    <label asp-for="Paid" class="col-md-3 col-form-label">Paid</label>
-                                    <div class="col-md-9 p-0">
-                                        <input type="text" asp-for="Paid" class="form-control input-full" placeholder="Enter Input">
+                                <h3 style="margin-top:10px">Order Details</h3>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                                                <select asp-for="IngredientId"
+                                                                        class="form-control"
+                                                                        asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                                </select>
+                                                                <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Unit Price</label>
+                                                                <input class="form-control" type="text" id="UnitPrice" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Quantity</label>
+                                                                <input class="form-control" type="text" id="Quantity" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label"></label>
+                                                                <button id="addRow" class="form-control btn btn-primary" type="submit" style="margin-top: 7px">Add New</button>
+                                                                <input class="form-control" type="text" id="PurchaseId" value="0" />
+                                                                <input asp-for="Id" class="form-control" type="text" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <table id="PurchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width:35%">IngredientId</th>
+                                                                        <th style="width:35%">Ingredient</th>
+                                                                        <th style="width:20%">Unit Price</th>
+                                                                        <th style="width:15%">Quantity</th>
+                                                                        <th style="width:20%">Amount</th>
+                                                                        <th style="width:15%">Actions</th>
+                                                                        <th style="width:15%">PurchaseIs</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @if (Model.Id > 0)
+                                                                {
+                                                                    @foreach (var item in Model.PurchaseDetails)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>
+                                                                                @item.IngredientId
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.IngredientName
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.UnitPrice
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.Quantity
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.Total
+                                                                            </td>
+                                                                            <td>
+                                                                                <a href="#" data-itemid="@item.IngredientId" class="editItem fa fa-edit"></a> |
+                                                                                <a href="#" data-itemid="@item.IngredientId" class="deleteItem fa fa-times"></a>
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.PurchaseId
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group form-inline">
-                                    <label asp-for="Due" class="col-md-3 col-form-label">Due</label>
-                                    <div class="col-md-9 p-0">
-                                        <input type="text" asp-for="Due" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-lg-4"></div>
+                                                        <div class="col-md-6 col-lg-4"></div>
+                                                        <div class="col-md-6 col-lg-4">
+                                                            <div class="form-group form-inline fc-right">
+                                                                <label asp-for="GrandTotal" class="col-md-3 col-form-label">Grand Total</label>
+                                                                <div class="col-md-9 p-0">
+                                                                    <input type="text" asp-for="GrandTotal" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group form-inline">
+                                                                <label asp-for="Paid" class="col-md-3 col-form-label">Paid</label>
+                                                                <div class="col-md-9 p-0">
+                                                                    <input type="text" asp-for="Paid" class="form-control input-full" placeholder="Enter Input">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group form-inline">
+                                                                <label asp-for="Due" class="col-md-3 col-form-label">Due</label>
+                                                                <div class="col-md-9 p-0">
+                                                                    <input type="text" asp-for="Due" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <input id="saveOrder" type="button" class="btn btn-primary" value="Save Ourder" />
-    </div>
-</form>
+                                <div class="modal-footer">
+                                    <div class="form-button-action">
+                                        <input type="submit" asp-action="PurchaseList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
+                                        <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
+                                    </div>
+                                </div>
+                            </form>
 
-@section scripts {
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                <div><label asp-for="Message"></label> </div>
+                @*<div id="isValidate" class="hide"><span id="aModalMessage"></span></div>
+                    <div id="isSuccess" class="hide"><span id="aModalMessage"></span></div>*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary hide">OK</button>
+                <button type="button" id="ok" class="btn btn-primary hide">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*@{
+        if (ViewBag.Result != null)
+        {
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    $("#aModal").modal('show');
+                });
+            </script>
+        }
+    }*@
+@section scripts{
     <script>
-        var t;
-        var GrandTotal = 0;
-        $(document).ready(function () {
-          t = $('#PurchaseOrderDetails').DataTable({
-                "paging": false,
-                "ordering": false,
-              "info": false,
-              "searching": false,
-                 "columnDefs": [
-                           {
-                               "targets": [ 0 ],
-                               "visible": false,
-                               "searchable": false
-                           }]
-          });
-            $("#Date").val(new Date());
-        });
+        dataArr = []
+      var GrandTotal = 0;
+var TotalAmount = 0;
 
-        $('#addRow').on('click', function (e) {
-            e.preventDefault();
-            t.row.add([
-                    $("#IngredientId").val(),
-                    $('#IngredientId').children("option:selected").text(),
-                    $("#UnitPrice").val(),
-                    $("#Quantity").val(),
-                    $("#UnitPrice").val() *  $("#Quantity").val()
-               ]).draw(false);
-            GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
-            $("#GrandTotal").val(GrandTotal);
-            clearItem();
-        });
-
-
-            // Automatically add a first row of data
-            //$('#addRow').click();
-
-        var saveUrl = '@Url.Action("SavePurchase", "Purchase", new { area=""})';
-        function saveOrder(data) {
-            return $.ajax({
-                dataType: 'json',
-                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                type: 'POST',
-                beforeSend: function (xhr) {xhr.setRequestHeader("XSRF-TOKEN",$('input:hidden[name="__RequestVerificationToken"]').val());},
-                url: saveUrl,
-                data: data,
-                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-                });
-            }
-
-        $('#saveOrder').click(function (e) {
-            e.preventDefault();
-            var table = $('#PurchaseOrderDetails').DataTable();
-            var dataArr = [];
-            var rows = $('tbody tr');
-            var rowData = table.rows(rows).data();
-            $.each($(rowData), function (key, value) {
-                    dataArr.push({
-                        IngredientCode: parseFloat(value[0]),
-                        UnitPrice: parseFloat(value[1]),
-                        Quantity: parseFloat(value[2]),
-                        Total: parseFloat(value[3]),
-                    });
-            });
-
-            console.log(dataArr);
-
-          var data = ({
-                ReferenceNo:  $("#ReferenceNo").val(),
-                SupplierId: $("#SupplierId").val(),
-                Date: new Date(),
-                GrandTotal: $("#GrandTotal").val(),
-                Due: $("#Paid").val(),
-                Paid: $("#Due").val(),
-                SupplierList: [],
-              IngredientList: [],
-              PurchaseDetails: dataArr
-            });
-               $.when(saveOrder(data)).then(function (response) {
-                    console.log(response);
-                }).fail(function (err) {
-                    console.log(err);
-                });
-
-        });
-
-          function clearItem() {
-                $("#IngredientId").val(''),
-                    $("#UnitPrice").val(''),
-                    $("#Quantity").val(''),
-                    $("#Amount").val('')
-            }
-
+        if (@Model.Id > 0) {
+            dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.PurchaseDetails))');
+            GrandTotal = parseFloat($("#GrandTotal").val());
+    }
+    console.log(dataArr);
     </script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/Scripts/Purchase.js"></script>
 }

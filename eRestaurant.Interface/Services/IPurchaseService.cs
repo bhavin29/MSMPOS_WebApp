@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Services
 {
     public interface IPurchaseService
     {
-        PurchaseViewModel GetPurchaseById(long PurchaseId);
+        PurchaseModel GetPurchaseById(long PurchaseId);
         List<PurchaseViewModel> GetPurchaseList();
         int InsertPurchase(PurchaseModel purchaseModel);
         int UpdatePurchase(PurchaseModel purchaseModel);

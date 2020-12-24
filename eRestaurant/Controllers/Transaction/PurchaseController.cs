@@ -18,7 +18,7 @@ namespace RocketPOS.Controllers.Transaction
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        
+
         public PurchaseController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
@@ -39,15 +39,24 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: Purchase/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult GetOrderById(int purchaseId)
         {
-            return View();
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+            return View(purchaseModel);
         }
 
         // GET: Purchase/Create
-        public ActionResult Purchase()
+        public ActionResult Purchase(long? id)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
+            if (id > 0)
+            {
+                int purchaseId = Convert.ToInt32(id);
+                purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+                
+            }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(purchaseModel);
@@ -56,18 +65,39 @@ namespace RocketPOS.Controllers.Transaction
         // POST: Purchase/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SavePurchase(PurchaseModel purchaseModel)
+        public ActionResult Purchase(PurchaseModel purchaseModel)
         {
-            try
+            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
+            if (!ModelState.IsValid)
             {
-              
+                string errorString = this.ValidationPurchase(purchaseModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    purchaseModel.Message = errorString;
+                    return View(purchaseModel);
+                }
+            }
 
-                return RedirectToAction(nameof(Purchase));
-            }
-            catch
+            if (purchaseModel.Id > 0)
             {
-                return View();
+                int result = _iPurchaseService.UpdatePurchase(purchaseModel);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                }
             }
+            else
+            {
+                int result = _iPurchaseService.InsertPurchase(purchaseModel);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                }
+            }
+            // return View(purchaseModel);
+            return Json(new { error = false, message = "Ok" });
+            //return View();
         }
 
         // GET: Purchase/Edit/5
@@ -114,6 +144,28 @@ namespace RocketPOS.Controllers.Transaction
             {
                 return View();
             }
+        }
+
+        private string ValidationPurchase(PurchaseModel purchaseModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(purchaseModel.ReferenceNo.ToString()) || purchaseModel.ReferenceNo == 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
+                return ErrorString;
+            }
+            if (string.IsNullOrEmpty(purchaseModel.SupplierId.ToString()) || purchaseModel.SupplierId == 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
+                return ErrorString;
+            }
+            if (purchaseModel.PurchaseDetails.Count < 1)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                return ErrorString;
+            }
+
+            return ErrorString;
         }
     }
 }

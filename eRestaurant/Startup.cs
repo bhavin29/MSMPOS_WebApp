@@ -37,8 +37,15 @@ namespace RocketPOS
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture("en-GB");
+                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("en-GB") };
+            });
+
             services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
+
 
             services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
         .AddDataAnnotationsLocalization(options =>
@@ -134,6 +141,7 @@ namespace RocketPOS
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+               
             }
             else
             {
@@ -141,7 +149,25 @@ namespace RocketPOS
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-           
+
+            var cultureInfo = new CultureInfo("en-GB");
+            cultureInfo.NumberFormat.CurrencySymbol = "£";
+
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
+            var supportedCultures = new[]
+                                        {
+                                            new CultureInfo("en-GB"),
+                                        };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-GB"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
+
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

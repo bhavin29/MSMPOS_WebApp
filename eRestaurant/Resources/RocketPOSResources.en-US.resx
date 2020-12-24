@@ -129,6 +129,9 @@
   <data name="Ingredient" xml:space="preserve">
     <value>Ingredient</value>
   </data>
+  <data name="Purchase" xml:space="preserve">
+    <value>Purchase</value>
+  </data>
   <data name="SaveSuccess" xml:space="preserve">
     <value>Saved Succesfully</value>
   </data>
@@ -138,8 +141,17 @@
   <data name="ValidIngredientName" xml:space="preserve">
     <value>Enter valid ingredient name</value>
   </data>
+  <data name="ValidPurchaseDetails" xml:space="preserve">
+    <value>Enter atleast one record</value>
+  </data>
+  <data name="ValidReferenceNo" xml:space="preserve">
+    <value>Enter Validate Reference No</value>
+  </data>
   <data name="ValidSalesPrice" xml:space="preserve">
     <value>Enter Valid Sales Price</value>
+  </data>
+  <data name="ValidSupplier" xml:space="preserve">
+    <value>Select Supplier</value>
   </data>
   <data name="ValidUnit" xml:space="preserve">
     <value>Select Unit</value>

@@ -1,99 +1,102 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.IngredientModel>
-@using  RocketPOS.Resources
-@inject LocService SharedLocalizer
-@{
-    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
-}
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="Ingredient" class="pull-right btn btn-primary">Add</a></div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="@SharedLocalizer.GetLocalizedHtmlString("Ingredient")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
-                                    <tr role="row">
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var tm = "#myModal" + item.Id;
-                                        var mid = "myModal" + item.Id;
-                                        <tr role="row">
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.IngredientName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Category)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Unit)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.IsActive)
-                                            </td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="Ingredient" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+
+    @using  RocketPOS.Resources
+    @inject LocService SharedLocalizer
+    @{
+        ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
+        var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
+    }
+
+    <div class="page-inner">
+        <div class="page-header"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <a asp-action="Ingredient" class="pull-right btn btn-primary">Add</a>
+                        <h2>Ingredient</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                                <div class="col-sm-12">
+                                    <table id="@SharedLocalizer.GetLocalizedHtmlString("Ingredient")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                        <thead>
+                                            <tr role="row">
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                                <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+                                                var tm = "#myModal" + item.Id;
+                                                var mid = "myModal" + item.Id;
+                                                <tr role="row">
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.IngredientName)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Category)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Unit)
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.IsActive)
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-button-action">
+                                                            <a asp-action="Ingredient" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                            <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </tbody>
-                            </table>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@section Scripts {
-    <script>
+    @section Scripts {
+        <script>
         $(document).ready(function () {
             var table = $('#@dataTableName').DataTable();
         });
-    </script>
-}
+        </script>
+    }
 

@@ -48,17 +48,19 @@ namespace RocketPOS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Addons(AddonsModel addonsModel, string submitButton)
         {
-            if (addonsModel.Id > 0)
+            if (ModelState.IsValid)
             {
-                var result = _iAddonsService.UpdateAddons(addonsModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                if (addonsModel.Id > 0)
+                {
+                    var result = _iAddonsService.UpdateAddons(addonsModel);
+                    ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                }
+                else
+                {
+                    var result = _iAddonsService.InsertAddons(addonsModel);
+                    ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                }
             }
-            else
-            {
-                var result = _iAddonsService.InsertAddons(addonsModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
-            }
-
             return View();
         }
 

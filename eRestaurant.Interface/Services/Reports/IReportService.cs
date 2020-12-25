@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using RocketPOS.Models.Reports;
 
 namespace RocketPOS.Interface.Services.Reports
 {
     public interface IReportService
     {
-        // Inventory method
+        List<InventoryReportModel> GetInventoryReport(InventoryReportParamModel inventoryReportParamModel);
     }
 }

@@ -11,8 +11,12 @@ using Microsoft.Extensions.Hosting;
 using RocketPOS.Models;
 using RocketPOS.Repository;
 using RocketPOS.Services;
+using RocketPOS.Repository.Reports;
+using RocketPOS.Services.Reports;
 using RocketPOS.Interface.Services;
 using RocketPOS.Interface.Repository;
+using RocketPOS.Interface.Services.Reports;
+using RocketPOS.Interface.Repository.Reports;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
@@ -128,6 +132,10 @@ namespace RocketPOS
             services.AddScoped<IEmployeeService, EmployeeService>();
            services.AddScoped<IEmployeeAttendanceRpository, EmployeeAttendanceRepository>();
             services.AddScoped<IEmployeeAttendanceService, EmployeeAttendanceService>();
+            services.AddScoped<IReportRepository, ReportRepository>();
+            services.AddScoped<IReportService, ReportService>();
+
+
             services.AddHttpClient();
         }
 

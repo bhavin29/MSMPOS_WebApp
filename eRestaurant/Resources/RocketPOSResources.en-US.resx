@@ -129,8 +129,8 @@
   <data name="Ingredient" xml:space="preserve">
     <value>Ingredient</value>
   </data>
-  <data name="Inventory" xml:space="preserve">
-    <value>Inventory</value>
+  <data name="Purchase" xml:space="preserve">
+    <value>Purchase</value>
   </data>
   <data name="SaveSuccess" xml:space="preserve">
     <value>Saved Succesfully</value>

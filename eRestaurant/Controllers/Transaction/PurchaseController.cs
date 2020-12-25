@@ -18,7 +18,7 @@ namespace RocketPOS.Controllers.Transaction
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        
+
         public PurchaseController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
@@ -39,15 +39,28 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: Purchase/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public ActionResult GetOrderById(int purchaseId)
         {
-            return View();
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+            return View(purchaseModel);
         }
 
         // GET: Purchase/Create
-        public ActionResult Purchase()
+        public ActionResult Purchase(long? id)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
+            if (id > 0)
+            {
+                int purchaseId = Convert.ToInt32(id);
+                purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+
+            }
+            else
+            {
+                purchaseModel.Date = DateTime.Now;
+            }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(purchaseModel);
@@ -56,64 +69,89 @@ namespace RocketPOS.Controllers.Transaction
         // POST: Purchase/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SavePurchase(PurchaseModel purchaseModel)
+        public ActionResult Purchase(PurchaseModel purchaseModel)
         {
-            try
+            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
+            string purchaseMessage = string.Empty;
+            if (!ModelState.IsValid)
             {
-              
+                string errorString = this.ValidationPurchase(purchaseModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    return Json(new { error = true, message =errorString, status = 201 });
+                }
+            }
 
-                return RedirectToAction(nameof(Purchase));
-            }
-            catch
+            if (purchaseModel.PurchaseDetails != null)
             {
-                return View();
+                if (purchaseModel.PurchaseDetails.Count > 0)
+                {
+
+                    if (purchaseModel.Id > 0)
+                    {
+
+                        int result = _iPurchaseService.UpdatePurchase(purchaseModel);
+                        if (result > 0)
+                        {
+                            purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
+                        }
+                    }
+                    else
+                    {
+                        int result = _iPurchaseService.InsertPurchase(purchaseModel);
+                        if (result > 0)
+                        {
+                            purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
+                        }
+                    }
+                }
+                else
+                {
+                    purchaseMessage = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                    return Json(new { error = true, message = purchaseMessage, status = 201 });
+                }
             }
+            else
+            {
+                purchaseMessage = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                return Json(new { error = true, message = purchaseMessage, status = 201 });
+            }
+            // return View(purchaseModel);
+            return Json(new { error = false, message = purchaseMessage, status=200 });
+            //return View();
         }
 
-        // GET: Purchase/Edit/5
-        public ActionResult Edit(int id)
+       public ActionResult Delete(int id)
         {
-            return View();
+            int result = _iPurchaseService.DeletePurchase(id);
+            if (result > 0)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+            }
+            return RedirectToAction(nameof(PurchaseList));
         }
 
-        // POST: Purchase/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        private string ValidationPurchase(PurchaseModel purchaseModel)
         {
-            try
+            string ErrorString = string.Empty;
+            //if (string.IsNullOrEmpty(purchaseModel.ReferenceNo.ToString()) || purchaseModel.ReferenceNo == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
+            //    return ErrorString;
+            //}
+            if (string.IsNullOrEmpty(purchaseModel.SupplierId.ToString()) || purchaseModel.SupplierId == 0)
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
+                return ErrorString;
             }
-            catch
+            if (purchaseModel.PurchaseDetails == null || purchaseModel.PurchaseDetails.Count < 1)
             {
-                return View();
+                ErrorString = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                return ErrorString;
             }
-        }
 
-        // GET: Purchase/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Purchase/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return ErrorString;
         }
     }
 }

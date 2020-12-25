@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Web.Mvc;
 
@@ -7,22 +8,31 @@ namespace RocketPOS.Models
 {
     public class PurchaseModel
     {
-      
-        public long ReferenceNo { get; set; }
-        public int SupplierId { get; set; }
+
+        public long Id { get; set; }
+        [Required(ErrorMessage = "Enter Reference No")]
+        public string ReferenceNo { get; set; }
+        [Required(ErrorMessage = "Select Supplier")]
+        public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
-        public int IngredientId { get; set; }
+        public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
+        [Required(ErrorMessage = "Select Date")]
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public decimal GrandTotal { get; set; }
         public decimal Due { get; set; }
         public decimal Paid { get; set; }
+        public string Message { get; set; }
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
     }
    
     public class PurchaseDetailsModel
     {
-        public int IngredientCode { get; set; }
+        public long PurchaseId { get; set; }
+        public int ReferenceNo { get; set; }
+        public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
         public decimal Total { get; set; }

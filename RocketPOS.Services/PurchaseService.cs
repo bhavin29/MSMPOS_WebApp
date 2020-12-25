@@ -18,9 +18,35 @@ namespace RocketPOS.Services
             _iPurchaseRepository = iPurchaseRepository;
         }
 
-        public PurchaseViewModel GetPurchaseById(long PurchaseId)
+        public PurchaseModel GetPurchaseById(long purchaseId)
         {
-            return _iPurchaseRepository.GetPurchaseList().Where(x => x.ReferenceNo == PurchaseId).FirstOrDefault();
+            PurchaseModel purchaseModel = new PurchaseModel();
+
+            var model = (from purchase in _iPurchaseRepository.GetPurchaseById(purchaseId).ToList()
+                         select new PurchaseModel()
+                         {
+                             Id = purchase.Id,
+                             ReferenceNo = purchase.ReferenceNo,
+                             SupplierId = purchase.SupplierId,
+                             Date = purchase.Date,
+                             GrandTotal = purchase.GrandTotal,
+                             Due = purchase.Due,
+                             Paid = purchase.Paid
+                         }).SingleOrDefault();
+            if(model != null)
+            {
+                model.PurchaseDetails = (from purchasedetails in _iPurchaseRepository.GetPurchaseDetails(purchaseId)
+                                      select new PurchaseDetailsModel()
+                                      {
+                                          PurchaseId = purchasedetails.PurchaseId,
+                                          IngredientId = purchasedetails.IngredientId,
+                                          Quantity = purchasedetails.Quantity,
+                                          UnitPrice = purchasedetails.UnitPrice,
+                                          Total = purchasedetails.Total,
+                                          IngredientName = purchasedetails.IngredientName
+                                      }).ToList();
+            }
+            return model;
         }
         public List<PurchaseViewModel> GetPurchaseList()
         {

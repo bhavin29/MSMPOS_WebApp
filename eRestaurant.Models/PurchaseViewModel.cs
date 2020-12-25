@@ -8,7 +8,7 @@ namespace RocketPOS.Models
     public class PurchaseViewModel
     {
         public int Id { get; set; }
-        public long ReferenceNo { get; set; }
+        public string ReferenceNo { get; set; }
      
         public DateTime Date { get; set; }
         public string SupplierName { get; set; }

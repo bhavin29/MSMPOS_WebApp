@@ -11,11 +11,10 @@ namespace RocketPOS.Models
 
         public long Id { get; set; }
         [Required(ErrorMessage = "Enter Reference No")]
-        public long ReferenceNo { get; set; }
+        public string ReferenceNo { get; set; }
         [Required(ErrorMessage = "Select Supplier")]
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
-        [Required(ErrorMessage = "Select Ingredient")]
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
         [Required(ErrorMessage = "Select Date")]

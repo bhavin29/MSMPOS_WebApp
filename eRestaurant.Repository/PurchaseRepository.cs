@@ -23,7 +23,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName," +
-                    "Purchase.GrandTotal as Total,Purchase.DueAmount as Due " +
+                    "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due " +
                     "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
@@ -205,6 +205,21 @@ namespace RocketPOS.Repository
         public int DeletePurchase(int Purchaseid)
         {
             int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update Purchase set IsDeleted = 1 where id = " + Purchaseid + ";" +
+                    " Update PurchaseIngredient set IsDeleted = 1 where PurchaseId = " + Purchaseid + ";";
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                { sqltrans.Rollback(); }
+            }
             return result;
         }
 

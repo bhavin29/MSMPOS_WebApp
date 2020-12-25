@@ -21,13 +21,13 @@
                             <form asp-action="Purchase" method="post" id="purchase" role="form">
                                 <div>
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="ReferenceNo" class="control-label"></label>
-                                                <input asp-for="ReferenceNo" class="form-control" />
-                                                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="ReferenceNo" class="control-label"></label>
+                                                    <input asp-for="ReferenceNo" class="form-control" />
+                                                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                                </div>
                                             </div>
-                                        </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label asp-for="SupplierList" class="control-label">Supplier</label>
@@ -80,8 +80,8 @@
                                                             <div class="form-group">
                                                                 <label class="control-label"></label>
                                                                 <button id="addRow" class="form-control btn btn-primary" type="submit" style="margin-top: 7px">Add New</button>
-                                                                <input class="form-control" type="text" id="PurchaseId" value="0" />
-                                                                <input asp-for="Id" class="form-control" type="text" />
+                                                                <input class="form-control" type="hidden" id="PurchaseId" value="0" />
+                                                                <input asp-for="Id" class="form-control" type="hidden" />
                                                             </div>
                                                         </div>
                                                     </div>
@@ -196,29 +196,15 @@
                 <h4 class="modal-title" id="aModalLabel">Message</h4>
             </div>
             <div class="modal-body">
-                <div><label asp-for="Message"></label> </div>
-                @*<div id="isValidate" class="hide"><span id="aModalMessage"></span></div>
-                    <div id="isSuccess" class="hide"><span id="aModalMessage"></span></div>*@
             </div>
             <div class="modal-footer">
-                <button type="button" id="save" class="btn btn-primary hide">OK</button>
-                <button type="button" id="ok" class="btn btn-primary hide">OK</button>
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id ="ok"class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-@*@{
-        if (ViewBag.Result != null)
-        {
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-            <script type="text/javascript">
-                $(function () {
-                    $("#aModal").modal('show');
-                });
-            </script>
-        }
-    }*@
+
 @section scripts{
     <script>
         dataArr = []

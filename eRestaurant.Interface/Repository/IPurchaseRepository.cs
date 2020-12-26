@@ -10,8 +10,10 @@ namespace RocketPOS.Interface.Repository
         List<PurchaseViewModel> GetPurchaseList();
         int InsertPurchase(PurchaseModel purchaseModel);
         int UpdatePurchase(PurchaseModel purchaseModel);
-        int DeletePurchase(int Purchaseid);
+        int DeletePurchase(long PurchaseId);
         List<PurchaseDetailsModel> GetPurchaseDetails(long purchaseId);
         List<PurchaseModel> GetPurchaseById(long purchaseId);
+        int DeletePurchaseDetails(long PurchaseDetailsId);
+        long ReferenceNumber();
     }
 }

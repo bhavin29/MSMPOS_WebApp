@@ -15,8 +15,8 @@ namespace RocketPOS.Controllers.Transaction
     {
         private readonly IPurchaseService _iPurchaseService;
         private readonly IDropDownService _iDropDownService;
-        private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
-        private LocService _locService;
+        private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private readonly LocService _locService;
 
 
         public PurchaseController(IPurchaseService purchaseService,
@@ -40,7 +40,7 @@ namespace RocketPOS.Controllers.Transaction
 
         // GET: Purchase/Details/5
         [HttpGet]
-        public ActionResult GetOrderById(int purchaseId)
+        public ActionResult GetOrderById(long purchaseId)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
             purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
@@ -53,13 +53,14 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseModel purchaseModel = new PurchaseModel();
             if (id > 0)
             {
-                int purchaseId = Convert.ToInt32(id);
+                long purchaseId = Convert.ToInt64(id);
                 purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
 
             }
             else
             {
                 purchaseModel.Date = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
@@ -79,7 +80,7 @@ namespace RocketPOS.Controllers.Transaction
                 string errorString = this.ValidationPurchase(purchaseModel);
                 if (!string.IsNullOrEmpty(errorString))
                 {
-                    return Json(new { error = true, message =errorString, status = 201 });
+                    return Json(new { error = true, message = errorString, status = 201 });
                 }
             }
 
@@ -118,11 +119,11 @@ namespace RocketPOS.Controllers.Transaction
                 return Json(new { error = true, message = purchaseMessage, status = 201 });
             }
             // return View(purchaseModel);
-            return Json(new { error = false, message = purchaseMessage, status=200 });
+            return Json(new { error = false, message = purchaseMessage, status = 200 });
             //return View();
         }
 
-       public ActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             int result = _iPurchaseService.DeletePurchase(id);
             if (result > 0)
@@ -130,6 +131,16 @@ namespace RocketPOS.Controllers.Transaction
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
             }
             return RedirectToAction(nameof(PurchaseList));
+        }
+
+        public ActionResult DeletePurchaseDetails(long purchaseId)
+        {
+            long result = _iPurchaseService.DeletePurchaseDetails(purchaseId);
+            if (result > 0)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+            }
+            return Json(new { error = false, message = string.Empty, status = 200 });
         }
 
         private string ValidationPurchase(PurchaseModel purchaseModel)

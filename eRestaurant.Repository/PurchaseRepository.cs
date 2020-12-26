@@ -22,9 +22,9 @@ namespace RocketPOS.Repository
             List<PurchaseViewModel> purchaseViewModelList = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName," +
+                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo, PurchaseDate as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due " +
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id";
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Isdeleted = 0";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
 
@@ -39,11 +39,9 @@ namespace RocketPOS.Repository
             {
                 var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid " +
-                      "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Id = " + purhcaseId;
+                      "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Isdeleted = 0 and Purchase.Id = " + purhcaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
             }
-
-
             return purchaseModelList;
         }
         public int InsertPurchase(PurchaseModel purchaseModel)
@@ -230,7 +228,7 @@ namespace RocketPOS.Repository
             {
                 var query = "select pin.Id as PurchaseId,pin.IngredientId as IngredientId,i.IngredientName,pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total " +
                             "from purchase as P inner join PurchaseIngredient as PIN on P.id = pin.PurchaseId " +
-                            "inner join Ingredient as i on pin.IngredientId = i.Id where P.id = " + purchaseId;
+                            "inner join Ingredient as i on pin.IngredientId = i.Id where P.id = " + purchaseId + "and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseDetailsModel>(query).AsList();
             }
 

@@ -1,6 +1,7 @@
 ﻿var PurchaseDatatable;
 
 $(document).ready(function () {
+    $("#purchase").validate();
     PurchaseDatatable = $('#PurchaseOrderDetails').DataTable({
         "paging": false,
         "ordering": false,
@@ -27,44 +28,40 @@ $(document).ready(function () {
             }
         ]
     });
-    // $("#Date").val(new Date());
 });
 
 $('#addRow').on('click', function (e) {
     debugger;
-    if ($("#purchase").valid()) {
-        e.preventDefault();
-        var message = validation();
-        if (message == '') {
-            PurchaseDatatable.row('.active').remove().draw(false);
-            PurchaseDatatable.row.add([
-                $("#IngredientId").val(),
-                $('#IngredientId').children("option:selected").text(),
-                $("#UnitPrice").val(),
-                $("#Quantity").val(),
-                $("#UnitPrice").val() * $("#Quantity").val(),
-                '<td><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="editItem fa fa-edit"></a> | <a href="#" data-itemId="' + $("#IngredientId").val() + '" class= "deleteItem fa fa-times"></a ></td > ',
-                $("#PurchaseId").val()
-            ]).draw(false);
-            dataArr.push({
-                ingredientId: $("#IngredientId").val(),
-                unitPrice: $("#UnitPrice").val(),
-                quantity: $("#Quantity").val(),
-                total: $("#UnitPrice").val() * $("#Quantity").val(),
-                purchaseId: $("#PurchaseId").val()
-            });
-            GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
-            $("#GrandTotal").val(GrandTotal);
-            DueAmount();
-            clearItem();
-        }
-        else if (message != '') {
-            $(".modal-body").text(message);
-            $("#save").hide();
-            $("#aModal").modal('show');
-        }
+    e.preventDefault();
+    var message = validation();
+    if (message == '') {
+        PurchaseDatatable.row('.active').remove().draw(false);
+        PurchaseDatatable.row.add([
+            $("#IngredientId").val(),
+            $('#IngredientId').children("option:selected").text(),
+            $("#UnitPrice").val(),
+            $("#Quantity").val(),
+            $("#UnitPrice").val() * $("#Quantity").val(),
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ',
+            $("#PurchaseId").val()
+        ]).draw(false);
+        dataArr.push({
+            ingredientId: $("#IngredientId").val(),
+            unitPrice: $("#UnitPrice").val(),
+            quantity: $("#Quantity").val(),
+            total: $("#UnitPrice").val() * $("#Quantity").val(),
+            purchaseId: $("#PurchaseId").val()
+        });
+        GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
+        $("#GrandTotal").val(GrandTotal);
+        DueAmount();
+        clearItem();
     }
-    else {
+    else if (message != '') {
+        $(".modal-body").text(message);
+        $("#save").hide();
+        jQuery.noConflict();
+        $("#aModal").modal('show');
         return false;
     }
 });
@@ -79,17 +76,18 @@ function saveOrder(data) {
         data: data,
         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
-}
+};
 
 $(function () {
     $('#saveOrder').click(function () {
         if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
-           var message = 'No data available!'
+            var message = 'No data available!'
             $(".modal-body").text(message);
             $("#save").hide();
+            jQuery.noConflict();
             $("#aModal").modal('show');
         }
-        else if ($("#purchase").valid()) {
+        else {
             $("#purchase").on("submit", function (e) {
                 e.preventDefault();
                 var data = ({
@@ -98,8 +96,8 @@ $(function () {
                     SupplierId: $("#SupplierId").val(),
                     Date: $("#Date").val(),
                     GrandTotal: $("#GrandTotal").val(),
-                    Due: $("#Paid").val(),
-                    Paid: $("#Due").val(),
+                    Due: $("#Due").val(),
+                    Paid: $("#Paid").val(),
                     SupplierList: [],
                     IngredientList: [],
                     PurchaseDetails: dataArr
@@ -109,12 +107,14 @@ $(function () {
                         $(".modal-body").text(response.message);
                         $("#save").show();
                         $("#ok").hide();
+                        jQuery.noConflict();
                         $("#aModal").modal('show');
                     }
                     else {
                         $(".modal-body").text(response.message);
                         $("#ok").show();
                         $("#save").hide();
+                        jQuery.noConflict();
                         $("#aModal").modal('show');
                     }
                     console.log(response);
@@ -132,66 +132,88 @@ $("#save").click(function () {
 
 $('#ok').click(function () {
     $("#aModal").modal('hide');
-    //window.location.href = "#";
-
 });
 
-$(document).on('click', 'a.deleteItem', function (e) {
-    e.preventDefault();
-    var id = $(this).attr('data-itemId');
-    $(this).parents('tr').css("background-color", "#FF3700").fadeOut(800, function () {
+function deleteOrderItem(id) {
+    debugger;
+    return $.ajax({
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        type: 'GET',
+        beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
+        url: 'DeletePurchaseDetails',
+        data: "purchaseId=" + id,
+        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+    });
+}
+
+//$(document).on('click', 'a.deleteItem', function (e) {
+function deleteOrder(purchaseId, ingredientId, rowId) {
+    debugger;
+    //e.preventDefault();
+    var id = ingredientId;
+    if (purchaseId == "0") {
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == id) {
-                debugger;
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
                 $("#GrandTotal").val(GrandTotal);
                 DueAmount();
                 dataArr.splice(i, 1);
-                PurchaseDatatable.row($(this).parents('tr')).remove().draw(false);
+                PurchaseDatatable.row(rowId).remove().draw(false);
             }
         }
-    });
+    }
+    else {
+        $.when(deleteOrderItem(purchaseId).then(function (res) {
+            if (res.status == 200) {
+                debugger;
+                for (var i = 0; i < dataArr.length; i++) {
+                    if (dataArr[i].ingredientId == id) {
+                        TotalAmount = dataArr[i].total;
+                        GrandTotal -= TotalAmount;
+                        $("#GrandTotal").val(GrandTotal);
+                        DueAmount();
+                        dataArr.splice(i, 1);
+                        PurchaseDatatable.row(rowId).remove().draw(false);
+                        jQuery.noConflict();
+                        $("#aModal").modal('hide');
+                    }
+                    else {
 
-});
+                    }
+                }
+            }
+        }).fail(function (err) {
 
-//$('#PurchaseDatatable tbody').on('click', 'tr', function () {
-//    debugger;
-//    if ($(this).hasClass('selected')) {
-//        $(this).removeClass('selected');
-//    }
-//    else {
-//        PurchaseDatatable.$('tr.selected').removeClass('selected');
-//        $(this).addClass('selected');
-//    }
-//});
+        }));
+    }
+};
 
 $(document).on('click', 'a.editItem', function (e) {
     if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
         var message = 'No data available!'
         $(".modal-body").text(message);
         $("#save").hide();
+        jQuery.noConflict();
         $("#aModal").modal('show');
     }
     else {
         e.preventDefault();
-        //if ($(this).hasClass('active')) {
-        //    $(this).removeClass('active');
-        //}
-        //else {
-        //    $(this).parents('tr').removeClass('active');
-        //    $(this).parents('tr').addClass('active');
-        //}
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+        }
+        else {
+            $(this).parents('tr').removeClass('active');
+            $(this).parents('tr').addClass('active');
+        }
         var id = $(this).attr('data-itemId');
-        //$(this).parents('tr').css("background-color", "#0000A0").fadeOut(800, function () {
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == id) {
                 $("#IngredientId").val(dataArr[i].ingredientId),
-                    // $('#IngredientId').children("option:selected").text(),
                     $("#UnitPrice").val(dataArr[i].unitPrice),
                     $("#Quantity").val(dataArr[i].quantity),
                     $("#PurchaseId").val(dataArr[i].purchaseId)
-                //$("#UnitPrice").val() * $("#Quantity").val(),
                 GrandTotal = $("#GrandTotal").val();
 
                 TotalAmount = dataArr[i].total;
@@ -228,6 +250,13 @@ function validation() {
     }
     else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
         message = "Enter quantity"
+    }
+    for (var i = 0; i < dataArr.length; i++) {
+        if ($("#IngredientId").val() == dataArr[i].ingredientId) {
+            message = "Ingredient already selected!"
+            break;
+        }
+
     }
     return message;
 

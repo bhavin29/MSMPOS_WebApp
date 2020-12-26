@@ -60,9 +60,19 @@ namespace RocketPOS.Services
         {
             return _iPurchaseRepository.UpdatePurchase(purchaseModel);
         }
-        public int DeletePurchase(int purchaseid)
+        public int DeletePurchase(long purchaseId)
         {
-            return _iPurchaseRepository.DeletePurchase(purchaseid);
+            return _iPurchaseRepository.DeletePurchase(purchaseId);
+        }
+
+        public int DeletePurchaseDetails(long PurchaseDetailsId)
+        {
+            return _iPurchaseRepository.DeletePurchaseDetails(PurchaseDetailsId);
+        }
+
+        public long ReferenceNumber()
+        {
+            return _iPurchaseRepository.ReferenceNumber();
         }
     }
 }

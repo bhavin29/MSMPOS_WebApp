@@ -80,7 +80,7 @@ namespace RocketPOS.Repository
                              "   'Notes'," +
                              "   1,   " +
                              "   GetUtcDate(),    " +
-                             "   0); SELECT CAST(SCOPE_IDENTITY() as INT); ";
+                             "   0); SELECT CAST(@ReferenceNo as int); ";
                 result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -202,7 +202,7 @@ namespace RocketPOS.Repository
 
             return result;
         }
-        public int DeletePurchase(int Purchaseid)
+        public int DeletePurchase(long PurchaseId)
         {
             int result = 0;
 
@@ -210,8 +210,8 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update Purchase set IsDeleted = 1 where id = " + Purchaseid + ";" +
-                    " Update PurchaseIngredient set IsDeleted = 1 where PurchaseId = " + Purchaseid + ";";
+                var query = $"update Purchase set IsDeleted = 1 where id = " + PurchaseId + ";" +
+                    " Update PurchaseIngredient set IsDeleted = 1 where PurchaseId = " + PurchaseId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -235,6 +235,46 @@ namespace RocketPOS.Repository
             }
 
             return purchaseDetails;
+        }
+
+        public int DeletePurchaseDetails(long PurchaseDetailsId)
+        {
+            int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update PurchaseIngredient set IsDeleted = 1 where id = " + PurchaseDetailsId + ";";
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                { sqltrans.Rollback(); }
+            }
+            return result;
+        }
+
+        public long ReferenceNumber()
+        {
+            long result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"SELECT ISNULL(MAX(PurchaseNumber),0) + 1 FROM purchase ;";
+                result = con.ExecuteScalar<long>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                { sqltrans.Rollback(); }
+            }
+            return result;
         }
     }
 }

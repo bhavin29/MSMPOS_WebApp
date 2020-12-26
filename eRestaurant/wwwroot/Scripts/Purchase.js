@@ -31,7 +31,6 @@ $(document).ready(function () {
 });
 
 $('#addRow').on('click', function (e) {
-    debugger;
     e.preventDefault();
     var message = validation();
     if (message == '') {
@@ -42,7 +41,10 @@ $('#addRow').on('click', function (e) {
             $("#UnitPrice").val(),
             $("#Quantity").val(),
             $("#UnitPrice").val() * $("#Quantity").val(),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ',
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > '+
+            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">'+
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val()
         ]).draw(false);
         dataArr.push({
@@ -137,20 +139,17 @@ $('#ok').click(function () {
 function deleteOrderItem(id) {
     debugger;
     return $.ajax({
-        dataType: 'json',
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        type: 'GET',
-        beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
-        url: 'DeletePurchaseDetails',
-        data: "purchaseId=" + id,
-        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+        dataType: "json",
+        //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        type: "GET",
+       // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
+        url: "/Purchase/DeletePurchaseDetails",
+        data: "purchaseId=" + id
+        //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
 }
 
-//$(document).on('click', 'a.deleteItem', function (e) {
 function deleteOrder(purchaseId, ingredientId, rowId) {
-    debugger;
-    //e.preventDefault();
     var id = ingredientId;
     if (purchaseId == "0") {
         for (var i = 0; i < dataArr.length; i++) {
@@ -161,11 +160,14 @@ function deleteOrder(purchaseId, ingredientId, rowId) {
                 DueAmount();
                 dataArr.splice(i, 1);
                 PurchaseDatatable.row(rowId).remove().draw(false);
+                jQuery.noConflict();
+                $("#myModal0").modal('hide');
             }
         }
     }
     else {
         $.when(deleteOrderItem(purchaseId).then(function (res) {
+            console.log(res)
             if (res.status == 200) {
                 debugger;
                 for (var i = 0; i < dataArr.length; i++) {
@@ -177,15 +179,13 @@ function deleteOrder(purchaseId, ingredientId, rowId) {
                         dataArr.splice(i, 1);
                         PurchaseDatatable.row(rowId).remove().draw(false);
                         jQuery.noConflict();
-                        $("#aModal").modal('hide');
-                    }
-                    else {
-
+                        $("#myModal2" + rowId).modal('hide');
                     }
                 }
+                console.log(res);
             }
         }).fail(function (err) {
-
+            console.log(err);
         }));
     }
 };
@@ -225,7 +225,6 @@ $(document).on('click', 'a.editItem', function (e) {
             }
         }
     }
-    //});
 });
 
 $("#Paid").blur(function () {

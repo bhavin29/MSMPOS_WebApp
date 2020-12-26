@@ -23,11 +23,11 @@
                                 <div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label asp-for="ReferenceNo" class="control-label"></label>
-                                                    <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
-                                                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
-                                                </div>
+                                            <div class="form-group">
+                                                <label asp-for="ReferenceNo" class="control-label"></label>
+                                                <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
+                                                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                            </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
@@ -68,13 +68,13 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Unit Price</label>
-                                                                <input class="form-control" type="text" id="UnitPrice" />
+                                                                <input class="form-control text-right" type="text" id="UnitPrice" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Quantity</label>
-                                                                <input class="form-control" type="text" id="Quantity" />
+                                                                <input class="form-control text-right" type="text" id="Quantity" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -94,10 +94,10 @@
                                                                     <tr>
                                                                         <th style="width:35%">IngredientId</th>
                                                                         <th style="width:35%">Ingredient</th>
-                                                                        <th style="width:20%">Unit Price</th>
-                                                                        <th style="width:15%">Quantity</th>
-                                                                        <th style="width:20%">Amount</th>
-                                                                        <th style="width:25%">Actions</th>
+                                                                        <th style="width:20%" class="text-right">Unit Price</th>
+                                                                        <th style="width:15%" class="text-right">Quantity</th>
+                                                                        <th style="width:20%" class="text-right">Amount</th>
+                                                                        <th style="width:25%" class="text-center">Actions</th>
                                                                         <th style="width:10%">PurchaseId</th>
                                                                     </tr>
                                                                 </thead>
@@ -115,17 +115,19 @@
                                                                             <td>
                                                                                 @item.IngredientName
                                                                             </td>
-                                                                            <td>
+                                                                            <td class="text-right">
                                                                                 @item.UnitPrice
                                                                             </td>
-                                                                            <td>
+                                                                            <td class="text-right">
                                                                                 @item.Quantity
                                                                             </td>
-                                                                            <td>
+                                                                            <td class="text-right">
                                                                                 @item.Total
                                                                             </td>
                                                                             <td>
-                                                                                <a href="#" data-itemid="@item.IngredientId" class="editItem fa fa-edit"></a> | <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                <div class="form-button-action">
+                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                </div>
                                                                             </td>
                                                                             <td>
                                                                                 @item.PurchaseId
@@ -142,7 +144,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <button id="deleteBtn" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</button>
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -169,20 +171,20 @@
                                                         <div class="col-md-6 col-lg-4">
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="GrandTotal" class="col-md-3 col-form-label">Grand Total</label>
-                                                                <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="GrandTotal" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                                                                <div class="col-md-9 p-0 ">
+                                                                    <input type="text" asp-for="GrandTotal" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group form-inline">
                                                                 <label asp-for="Paid" class="col-md-3 col-form-label">Paid</label>
                                                                 <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Paid" class="form-control input-full" placeholder="Enter Input">
+                                                                    <input type="text" asp-for="Paid" class="form-control input-full text-right" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group form-inline">
                                                                 <label asp-for="Due" class="col-md-3 col-form-label">Due</label>
                                                                 <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Due" class="form-control input-full" disabled="disabled" placeholder="Enter Input">
+                                                                    <input type="text" asp-for="Due" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -192,12 +194,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
                                     <div class="form-button-action">
                                         <input type="submit" asp-action="PurchaseList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
                                         <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
                                     </div>
-                                </div>
                             </form>
 
                         </div>
@@ -224,7 +224,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+@*<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -235,12 +235,12 @@
                 @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
             </div>
             <div class="modal-footer">
-                <button id="deleteBtn" onclick="deleteOrder(0, @Model.IngredientId,0)" class="btn bg-danger mr-1">Delete</button>
+                <button id="deleteBtn" onclick="deleteOrder(0, ,0)" class="btn bg-danger mr-1">Delete</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 @section scripts{
     <script>

@@ -12,10 +12,12 @@ namespace RocketPOS.Models
         public int EmployeeId  { get; set; }
 
         [DisplayName("Employee")]
+        [Required(ErrorMessage = "Select Employee Name")]
         public string EmployeeName { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
 
         [DisplayName("Outlet")]
+        [Required(ErrorMessage = "Select Outlet")]
         public string OutletId { get; set; }
 
         [DisplayName("Outlet")]
@@ -23,7 +25,7 @@ namespace RocketPOS.Models
         public List<SelectListItem> OutletList { get; set; }
 
         [DisplayName("Username")]
-        [Required]
+        [Required(ErrorMessage = "Enter Username")]
         public string Username { get; set; }
         public string Password { get; set; }
 

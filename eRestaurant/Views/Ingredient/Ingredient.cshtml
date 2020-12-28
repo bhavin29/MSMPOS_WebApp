@@ -17,7 +17,7 @@
                         <div class="col-md-12">
                             <form asp-action="Ingredient" method="post" role="form">
                                 <div class="row">
-                                    <div class="col-lg-5">
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="IngredientName" class="control-label">Ingredent Name</label>
                                             <input asp-for="IngredientName" class="form-control" />
@@ -31,7 +31,6 @@
                                             </select>
                                             <span asp-validation-for="CategoryId" class="text-danger"></span>
                                         </div>
-
                                         <div class="form-group">
                                             <label asp-for="UnitList" class="control-label">Unit</label>
                                             <select asp-for="UnitId"
@@ -89,9 +88,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>

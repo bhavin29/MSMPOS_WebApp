@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
 
         private readonly IExpsenseCategoryService _iexpsenseCategoryService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public ExpenseCategoryController(IExpsenseCategoryService expsenseCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -29,7 +30,7 @@ namespace RocketPOS.Controllers.Master
             List<ExpsenseCategoryModel> expenseCategoryModel = new List<ExpsenseCategoryModel>();
             expenseCategoryModel = _iexpsenseCategoryService.GetExpsenseCategoryList().ToList();
             return View(expenseCategoryModel);
-            // return View("../Master/Addons/Index");
+            // return View("../Master/ExpenseCategory/Index");
 
         }
 
@@ -50,18 +51,28 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult ExpenseCategory(ExpsenseCategoryModel expenseCategoryModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationExpenseCategory(expenseCategoryModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(expenseCategoryModel);
+                }
+            }
+
             if (expenseCategoryModel.Id > 0)
             {
                 var result = _iexpsenseCategoryService.UpdateExpsenseCategory(expenseCategoryModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iexpsenseCategoryService.InsertExpsenseCategory(expenseCategoryModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "ExpenseCategory");
         }
 
         public ActionResult Delete(int id)
@@ -69,6 +80,23 @@ namespace RocketPOS.Controllers.Master
             var deletedid = _iexpsenseCategoryService.DeleteExpsenseCategory(id);
 
             return RedirectToAction(nameof(Index));
+        }
+        
+        private string ValidationExpenseCategory(ExpsenseCategoryModel expenseCategoryModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(expenseCategoryModel.ExpenseCategory))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(expenseCategoryModel.Price.ToString()) || expenseCategoryModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
         }
 
     }

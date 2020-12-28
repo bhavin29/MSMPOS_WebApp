@@ -12,7 +12,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [DisplayName("Bank Name")]
-        [Required]
+        [Required(ErrorMessage = "Enter Bank Name")]
         public string BankName { get; set; }
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }

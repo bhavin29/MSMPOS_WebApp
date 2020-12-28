@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
 
         private readonly IStoreService _istoreService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public StoreController(IStoreService storeService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -36,8 +37,8 @@ namespace RocketPOS.Controllers.Master
             StoreModel storeModel = new StoreModel();
             if (id > 0)
             {
-                int addonsId = Convert.ToInt32(id);
-                storeModel = _istoreService.GetStoreById(addonsId);
+                int storeId = Convert.ToInt32(id);
+                storeModel = _istoreService.GetStoreById(storeId);
             }
 
             return View(storeModel);
@@ -47,18 +48,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Store(StoreModel storeModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationStore(storeModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(storeModel);
+                }
+            }
+
             if (storeModel.Id > 0)
             {
                 var result = _istoreService.UpdateStore(storeModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _istoreService.InsertStore(storeModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "Store");
+
         }
 
         public ActionResult Delete(int id)
@@ -68,6 +80,22 @@ namespace RocketPOS.Controllers.Master
             return RedirectToAction(nameof(Index));
         }
 
+        private string ValidationStore(StoreModel storeModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(storeModel.StoreName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(storeModel.Price.ToString()) || storeModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
 
     }
 }

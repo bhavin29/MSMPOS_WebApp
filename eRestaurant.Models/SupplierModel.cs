@@ -8,7 +8,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [DisplayName("Supplier")]
-        [Required]
+        [Required(ErrorMessage = "Enter Supplier Name")]
         public string SupplierName { get; set; }
         [DisplayName("Tax")]
         public int TaxType { get; set;}

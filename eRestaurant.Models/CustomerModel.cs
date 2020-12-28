@@ -13,7 +13,7 @@ namespace RocketPOS.Models
         public string CustomerNumber { get; set; }
 
         [DisplayName("Customer Name")]
-        [Required]
+        [Required(ErrorMessage = "Enter Customer Name")]
         public string CustomerName { get; set; }
         [DisplayName("Email")]
         public string CustomerEmail { get; set; }

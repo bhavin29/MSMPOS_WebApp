@@ -11,7 +11,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [DisplayName("Payment Method")]
-        [Required]
+        [Required(ErrorMessage = "Enter Payment Method")]
         public string PaymentMethodName { get; set; }
         [DisplayName("Bank")]
         public bool IsBank { get; set; }

@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IIngredientCategoryService _iIngredientCategoryService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public IngredientCategoryController(IIngredientCategoryService ingredientCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -23,17 +24,17 @@ namespace RocketPOS.Controllers.Master
             _sharedLocalizer = sharedLocalizer;
         }
 
-        // GET: AddonsController
+        // GET: IngredientCategoryController
         public ActionResult Index()
         {
             List<IngredientCategoryModel> ingredientCategoryList = new List<IngredientCategoryModel>();
             ingredientCategoryList = _iIngredientCategoryService.GetIngredientCategoryList().ToList();
             return View(ingredientCategoryList);
-            // return View("../Master/Addons/Index");
+            // return View("../Master/IngredientCategory/Index");
 
         }
 
-        // GET: AddonsController/Details/5
+        // GET: IngredientCategoryController/Details/5
         public ActionResult IngredientCategory(int? id)
         {
             IngredientCategoryModel ingredientCategoryModel = new IngredientCategoryModel();
@@ -46,31 +47,59 @@ namespace RocketPOS.Controllers.Master
             return View(ingredientCategoryModel);
         }
 
-        // POST: Addons/Create
+        // POST: IngredientCategory/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult IngredientCategory(IngredientCategoryModel ingredientCategoryModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationIngredientCategory(ingredientCategoryModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(ingredientCategoryModel);
+                }
+            }
+
             if (ingredientCategoryModel.Id > 0)
             {
                 var result = _iIngredientCategoryService.UpdateIngredientCategory(ingredientCategoryModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iIngredientCategoryService.InsertIngredientCategory(ingredientCategoryModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "IngredientCategory");
         }
 
-        // GET: Addons/Delete/5
-        public ActionResult Delete(int id)
+            // GET: IngredientCategory/Delete/5
+            public ActionResult Delete(int id)
         {
             var deletedid =_iIngredientCategoryService.DeleteIngredientCategory(id);
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationIngredientCategory(IngredientCategoryModel ingredientCategoryModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(ingredientCategoryModel.IngredientCategoryName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(ingredientCategoryModel.Price.ToString()) || ingredientCategoryModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

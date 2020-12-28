@@ -11,6 +11,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         [DisplayName("Employee Name")]
+        [Required(ErrorMessage = "Enter Employee Name")]
         public string EmployeeName { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
 

@@ -13,13 +13,13 @@ namespace RocketPOS.Models
         public int StoreId { get; set; }
 
         [DisplayName("Store Name")]
-        [Required]
+        [Required(ErrorMessage = "Select Store")]
         public string StoreName { get; set; }
 
         public List<SelectListItem> StoreList { get; set; }
 
         [DisplayName("Outlet Name")]
-        [Required]
+        [Required(ErrorMessage = "Enter Outlet Name")]
         public string OutletName { get; set;  }
         [DisplayName("Address")]
       

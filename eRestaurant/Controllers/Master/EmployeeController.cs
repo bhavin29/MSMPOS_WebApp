@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IEmployeeService _iemployeeService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public EmployeeController(IEmployeeService employeeService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -46,18 +47,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Employee(EmployeeModel employeeModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationEmployee(employeeModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(employeeModel);
+                }
+            }
+
+
             if (employeeModel.Id > 0)
             {
                 var result = _iemployeeService.UpdateEmployee(employeeModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iemployeeService.InsertEmployee(employeeModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "Employee");
         }
 
         public ActionResult Delete(int id)
@@ -66,5 +78,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationEmployee(EmployeeModel employeeModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(employeeModel.FirstName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(employeeModel.Price.ToString()) || employeeModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

@@ -10,16 +10,22 @@ namespace RocketPOS.Models
     public class AddonsModel
     {
         public int Id { get; set; }
-       
-        [DisplayName("Addons Name")]
-       
+
+        [Required(ErrorMessage = "Enter Addons Name")]
+
         public string AddonsName { get; set; }
 
+        [Required(ErrorMessage = "Enter Price")]
         public decimal Price { get; set; }
 
         public bool IsActive { get; set; }
 
         public int UserId { get; set; }
+
+        public AddonsModel()
+        {
+            IsActive = true;
+        }
 
     }
 }

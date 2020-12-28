@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IPaymentMethodService _iPaymentMethodService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public PaymentMethodController(IPaymentMethodService paymentMethod, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -46,18 +47,28 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult PaymentMethod(PaymentMethodModel paymentMethodModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationPaymentMethod(paymentMethodModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(paymentMethodModel);
+                }
+            }
+
             if (paymentMethodModel.Id > 0)
             {
                 var result = _iPaymentMethodService.UpdatePaymentMethod(paymentMethodModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iPaymentMethodService.InsertPaymentMethod(paymentMethodModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "PaymentMethod");
         }
 
         public ActionResult Delete(int id)
@@ -66,5 +77,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationPaymentMethod(PaymentMethodModel paymentMethodModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(paymentMethodModel.PaymentMethodName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(paymentMethodModel.Price.ToString()) || paymentMethodModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

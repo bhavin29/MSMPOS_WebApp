@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IBankService _iBankService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public BankController(IBankService iBankService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -46,18 +47,27 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Bank(BankModel bankModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {                string errorString = this.ValidationBank(bankModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(bankModel);
+                }
+            }
+
             if (bankModel.Id > 0)
             {
                 var result = _iBankService.UpdateBank(bankModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iBankService.InsertBank(bankModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "Bank");
         }
 
         public ActionResult Delete(int id)
@@ -66,5 +76,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationBank(BankModel bankModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(bankModel.BankName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidBankName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(BankModel.Price.ToString()) || BankModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

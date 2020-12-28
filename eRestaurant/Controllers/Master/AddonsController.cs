@@ -48,20 +48,30 @@ namespace RocketPOS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Addons(AddonsModel addonsModel, string submitButton)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                if (addonsModel.Id > 0)
+                string errorString = this.ValidationAddons(addonsModel);
+                if (!string.IsNullOrEmpty(errorString))
                 {
-                    var result = _iAddonsService.UpdateAddons(addonsModel);
-                    ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
-                }
-                else
-                {
-                    var result = _iAddonsService.InsertAddons(addonsModel);
-                    ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                    ViewBag.Validate = errorString;
+                    return View(addonsModel);
                 }
             }
-            return View();
+
+            if (addonsModel.Id > 0)
+            {
+                var result = _iAddonsService.UpdateAddons(addonsModel);
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+            }
+            else
+            {
+                var result = _iAddonsService.InsertAddons(addonsModel);
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+            }
+
+            return RedirectToAction("Index", "Addons");
+
+            //return View(addonsModel);
         }
 
         public ActionResult Delete(int id)
@@ -71,6 +81,22 @@ namespace RocketPOS.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        private string ValidationAddons(AddonsModel addonsModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(addonsModel.AddonsName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(addonsModel.Price.ToString()) || addonsModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+  
+            return ErrorString;
+        }
 
     }
 }

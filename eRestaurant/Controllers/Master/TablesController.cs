@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly ITablesService _iTablesService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public TablesController(ITablesService tableService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -48,18 +49,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Tables(TablesModel tableModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationTables(tableModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(tableModel);
+                }
+            }
+
             if (tableModel.Id > 0)
             {
                 var result = _iTablesService.UpdateTables(tableModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iTablesService.InsertTables(tableModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             tableModel.OutletList = _iDropDownService.GetOutletList();
-            return View();
+
+            return RedirectToAction("Index", "Tables");
         }
 
         public ActionResult Delete(int id)
@@ -68,5 +80,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationTables(TablesModel tablesModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(tablesModel.TableName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(tablesModel.Price.ToString()) || tablesModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

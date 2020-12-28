@@ -11,7 +11,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [DisplayName("FoodMenu Category")]
-        [Required]
+        [Required(ErrorMessage = "Enter FoodMenu Category")]
         public string FoodMenuCategoryName { get; set; }
 
         public string Notes { get; set; }

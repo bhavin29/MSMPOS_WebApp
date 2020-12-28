@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IFoodMenuService _iFoodMenuService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -49,19 +50,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult FoodMenu(FoodMenuModel foodMenuModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationFoodMenu(foodMenuModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(foodMenuModel);
+                }
+            }
+
             if (foodMenuModel.Id > 0)
             {
                 var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
 
-            return View();
+            return RedirectToAction("Index", "FoodMenu");
         }
 
         public ActionResult Delete(int id)
@@ -70,5 +81,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationFoodMenu(FoodMenuModel foodMenuModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(foodMenuModel.FoodMenuName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(foodMenuModel.Price.ToString()) || foodMenuModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

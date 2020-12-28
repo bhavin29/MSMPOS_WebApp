@@ -11,8 +11,8 @@ namespace RocketPOS.Models
     {
         public int Id {get; set;}
 
-        [DisplayName("Ingredient Category Name")]
-        [Required]
+        [DisplayName("Ingredient Category")]
+        [Required(ErrorMessage = "Enter Ingredient Category")]
         public string IngredientCategoryName { get; set; }
 
         [DisplayName("Raw Material Type")]

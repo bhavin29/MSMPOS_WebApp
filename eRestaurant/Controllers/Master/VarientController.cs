@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IVarientService _iVarientService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public VarientController(IVarientService varientService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -37,8 +38,8 @@ namespace RocketPOS.Controllers.Master
             VarientModel varientModel = new VarientModel();
             if (id > 0)
             {
-                int addonsId = Convert.ToInt32(id);
-                varientModel = _iVarientService.GetAddonesById(addonsId);
+                int varientId = Convert.ToInt32(id);
+                varientModel = _iVarientService.GetAddonesById(varientId);
             }
             varientModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             return View(varientModel);
@@ -48,18 +49,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Varient(VarientModel varientModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationVarient(varientModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(varientModel);
+                }
+            }
+
             if (varientModel.Id > 0)
             {
                 var result = _iVarientService.UpdateVarient(varientModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iVarientService.InsertVarient(varientModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             varientModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
-            return View();
+
+            return RedirectToAction("Index", "Varient");
         }
 
         public ActionResult Delete(int id)
@@ -67,6 +79,23 @@ namespace RocketPOS.Controllers.Master
             var deletedid = _iVarientService.DeleteVarient(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string ValidationVarient(VarientModel varientModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(varientModel.VarientName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(varientModel.Price.ToString()) || varientModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
         }
 
     }

@@ -13,11 +13,12 @@ namespace RocketPOS.Models
         public int FoodMenuId { get; set; }
 
         [DisplayName("Food Menu")]
+        [Required(ErrorMessage = "Select Food Menu")]
         public string FoodMenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
 
         [DisplayName("Varient")]
-        [Required]
+        [Required(ErrorMessage = "Enter Varient Name")]
         public string VarientName { get; set; }
         public decimal Price { get; set; }
 

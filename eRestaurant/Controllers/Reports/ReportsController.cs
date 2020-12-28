@@ -18,12 +18,14 @@ namespace RocketPOS.Controllers.Reports
     {
 
         private readonly IReportService _iReportService;
-        private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
-        private LocService _locService;
+        private readonly IDropDownService _iDropDownService;
+        private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private readonly LocService _locService;
 
-        public ReportController(IReportService iReportService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public ReportController(IReportService iReportService, IDropDownService idropDownService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iReportService = iReportService;
+            _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
@@ -39,6 +41,11 @@ namespace RocketPOS.Controllers.Reports
 
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
+
+            //inventoryReportParamModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
+            //inventoryReportParamModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            //inventoryReportParamModel.IngredientList = _iDropDownService.GetIngredientList();
+
 
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);

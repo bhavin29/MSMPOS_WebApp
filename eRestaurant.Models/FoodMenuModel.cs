@@ -18,7 +18,7 @@ namespace RocketPOS.Models
         public List<SelectListItem> FoodCategoryList { get; set; }
 
         [DisplayName("Food Menu")]
-        [Required]
+        [Required(ErrorMessage = "Enter Food Menu")]
         public string FoodMenuName { get; set; }
 
         [DisplayName("Food Menu Code")] 

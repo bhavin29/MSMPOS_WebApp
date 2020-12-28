@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
         private readonly ICardTerminalService _iCardTerminalService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public CardTerminalController(ICardTerminalService iCardTerminalService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -48,18 +49,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult CardTerminal(CardTerminalModel cardTerminalModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationCardTerminal(cardTerminalModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(cardTerminalModel);
+                }
+            }
+
             if (cardTerminalModel.Id > 0)
             {
                 var result = _iCardTerminalService.UpdateCardTerminal(cardTerminalModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iCardTerminalService.InsertCardTerminal(cardTerminalModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             cardTerminalModel.OutletList = _iDropDownService.GetOutletList();
-            return View();
+
+            return RedirectToAction("Index", "Addons");
         }
 
         public ActionResult Delete(int id)
@@ -67,6 +79,23 @@ namespace RocketPOS.Controllers.Master
             var deletedid = _iCardTerminalService.DeleteCardTerminal(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string ValidationCardTerminal(CardTerminalModel cardTerminalModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(cardTerminalModel.CardTerminalName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(cardTerminalModel.Price.ToString()) || cardTerminalModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
         }
 
 

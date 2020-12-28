@@ -23,6 +23,7 @@ using Microsoft.AspNetCore.Localization;
 using System.Reflection;
 using RocketPOS.Resources;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace RocketPOS
 {
@@ -79,6 +80,14 @@ namespace RocketPOS
 
                     options.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider());
                 });
+
+            services.AddMvc().AddViewOptions(options =>
+            {
+                    options.HtmlHelperOptions.ClientValidationEnabled = false;
+            });
+
+            services.Configure<HtmlHelperOptions>(o => o.ClientValidationEnabled = false);
+
 
             services.AddRazorPages();
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");

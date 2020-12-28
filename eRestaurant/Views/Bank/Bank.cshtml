@@ -1,10 +1,6 @@
 ﻿@model RocketPOS.Models.BankModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@{
-    // ViewData["Title"] = "Addons";
-}
-
 @if (!string.IsNullOrEmpty(ViewBag.msg))
 {
     <script type="text/javascript">
@@ -21,9 +17,8 @@
                     <h2>Manage Bank</h2>
                 </div>
                 <div class="card-body">
-
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <form asp-action="Bank">
                                 <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
@@ -56,13 +51,13 @@
                                     {
                                         @if (Model.Id > 0)
                                         {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Edit" class="btn btn-primary" />
                                         }
                                         else
                                         {
                                             <input type="submit" value="Add" class="btn btn-primary btn-sm" />
                                         }
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-danger" />
                                     }
                                 </div>
                             </form>
@@ -102,10 +97,17 @@
         </script>
     }
 }
+
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "/Bank/Index";
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#Bank").prev().focus();
+            $("#vModal").modal('hide');
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
+
 }

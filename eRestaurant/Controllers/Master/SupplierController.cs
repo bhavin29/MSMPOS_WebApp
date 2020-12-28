@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly ISupplierService _iSupplierService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public SupplierController(ISupplierService supplierService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -46,18 +47,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Supplier(SupplierModel supplierModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationSupplier(supplierModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(supplierModel);
+                }
+            }
+
+
             if (supplierModel.Id > 0)
             {
                 var result = _iSupplierService.UpdateSupplier(supplierModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iSupplierService.InsertSupplier(supplierModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "Supplier");
         }
 
         public ActionResult Delete(int id)
@@ -65,6 +77,23 @@ namespace RocketPOS.Controllers.Master
             var deletedid = _iSupplierService.DeleteSupplier(id);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private string ValidationSupplier(SupplierModel supplierModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(supplierModel.SupplierName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(supplierModel.Price.ToString()) || supplierModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
         }
 
     }

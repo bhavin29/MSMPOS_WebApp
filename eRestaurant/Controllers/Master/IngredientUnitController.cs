@@ -16,6 +16,7 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IIngredientUnitService _iIngredientUnitService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public IngredientUnitController(IIngredientUnitService ingredientUnitService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -47,18 +48,28 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult IngredientUnit(IngredientUnitModel ingredientUniModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationIngredientUnit(ingredientUniModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(ingredientUniModel);
+                }
+            }
+
             if (ingredientUniModel.Id > 0)
             {
                 var result = _iIngredientUnitService.UpdateIngredientUnit(ingredientUniModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iIngredientUnitService.InsertIngredientUnit(ingredientUniModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 
-            return View();
+            return RedirectToAction("Index", "IngredientUnit");
         }
 
         public ActionResult Delete(int id)
@@ -67,6 +78,24 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationIngredientUnit(IngredientUnitModel ingredientUnitModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(ingredientUnitModel.IngredientUnitName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(ingredientUnitModel.Price.ToString()) || ingredientUnitModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
 
 
     }

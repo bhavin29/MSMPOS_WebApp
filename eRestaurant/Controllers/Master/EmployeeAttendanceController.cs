@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IEmployeeAttendanceService _iemployeeAttendanceService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public EmployeeAttendanceController(IEmployeeAttendanceService employeeAttendanceService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -49,18 +50,29 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult EmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationEmployeeAttendance(employeeAttendanceModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(employeeAttendanceModel);
+                }
+            }
+
             if (employeeAttendanceModel.Id > 0)
             {
                 var result = _iemployeeAttendanceService.UpdateEmployeeAttendance(employeeAttendanceModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iemployeeAttendanceService.InsertEmployeeAttendance(employeeAttendanceModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            return View();
+
+            return RedirectToAction("Index", "EmployeeAttendance");
         }
 
         public ActionResult Delete(int id)
@@ -69,5 +81,23 @@ namespace RocketPOS.Controllers.Master
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(employeeAttendanceModel.EmployeeName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(employeeAttendanceModel.Price.ToString()) || employeeAttendanceModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
     }
 }

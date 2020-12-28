@@ -15,11 +15,12 @@ namespace RocketPOS.Models
         public int OutletId { get; set; }
 
         [DisplayName("Outlet")]
+        [Required(ErrorMessage = "Select Outlet")]
         public string OutletName { get; set; }
         public List<SelectListItem> OutletList { get; set; }
 
         [DisplayName("Table")]
-        [Required]
+        [Required(ErrorMessage = "Enter Table Name")]
         public string TableName { get; set; }
         [DisplayName("Person Capacity")]
         [Required] 

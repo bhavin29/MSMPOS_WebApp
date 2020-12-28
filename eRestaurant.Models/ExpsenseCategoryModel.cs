@@ -12,7 +12,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [DisplayName("Expense Category")]
-        [Required]
+        [Required(ErrorMessage = "Enter Expense Category")]
         public string ExpenseCategory { get; set; }
 
         public string Notes { get; set; }

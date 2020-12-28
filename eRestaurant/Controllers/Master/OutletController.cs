@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IOutletService _iOutletService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private LocService _locService;
 
         public OutletController(IOutletService iOutletService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
         {
@@ -30,7 +31,7 @@ namespace RocketPOS.Controllers.Master
             List<OutletModel> adonsList = new List<OutletModel>();
             adonsList = _iOutletService.GetOutletList().ToList();
             return View(adonsList);
-            // return View("../Master/Addons/Index");
+            // return View("../Master/Outlet/Index");
 
         }
 
@@ -39,8 +40,8 @@ namespace RocketPOS.Controllers.Master
             OutletModel outletModel = new OutletModel();
             if (id > 0)
             {
-                int addonsId = Convert.ToInt32(id);
-                outletModel = _iOutletService.GetOutletById(addonsId);
+                int outletId = Convert.ToInt32(id);
+                outletModel = _iOutletService.GetOutletById(outletId);
             }
             outletModel.StoreList = _iDropDownService.GetStoreList();
 
@@ -51,26 +52,54 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Outlet(OutletModel outletModel, string submitButton)
         {
+            if (!ModelState.IsValid)
+            {
+                string errorString = this.ValidationOutlet(outletModel);
+                if (!string.IsNullOrEmpty(errorString))
+                {
+                    ViewBag.Validate = errorString;
+                    return View(outletModel);
+                }
+            }
+
             if (outletModel.Id > 0)
             {
                 var result = _iOutletService.UpdateOutlet(outletModel);
-                ViewBag.Result = _sharedLocalizer["EditSuccss"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iOutletService.InsertOutlet(outletModel);
-                ViewBag.Result = _sharedLocalizer["SaveSuccess"].Value;
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             outletModel.StoreList = _iDropDownService.GetStoreList();
-            return View();
+            return RedirectToAction("Index", "Outlet");
         }
 
-        public ActionResult Delete(int id)
+            public ActionResult Delete(int id)
         {
             var deletedid = _iOutletService.DeleteOutlet(id);
 
             return RedirectToAction(nameof(Index));
         }
+
+        private string ValidationOutlet(OutletModel outletModel)
+        {
+            string ErrorString = string.Empty;
+            if (string.IsNullOrEmpty(outletModel.OutletName))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
+            //if (string.IsNullOrEmpty(outletModel.Price.ToString()) || outletModel.Price == 0)
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
+            //    return ErrorString;
+            //}
+
+            return ErrorString;
+        }
+
 
 
     }

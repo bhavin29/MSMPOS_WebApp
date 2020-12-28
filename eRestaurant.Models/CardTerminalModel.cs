@@ -16,7 +16,7 @@ namespace RocketPOS.Models
 
 
         [DisplayName("Card Terminal Name")]
-        [Required]
+        [Required(ErrorMessage = "Enter Card Terminal Name")]
         public string CardTerminalName { get; set; }
 
         public bool IsActive { get; set; }

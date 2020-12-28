@@ -13,7 +13,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="InventoryTransfer" class="pull-right btn btn-primary">Add Inventory Adjestment</a></div>
+                    <div class="col-md-4"><a asp-action="InventoryTransfer" class="pull-right btn btn-primary">Add Inventory Transfer</a></div>
                 </div>
             </div>
             <div class="card-body">
@@ -25,15 +25,17 @@
                                     <tr role="row">
                                         <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("FromStore")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("ToStore")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                </thead>
+</thead>
                                 <tfoot>
                                     <tr>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("FromStore")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("ToStore")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     </tr>
@@ -43,26 +45,29 @@
                                     {
                                         var tm = "#myModal" + item.Id;
                                         var mid = "myModal" + item.Id;
-                                        <tr role="row">
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.FromStoreName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayName("Rocket")
-                                            </td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="InventoryTransfer" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FromStoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ToStoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryTransfer" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                         <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">

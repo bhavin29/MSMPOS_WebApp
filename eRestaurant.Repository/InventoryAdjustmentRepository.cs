@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = $"update InventoryAdjustment set IsDeleted = 1 where id = " + invAdjId + ";" +
-                    " Update [InventoryAdjustmentIngredient] set IsDeleted = 1 where [InventoryAdjustmentId] = " + invAdjId + ";";
+                    " Update InventoryAdjustmentIngredient set IsDeleted = 1 where [InventoryAdjustmentId] = " + invAdjId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -48,7 +48,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update [InventoryAdjustmentIngredient] set IsDeleted = 1 where id = " + invAdjDetailId + ";";
+                var query = $"update InventoryAdjustmentIngredient set IsDeleted = 1 where id = " + invAdjDetailId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -66,7 +66,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber,IA.EntryDate,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM[RocketPOS].[dbo].[InventoryAdjustment] IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
                inventoryAdjustmentModels = con.Query<InventoryAdjustmentModel>(query).AsList();
@@ -96,7 +96,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber,IA.EntryDate,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM[RocketPOS].[dbo].[InventoryAdjustment] IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 ;";
                 inventoryAdjustmentModels = con.Query<InventoryAdjustmentViewModel>(query).AsList();
@@ -113,7 +113,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO [InventoryAdjustment] " +
+                var query = "INSERT INTO InventoryAdjustment " +
                              "  ( Id ,StoreId, ReferenceNumber,EntryDate ,EmployeeId,Notes ) " + 
                              "   VALUES           " +
                              "  ( @Id ,@StoreId, @ReferenceNumber,@EntryDate ,@EmployeeId,@Notes ); " +
@@ -201,7 +201,7 @@ namespace RocketPOS.Repository
                         }
                         else
                         {
-                            queryDetails = "INSERT INTO [dbo].[PurchaseIngredient]" +
+                            queryDetails = "INSERT INTO InventoryAdjustmentIngredient" +
                                                   " (InventoryAdjustmentId, IngredientId,IntgredientQty,ConsumptionStatus,UserIdUpdated,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryAdjustmentModel.Id + "," +

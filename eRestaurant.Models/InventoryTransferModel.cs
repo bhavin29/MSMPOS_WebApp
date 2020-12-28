@@ -21,7 +21,7 @@ namespace RocketPOS.Models
         public string ToStoreName { get; set; }
         [Required(ErrorMessage = "Select Store")]
         public int? ToStoreId { get; set; }
-        public List<SelectListItem> TotoreList { get; set; }
+        public List<SelectListItem> ToStoreList { get; set; }
 
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }

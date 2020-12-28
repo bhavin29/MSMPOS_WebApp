@@ -1,4 +1,5 @@
 ﻿@using Microsoft.Extensions.Localization;
+@using  RocketPOS.Models;
 @model RocketPOS.Models.InventoryTransferModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
@@ -14,7 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-action="InventoryTransfer" method="post" id="purchase" role="form">
+                            <form asp-action="InventoryTransfer" method="post" id="InventoryTransfer" role="form">
                                 <div>
                                     <div class="row">
                                         <div class="col-md-4">
@@ -26,12 +27,22 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="FromStoreList" class="control-label">Store</label>
+                                                <label asp-for="FromStoreList" class="control-label">Store From</label>
                                                 <select asp-for="FromStoreId"
                                                         class="form-control"
                                                         asp-items="@(new SelectList(Model.FromStoreList, "Value", "Text"))">
                                                 </select>
                                                 <span asp-validation-for="FromStoreId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="ToStoreList" class="control-label">Trasnfer To Store </label>
+                                                <select asp-for="ToStoreId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.ToStoreList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="ToStoreId" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">

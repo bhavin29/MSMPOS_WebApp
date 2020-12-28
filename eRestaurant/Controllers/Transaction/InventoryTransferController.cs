@@ -60,7 +60,8 @@ namespace RocketPOS.Controllers.Transaction
                 inventoryTransferModel.Date = DateTime.Now;
                 inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
             }
-            inventoryTransferModel.FromStoreList = _iDropDownService.GetSupplierList();
+            inventoryTransferModel.FromStoreList = _iDropDownService.GetStoreList();
+            inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
 
@@ -72,6 +73,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult InventoryTransfer(InventoryTransferModel inventoryTransferModel)
         {
             inventoryTransferModel.FromStoreList = _iDropDownService.GetStoreList();
+            inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
             string purchaseMessage = string.Empty;

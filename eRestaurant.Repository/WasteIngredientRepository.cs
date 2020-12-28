@@ -20,21 +20,21 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-        public List<WasteIngredientModel> GetWasteIngredientList()
+        public List<WasteListModel> GetWasteIngredientList()
         {
-            List<WasteIngredientModel> WasteIngredientModel = new List<WasteIngredientModel>();
+            List<WasteListModel> WasteIngredientModel = new List<WasteListModel>();
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT Id,WasteIngredientName,Price,IsActive FROM WasteIngredient WHERE IsDeleted = 0 " +
                             "ORDER BY WasteIngredientName ";
-                WasteIngredientModel = con.Query<WasteIngredientModel>(query).ToList();
+                WasteIngredientModel = con.Query<WasteListModel>(query).ToList();
             }
 
             return WasteIngredientModel;
         }
 
-        public int InsertWasteIngredient(WasteIngredientModel WasteIngredientModel)
+        public int InsertWasteIngredient(WasteListModel WasteIngredientModel)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -62,7 +62,7 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public int UpdateWasteIngredient(WasteIngredientModel WasteIngredientModel)
+        public int UpdateWasteIngredient(WasteListModel WasteIngredientModel)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))

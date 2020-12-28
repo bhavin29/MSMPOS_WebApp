@@ -9,12 +9,12 @@ namespace RocketPOS.Interface.Services
 {
     public interface IWasteIngredientService
     {
-        WasteIngredientModel GetWasteIngredientById(int WasteIngredientId);
-        List<WasteIngredientModel> GetWasteIngredientList();
+        WasteListModel GetWasteIngredientById(int WasteIngredientId);
+        List<WasteListModel> GetWasteIngredientList();
 
-        int InsertWasteIngredient(WasteIngredientModel WasteIngredientModel);
+        int InsertWasteIngredient(WasteListModel WasteIngredientModel);
 
-        int UpdateWasteIngredient(WasteIngredientModel WasteIngredientModel);
+        int UpdateWasteIngredient(WasteListModel WasteIngredientModel);
 
         int DeleteWasteIngredient(int WasteIngredientID);
     }

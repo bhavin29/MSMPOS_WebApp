@@ -1,12 +1,7 @@
 ﻿@using Microsoft.Extensions.Localization;
-@model RocketPOS.Models.PurchaseModel
+@model RocketPOS.Models.InventoryTransferModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
-@{
-    //ViewData["Title"] = "Purchase";
-    //List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
-}
-
 <hr />
 <div class="page-inner">
     <div class="page-header"></div>
@@ -14,12 +9,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Add Purchase</h2>
+                    <h2>Manage Inventory Transfer</h2>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-action="Purchase" method="post" id="purchase" role="form">
+                            <form asp-action="InventoryTransfer" method="post" id="purchase" role="form">
                                 <div>
                                     <div class="row">
                                         <div class="col-md-4">
@@ -31,12 +26,22 @@
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="SupplierList" class="control-label">Supplier</label>
-                                                <select asp-for="SupplierId"
+                                                <label asp-for="FromStoreList" class="control-label">Store</label>
+                                                <select asp-for="FromStoreId"
                                                         class="form-control"
-                                                        asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))">
+                                                        asp-items="@(new SelectList(Model.FromStoreList, "Value", "Text"))">
                                                 </select>
-                                                <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                                <span asp-validation-for="FromStoreId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="EmployeeList" class="control-label">Resposible Person</label>
+                                                <select asp-for="EmployeeId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="EmployeeId" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
@@ -48,7 +53,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <h3 style="margin-top:10px">Order Details</h3>
+                                <h3 style="margin-top:10px">Ingredient Details</h3>
                                 <div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -67,21 +72,21 @@
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label class="control-label">Unit Price</label>
-                                                                <input class="form-control text-right" type="text" id="UnitPrice" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
                                                                 <label class="control-label">Quantity</label>
                                                                 <input class="form-control text-right" type="text" id="Quantity" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
+                                                                <label class="control-label">Comsumption Status</label>
+                                                                <input class="form-control text-right" type="text" id="ConsumpationStatus" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
                                                                 <label class="control-label"></label>
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
-                                                                <input class="form-control" type="hidden" id="PurchaseId" value="0" />
+                                                                <input class="form-control" type="hidden" id="InventoryTransferId" value="0" />
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
                                                             </div>
                                                         </div>
@@ -89,25 +94,24 @@
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            <table id="PurchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                                            <table id="InventoryTransferOrderDetail" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                                 <thead>
                                                                     <tr>
                                                                         <th style="width:35%">IngredientId</th>
                                                                         <th style="width:35%">Ingredient</th>
-                                                                        <th style="width:20%" class="text-right">Unit Price</th>
                                                                         <th style="width:15%" class="text-right">Quantity</th>
-                                                                        <th style="width:20%" class="text-right">Amount</th>
+                                                                        <th style="width:20%" class="text-right">Comsumption STatus</th>
                                                                         <th style="width:25%" class="text-center">Actions</th>
-                                                                        <th style="width:10%">PurchaseId</th>
+                                                                        <th style="width:10%">InventoryTransferId</th>
                                                                     </tr>
                                                                 </thead>
                                                                 @if (Model.Id > 0)
                                                                 {
-                                                                    @foreach (var item in Model.PurchaseDetails)
+                                                                    @foreach (var item in Model.InventoryTransferDetail)
                                                                     {
-                                                                        var tm = "#myModal" + item.PurchaseId;
-                                                                        var mid = "myModal" + item.PurchaseId;
-                                                                        var rowId = "rowId" + item.PurchaseId;
+                                                                        var tm = "#myModal" + item.InventoryTransferId;
+                                                                        var mid = "myModal" + item.InventoryTransferId;
+                                                                        var rowId = "rowId" + item.InventoryTransferId;
                                                                         <tr id="@rowId">
                                                                             <td>
                                                                                 @item.IngredientId
@@ -116,13 +120,10 @@
                                                                                 @item.IngredientName
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.UnitPrice
-                                                                            </td>
-                                                                            <td class="text-right">
                                                                                 @item.Quantity
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.Total
+                                                                                @item.ConsumpationStatus
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
@@ -130,7 +131,7 @@
                                                                                 </div>
                                                                             </td>
                                                                             <td>
-                                                                                @item.PurchaseId
+                                                                                @item.InventoryTransferId
                                                                             </td>
                                                                         </tr>
                                                                         <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -144,7 +145,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.InventoryTransferId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -170,21 +171,9 @@
                                                         <div class="col-md-6 col-lg-4"></div>
                                                         <div class="col-md-6 col-lg-4">
                                                             <div class="form-group form-inline fc-right">
-                                                                <label asp-for="GrandTotal" class="col-md-3 col-form-label">Grand Total</label>
+                                                                <label asp-for="Notes" class="col-md-3 col-form-label">Notes</label>
                                                                 <div class="col-md-9 p-0 ">
-                                                                    <input type="text" asp-for="GrandTotal" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group form-inline">
-                                                                <label asp-for="Paid" class="col-md-3 col-form-label">Paid</label>
-                                                                <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Paid" class="form-control input-full text-right" placeholder="Enter Input">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group form-inline">
-                                                                <label asp-for="Due" class="col-md-3 col-form-label">Due</label>
-                                                                <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Due" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                    <input type="text" asp-for="Notes" class="form-control input-full text-right" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -195,8 +184,8 @@
                                     </div>
                                 </div>
                                 <div class="form-button-action">
-                                    <input type="submit" asp-action="PurchaseList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
-                                    <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
+                                    <input type="submit" asp-action="InventoryTransferList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
+                                    <input id="saveOrder" type="submit" class="btn btn-primary" value="Save" />
                                 </div>
                             </form>
 
@@ -224,36 +213,14 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                </div>
-                <div class="modal-footer">
-                    <button id="deleteBtn" onclick="deleteOrder(0, ,0)" class="btn bg-danger mr-1">Delete</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
 @section scripts{
     <script>
-        dataArr = []
-      var GrandTotal = 0;
-var TotalAmount = 0;
-
+        dataArr = [];
         if (@Model.Id > 0) {
-            dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.PurchaseDetails))');
-            GrandTotal = parseFloat($("#GrandTotal").val());
-    }
+            dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.InventoryTransferDetail))');
+        }
     console.log(dataArr);
     </script>
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/Scripts/Purchase.js"></script>
+    <script src="~/Scripts/InventoryTransfer.js"></script>
 }

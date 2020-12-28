@@ -21,19 +21,19 @@ namespace RocketPOS.Services
             _iWasteIngredientRepository = iWasteIngredientRepository;
         }
 
-        public WasteIngredientModel GetWasteIngredientById(int WasteIngredientId)
+        public WasteListModel GetWasteIngredientById(int WasteIngredientId)
         {
             return _iWasteIngredientRepository.GetWasteIngredientList().Where(x => x.Id == WasteIngredientId).FirstOrDefault();
         }
-        public List<WasteIngredientModel> GetWasteIngredientList()
+        public List<WasteListModel> GetWasteIngredientList()
         {
             return _iWasteIngredientRepository.GetWasteIngredientList();
         }
-        public int InsertWasteIngredient(WasteIngredientModel WasteIngredientModel)
+        public int InsertWasteIngredient(WasteListModel WasteIngredientModel)
         {
             return _iWasteIngredientRepository.InsertWasteIngredient(WasteIngredientModel);
         }
-        public int UpdateWasteIngredient(WasteIngredientModel WasteIngredientModel)
+        public int UpdateWasteIngredient(WasteListModel WasteIngredientModel)
         {
             return _iWasteIngredientRepository.UpdateWasteIngredient(WasteIngredientModel);
         }

@@ -1,0 +1,46 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Web.Mvc;
+
+namespace RocketPOS.Models
+{
+    public class InventoryTransferModel
+    {
+        public int Id { get; set; }
+        public string ReferenceNo { get; set; }
+        [Required(ErrorMessage = "Select Employee")]
+        public int? EmployeeId { get; set; }
+        public List<SelectListItem> EmployeeList { get; set; }
+        public string FromStoreName { get; set; }
+        [Required(ErrorMessage = "Select Store")]
+        public int? FromStoreId { get; set; }
+        public List<SelectListItem> FromStoreList { get; set; }
+
+        public string ToStoreName { get; set; }
+        [Required(ErrorMessage = "Select Store")]
+        public int? ToStoreId { get; set; }
+        public List<SelectListItem> TotoreList { get; set; }
+
+        public int? IngredientId { get; set; }
+        public List<SelectListItem> IngredientList { get; set; }
+
+        [Required(ErrorMessage = "Select Date")]
+        [DataType(DataType.Date)]
+        public DateTime Date { get; set; }
+        public string Notes { get; set; }
+        public List<InventoryTransferDetailModel> InventoryTransferDetail { get; set; }
+
+    }
+
+    public class InventoryTransferDetailModel
+    {
+        public long InventoryTransferId { get; set; }
+        public int ReferenceNo { get; set; }
+        public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
+        public decimal Quantity { get; set; }
+        public string ConsumpationStatus { get; set; }
+    }
+}

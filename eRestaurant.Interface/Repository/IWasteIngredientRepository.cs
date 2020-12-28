@@ -8,11 +8,11 @@ namespace RocketPOS.Interface.Repository
     public interface IWasteIngredientRepository
     {
 
-        List<WasteIngredientModel> GetWasteIngredientList();
+        List<WasteListModel> GetWasteIngredientList();
 
-        int InsertWasteIngredient(WasteIngredientModel WasteIngredientModel);
+        int InsertWasteIngredient(WasteListModel WasteIngredientModel);
 
-        int UpdateWasteIngredient(WasteIngredientModel WasteIngredientModel);
+        int UpdateWasteIngredient(WasteListModel WasteIngredientModel);
 
         int DeleteWasteIngredient(int WasteIngredientID);
 

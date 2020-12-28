@@ -22,4 +22,13 @@ namespace RocketPOS.Models
         int Status { get; set; }
 
     }
+    public class    WasteDetailModel
+    {
+        public int Id { get; set; }
+        public int WasteId { get; set; }
+        public int IngredientId { get; set; }
+        public decimal Qty { get; set; }
+        public decimal LossAmount { get; set; }
+
+    }
 }

@@ -93,8 +93,8 @@ namespace RocketPOS
             services.AddScoped<IDropDownRepository, DropDownRepository>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ICommonRepository, CommonRepository>();
-			     services.AddScoped<IAddonsService, AddonsService>();
-			services.AddScoped<IAddonsService, AddonsService>();
+            services.AddScoped<IAddonsService, AddonsService>();
+            services.AddScoped<IAddonsService, AddonsService>();
             services.AddScoped<IAddonsRepository, AddonsRepository>();
             services.AddScoped<IIngredientUnitService, IngredientUnitService>();
             services.AddScoped<IIngredientUnitRepository, IngredientUnitRepository>();
@@ -110,7 +110,7 @@ namespace RocketPOS
             services.AddScoped<IStoreRepository, StoreRepository>();
             services.AddScoped<ISupplierService, SupplierService>();
             services.AddScoped<ISupplierRepository, SupplierRepository>();
-            services.AddScoped<IOutletRepository, OutletRepository >();
+            services.AddScoped<IOutletRepository, OutletRepository>();
             services.AddScoped<IOutletService, OutletService>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<ICustomerService, CustomerService>();
@@ -118,7 +118,7 @@ namespace RocketPOS
             services.AddScoped<ICardTerminalRepository, CardTerminalRepository>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-			 services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
             services.AddScoped<IPaymentMethodService, PaymentMethodService>();
             services.AddScoped<IVarientService, VarientService>();
             services.AddScoped<IVarientRepository, VarientRepository>();
@@ -130,11 +130,14 @@ namespace RocketPOS
             services.AddScoped<IFoodMenuService, FoodMenuService>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
-           services.AddScoped<IEmployeeAttendanceRpository, EmployeeAttendanceRepository>();
+            services.AddScoped<IEmployeeAttendanceRpository, EmployeeAttendanceRepository>();
             services.AddScoped<IEmployeeAttendanceService, EmployeeAttendanceService>();
             services.AddScoped<IReportRepository, ReportRepository>();
             services.AddScoped<IReportService, ReportService>();
-
+            services.AddScoped<IInventoryAdjustmentRepository, InventoryAdjustmentRepository>();
+            services.AddScoped<IInventoryAdjustmentService, InventoryAdjustmentService>();
+            services.AddScoped<IInventoryTransferRepository, InventoryTransferRepository>();
+            services.AddScoped<IInventoryTransferService, InventoryTransferService>();
 
             services.AddHttpClient();
         }
@@ -149,7 +152,7 @@ namespace RocketPOS
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-               
+
             }
             else
             {

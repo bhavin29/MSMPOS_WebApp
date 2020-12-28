@@ -4,7 +4,7 @@ using System.Text;
 
 namespace RocketPOS.Models
 {
-    public class WasteIngredientModel
+    public class WasteListModel
     {
         public int Id { get; set; }
         public int WasteId { get; set; }

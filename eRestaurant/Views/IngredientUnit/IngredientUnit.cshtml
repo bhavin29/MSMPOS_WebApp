@@ -33,11 +33,18 @@
                                     <input asp-for="Notes" class="form-control" />
                                     <span asp-validation-for="Notes" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="IsActive" class="control-label"></label>
-                                    <input asp-for="IsActive" class="form-control" />
-                                    @* <span class="alert-danger" asp-validation-for="IsActive"></span>*@
-                                </div>
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
+                                    {
+
+                                        <div class="form-group">
+                                            <label asp-for="IsActive" class="control-label"></label>
+                                            <input asp-for="IsActive" class="form-control" />
+                                            <span class="alert-danger" asp-validation-for="IsActive"></span>
+                                        </div>
+                                    }
+                                }
                                 @*<div class="form-group">
                                         <label asp-for="UserId" class="control-label"></label>
                                         <input asp-for="UserId" class="form-control" />
@@ -102,7 +109,13 @@
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "/IngredientUnit/Index";
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#IngredientUnit").prev().focus();
+            $("#vModal").modal('hide');
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
+
 }

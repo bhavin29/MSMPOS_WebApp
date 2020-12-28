@@ -105,7 +105,13 @@
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "/../Supplier/Index";
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#Supplier").prev().focus();
+            $("#vModal").modal('hide');
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
+
 }

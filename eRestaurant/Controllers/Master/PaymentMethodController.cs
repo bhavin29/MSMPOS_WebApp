@@ -18,10 +18,11 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public PaymentMethodController(IPaymentMethodService paymentMethod, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public PaymentMethodController(IPaymentMethodService paymentMethod, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iPaymentMethodService = paymentMethod;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

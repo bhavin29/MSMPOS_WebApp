@@ -31,12 +31,17 @@ namespace RocketPOS.Models
 
         public string ThumbToken { get; set; }
 
-        public int RollTypeId { get; set; }
+        public int RoleTypeId { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LastLogout { get; set; }
         public string IPAdress { get; set; }
         public string Counter { get; set; }
         public bool IsActive { get; set; }
        int UserID { get; set; }
+
+        public UserModel()
+        {
+            IsActive = true;
+        }
     }
 }

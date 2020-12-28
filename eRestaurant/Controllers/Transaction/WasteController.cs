@@ -21,8 +21,7 @@ namespace RocketPOS.Controllers.Transaction
 
         public WasteController(IWasteService wasteService,
             IDropDownService idropDownService,
-            IStringLocalizer<RocketPOSResources> sharedLocalizer,
-            LocService locService)
+            IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iWasteService = wasteService;
             _iDropDownService = idropDownService;

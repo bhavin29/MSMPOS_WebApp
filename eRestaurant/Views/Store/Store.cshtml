@@ -1,13 +1,6 @@
 ﻿@model RocketPOS.Models.StoreModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
-}
-
 <div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
@@ -28,22 +21,28 @@
                                     <span asp-validation-for="StoreName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="IsMainStore" class="control-label"></label>
-                                    <input asp-for="IsMainStore" class="form-control" />
-                                </div>
-                                <div class="form-group">
                                     <label asp-for="Notes" class="control-label"></label>
                                     <input asp-for="Notes" class="form-control" />
                                     <span asp-validation-for="Notes" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="IsActive" class="control-label"></label>
-                                    <input asp-for="IsActive" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="IsLock" class="control-label"></label>
-                                    <input asp-for="IsLock" class="form-control" />
-                                </div>
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
+                                    {
+                                        @*<div class="form-group">
+                                            <label asp-for="IsMainStore" class="control-label"></label>
+                                            <input asp-for="IsMainStore" class="form-control" />
+                                        </div>*@
+                                        <div class="form-group">
+                                            <label asp-for="IsActive" class="control-label"></label>
+                                            <input asp-for="IsActive" class="form-control" />
+                                        </div>
+                                        @*<div class="form-group">
+                                            <label asp-for="IsLock" class="control-label"></label>
+                                            <input asp-for="IsLock" class="form-control" />
+                                        </div>*@
+                                    }
+                                }
                                 <div class="form-group">
                                     @if (Model != null)
                                     {
@@ -98,7 +97,13 @@
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "/Store/Index";
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#Store").prev().focus();
+            $("#vModal").modal('hide');
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
+
 }

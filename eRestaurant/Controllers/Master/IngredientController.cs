@@ -21,8 +21,7 @@ namespace RocketPOS.Controllers
 
         public IngredientController(IIngredientService ingredientService,
             IDropDownService idropDownService,
-            IStringLocalizer<RocketPOSResources> sharedLocalizer,
-            LocService locService)
+            IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iIngredientService = ingredientService;
             _iDropDownService = idropDownService;

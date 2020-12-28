@@ -19,20 +19,20 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public OutletController(IOutletService iOutletService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public OutletController(IOutletService iOutletService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iOutletService = iOutletService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()
         {
             List<OutletModel> adonsList = new List<OutletModel>();
             adonsList = _iOutletService.GetOutletList().ToList();
+  
             return View(adonsList);
-            // return View("../Master/Outlet/Index");
-
         }
 
         public ActionResult Outlet(int? id)
@@ -52,6 +52,8 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Outlet(OutletModel outletModel, string submitButton)
         {
+            outletModel.StoreList = _iDropDownService.GetStoreList();
+
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationOutlet(outletModel);
@@ -72,7 +74,6 @@ namespace RocketPOS.Controllers.Master
                 var result = _iOutletService.InsertOutlet(outletModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            outletModel.StoreList = _iDropDownService.GetStoreList();
             return RedirectToAction("Index", "Outlet");
         }
 

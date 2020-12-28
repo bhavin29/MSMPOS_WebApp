@@ -356,7 +356,13 @@
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "/../Employee/Index";
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#Employee").prev().focus();
+            $("#vModal").modal('hide');
         });
     </script>
+    <partial name="_ValidationScriptsPartial" />
+
 }

@@ -20,5 +20,10 @@ namespace RocketPOS.Models
         public string CardTerminalName { get; set; }
 
         public bool IsActive { get; set; }
+
+        public CardTerminalModel()
+        {
+            IsActive = true;
+        }
     }
 }

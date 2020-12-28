@@ -20,5 +20,10 @@ namespace RocketPOS.Models
 
         public int UserId { get; set; }
 
+        public FoodMenuCatagoryModel()
+        {
+            IsActive = true;
+        }
+
     }
 }

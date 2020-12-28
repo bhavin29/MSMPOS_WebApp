@@ -24,5 +24,9 @@ namespace RocketPOS.Models
 
         public int UserId { get; set; }
 
+        public IngredientCategoryModel()
+        {
+            IsActive = true;
+        }
     }
 }

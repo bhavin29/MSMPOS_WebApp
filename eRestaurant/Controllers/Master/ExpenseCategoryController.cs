@@ -19,10 +19,11 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public ExpenseCategoryController(IExpsenseCategoryService expsenseCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public ExpenseCategoryController(IExpsenseCategoryService expsenseCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iexpsenseCategoryService = expsenseCategoryService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

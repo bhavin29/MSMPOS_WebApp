@@ -22,5 +22,10 @@ namespace RocketPOS.Models
         public string SupplierEmail { get; set; }
         public bool IsActive { get; set; }
         public int  UserId { get; set; }
+
+        public SupplierModel()
+        {
+            IsActive = true;
+        }
     }
 }

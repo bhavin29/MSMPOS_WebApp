@@ -19,11 +19,12 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public EmployeeAttendanceController(IEmployeeAttendanceService employeeAttendanceService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public EmployeeAttendanceController(IEmployeeAttendanceService employeeAttendanceService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iemployeeAttendanceService = employeeAttendanceService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()
@@ -50,6 +51,8 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult EmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel, string submitButton)
         {
+            employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
+
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationEmployeeAttendance(employeeAttendanceModel);
@@ -70,8 +73,7 @@ namespace RocketPOS.Controllers.Master
                 var result = _iemployeeAttendanceService.InsertEmployeeAttendance(employeeAttendanceModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
-
+   
             return RedirectToAction("Index", "EmployeeAttendance");
         }
 

@@ -28,5 +28,10 @@ namespace RocketPOS.Models
         public decimal AlterQty { get; set; }
         public bool IsActive { get; set; }
         public int UserId { get; set; }
+
+        public IngredientModel()
+        {
+            IsActive = true;
+        }
     }
 }

@@ -19,10 +19,12 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public StoreController(IStoreService storeService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public StoreController(IStoreService storeService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _istoreService = storeService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
+
         }
 
         public ActionResult Index()
@@ -85,7 +87,7 @@ namespace RocketPOS.Controllers.Master
             string ErrorString = string.Empty;
             if (string.IsNullOrEmpty(storeModel.StoreName))
             {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                ErrorString = _locService.GetLocalizedHtmlString("ValidStoreName");
                 return ErrorString;
             }
             //if (string.IsNullOrEmpty(storeModel.Price.ToString()) || storeModel.Price == 0)

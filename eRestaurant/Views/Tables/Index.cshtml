@@ -33,12 +33,12 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.PersonCapacity)
                                             </th>
-                                            <th>
+                                            @*<th>
                                                 @Html.DisplayNameFor(model => model.TableIcon)
-                                            </th>
-                                            <th>
+                                            </th>*@
+                                            @*<th>
                                                 @Html.DisplayNameFor(model => model.Status)
-                                            </th>
+                                            </th>*@
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </thead>
@@ -53,12 +53,12 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.PersonCapacity)
                                             </th>
-                                            <th>
+                                            @*<th>
                                                 @Html.DisplayNameFor(model => model.TableIcon)
                                             </th>
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Status)
-                                            </th>
+                                            </th>*@
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </tfoot>
@@ -78,12 +78,12 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.PersonCapacity)
                                                 </td>
-                                                <td>
+                                                @*<td>
                                                     @Html.DisplayFor(modelItem => item.TableIcon)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.Status)
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     <div class="form-button-action">
                                                         <a asp-action="Tables" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>

@@ -40,5 +40,10 @@ namespace RocketPOS.Models
         public bool IsLock { get; set; }
         public int UserId { get; set; }
 
+        public OutletModel()
+        {
+            IsActive = true;
+        }
+
     }
 }

@@ -21,6 +21,9 @@ namespace RocketPOS.Models
 
         public int UserId { get; set; }
 
-
+        public ExpsenseCategoryModel()
+        {
+            IsActive = true;
+        }
     }
 }

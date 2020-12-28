@@ -19,11 +19,12 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iFoodMenuService = foodMenuService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()
@@ -50,6 +51,8 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult FoodMenu(FoodMenuModel foodMenuModel, string submitButton)
         {
+            foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationFoodMenu(foodMenuModel);
@@ -70,8 +73,7 @@ namespace RocketPOS.Controllers.Master
                 var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-
+ 
             return RedirectToAction("Index", "FoodMenu");
         }
 

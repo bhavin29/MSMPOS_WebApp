@@ -18,11 +18,12 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public CardTerminalController(ICardTerminalService iCardTerminalService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public CardTerminalController(ICardTerminalService iCardTerminalService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iCardTerminalService = iCardTerminalService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()
@@ -71,7 +72,7 @@ namespace RocketPOS.Controllers.Master
             }
             cardTerminalModel.OutletList = _iDropDownService.GetOutletList();
 
-            return RedirectToAction("Index", "Addons");
+            return RedirectToAction("Index", "CardTerminal");
         }
 
         public ActionResult Delete(int id)

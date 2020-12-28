@@ -22,8 +22,7 @@ namespace RocketPOS.Controllers.Transaction
 
         public InventoryTransferController(IInventoryTransferService inventoryTransferService,
             IDropDownService idropDownService,
-            IStringLocalizer<RocketPOSResources> sharedLocalizer,
-            LocService locService)
+            IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _inventoryTransferService = inventoryTransferService;
             _iDropDownService = idropDownService;

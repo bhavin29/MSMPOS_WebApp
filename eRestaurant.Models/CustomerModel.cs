@@ -25,5 +25,9 @@ namespace RocketPOS.Models
         public string FavDeliveryAddress { get; set; }
         public bool IsActive { get; set; }
 
+        public CustomerModel()
+        {
+            IsActive = true;
+        }
     }
 }

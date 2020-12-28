@@ -20,5 +20,10 @@ namespace RocketPOS.Models
         public bool IsActive { get; set; }
         public bool IsLock { get; set; }
         public int UserId { get; set; }
+
+        public StoreModel()
+        {
+            IsActive = true;
+        }
     }
 }

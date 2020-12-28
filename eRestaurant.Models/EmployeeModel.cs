@@ -72,5 +72,9 @@ namespace RocketPOS.Models
         public bool IsActive { get; set; }
         public int UserId { get; set; }
 
+        public EmployeeModel()
+        {
+            IsActive = true;
+        }
     }
 }

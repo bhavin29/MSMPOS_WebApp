@@ -19,10 +19,11 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public CustomerController(ICustomerService customerService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public CustomerController(ICustomerService customerService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iCustomerService = customerService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

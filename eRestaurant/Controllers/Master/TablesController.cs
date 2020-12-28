@@ -19,11 +19,12 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public TablesController(ITablesService tableService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public TablesController(ITablesService tableService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iTablesService = tableService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()
@@ -49,6 +50,8 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Tables(TablesModel tableModel, string submitButton)
         {
+            tableModel.OutletList = _iDropDownService.GetOutletList();
+
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationTables(tableModel);
@@ -69,7 +72,6 @@ namespace RocketPOS.Controllers.Master
                 var result = _iTablesService.InsertTables(tableModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            tableModel.OutletList = _iDropDownService.GetOutletList();
 
             return RedirectToAction("Index", "Tables");
         }

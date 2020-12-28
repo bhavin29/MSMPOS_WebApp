@@ -18,5 +18,10 @@ namespace RocketPOS.Models
         [DisplayName("Integration")]
         public bool IsIntegration { get; set; }
         public bool IsActive { get; set; }
+
+        public PaymentMethodModel()
+        {
+            IsActive = true;
+        }
     }
 }

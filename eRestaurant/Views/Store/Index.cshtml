@@ -36,9 +36,9 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.IsActive)
                                             </th>
-                                            <th>
+                                            @*<th>
                                                 @Html.DisplayNameFor(model => model.IsLock)
-                                            </th>
+                                            </th>*@
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </thead>
@@ -56,9 +56,9 @@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.IsActive)
                                             </th>
-                                            <th>
+                                            @*<th>
                                                 @Html.DisplayNameFor(model => model.IsLock)
-                                            </th>
+                                            </th>*@
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </tfoot>
@@ -81,9 +81,9 @@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.IsActive)
                                                 </td>
-                                                <td>
+                                                @*<td>
                                                     @Html.DisplayFor(modelItem => item.IsLock)
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     <div class="form-button-action">
                                                         <a asp-action="Store" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>

@@ -18,10 +18,11 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public BankController(IBankService iBankService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public BankController(IBankService iBankService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iBankService = iBankService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

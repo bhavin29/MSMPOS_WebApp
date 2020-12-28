@@ -12,7 +12,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public int FoodCategoryId { get; set; }
 
-        [DisplayName("Food Category")]
+        [DisplayName("Category")]
         [Required]
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
@@ -21,7 +21,7 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Enter Food Menu")]
         public string FoodMenuName { get; set; }
 
-        [DisplayName("Food Menu Code")] 
+        [DisplayName("Code")] 
         public string FoodMenuCode { get; set; }
         public string ColourCode { get; set; }
         public string BigThumb { get; set; }
@@ -38,7 +38,10 @@ namespace RocketPOS.Models
         public int OutletId { get; set; }
         public bool IsActive { get; set; }
 
-
+        public FoodMenuModel()
+        {
+            IsActive = true;
+        }
     }
 }
 

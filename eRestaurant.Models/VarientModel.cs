@@ -24,5 +24,9 @@ namespace RocketPOS.Models
 
         public bool IsActive { get; set;}
 
+        public VarientModel()
+        {
+            IsActive = true;
+        }
     }
 }

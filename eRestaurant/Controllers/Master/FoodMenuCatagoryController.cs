@@ -18,10 +18,11 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer)
+        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _ifoodMenuCatagoryService = ifoodMenuCatagoryService;
             _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         public ActionResult Index()

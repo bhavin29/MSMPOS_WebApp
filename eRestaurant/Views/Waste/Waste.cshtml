@@ -1,0 +1,259 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.WasteModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+
+<hr />
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Add Waste</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="Waste" method="post" id="waste" role="form">
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="ReferenceNumber" class="control-label"></label>
+                                                <input asp-for="ReferenceNumber" disabled="disabled" class="form-control" />
+                                                <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="OutletList" class="control-label">Outlet</label>
+                                                <select asp-for="OutletId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="OutletId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="EmployeeList" class="control-label">Resposible Person</label>
+                                                <select asp-for="EmployeeId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label asp-for="WasteDateTime" class="control-label"></label>
+                                                <input asp-for="WasteDateTime" type="date" class="form-control" />
+                                                <span asp-validation-for="WasteDateTime" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h3 style="margin-top:10px">Order Details</h3>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label asp-for="FoodMenuList" class="control-label">Food Menu</label>
+                                                                <select asp-for="FoodMenuId"
+                                                                        class="form-control"
+                                                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                                                </select>
+                                                                <span asp-validation-for="FoodMenuId" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                                                <select asp-for="IngredientId"
+                                                                        class="form-control"
+                                                                        asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                                </select>
+                                                                <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Quantity</label>
+                                                                <input class="form-control text-right" type="text" id="Quantity" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Loss Amount</label>
+                                                                <input class="form-control text-right" type="text" id="LossAmount" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label"></label>
+                                                                <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
+                                                                @*<input class="form-control" type="hidden" id="WasteId" value="0" />*@
+                                                                <input asp-for="Id" class="form-control" type="hidden" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr />
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <table id="WasteOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th style="width:35%">FoodMenuId</th>
+                                                                        <th style="width:35%">FoodMenu</th>
+                                                                        <th style="width:35%">IngredientId</th>
+                                                                        <th style="width:35%">Ingredient</th>
+                                                                        <th style="width:15%" class="text-right">Quantity</th>
+                                                                        <th style="width:20%" class="text-right">Loss Amount</th>
+                                                                        <th style="width:10%">WasteId</th>
+                                                                        <th style="width:25%" class="text-center">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                @if (Model.Id > 0)
+                                                                {
+                                                                    @foreach (var item in Model.WasteDetail)
+                                                                    {
+                                                                        var tm = "#myModal" + item.WasteId;
+                                                                        var mid = "myModal" + item.WasteId;
+                                                                        var rowId = "rowId" + item.WasteId;
+                                                                        <tr id="@rowId">
+                                                                            <td>
+                                                                                @item.FoodMenuId
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.FoodMenuName
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.IngredientId
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.IngredientName
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.Qty
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.LossAmount
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.WasteId
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="form-button-action">
+                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                            <div class="modal-dialog">
+                                                                                <div class="modal-content">
+                                                                                    <div class="modal-header">
+                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                                    </div>
+                                                                                    <div class="modal-body">
+                                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                                    </div>
+                                                                                    <div class="modal-footer">
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.WasteId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-lg-4"></div>
+                                                        <div class="col-md-6 col-lg-4"></div>
+                                                        <div class="col-md-6 col-lg-4">
+                                                            <div class="form-group form-inline fc-right">
+                                                                @*<label asp-for="ReasonForWaste" class="col-md-3 col-form-label">ReasonFor Waste</label>
+                                                                    <div class="col-md-9 p-0 ">
+                                                                        <input type="text" asp-for="ReasonForWaste" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                    </div>*@
+                                                            </div>
+                                                            <div class="form-group form-inline">
+                                                                @*<label asp-for="ReasonForWaste" class="col-md-3 col-form-label">Paid</label>
+                                                                    <div class="col-md-9 p-0">
+                                                                        <input type="text" asp-for="Paid" class="form-control input-full text-right" placeholder="Enter Input">
+                                                                    </div>*@
+                                                            </div>
+                                                            <div class="form-group form-inline">
+                                                                @*<label asp-for="Due" class="col-md-3 col-form-label">Due</label>
+                                                                    <div class="col-md-9 p-0">
+                                                                        <input type="text" asp-for="Due" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                    </div>*@
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-button-action">
+                                    <input type="submit" asp-action="WasteList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
+                                    <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+\
+@section scripts{
+    <script>
+        dataArr = []
+
+        if (@Model.Id > 0) {
+            dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.WasteDetail))');
+    }
+    console.log(dataArr);
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/Scripts/Waste.js"></script>
+}

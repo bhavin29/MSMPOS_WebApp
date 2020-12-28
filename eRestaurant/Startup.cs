@@ -138,6 +138,8 @@ namespace RocketPOS
             services.AddScoped<IInventoryAdjustmentService, InventoryAdjustmentService>();
             services.AddScoped<IInventoryTransferRepository, InventoryTransferRepository>();
             services.AddScoped<IInventoryTransferService, InventoryTransferService>();
+            services.AddScoped<IWasteRepository, WasteRepository>();
+            services.AddScoped<IWasteService, WasteService>();
 
             services.AddHttpClient();
         }

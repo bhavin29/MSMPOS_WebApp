@@ -33,11 +33,11 @@ namespace RocketPOS.Repository
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-                {
-                    var query = "select Id,IngredientUnitName as [Name] from IngredientUnit where IsDeleted= 0";
-                    dropDownModels = con.Query<DropDownModel>(query).ToList();
-                }
-           return dropDownModels;
+            {
+                var query = "select Id,IngredientUnitName as [Name] from IngredientUnit where IsDeleted= 0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
         }
         public List<DropDownModel> GetOutletList()
         {
@@ -57,7 +57,7 @@ namespace RocketPOS.Repository
             return dropDownModels;
         }
 
-           public List<DropDownModel> GetSupplierList()
+        public List<DropDownModel> GetSupplierList()
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -67,8 +67,8 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
-		
-		 public List<DropDownModel> GetStoreList()
+
+        public List<DropDownModel> GetStoreList()
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -96,18 +96,7 @@ namespace RocketPOS.Repository
             return dropDownModels;
         }
 
-         public List<DropDownModel> GetIngredientList()
-        {
-            List<DropDownModel> dropDownModels = new List<DropDownModel>();
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                var query = "select Id,IngredientName as [Name] from Ingredient where IsDeleted= 0";
-                dropDownModels = con.Query<DropDownModel>(query).ToList();
-            }
-            return dropDownModels;
-        }
-		
-		public List<DropDownModel> GetFoodMenuList()
+        public List<DropDownModel> GetIngredientList()
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -118,20 +107,24 @@ namespace RocketPOS.Repository
             return dropDownModels;
         }
 
+        public List<DropDownModel> GetFoodMenuList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id,FoodMenuName as [Name] from FoodMenu where IsDeleted= 0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+
         public List<DropDownModel> GetEmployeeList()
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
-            try
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-                {
-                    var query = "select Id,(LastName + ' ' + FirstName) as [Name] from Employee where IsDeleted= 0 Order by LastName,FirstName";
-                    dropDownModels = con.Query<DropDownModel>(query).ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                var query = "select Id,(LastName + ' ' + FirstName) as [Name] from Employee where IsDeleted= 0 Order by LastName,FirstName";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
         }

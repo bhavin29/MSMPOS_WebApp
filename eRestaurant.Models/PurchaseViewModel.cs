@@ -10,7 +10,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
      
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string SupplierName { get; set; }
         public decimal GrandTotal { get; set; }
         public decimal Due { get; set; }

@@ -95,7 +95,9 @@
     @section Scripts {
         <script>
         $(document).ready(function () {
-            var table = $('#@dataTableName').DataTable();
+            var table = $('#@dataTableName').DataTable({
+                "order": [[1, "asc"]]
+            });
         });
         </script>
     }

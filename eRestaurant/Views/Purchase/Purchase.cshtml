@@ -68,7 +68,7 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Unit Price</label>
-                                                                <input class="form-control text-right" type="text" id="UnitPrice" />
+                                                                <input class="form-control text-right" type="number" step=".00" id="UnitPrice" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -104,10 +104,10 @@
                                                                 @if (Model.Id > 0)
                                                                 {
                                                                     @foreach (var item in Model.PurchaseDetails)
-                                                                    {
-                                                                        var tm = "#myModal" + item.PurchaseId;
-                                                                        var mid = "myModal" + item.PurchaseId;
-                                                                        var rowId = "rowId" + item.PurchaseId;
+                                                                        {
+                                                                            var tm = "#myModal" + item.PurchaseId;
+                                                                            var mid = "myModal" + item.PurchaseId;
+                                                                            var rowId = "rowId" + item.PurchaseId;
                                                                         <tr id="@rowId">
                                                                             <td>
                                                                                 @item.IngredientId

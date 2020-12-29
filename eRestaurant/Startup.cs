@@ -41,17 +41,10 @@ namespace RocketPOS
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-            services.Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en-GB");
-                options.SupportedCultures = new List<CultureInfo> { new CultureInfo("en-GB") };
-            });
-
             services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
 
-
-            services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
+         services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
         .AddDataAnnotationsLocalization(options =>
         {
             options.DataAnnotationLocalizerProvider = (type, factory) =>

@@ -78,7 +78,7 @@ namespace RocketPOS.Repository
                              "   'Notes'," +
                              "   1,   " +
                              "   GetUtcDate(),    " +
-                             "   0); SELECT CAST(@ReferenceNo as int); ";
+                             "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
                 result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

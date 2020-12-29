@@ -126,4 +126,10 @@
   <data name="SaveSuccess" xml:space="preserve">
     <value>Saved Succesfully</value>
   </data>
+  <data name="ValidPurchaseDetails" xml:space="preserve">
+    <value>At least one order should be entered</value>
+  </data>
+  <data name="ValidSupplier" xml:space="preserve">
+    <value>Select Supplier</value>
+  </data>
 </root>

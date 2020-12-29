@@ -35,18 +35,18 @@ $('#addRow').on('click', function (e) {
     var message = validation();
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
-        PurchaseDatatable.row.add([
-            $("#IngredientId").val(),
+        var rowNode = PurchaseDatatable.row.add([
+            '<td class="text-right">'+$("#IngredientId").val()+' </td>',
             $('#IngredientId').children("option:selected").text(),
-            $("#UnitPrice").val(),
-            $("#Quantity").val(),
-            $("#UnitPrice").val() * $("#Quantity").val(),
+            '<td class="text-right">' + $("#UnitPrice").val() + ' </td>',
+            '<td class="text-right">' + $("#Quantity").val() + ' </td>',
+            '<td class="text-right">' + $("#UnitPrice").val() * $("#Quantity").val() + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > '+
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">'+
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val()
-        ]).draw(false);
+        ]).draw(false).nodes();
         dataArr.push({
             ingredientId: $("#IngredientId").val(),
             unitPrice: $("#UnitPrice").val(),
@@ -54,10 +54,14 @@ $('#addRow').on('click', function (e) {
             total: $("#UnitPrice").val() * $("#Quantity").val(),
             purchaseId: $("#PurchaseId").val()
         });
+        $(rowNode).find('td').eq(1).addClass('text-right');
+        $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
         GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
         $("#GrandTotal").val(GrandTotal);
         DueAmount();
         clearItem();
+        $("#IngredientId").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -83,7 +87,7 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
         if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
-            var message = 'No data available!'
+            var message = 'At least one order should be entered'
             $(".modal-body").text(message);
             $("#save").hide();
             jQuery.noConflict();

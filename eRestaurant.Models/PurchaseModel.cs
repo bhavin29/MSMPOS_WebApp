@@ -33,6 +33,8 @@ namespace RocketPOS.Models
         public int ReferenceNo { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:#.##}", ApplyFormatInEditMode = true)]
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
         public decimal Total { get; set; }

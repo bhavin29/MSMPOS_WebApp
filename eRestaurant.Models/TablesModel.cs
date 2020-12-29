@@ -4,7 +4,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
+using RocketPOS.Framework;
 
 namespace RocketPOS.Models
 {
@@ -26,6 +26,8 @@ namespace RocketPOS.Models
         [Required] 
         public int PersonCapacity { get; set; }
         public string TableIcon { get; set; }
-        public int Status { get; set; }
+
+        [EnumDataType(typeof(TableStatus))]
+        public TableStatus? Status { get; set; }
     }
 }

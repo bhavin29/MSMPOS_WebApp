@@ -1,4 +1,5 @@
-﻿@model RocketPOS.Models.IngredientCategoryModel
+﻿@using RocketPOS.Framework;
+@model RocketPOS.Models.IngredientCategoryModel
 
 @{
     //  ViewData["Title"] = "IngredientCategory";
@@ -37,9 +38,12 @@
                                     <span asp-validation-for="IngredientCategoryName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="RawMaterialType" class="control-label"></label>
-                                    <input asp-for="RawMaterialType" class="form-control" />
-                                    <span asp-validation-for="RawMaterialType" class="text-danger"></span>
+                                    <label asp-for="RawMaterialType" class="control-label">Role</label>
+                                    <select asp-for="RawMaterialType" class="form-control" asp-items="Html.GetEnumSelectList<RawMaterialType>()">
+                                        <option selected="selected" value="">--Select raw material type--</option>
+                                    </select>
+                                    <span asp-validation-for="RawMaterialType" class="text-danger" />
+                                    a
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Notes" class="control-label"></label>

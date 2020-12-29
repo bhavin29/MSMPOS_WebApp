@@ -65,6 +65,8 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+
+                ingredientCategoryModel.RawMaterialType = (ingredientCategoryModel.RawMaterialType == 0) ? null : ingredientCategoryModel.RawMaterialType;
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO IngredientCategory (IngredientCategoryName," +

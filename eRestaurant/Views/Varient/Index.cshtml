@@ -78,7 +78,7 @@
                                                 <td>
                                                     <div class="form-button-action">
                                                         <a asp-action="Varient" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                        <a href="#" class="btn btn-link btn-danger btn-lg" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -86,8 +86,8 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                             <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                         </div>
                                                         <div class="modal-body">
                                                             @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")

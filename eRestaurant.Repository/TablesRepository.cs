@@ -39,6 +39,8 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                TablesModel.Status = (TablesModel.Status == 0) ? null : TablesModel.Status;  
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO Tables (TableName,OutletId,PersonCapacity,TableIcon,Status)" +

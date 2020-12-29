@@ -40,6 +40,8 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                UserModel.RoleTypeId = (UserModel.RoleTypeId == 0) ? null : UserModel.RoleTypeId;
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //LastLogin,LastLogout,

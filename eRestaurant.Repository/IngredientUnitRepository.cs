@@ -43,7 +43,10 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                ingredientUnitModel = con.Query<IngredientUnitModel>(DataQuery.IngredientUnitAll.ToString()).ToList();
+                var query = "Select IngredientUnitName,Notes,IsActive" +
+                          "From IngredientUnit;" +
+                          " SELECT CAST(SCOPE_IDENTITY() as INT);";
+                ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList();
             }
 
             return ingredientUnitModel;

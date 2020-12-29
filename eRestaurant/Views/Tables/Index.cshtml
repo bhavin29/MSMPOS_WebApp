@@ -1,4 +1,7 @@
 ﻿@using Microsoft.Extensions.Localization;
+@using System.ComponentModel;
+@using System.ComponentModel.DataAnnotations;
+
 @model IEnumerable<RocketPOS.Models.TablesModel>
 @inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
 @using  RocketPOS.Resources
@@ -34,11 +37,11 @@
                                                 @Html.DisplayNameFor(model => model.PersonCapacity)
                                             </th>
                                             @*<th>
-                                                @Html.DisplayNameFor(model => model.TableIcon)
-                                            </th>*@
-                                            @*<th>
+                                                    @Html.DisplayNameFor(model => model.TableIcon)
+                                                </th>*@
+                                            <th>
                                                 @Html.DisplayNameFor(model => model.Status)
-                                            </th>*@
+                                            </th>
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </thead>
@@ -54,11 +57,11 @@
                                                 @Html.DisplayNameFor(model => model.PersonCapacity)
                                             </th>
                                             @*<th>
-                                                @Html.DisplayNameFor(model => model.TableIcon)
-                                            </th>
+                                                    @Html.DisplayNameFor(model => model.TableIcon)
+                                                </th>*@
                                             <th>
                                                 @Html.DisplayNameFor(model => model.Status)
-                                            </th>*@
+                                            </th>
                                             <th>@Html.DisplayName("Action")</th>
                                         </tr>
                                     </tfoot>
@@ -80,10 +83,10 @@
                                                 </td>
                                                 @*<td>
                                                     @Html.DisplayFor(modelItem => item.TableIcon)
-                                                </td>
+                                                </td>*@
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.Status)
-                                                </td>*@
+                                                </td>
                                                 <td>
                                                     <div class="form-button-action">
                                                         <a asp-action="Tables" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
@@ -95,8 +98,8 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                             <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                         </div>
                                                         <div class="modal-body">
                                                             @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")

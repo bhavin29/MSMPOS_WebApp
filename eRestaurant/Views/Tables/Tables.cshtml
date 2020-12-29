@@ -1,4 +1,5 @@
 ﻿@model RocketPOS.Models.TablesModel
+@using RocketPOS.Framework;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <div class="page-inner">
     <div class="page-header"></div>
@@ -37,9 +38,11 @@
                                     <span asp-validation-for="TableIcon" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="Status" class="control-label"></label>
-                                    <input asp-for="Status" class="form-control" />
-                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                    <label asp-for="Status" class="control-label">Status</label>
+                                    <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<TableStatus>()">
+                                        <option selected="selected" value="">--Select status--</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger" />
                                 </div>
                                 <div class="form-group">
                                     @if (Model != null)

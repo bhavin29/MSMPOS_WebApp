@@ -4,6 +4,8 @@ using System.Text;
 using System.Web.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using RocketPOS.Framework;
+
 namespace RocketPOS.Models
 {
    public class UserModel
@@ -31,13 +33,15 @@ namespace RocketPOS.Models
 
         public string ThumbToken { get; set; }
 
-        public int RoleTypeId { get; set; }
+        [EnumDataType(typeof(RoleType))]
+        public RoleType? RoleTypeId { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LastLogout { get; set; }
         public string IPAdress { get; set; }
         public string Counter { get; set; }
         public bool IsActive { get; set; }
        int UserID { get; set; }
+
 
         public UserModel()
         {

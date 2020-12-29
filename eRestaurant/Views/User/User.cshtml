@@ -1,4 +1,5 @@
 ﻿@model RocketPOS.Models.UserModel
+@using RocketPOS.Framework;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <div class="page-inner">
     <div class="page-header"></div>
@@ -44,25 +45,27 @@
                                     <span asp-validation-for="ThumbToken" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="RoleTypeId" class="control-label"></label>
-                                    <input asp-for="RoleTypeId" class="form-control" />
-                                    <span asp-validation-for="RoleTypeId" class="text-danger"></span>
-                                </div>
+                                    <label asp-for="RoleTypeId" class="control-label">Role</label>
+                                    <select asp-for="RoleTypeId" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
+                                        <option selected="selected" value="">--Select role--</option>
+                                    </select>
+                                    <span asp-validation-for="RoleTypeId"class="text-danger" />
+a                                </div>
                                 @*<div class="form-group">
-                                    <label asp-for="LastLogin" class="control-label"></label>
-                                    <input asp-for="LastLogin" class="form-control" />
-                                    <span asp-validation-for="LastLogin" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="LastLogout" class="control-label"></label>
-                                    <input asp-for="LastLogout" class="form-control" />
-                                    <span asp-validation-for="LastLogout" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="IPAdress" class="control-label"></label>
-                                    <input asp-for="IPAdress" class="form-control" />
-                                    <span asp-validation-for="IPAdress" class="text-danger"></span>
-                                </div>*@
+                                        <label asp-for="LastLogin" class="control-label"></label>
+                                        <input asp-for="LastLogin" class="form-control" />
+                                        <span asp-validation-for="LastLogin" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="LastLogout" class="control-label"></label>
+                                        <input asp-for="LastLogout" class="form-control" />
+                                        <span asp-validation-for="LastLogout" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="IPAdress" class="control-label"></label>
+                                        <input asp-for="IPAdress" class="form-control" />
+                                        <span asp-validation-for="IPAdress" class="text-danger"></span>
+                                    </div>*@
                                 <div class="form-group">
                                     <label asp-for="Counter" class="control-label"></label>
                                     <input asp-for="Counter" class="form-control" />
@@ -77,23 +80,23 @@
                                             <label asp-for="IsActive" class="control-label"></label>
                                             <input asp-for="IsActive" class="form-control" />
                                         </div>
+                                    }
+                                }
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
                                         }
                                     }
-                                        <div class="form-group">
-                                            @if (Model != null)
-                                            {
-                                                @if (Model.Id > 0)
-                                                {
-                                                    <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                                }
-                                                else
-                                                {
-                                                    <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                                }
-                                            }
-                                            <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-                                        </div>
-                                    </form>
+                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

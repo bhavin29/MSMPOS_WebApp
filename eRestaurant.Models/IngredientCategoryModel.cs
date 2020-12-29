@@ -4,6 +4,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Models
 {
@@ -16,7 +17,7 @@ namespace RocketPOS.Models
         public string IngredientCategoryName { get; set; }
 
         [DisplayName("Raw Material Type")]
-        public int RawMaterialType { get; set; }
+        public RawMaterialType? RawMaterialType { get; set; }
 
         public string Notes { get; set; }
 

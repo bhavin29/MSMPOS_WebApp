@@ -41,6 +41,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 employeeModel.UpdateStatus = (Framework.AttendanceStatus?)1; //Manullly by defauly
+                employeeModel.TotalTimeCount = (int)((employeeModel.OutTime.TotalMinutes - employeeModel.InTime.TotalMinutes)/60);
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();

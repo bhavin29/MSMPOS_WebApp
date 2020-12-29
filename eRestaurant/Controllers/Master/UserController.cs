@@ -43,6 +43,7 @@ namespace RocketPOS.Controllers.Master
                 userModel = _iUserService.GetUserById(userId);
             }
             userModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            userModel.OutletList = _iDropDownService.GetOutletList();
 
             return View(userModel);
         }
@@ -51,6 +52,10 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult User(UserModel userModel, string submitButton)
         {
+            userModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            userModel.OutletList = _iDropDownService.GetOutletList();
+            ViewBag.OutletList = userModel.OutletList;
+
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationUser(userModel);
@@ -60,7 +65,6 @@ namespace RocketPOS.Controllers.Master
                     return View(userModel);
                 }
             }
-
 
             if (userModel.Id > 0)
             {
@@ -72,9 +76,8 @@ namespace RocketPOS.Controllers.Master
                 var result = _iUserService.InsertUser(userModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            userModel.EmployeeList = _iDropDownService.GetEmployeeList();
- 
-        return RedirectToAction("Index", "User");
+
+            return RedirectToAction("Index", "User");
         }
 
         public ActionResult Delete(int id)

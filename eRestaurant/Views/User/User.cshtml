@@ -14,20 +14,19 @@
                     <div class="row">
                         <div class="col-md-4">
                             <form asp-action="User">
-                                <div asp-validation-summary="All" class="text-danger"></div>
                                 <div class="form-group">
                                     <label asp-for="EmployeeList" class="control-label">Employee</label>
-                                    @if (Model != null)
-                                    {
-                                        <select asp-for="EmployeeId" class="form-control"
-                                                asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                        </select>
-                                    }
+                                    <select asp-for="EmployeeId" class="form-control"
+                                            asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                    </select>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="OutletId" class="control-label"></label>
-                                    <input asp-for="OutletId" class="form-control" />
-                                    <span asp-validation-for="OutletId" class="text-danger"></span>
+                                    <label asp-for="OutletList" class="control-label">Outlet</label>
+                                    <select asp-for="OutletId" class="form-control"
+                                            asp-items="@(new MultiSelectList(Model.OutletList, "Value", "Text"))">
+                                    </select>
+
+                                    <select multiple="multiple" class="multi-select" id="my_multi_select1" asp-for="@Model.OutletList" asp-items="(List<SelectListItem>)ViewBag.OutletList"></select>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Username" class="control-label"></label>
@@ -39,33 +38,19 @@
                                     <input asp-for="Password" class="form-control" />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
+                                @*<div class="form-group">
                                     <label asp-for="ThumbToken" class="control-label"></label>
                                     <input asp-for="ThumbToken" class="form-control" />
                                     <span asp-validation-for="ThumbToken" class="text-danger"></span>
-                                </div>
+                                </div>*@
                                 <div class="form-group">
                                     <label asp-for="RoleTypeId" class="control-label">Role</label>
                                     <select asp-for="RoleTypeId" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
                                         <option selected="selected" value="">--Select role--</option>
                                     </select>
-                                    <span asp-validation-for="RoleTypeId"class="text-danger" />
-a                                </div>
-                                @*<div class="form-group">
-                                        <label asp-for="LastLogin" class="control-label"></label>
-                                        <input asp-for="LastLogin" class="form-control" />
-                                        <span asp-validation-for="LastLogin" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="LastLogout" class="control-label"></label>
-                                        <input asp-for="LastLogout" class="form-control" />
-                                        <span asp-validation-for="LastLogout" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="IPAdress" class="control-label"></label>
-                                        <input asp-for="IPAdress" class="form-control" />
-                                        <span asp-validation-for="IPAdress" class="text-danger"></span>
-                                    </div>*@
+                                    <span asp-validation-for="RoleTypeId" class="text-danger" />
+                                    a
+                                </div>
                                 <div class="form-group">
                                     <label asp-for="Counter" class="control-label"></label>
                                     <input asp-for="Counter" class="form-control" />

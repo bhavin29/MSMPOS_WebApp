@@ -49,7 +49,8 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Bank(BankModel bankModel, string submitButton)
         {
             if (!ModelState.IsValid)
-            {                string errorString = this.ValidationBank(bankModel);
+            {
+                string errorString = this.ValidationBank(bankModel);
                 if (!string.IsNullOrEmpty(errorString))
                 {
                     ViewBag.Validate = errorString;

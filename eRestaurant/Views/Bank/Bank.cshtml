@@ -1,13 +1,6 @@
 ﻿@model RocketPOS.Models.BankModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
-}
-
 <div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
@@ -20,44 +13,49 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form asp-action="Bank">
-                                <div asp-validation-summary="All" class="text-danger"></div>
-                                <div class="form-group">
-                                    <label asp-for="BankName" class="control-label"></label>
-                                    <input asp-for="BankName" class="form-control" />
-                                    <span asp-validation-for="BankName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="AccountName" class="control-label"></label>
-                                    <input asp-for="AccountName" class="form-control" />
-                                    <span asp-validation-for="AccountName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="AccountNumber" class="control-label"></label>
-                                    <input asp-for="AccountNumber" class="form-control" />
-                                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Branch" class="control-label"></label>
-                                    <input asp-for="Branch" class="form-control" />
-                                    <span asp-validation-for="Branch" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="SignaturePicture" class="control-label"></label>
-                                    <input asp-for="SignaturePicture" class="form-control" />
-                                    <span asp-validation-for="SignaturePicture" class="text-danger"></span>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="BankName" class="control-label"></label>
+                                            <input asp-for="BankName" class="form-control" />
+                                            <span asp-validation-for="BankName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="AccountName" class="control-label"></label>
+                                            <input asp-for="AccountName" class="form-control" />
+                                            <span asp-validation-for="AccountName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="AccountNumber" class="control-label"></label>
+                                            <input asp-for="AccountNumber" class="form-control" />
+                                            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="Branch" class="control-label"></label>
+                                            <input asp-for="Branch" class="form-control" />
+                                            <span asp-validation-for="Branch" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="SignaturePicture" class="control-label"></label>
+                                            <input asp-for="SignaturePicture" class="form-control" />
+                                            <span asp-validation-for="SignaturePicture" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     @if (Model != null)
                                     {
                                         @if (Model.Id > 0)
                                         {
-                                            <input type="submit" value="Edit" class="btn btn-primary" />
+                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
                                         }
                                         else
                                         {
                                             <input type="submit" value="Add" class="btn btn-primary btn-sm" />
                                         }
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-danger" />
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
                                     }
                                 </div>
                             </form>
@@ -97,7 +95,6 @@
         </script>
     }
 }
-
 @section Scripts{
     <script>
         $('#save').click(function () {

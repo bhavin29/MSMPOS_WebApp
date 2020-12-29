@@ -42,6 +42,10 @@ namespace RocketPOS.Controllers.Master
                 int userId = Convert.ToInt32(id);
                 employeeAttendanceModel = _iemployeeAttendanceService.GetEmployeeAttendaceById(userId);
             }
+            else
+            {
+                employeeAttendanceModel.LogDate = DateTime.Now;
+            }
             employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
 
             return View(employeeAttendanceModel);
@@ -63,17 +67,26 @@ namespace RocketPOS.Controllers.Master
                 }
             }
 
-            if (employeeAttendanceModel.Id > 0)
+            if (_iemployeeAttendanceService.ValidationEmployeeAttendance(employeeAttendanceModel)==0)
             {
-                var result = _iemployeeAttendanceService.UpdateEmployeeAttendance(employeeAttendanceModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                ViewBag.Validate = "Employee with same log date already exits";
+
+                return View(employeeAttendanceModel);
             }
             else
             {
-                var result = _iemployeeAttendanceService.InsertEmployeeAttendance(employeeAttendanceModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                if (employeeAttendanceModel.Id > 0)
+                {
+                    var result = _iemployeeAttendanceService.UpdateEmployeeAttendance(employeeAttendanceModel);
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                }
+                else
+                {
+                    var result = _iemployeeAttendanceService.InsertEmployeeAttendance(employeeAttendanceModel);
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                }
             }
-   
+
             return RedirectToAction("Index", "EmployeeAttendance");
         }
 
@@ -87,17 +100,18 @@ namespace RocketPOS.Controllers.Master
         private string ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
         {
             string ErrorString = string.Empty;
-            if (string.IsNullOrEmpty(employeeAttendanceModel.EmployeeName))
+            double  timeDiffrent = employeeAttendanceModel.OutTime.TotalMinutes - employeeAttendanceModel.InTime.TotalMinutes;
+
+            if (string.IsNullOrEmpty(employeeAttendanceModel.EmployeeId.ToString()) || employeeAttendanceModel.EmployeeId == 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
                 return ErrorString;
             }
-            //if (string.IsNullOrEmpty(employeeAttendanceModel.Price.ToString()) || employeeAttendanceModel.Price == 0)
-            //{
-            //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
-            //    return ErrorString;
-            //}
-
+            if (timeDiffrent <= 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+                return ErrorString;
+            }
             return ErrorString;
         }
 

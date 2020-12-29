@@ -15,8 +15,6 @@ namespace RocketPOS.Interface.Repository
 
         int DeleteEmployeeAttendance(int employeeAttendaceID);
 
-
-
-
+        int ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel);
     }
 }

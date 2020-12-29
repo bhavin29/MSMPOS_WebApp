@@ -17,8 +17,6 @@ namespace RocketPOS.Services
         {
             _iEmployeeAttendanceReportsitory = iEmployeeRepository;
         }
-
-
         public int InsertEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
         {
             return _iEmployeeAttendanceReportsitory.InsertEmployeeAttendance(employeeAttendanceModel);
@@ -42,6 +40,11 @@ namespace RocketPOS.Services
         public List<EmployeeAttendanceModel> GetEmployeeAttendaceList()
         {
             return _iEmployeeAttendanceReportsitory.GetEmployeeAttendanceList();
+        }
+
+        public int ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
+        {
+            return _iEmployeeAttendanceReportsitory.ValidationEmployeeAttendance(employeeAttendanceModel);
         }
     }
 }

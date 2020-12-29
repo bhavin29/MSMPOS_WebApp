@@ -1,9 +1,5 @@
 ﻿@model RocketPOS.Models.EmployeeAttendanceModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@{
-    // ViewData["Title"] = "Attendance";
-}
-
 
 <div class="page-inner">
     <div class="page-header"></div>
@@ -15,62 +11,47 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <form asp-action="EmployeeAttendance">
-                                <div asp-validation-summary="All" class="text-danger"></div>
-                                @*<div class="form-group">
-                                        <label asp-for="Id" class="control-label"></label>
-                                        <input asp-for="Id" class="form-control" />
-                                        <span asp-validation-for="Id" class="text-danger"></span>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="EmployeeList" class="control-label">Empployee</label>
+                                            <select asp-for="EmployeeId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="LogDate" class="control-label"></label>
+                                            <input asp-for="LogDate" type="date" class="form-control" />
+                                            <span asp-validation-for="LogDate" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label asp-for="EmployeeId" class="control-label"></label>
-                                        <input asp-for="EmployeeId" class="form-control" />
-                                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                    </div>*@
-                                <div class="form-group">
-                                    <label asp-for="EmployeeList" class="control-label">Empployee</label>
-                                    @if (Model != null)
-                                    {
-                                        <select asp-for="EmployeeId" class="form-control"
-                                                asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                        </select>
-                                    }
-                                </div>
-                                @*<div class="form-group">
-                                        <label asp-for="EmployeeName" class="control-label"></label>
-                                        <input asp-for="EmployeeName" class="form-control" />
-                                        <span asp-validation-for="EmployeeName" class="text-danger"></span>
-                                    </div>*@
-                                <div class="form-group">
-                                    <label asp-for="LogDate" class="control-label"></label>
-                                    <input asp-for="LogDate" class="form-control" />
-                                    <span asp-validation-for="LogDate" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="InTime" class="control-label"></label>
-                                    <input asp-for="InTime" class="form-control" />
-                                    <span asp-validation-for="InTime" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="OutTime" class="control-label"></label>
-                                    <input asp-for="OutTime" class="form-control" />
-                                    <span asp-validation-for="OutTime" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="TotalTimeCount" class="control-label"></label>
-                                    <input asp-for="TotalTimeCount" class="form-control" />
-                                    <span asp-validation-for="TotalTimeCount" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="UpdateStatus" class="control-label"></label>
-                                    <input asp-for="UpdateStatus" class="form-control" />
-                                    <span asp-validation-for="UpdateStatus" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Notes" class="control-label"></label>
-                                    <input asp-for="Notes" class="form-control" />
-                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="InTime" class="control-label"></label>
+                                            <input asp-for="InTime" type="time" class="form-control" />
+                                            <span asp-validation-for="InTime" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="OutTime" class="control-label"></label>
+                                            <input asp-for="OutTime" type="time" class="form-control" />
+                                            <span asp-validation-for="OutTime" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="TotalTimeCount" class="control-label"></label>
+                                            <input asp-for="TotalTimeCount" class="form-control" />
+                                            <span asp-validation-for="TotalTimeCount" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Notes" class="control-label"></label>
+                                            <input asp-for="Notes" class="form-control" />
+                                            <span asp-validation-for="Notes" class="text-danger"></span>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     @if (Model != null)
@@ -83,16 +64,14 @@
                                         {
                                             <input type="submit" value="Add" class="btn btn-primary btn-sm" />
                                         }
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
                                     }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

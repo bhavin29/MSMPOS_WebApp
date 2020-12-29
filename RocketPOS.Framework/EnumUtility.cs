@@ -22,11 +22,11 @@ namespace RocketPOS.Framework
     public enum TableStatus
     {
         [Display(Name = "Open")]
-        Open =1,
+        Open = 1,
         [Display(Name = "Occupied")]
-        Occupied =2,
+        Occupied = 2,
         [Display(Name = "Clean")]
-        Clean =3,
+        Clean = 3,
     }
     public enum RoleType
     {
@@ -39,7 +39,7 @@ namespace RocketPOS.Framework
         [Display(Name = "Waiter")]
         Waiter = 4,
     }
-public enum RawMaterialType
+    public enum RawMaterialType
     {
         [Display(Name = "Appletiser")]
         Admin = 1,
@@ -47,5 +47,12 @@ public enum RawMaterialType
         Manager = 2,
         [Display(Name = "ICE Cream")]
         POS = 3,
+    }
+    public enum AttendanceStatus
+    {
+        [Display(Name = "Manually")]
+        Manually = 1,
+        [Display(Name = "Auto")]
+        Auto = 2,
     }
 }

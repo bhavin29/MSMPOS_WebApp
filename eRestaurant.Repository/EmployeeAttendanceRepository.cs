@@ -40,6 +40,8 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                employeeModel.UpdateStatus = (Framework.AttendanceStatus?)1; //Manullly by defauly
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 
@@ -67,12 +69,12 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-    
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE EmployeeAttendance SET " +
-                            " EmployeeId=@EmployeeId, LogDate=@LogDate, InTime=@InTime, OutTime=@OutTime, "+
-                            "TotalTimeCount=@TotalTimeCount, UpdateStatus=@UpdateStatus, Notes=@Notes " + 
+                            " EmployeeId=@EmployeeId, LogDate=@LogDate, InTime=@InTime, OutTime=@OutTime, " +
+                            "TotalTimeCount=@TotalTimeCount, UpdateStatus=@UpdateStatus, Notes=@Notes " +
                             "WHERE Id = @Id;";
                 result = con.Execute(query, employeeModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -108,6 +110,26 @@ namespace RocketPOS.Repository
                 }
             }
             return result;
+        }
+
+        public int ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
+        {
+            int result = 1;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                List<EmployeeAttendanceModel> employeeAttendanceModels = new List<EmployeeAttendanceModel>();
+
+                var query = "SELECT * FROM EMPLOYEEATTENDANCE WHERE EMPLOYEEID= " + employeeAttendanceModel.EmployeeId.ToString() +
+                            "AND convert(varchar,LOGDATE,5) = '" + employeeAttendanceModel.LogDate.ToString("dd-MM-yy") + "';";
+                employeeAttendanceModels = con.Query<EmployeeAttendanceModel>(query).ToList();
+
+                if (employeeAttendanceModels.Count > 0)
+                {
+                    result = 0;
+                }
+
+                return result;
+            }
         }
     }
 }

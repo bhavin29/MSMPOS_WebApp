@@ -17,5 +17,7 @@ namespace RocketPOS.Interface.Services
         int UpdateEmployeeAttendance(EmployeeAttendanceModel employeeAttendaceModel);
 
         int DeleteEmployeeAttendance(int employeeAttendaceID);
+
+        int ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel);
     }
 }

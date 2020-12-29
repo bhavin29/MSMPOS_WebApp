@@ -55,10 +55,12 @@ $('#addRow').on('click', function (e) {
         ]).draw(false);
         dataArr.push({
             FoodMenuId: $("#FoodMenuId").val(),
-            ingredientId: $("#IngredientId").val(),
-            quantity: $("#Quantity").val(),
+            IngredientId: $("#IngredientId").val(),
+            Qty: $("#Quantity").val(),
             LossAmount: $("#LossAmount").val() ,
-            wasteId: $("#WasteId").val()
+            WasteId: $("#WasteId").val(),
+            FoodMenuName: $('#FoodMenuId').children("option:selected").text(),
+            IngredientName: $('#IngredientId').children("option:selected").text()
         });
         clearItem();
     }
@@ -102,7 +104,7 @@ $(function () {
                     Date: $("#Date").val(),
                     EmployeeList: [],
                     IngredientList: [],
-                    WasteDetails: dataArr
+                    WasteDetail: dataArr
                 });
                 $.when(saveOrder(data)).then(function (response) {
                     if (response.status == "200") {

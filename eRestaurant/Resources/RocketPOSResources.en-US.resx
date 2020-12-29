@@ -142,7 +142,7 @@
     <value>Enter valid ingredient name</value>
   </data>
   <data name="ValidPurchaseDetails" xml:space="preserve">
-    <value>Enter atleast one record</value>
+    <value>At least one order should be entered</value>
   </data>
   <data name="ValidReferenceNo" xml:space="preserve">
     <value>Enter Validate Reference No</value>

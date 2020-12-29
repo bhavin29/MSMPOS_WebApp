@@ -29,7 +29,7 @@ namespace RocketPOS.Repository
                              ",ing.PurchasePrice, ing.SalesPrice, ing.AlterQty,ing.Code" +
                              " from Ingredient as Ing inner join IngredientCategory as category " +
                              "on ing.IngredientCategoryId = category.id and category.IsDeleted = 0 inner join IngredientUnit as unit " +
-                             "on ing.IngredientUnitId = unit.Id and unit.IsDeleted = 0 where ing.IsDeleted = 0";
+                             "on ing.IngredientUnitId = unit.Id and unit.IsDeleted = 0 where ing.IsDeleted = 0 order by ing.IngredientName asc";
                 ingredientModel = con.Query<IngredientModel>(query).ToList();
             }
             return ingredientModel;

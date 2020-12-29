@@ -22,9 +22,9 @@ namespace RocketPOS.Repository
             List<PurchaseViewModel> purchaseViewModelList = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo, PurchaseDate as [Date],Supplier.SupplierName," +
+                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due " +
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Isdeleted = 0";
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Isdeleted = 0 order by PurchaseDate, purchaseNumber desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
 
@@ -103,8 +103,8 @@ namespace RocketPOS.Repository
                                               "" + item.Quantity + "," +
                                               "" + item.Total + "," +
                                               "0," +
-                                              "" + item.Total + ",1,0); SELECT CAST(SCOPE_IDENTITY() as INT); ";
-                        detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                                              "" + item.Total + ",1,0);";
+                        detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
 

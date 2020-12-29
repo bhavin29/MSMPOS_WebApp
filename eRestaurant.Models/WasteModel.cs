@@ -32,7 +32,7 @@ namespace RocketPOS.Models
         decimal TotalLossAmount { get; set; }
         string ReasonForWaste { get; set; }
         int WasteStatus { get; set; }
-        public List<WasteDetailModel> WasteDetail;
+        public List<WasteDetailModel> WasteDetail { get; set; }
 
     }
     public class    WasteDetailModel

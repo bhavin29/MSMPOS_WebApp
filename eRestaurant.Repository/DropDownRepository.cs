@@ -24,7 +24,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,IngredientCategoryName as [Name] from IngredientCategory where IsDeleted = 0";
+                var query = "select Id,IngredientCategoryName as [Name] from IngredientCategory where IsDeleted = 0 Order by IngredientCategoryName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -34,7 +34,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,IngredientUnitName as [Name] from IngredientUnit where IsDeleted= 0";
+                var query = "select Id,IngredientUnitName as [Name] from IngredientUnit where IsDeleted= 0 Order by IngredientUnitName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -62,7 +62,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,SupplierName as [Name] from Supplier where IsDeleted= 0";
+                var query = "select Id,SupplierName as [Name] from Supplier where IsDeleted= 0 Order by SupplierName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -73,7 +73,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,StoreName as [Name] from Store where IsDeleted= 0";
+                var query = "select Id,StoreName as [Name] from Store where IsDeleted= 0 Order by StoreName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -101,7 +101,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,IngredientName as [Name] from Ingredient where IsDeleted= 0";
+                var query = "select Id,IngredientName as [Name] from Ingredient where IsDeleted= 0 Order by IngredientName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -112,7 +112,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,FoodMenuName as [Name] from FoodMenu where IsDeleted= 0";
+                var query = "select Id,FoodMenuName as [Name] from FoodMenu where IsDeleted= 0 Order by FoodMenuName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

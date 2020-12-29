@@ -150,6 +150,9 @@
   <data name="ValidSalesPrice" xml:space="preserve">
     <value>Enter Valid Sales Price</value>
   </data>
+  <data name="ValidStoreName" xml:space="preserve">
+    <value>Enter Store Name</value>
+  </data>
   <data name="ValidSupplier" xml:space="preserve">
     <value>Select Supplier</value>
   </data>

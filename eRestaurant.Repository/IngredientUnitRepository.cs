@@ -43,8 +43,8 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select IngredientUnitName,Notes,IsActive" +
-                          "From IngredientUnit;" +
+                var query = "Select Id,IngredientUnitName,Notes,IsActive " +
+                          "From IngredientUnit where IsDeleted=0;" +
                           " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList();
             }
@@ -113,7 +113,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"UPDATE IngredientUnit SET isDeleted= 1 WHERE Id = {ingredientUnitId}";
+                var query = "UPDATE IngredientUnit SET isDeleted= 1 WHERE Id = " + ingredientUnitId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

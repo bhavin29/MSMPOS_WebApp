@@ -34,6 +34,9 @@ namespace RocketPOS.Models
         public string ThumbToken { get; set; }
 
         [EnumDataType(typeof(RoleType))]
+
+        [DisplayName("Role")]
+        [Required(ErrorMessage = "Select Role")]
         public RoleType? RoleTypeId { get; set; }
         public DateTime LastLogin { get; set; }
         public DateTime LastLogout { get; set; }

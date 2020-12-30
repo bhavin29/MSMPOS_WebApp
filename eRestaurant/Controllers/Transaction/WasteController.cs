@@ -42,7 +42,13 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetOrderById(long wasteId)
         {
             WasteModel wasteModel = new WasteModel();
+            wasteModel.OutletList = _iDropDownService.GetOutletList();
+            wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            wasteModel.IngredientList = _iDropDownService.GetIngredientList();
+            wasteModel.EmployeeList = _iDropDownService.GetEmployeeList();
+ 
             wasteModel = _iWasteService.GetWasteById(wasteId);
+            
             return View(wasteModel);
         }
 
@@ -50,6 +56,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult Waste(long? id)
         {
             WasteModel wasteModel = new WasteModel();
+
             if (id > 0)
             {
                 long wasteId = Convert.ToInt64(id);
@@ -61,10 +68,13 @@ namespace RocketPOS.Controllers.Transaction
                 wasteModel.WasteDateTime = DateTime.Now;
                 wasteModel.ReferenceNumber = _iWasteService.ReferenceNumber().ToString();
             }
+
             wasteModel.OutletList = _iDropDownService.GetOutletList();
             wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             wasteModel.IngredientList = _iDropDownService.GetIngredientList();
             wasteModel.EmployeeList = _iDropDownService.GetEmployeeList();
+
+
             return View(wasteModel);
         }
 

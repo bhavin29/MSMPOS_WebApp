@@ -30,7 +30,7 @@ $(document).ready(function () {
                 "targets": [7],
                 "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete Order</a>', "autoWidth": true
             }
-       ]
+        ]
     });
 });
 
@@ -40,28 +40,30 @@ $('#addRow').on('click', function (e) {
     debugger;
     if (message == '') {
         WasteDatatable.row('.active').remove().draw(false);
-        WasteDatatable.row.add([
+        var rowNode = WasteDatatable.row.add([
             $("#FoodMenuId").val(),
             $('#FoodMenuId').children("option:selected").text(),
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
-            $("#Quantity").val(),
-            $("#LossAmount").val(),
+            '<td class="text-right">' + $("#Quantity").val() + ' </td>',
+            '<td class="text-right">' + $("#LossAmount").val() + ' </td>',
             $("#WasteId").val(),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > '+
-            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
-            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">'+
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
+            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
         ]).draw(false);
         dataArr.push({
-            FoodMenuId: $("#FoodMenuId").val(),
-            IngredientId: $("#IngredientId").val(),
-            Qty: $("#Quantity").val(),
-            LossAmount: $("#LossAmount").val() ,
-            WasteId: $("#WasteId").val(),
-            FoodMenuName: $('#FoodMenuId').children("option:selected").text(),
-            IngredientName: $('#IngredientId').children("option:selected").text()
+            foodMenuId: $("#FoodMenuId").val(),
+            ingredientId: $("#IngredientId").val(),
+            qty: $("#Quantity").val(),
+            lossAmount: $("#LossAmount").val(),
+            wasteId: $("#WasteId").val(),
+            foodMenuName: $('#FoodMenuId').children("option:selected").text(),
+            ingredientName: $('#IngredientId').children("option:selected").text()
         });
+        $(rowNode).find('td').eq(1).addClass('text-right');
+        $(rowNode).find('td').eq(2).addClass('text-right');
         clearItem();
     }
     else if (message != '') {
@@ -88,7 +90,7 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
         if (!WasteDatatable.data().any() || WasteDatatable.data().row == null) {
-            var message = 'No data available!'
+            var message = 'At least one order should be entered'
             $(".modal-body").text(message);
             $("#save").hide();
             jQuery.noConflict();
@@ -99,9 +101,13 @@ $(function () {
                 e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
-                    ReferenceNo: $("#ReferenceNumber").val(),
+                    ReferenceNumber: $("#ReferenceNumber").val(),
                     EmployeeId: $("#EmployeeId").val(),
-                    Date: $("#Date").val(),
+                    OutletId: $("#OutletId").val(),
+                    TotalLossAmount: $("#TotalLossAmount").val(),
+                    ReasonForWaste: $("#ReasonForWaste").val(),
+                    WasteDateTime: $("#WasteDateTime").val(),
+                    WasteStatus: $("#WasteStatus").val(),
                     EmployeeList: [],
                     IngredientList: [],
                     WasteDetail: dataArr
@@ -144,7 +150,7 @@ function deleteOrderItem(id) {
         dataType: "json",
         //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         type: "GET",
-       // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
+        // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
         url: "/Waste/DeleteWasteDetail",
         data: "wasteId=" + id
         //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
@@ -152,14 +158,13 @@ function deleteOrderItem(id) {
 }
 
 function deleteOrder(wasteId, ingredientId, rowId) {
-    var id = ingredientId;
-    if (wasteId == "0") {
+    var id = wasteId;
+    if (ingredientId == "0") {
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == id) {
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
-                $("#GrandTotal").val(GrandTotal);
-                DueAmount();
+                $("#TotalLossAmount").val(GrandTotal);
                 dataArr.splice(i, 1);
                 WasteDatatable.row(rowId).remove().draw(false);
                 jQuery.noConflict();
@@ -168,7 +173,7 @@ function deleteOrder(wasteId, ingredientId, rowId) {
         }
     }
     else {
-        $.when(deleteOrderItem(wasteId).then(function (res) {
+        $.when(deleteOrderItem(ingredientId).then(function (res) {
             console.log(res)
             if (res.status == 200) {
                 debugger;
@@ -176,8 +181,7 @@ function deleteOrder(wasteId, ingredientId, rowId) {
                     if (dataArr[i].ingredientId == id) {
                         TotalAmount = dataArr[i].total;
                         GrandTotal -= TotalAmount;
-                        $("#GrandTotal").val(GrandTotal);
-                        DueAmount();
+                        $("#TotalLossAmount").val(GrandTotal);
                         dataArr.splice(i, 1);
                         WasteDatatable.row(rowId).remove().draw(false);
                         jQuery.noConflict();
@@ -201,6 +205,8 @@ $(document).on('click', 'a.editItem', function (e) {
         $("#aModal").modal('show');
     }
     else {
+        debugger;
+  
         e.preventDefault();
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
@@ -212,16 +218,18 @@ $(document).on('click', 'a.editItem', function (e) {
         var id = $(this).attr('data-itemId');
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == id) {
-                  $("#IngredientId").val(dataArr[i].ingredientId),
-                    $("#FoodMenuId").val(dataArr[i].FoodMenuId),
-                    $("#Quantity").val(dataArr[i].quantity),
-                    $("#LossAmount").val(dataArr[i].LossAmount),
-                    $("#WasteId").val(dataArr[i].WasteId)
+                    $("#IngredientId").val(dataArr[i].ingredientId),
+                    $("#FoodMenuId").val(dataArr[i].foodMenuId),
+                    $("#Quantity").val(dataArr[i].qty),
+                    $("#LossAmount").val(dataArr[i].lossAmount),
+                    $("#WasteId").val(dataArr[i].wasteId)
                 dataArr.splice(i, 1);
                 $(this).remove();
             }
         }
     }
+    debugger;
+
 });
 
 
@@ -246,7 +254,6 @@ function validation() {
 
     }
     return message;
-
 }
 
 function clearItem() {

@@ -22,7 +22,7 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
 
-        [DisplayName("Reference Number")]
+        [DisplayName("Ref #")]
         [Required]
 
         public string ReferenceNumber { get; set; }

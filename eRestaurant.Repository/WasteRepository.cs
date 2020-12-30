@@ -24,7 +24,7 @@ namespace RocketPOS.Repository
             List<WasteListModel> wasteViewModelList = new List<WasteListModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, W.WasteDateTime, W.EmployeeId, " +
+                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, convert(varchar(12),W.WasteDateTime,3) as WasteDateTime, W.EmployeeId, " +
                             "(E.LastName + ' ' + E.FirstName) as EmployeeName,W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
                             " FROM Waste W" +
                             " INNER JOIN Outlet O ON W.OutletId = O.Id " +

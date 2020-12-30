@@ -1,4 +1,5 @@
 ﻿@using Microsoft.Extensions.Localization;
+@using RocketPOS.Framework;
 @model RocketPOS.Models.InventoryAdjustmentModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
@@ -78,8 +79,10 @@
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label class="control-label">Comsumption Status</label>
-                                                                <input class="form-control text-right" type="text" id="ConsumpationStatus" />
+                                                                <label asp-for="ConsumpationStatus" class="control-label">Status</label>
+                                                                <select asp-for="ConsumpationStatus" class="form-control" asp-items="Html.GetEnumSelectList<ConsumpationStatus>()">
+                                                                    <option selected="selected" value="">--Select Consumpation--</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -94,7 +97,7 @@
                                                     <hr />
                                                     <div class="row">
                                                         <div class="col-md-10">
-                                                            <table id="InventoryAdjustmentOrderDetail" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                                            <table id="InventoryAdjustmentOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                                 <thead>
                                                                     <tr>
                                                                         <th style="width:35%">IngredientId</th>

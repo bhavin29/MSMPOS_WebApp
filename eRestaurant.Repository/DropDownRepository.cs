@@ -101,7 +101,8 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,IngredientName + ' [ ' + CONVERT(VARCHAR(20),SalesPrice ) + ' ]'  as [Name] from Ingredient where IsDeleted= 0 Order by IngredientName";
+                //var query = "select Id,IngredientName + ' [ ' + CONVERT(VARCHAR(20),SalesPrice ) + ' ]'  as [Name] from Ingredient where IsDeleted= 0 Order by IngredientName";
+                var query = "select Id,IngredientName as [Name] from Ingredient where IsDeleted= 0 Order by IngredientName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

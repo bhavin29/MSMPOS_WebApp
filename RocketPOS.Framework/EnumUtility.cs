@@ -55,4 +55,12 @@ namespace RocketPOS.Framework
         [Display(Name = "Auto")]
         Auto = 2,
     }
+
+    public enum ConsumpationStatus
+    {
+        [Display(Name = "Stock In")]
+        StockIN = 1,
+        [Display(Name = "Stock Out")]
+        StockOUT = 2,
+    }
 }

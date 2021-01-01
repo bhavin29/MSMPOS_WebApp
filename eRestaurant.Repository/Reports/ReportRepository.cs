@@ -53,5 +53,32 @@ namespace RocketPOS.Repository.Reports
 
             return inventoryReportModel;
         }
+        public List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate)
+        {
+            List<PurchaseReportModel> purchaseReportModel = new List<PurchaseReportModel>();
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+
+                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo," +
+                             "convert(varchar(12), PurchaseDate, 3) as [Date]," +
+                             "Supplier.SupplierName as Supplier," +
+                             "Purchase.GrandTotal as GrandTotal," +
+                             "Purchase.PaidAmount as Paid," +
+                             "Purchase.DueAmount as Due," +
+                             "STUFF( (SELECT ', ' + convert(varchar(10), i1.IngredientName, 120)" +
+                              " FROM Ingredient i1 inner join PurchaseIngredient on PurchaseIngredient.IngredientId = i1.Id" +
+                              " where Purchase.id = PurchaseIngredient.PurchaseId" +
+                              " FOR XML PATH(''))" +
+                              " , 1, 2, '')  AS Ingredients," +
+                             " 'Rocket Admin' as PurchaseBy" +
+                             " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id " +
+                             "where Purchase.Isdeleted = 0 and PurchaseDate between convert(datetime, '" + fromDate + "',103) and convert(datetime, '" + toDate + "',103)";
+
+                purchaseReportModel = con.Query<PurchaseReportModel>(query).ToList();
+            }
+
+            return purchaseReportModel;
+        }
     }
 }

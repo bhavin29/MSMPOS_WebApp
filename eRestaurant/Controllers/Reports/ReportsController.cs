@@ -11,6 +11,7 @@ using RocketPOS.Models;
 using RocketPOS.Resources;
 using RocketPOS.Interface.Services.Reports;
 using RocketPOS.Models.Reports;
+using Newtonsoft.Json;
 
 namespace RocketPOS.Controllers.Reports
 {
@@ -59,6 +60,42 @@ namespace RocketPOS.Controllers.Reports
   
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
+        }
+
+        public ViewResult Purchase()
+        {
+            PurchaseReportParamModel purchaseReportModel = new PurchaseReportParamModel();
+            purchaseReportModel.FromDate = DateTime.Now;
+            purchaseReportModel.ToDate = DateTime.Now;
+            //purchaseReportModel = _iReportService.GetPurchaseReport(purchaseReportParamModel);
+            return View(purchaseReportModel);
+        }
+
+        [HttpGet]
+        public ActionResult PurchaseReport(string fromDate, string toDate)
+          {
+            List<PurchaseReportModel> purchaseReportList = new List<PurchaseReportModel>();
+            PurchaseReportParamModel purchaseReportModel = new PurchaseReportParamModel();
+            purchaseReportModel.draw = int.Parse(HttpContext.Request.Query["draw"]);
+            if (fromDate != null)
+            {
+                DateTime newFromDate = fromDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                DateTime newToDate = toDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(toDate);
+                purchaseReportModel.FromDate = newFromDate;
+                purchaseReportModel.ToDate = newToDate;
+                purchaseReportList = _iReportService.GetPurchaseReport(newFromDate, newToDate);
+                purchaseReportModel.data = purchaseReportList.ToArray();
+            }
+            else
+            {
+                purchaseReportModel.FromDate = DateTime.Now;
+                purchaseReportModel.ToDate = DateTime.Now;
+            }
+
+            //string jsonData = JsonConvert.SerializeObject(purchaseReportModel.PurchaseReport);
+            var jsonData = purchaseReportList.ToArray();
+            //return Json(purchaseReportModel, json);
+            return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
         }
 
 

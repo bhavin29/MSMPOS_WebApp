@@ -141,15 +141,11 @@ $('#ok').click(function () {
 });
 
 function deleteOrderItem(id) {
-    debugger;
     return $.ajax({
         dataType: "json",
-        //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         type: "GET",
-       // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
         url: "/Purchase/DeletePurchaseDetails",
         data: "purchaseId=" + id
-        //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
 }
 

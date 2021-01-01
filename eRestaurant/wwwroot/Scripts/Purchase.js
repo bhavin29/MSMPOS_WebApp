@@ -36,9 +36,9 @@ $('#addRow').on('click', function (e) {
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
         var rowNode = PurchaseDatatable.row.add([
-            '<td class="text-right">'+$("#IngredientId").val()+' </td>',
+            '<td class="text-right">' + $("#IngredientId").val() + ' </td>',
             $('#IngredientId').children("option:selected").text(),
-            '<td class="text-right">' + $("#UnitPrice").val() + ' </td>',
+            '<td class="text-right">' + UnitPrice + ' </td>',
             '<td class="text-right">' + $("#Quantity").val() + ' </td>',
             '<td class="text-right">' + $("#UnitPrice").val() * $("#Quantity").val() + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > '+

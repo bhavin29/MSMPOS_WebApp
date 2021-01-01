@@ -141,37 +141,44 @@
 @section Scripts {
     <script>
         var filterValues = {};
-            var refDataTable = $("#PurchaseReport").dataTable({
-                serverSide: true,
-                paging:   false,
-                ordering: false,
-                info:     false,
-              "columns": [
-                    { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
-                    { "data": "date", "name": "Date", "autoWidth": true },
-                    { "data": "supplier", "name": "Supplier", "autoWidth": true },
-                    { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true },
-                    { "data": "paid", "name": "Paid", "autoWidth": true },
-                    { "data": "due", "name": "Due", "autoWidth": true },
-                    { "data": "ingredients", "name": "Ingredients", "autoWidth": true },
-                    { "data": "purchaseBy", "name": "PurchaseBy", "autoWidth": true }
+        var refDataTable = $("#PurchaseReport").dataTable({
+             dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5',
                 ],
-                ajax: function (data, callback, settings) {
-                    filterValues.draw = data.draw;
-                    filterValues.start = data.start;
-                    filterValues.length = data.length;
-                    $.ajax({
-                        url: '/Report/PurchaseReport',
-                        method: 'GET',
-                        data: filterValues
-                    }).done(callback);
-                }
-            });
-            $("#Submit").click(function () {
-                filterValues.fromDate = $("#FromDate").val();
-                filterValues.toDate = $("#ToDate").val();
-                refDataTable.fnDraw();
-            });
-            
+            serverSide: true,
+            paging: false,
+            ordering: false,
+            info: false,
+            dom: 'Bfrtip',
+            "columns": [
+                { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
+                { "data": "date", "name": "Date", "autoWidth": true },
+                { "data": "supplier", "name": "Supplier", "autoWidth": true },
+                { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true },
+                { "data": "paid", "name": "Paid", "autoWidth": true },
+                { "data": "due", "name": "Due", "autoWidth": true },
+                { "data": "ingredients", "name": "Ingredients", "autoWidth": true },
+                { "data": "purchaseBy", "name": "PurchaseBy", "autoWidth": true }
+            ],
+            ajax: function (data, callback, settings) {
+                filterValues.draw = data.draw;
+                filterValues.start = data.start;
+                filterValues.length = data.length;
+                $.ajax({
+                    url: '/Report/PurchaseReport',
+                    method: 'GET',
+                    data: filterValues
+                }).done(callback);
+            }
+        });
+        $("#Submit").click(function () {
+            filterValues.fromDate = $("#FromDate").val();
+            filterValues.toDate = $("#ToDate").val();
+            refDataTable.fnDraw();
+        });
+
     </script>
 }

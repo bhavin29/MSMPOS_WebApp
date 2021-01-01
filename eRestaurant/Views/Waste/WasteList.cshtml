@@ -27,7 +27,7 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
+                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                 </thead>
                                 <tfoot>
@@ -36,7 +36,7 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
+                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     </tr>
                                 </tfoot>
@@ -58,9 +58,9 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.TotalLossAmount)
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @Html.DisplayName("Rocket")
-                                            </td>
+                                            </td>*@
                                             <td>
                                                 <div class="form-button-action">
                                                     <a asp-action="Waste" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>

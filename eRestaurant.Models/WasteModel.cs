@@ -22,16 +22,19 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
 
-        [DisplayName("Reference Number")]
+        [DisplayName("Ref #")]
         [Required]
 
         public string ReferenceNumber { get; set; }
+
+        [Required(ErrorMessage = "Select Date")]
+        [DataType(DataType.Date)]
         public DateTime WasteDateTime { get; set; }
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
-        decimal TotalLossAmount { get; set; }
-        string ReasonForWaste { get; set; }
-        int WasteStatus { get; set; }
+        public decimal TotalLossAmount { get; set; }
+        public string ReasonForWaste { get; set; }
+        public  int WasteStatus { get; set; }
         public List<WasteDetailModel> WasteDetail { get; set; }
 
     }

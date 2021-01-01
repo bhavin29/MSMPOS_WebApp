@@ -24,7 +24,7 @@ namespace RocketPOS.Repository
             List<WasteListModel> wasteViewModelList = new List<WasteListModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, W.WasteDateTime, W.EmployeeId, " +
+                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, convert(varchar(12),W.WasteDateTime,3) as WasteDateTime, W.EmployeeId, " +
                             "(E.LastName + ' ' + E.FirstName) as EmployeeName,W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
                             " FROM Waste W" +
                             " INNER JOIN Outlet O ON W.OutletId = O.Id " +
@@ -52,28 +52,28 @@ namespace RocketPOS.Repository
             }
             return purchaseModelList;
         }
-        public int InsertWaste(WasteModel purchaseModel)
+        public int InsertWaste(WasteModel wasteModel)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Waste (OutletId, ReferenceNumber, WasteDateTime, EmployeeId, TotalLossAmount,  ReasonForWaste, WasteStatus,UserIdUpdated ,[DateInserted], [IsDeleted])   " +
+                var query = "INSERT INTO Waste (OutletId, ReferenceNumber, WasteDateTime, EmployeeId, TotalLossAmount,  ReasonForWaste, WasteStatus,UserIdInserted ,[DateInserted], [IsDeleted])   " +
                              "   VALUES           " +
                              "  (@OutletId, @ReferenceNumber, @WasteDateTime, @EmployeeId, @TotalLossAmount,  @ReasonForWaste, @WasteStatus, 1,   GetUtcDate(),    0); " +
                              "  SELECT CAST(SCOPE_IDENTITY() as int); ";
                
-                result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
+                result = con.ExecuteScalar<int>(query, wasteModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
                     int detailResult = 0;
-                    foreach (var item in purchaseModel.WasteDetail)
+                    foreach (var item in wasteModel.WasteDetail)
                     {
                         var queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdUpdated],[IsDeleted])   " +
                                               "VALUES " +
-                                              "(" + result + "," + item.FoodMenuId +"," + item.IngredientId +  "," + item.Qty + "," + item.LossAmount + "," +
+                                              "(" + result + "," + item.FoodMenuId +"," + item.IngredientId +  "," + item.Qty + "," + item.LossAmount +
                                               ",1,0);" +
                                               " SELECT CAST(SCOPE_IDENTITY() as INT); ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
@@ -97,7 +97,7 @@ namespace RocketPOS.Repository
             return result;
 
         }
-        public int UpdateWaste(WasteModel purchaseModel)
+        public int UpdateWaste(WasteModel wasteModel)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -107,14 +107,14 @@ namespace RocketPOS.Repository
                 var query = "Update Waste set " +
                              "OutletId=@OutletId, ReferenceNumber=@ReferenceNumber, WasteDateTime=@WasteDateTime, EmployeeId=@EmployeeId, " +
                              " TotalLossAmount=@TotalLossAmount, ReasonForWaste=@ReasonForWaste, WasteStatus=@WasteStatus " + 
-                             "  ,UserIdUpdated = 1, DateUpdated  = GetUtcDate()  where id= " + purchaseModel.Id + ";";
+                             "  ,UserIdUpdated = 1, DateUpdated  = GetUtcDate()  where id= " + wasteModel.Id + ";";
   
-                result = con.Execute(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
+                result = con.Execute(query, wasteModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
                     int detailResult = 0;
-                    foreach (var item in purchaseModel.WasteDetail)
+                    foreach (var item in wasteModel.WasteDetail)
                     {
                         var queryDetails = string.Empty;
                         if (item.WasteId > 0)
@@ -122,8 +122,8 @@ namespace RocketPOS.Repository
                             queryDetails = "Update [dbo].[WasteIngredient] set " +
                                                  " [IngredientId]  = " + item.IngredientId + "," +
                                                  " [FoodMenuId]   = " + item.FoodMenuId + "," +
-                                                 " [Qty]        =  " + item.Qty + "," +
-                                                 " [LossAmount] = " + item.LossAmount + "," +
+                                                 " [IngredientQty]        =  " + item.Qty + "," +
+                                                 " [LossAmount] = " + item.LossAmount + 
                                                  " where id = " + item.WasteId + ";";
                         }
                         else
@@ -132,16 +132,16 @@ namespace RocketPOS.Repository
                                                   " ([WasteId]   " +
                                                   " ,[IngredientId] " +
                                                   " ,[FoodMenuId]    " +
-                                                  " ,[Qty]          " +
+                                                  " ,[IngredientQty]          " +
                                                   " ,[LossAmount]  " +
                                                   " ,[UserIdUpdated]" +
                                                   " ,[IsDeleted])   " +
                                                   "VALUES           " +
-                                                  "(" + purchaseModel.Id + "," +
+                                                  "(" + wasteModel.Id + "," +
                                                   "" + item.IngredientId + "," +
                                                   "" + item.FoodMenuId + "," +
                                                   "" + item.Qty + "," +
-                                                  "" + item.LossAmount + "," +
+                                                  "" + item.LossAmount +
                                                   ",1,0); ";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
@@ -190,8 +190,8 @@ namespace RocketPOS.Repository
             List<WasteDetailModel> purchaseDetails = new List<WasteDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select WI.Id, WI.FoodMenuID, F.FoodMenuName, WI.IngredientId as IngredientId,i.IngredientName, WI.IngredientQty ," +
-                    " WI.lossAmount as Total from Waste as W " +
+                var query = "select WI.Id as WasteId, WI.FoodMenuId, F.FoodMenuName, WI.IngredientId as IngredientId,i.IngredientName, WI.IngredientQty as Qty ," +
+                    " WI.lossAmount as LossAmount from Waste as W " +
                     " inner join WasteIngredient as WI on W.id = WI.WasteId " +
                     " inner join Ingredient i on WI.IngredientId = i.Id " +
                     " inner join FoodMenu F ON F.Id = WI.FoodMenuId " +

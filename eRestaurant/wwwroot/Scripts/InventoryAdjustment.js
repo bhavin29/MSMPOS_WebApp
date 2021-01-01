@@ -1,10 +1,9 @@
 ﻿var InventoryAdjustmentDatatable;
 
-
 $(document).ready(function () {
 
     $("#InventoryAdjustment").validate();
-    InventoryAdjustmentDatatable = $('#InventoryAdjustmentOrderDetail').DataTable({
+    InventoryAdjustmentDatatable = $('#InventoryAdjustmentOrderDetails').DataTable({
         "paging": false,
         "ordering": false,
         "info": false,
@@ -27,31 +26,31 @@ $(document).ready(function () {
 });
 
 $('#addRow').on('click', function (e) {
-  
     e.preventDefault();
+    debugger;
     var message = validation();
     if (message == '') {
-        
         InventoryAdjustmentDatatable.row('.active').remove().draw(false);
-        InventoryAdjustmentDatatable.row.add([
+        var rowNode = InventoryAdjustmentDatatable.row.add([
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
-            $("#Quantity").val(),
-            $("#ConsumpationStatus").val(),
+            '<td class="text-right">' + $("#Quantity").val(), + ' </td>',
+            '<td class="text-right">' + $("#consumpationStatus").val(), + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
-            $("#InventoryAdjustmentId").val()
+            $("#inventoryAdjustmentId").val()
         ]).draw(false);
-       
         dataArr.push({
-            ingredientId: $("#IngredientId").val(),
-            quantity: $("#Quantity").val(),
+            IngredientId: $("#IngredientId").val(),
+            Quantity: $("#Quantity").val(),
             ConsumpationStatus: $("#ConsumpationStatus").val(),
             InventoryAdjustmentId: $("#InventoryAdjustmentId").val()
         });
-        clearItem();
+        $(rowNode).find('td').eq(1).addClass('text-right');
+        $(rowNode).find('td').eq(2).addClass('text-right');
+       clearItem();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -84,6 +83,7 @@ $(function () {
             $("#aModal").modal('show');
         }
         else {
+            debugger;
             $("#InventoryAdjustment").on("submit", function (e) {
                 e.preventDefault();
                 var data = ({
@@ -176,6 +176,7 @@ function deleteOrder(purchaseId, ingredientId, rowId) {
     }
 };
 
+
 $(document).on('click', 'a.editItem', function (e) {
     debugger;
     if (!InventoryAdjustmentDatatable.data().any() || InventoryAdjustmentDatatable.data().row == null) {
@@ -197,8 +198,8 @@ $(document).on('click', 'a.editItem', function (e) {
         var id = $(this).attr('data-itemId');
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == id) {
-                $("#IngredientId").val(dataArr[i].ingredientId),
-                    $("#Quantity").val(dataArr[i].quantity),
+                $("#IngredientId").val(dataArr[i].IngredientId),
+                    $("#Quantity").val(dataArr[i].Quantity),
                     $("#ConsumpationStatus").val(dataArr[i].ConsumpationStatus),
                     $("#InventoryAdjustmentId").val(dataArr[i].InventoryAdjustmentId);
                 dataArr.splice(i, 1);
@@ -210,18 +211,17 @@ $(document).on('click', 'a.editItem', function (e) {
 
 function validation() {
     var message = '';
-
+    debugger;
     if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
         message = "Select ingredient"
     }
-
+    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+        message = "Enter Quantity"
+    }
     else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
         message = "Select Comsumption Status"
     }
-    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
-        message = "Enter quantity"
-    }
-
+ 
     for (var i = 0; i < dataArr.length; i++) {
         if ($("#IngredientId").val() == dataArr[i].ingredientId) {
             message = "Ingredient already selected!"

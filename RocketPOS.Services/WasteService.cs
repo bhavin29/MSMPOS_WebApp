@@ -12,13 +12,13 @@ namespace RocketPOS.Services
     public class WasteService : IWasteService
     {
         private readonly IWasteRepository _iWasteRepository;
-       // private IWasteRepository _iWasteRepository;
+        // private IWasteRepository _iWasteRepository;
 
         public WasteService(IWasteRepository iWasteRepository)
         {
             _iWasteRepository = iWasteRepository;
         }
-    
+
         public List<WasteListModel> GetWasteList()
         {
             return _iWasteRepository.GetWasteList();
@@ -54,30 +54,12 @@ namespace RocketPOS.Services
         public WasteModel GetWasteById(long wasteId)
         {
             List<WasteModel> wasteModel = new List<WasteModel>();
+            WasteModel model = new WasteModel();
 
-            var model = (from waste in _iWasteRepository.GetWasteById(wasteId).ToList()
-                         select new WasteModel()
-                         {
-                             Id = waste.Id,
-                             //    ReferenceNo = waste.ReferenceNo,
-                             //    SupplierId = waste.SupplierId,
-                             //    Date = waste.Date,
-                             //    GrandTotal = waste.GrandTotal,
-                             //    Due = waste.Due,
-                             //    Paid = waste.Paid
-                             }).SingleOrDefault();
-                if (model != null)
+            model = _iWasteRepository.GetWasteById(wasteId).ToList().SingleOrDefault();
+            if (model != null)
             {
-                model.WasteDetail = (from wastedetails in _iWasteRepository.GetWasteDetails(wasteId)
-                                      select new WasteDetailModel()
-                                      {
-                                          WasteId = wastedetails.WasteId,
-                                          IngredientId = wastedetails.IngredientId,
-                                          //Quantity = wastedetails.Quantity,
-                                          //UnitPrice = wastedetails.UnitPrice,
-                                          //Total = wastedetails.Total,
-                                          //IngredientName = wastedetails.IngredientName
-                                      }).ToList();
+                model.WasteDetail = _iWasteRepository.GetWasteDetails(wasteId);
             }
             return model;
 

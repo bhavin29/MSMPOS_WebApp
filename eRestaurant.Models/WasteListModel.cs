@@ -10,7 +10,7 @@ namespace RocketPOS.Models
 
         public string ReferenceNumber { get; set; }
 
-        public DateTime Wastedatetime { get; set; }
+        public string Wastedatetime { get; set; }
 
         public string OutlutName { get; set; }
 

@@ -33,8 +33,8 @@ namespace RocketPOS.Repository.Reports
                             " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
                             " INNER JOIN IngredientCategory IG on IG.Id = I.IngredientCategoryId " +
                             " LEFT OUTER JOIN FoodMenuIngredient FMG on FMG.IngredientId = I.Id " +
-                            " LEFT OUTER JOIN FoodMenu FM ON FM.Id = FMG.FoodMenuId " +
-                            " WHERE I.AlterQty < INV.StockQty  ";
+                            " LEFT OUTER JOIN FoodMenu FM ON FM.Id = FMG.FoodMenuId ";
+                          //  " WHERE I.AlterQty < INV.StockQty  ";
 
                 //if (inventoryReportParamModel.StoreId.ToString().Length != 0)
                 //    query = query + " AND INV.StoreId = " + inventoryReportParamModel.StoreId.ToString();

@@ -68,13 +68,13 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Unit Price</label>
-                                                                <input class="form-control text-right" type="number" step=".00" id="UnitPrice" />
+                                                                <input class="form-control text-right" type="number" placeholder="0.00" id="UnitPrice" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Quantity</label>
-                                                                <input class="form-control text-right" type="text" id="Quantity" />
+                                                                <input class="form-control text-right" type="text" placeholder="0.00" id="Quantity" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -172,19 +172,19 @@
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="GrandTotal" class="col-md-3 col-form-label">Grand Total</label>
                                                                 <div class="col-md-9 p-0 ">
-                                                                    <input type="text" asp-for="GrandTotal" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                    <input type="number" asp-for="GrandTotal" class="form-control input-full text-right" disabled="disabled" placeholder="0.00">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group form-inline">
                                                                 <label asp-for="Paid" class="col-md-3 col-form-label">Paid</label>
                                                                 <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Paid" class="form-control input-full text-right" placeholder="Enter Input">
+                                                                    <input type="number" asp-for="Paid" class="form-control input-full text-right" placeholder="0.00">
                                                                 </div>
                                                             </div>
                                                             <div class="form-group form-inline">
                                                                 <label asp-for="Due" class="col-md-3 col-form-label">Due</label>
                                                                 <div class="col-md-9 p-0">
-                                                                    <input type="text" asp-for="Due" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                    <input type="number" asp-for="Due" class="form-control input-full text-right" disabled="disabled" placeholder="0.00">
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -1,0 +1,177 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.Reports.PurchaseReportParamModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Purchase");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Purchase");
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <input asp-for="FromDate" type="date" />
+                        </div>
+                        <div class="col-sm-4">
+                            <input asp-for="ToDate" type="date" />
+                        </div>
+                        <div class="col-sm-2">
+                            @*@Html.ActionLink("Submit", "Purchase", "ReportsController", new { fromDate = Model.FromDate.ToString(), toDate = Model.ToDate.ToString() })*@
+                            <a id="Submit" class="btn btn-default">Submit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Inventory</h2>
+            </div>
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="PurchaseReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayName("ReferenceNo")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Date")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Supplier")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("GrandTotal")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Paid")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Due")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("Ingredients")
+                                    </th>
+                                    <th>
+                                        @Html.DisplayName("PurchaseBy")
+                                    </th>
+                                </tr>
+                            </thead>
+                            @*<tfoot role="row">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayName("ReferenceNo")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Date")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Supplier")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("GrandTotal")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Paid")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Due")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Ingredients")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("PurchaseBy")
+                                        </th>
+                                    </tr>
+                                </tfoot>*@
+                            @*@if (Model.PurchaseReport != null)
+                                {
+                                    @foreach (var item in Model.PurchaseReport)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.ReferenceNo
+                                            </td>
+                                            <td>
+                                                @item.Date
+                                            </td>
+                                            <td>
+                                                @item.Supplier
+                                            </td>
+                                            <td class="text-right">
+                                                @item.GrandTotal
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Paid
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Due
+                                            </td>
+                                            <td>
+                                                @item.Ingredients
+                                            </td>
+                                            <td>
+                                                @item.PurchaseBy
+                                            </td>
+                                        </tr>
+                                    }
+                                }*@
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var filterValues = {};
+            var refDataTable = $("#PurchaseReport").dataTable({
+                serverSide: true,
+                paging:   false,
+                ordering: false,
+                info:     false,
+              "columns": [
+                    { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
+                    { "data": "date", "name": "Date", "autoWidth": true },
+                    { "data": "supplier", "name": "Supplier", "autoWidth": true },
+                    { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true },
+                    { "data": "paid", "name": "Paid", "autoWidth": true },
+                    { "data": "due", "name": "Due", "autoWidth": true },
+                    { "data": "ingredients", "name": "Ingredients", "autoWidth": true },
+                    { "data": "purchaseBy", "name": "PurchaseBy", "autoWidth": true }
+                ],
+                ajax: function (data, callback, settings) {
+                    filterValues.draw = data.draw;
+                    filterValues.start = data.start;
+                    filterValues.length = data.length;
+                    $.ajax({
+                        url: '/Report/PurchaseReport',
+                        method: 'GET',
+                        data: filterValues
+                    }).done(callback);
+                }
+            });
+            $("#Submit").click(function () {
+                filterValues.fromDate = $("#FromDate").val();
+                filterValues.toDate = $("#ToDate").val();
+                refDataTable.fnDraw();
+            });
+            
+    </script>
+}

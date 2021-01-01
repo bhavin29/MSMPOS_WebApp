@@ -21,6 +21,9 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetInventoryReport(inventoryReportParamModel);
         }
 
-
+        public List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate)
+        {
+            return _iReportRepository.GetPurchaseReport(fromDate,toDate);
+        }
     }
 }

@@ -26,8 +26,8 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("G.Total")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                 </thead>
@@ -36,8 +36,8 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("G.Total")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     </tr>
@@ -57,10 +57,10 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.SupplierName)
                                             </td>
-                                            <td>
+                                            <td class="text-right">
                                                 @Html.DisplayFor(modelItem => item.GrandTotal)
                                             </td>
-                                            <td>
+                                            <td class="text-right">
                                                 @Html.DisplayFor(modelItem => item.Due)
                                             </td>
                                             <td>

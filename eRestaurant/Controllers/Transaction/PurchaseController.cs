@@ -145,11 +145,6 @@ namespace RocketPOS.Controllers.Transaction
         private string ValidationPurchase(PurchaseModel purchaseModel)
         {
             string ErrorString = string.Empty;
-            //if (string.IsNullOrEmpty(purchaseModel.ReferenceNo.ToString()) || purchaseModel.ReferenceNo == 0)
-            //{
-            //    ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
-            //    return ErrorString;
-            //}
             if (string.IsNullOrEmpty(purchaseModel.SupplierId.ToString()) || purchaseModel.SupplierId == 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");

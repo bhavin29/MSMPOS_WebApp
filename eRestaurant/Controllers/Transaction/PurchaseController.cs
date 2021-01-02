@@ -55,7 +55,6 @@ namespace RocketPOS.Controllers.Transaction
             {
                 long purchaseId = Convert.ToInt64(id);
                 purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
-
             }
             else
             {

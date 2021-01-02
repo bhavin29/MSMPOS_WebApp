@@ -54,6 +54,7 @@ namespace RocketPOS.Services
 
             return lstCategory;
         }
+
         public List<SelectListItem> GetOutletList()
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
@@ -70,6 +71,7 @@ namespace RocketPOS.Services
 
             return lstCategory;
         }
+
         public List<SelectListItem> GetStoreList()
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
@@ -160,6 +162,22 @@ namespace RocketPOS.Services
 
             ingredientList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
             List<DropDownModel> ingredientListResult = _dropDownRepository.GetIngredientList().ToList();
+            if (ingredientListResult != null && ingredientListResult.Count > 0)
+            {
+                foreach (var item in ingredientListResult)
+                {
+                    ingredientList.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return ingredientList;
+        }
+
+        public List<SelectListItem> GetUserList()
+        {
+            List<SelectListItem> ingredientList = new List<SelectListItem>();
+
+            ingredientList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            List<DropDownModel> ingredientListResult = _dropDownRepository.GetUserList().ToList();
             if (ingredientListResult != null && ingredientListResult.Count > 0)
             {
                 foreach (var item in ingredientListResult)

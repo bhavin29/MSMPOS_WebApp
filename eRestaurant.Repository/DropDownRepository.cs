@@ -129,5 +129,17 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetUserList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id,Username as [Name] from [User] where IsDeleted= 0 Order by Username";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+
     }
 }

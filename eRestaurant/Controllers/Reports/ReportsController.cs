@@ -93,11 +93,18 @@ namespace RocketPOS.Controllers.Reports
             return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
         }
 
-        public ViewResult OutletRegister()
+        //public ViewResult OutletRegister()
+        //{
+        //    List<OutletRegisterReportModel> outletRegisterReportModel = new List<OutletRegisterReportModel>();
+        //    outletRegisterReportModel= _iReportService.GetOutletRegisterReport(21);
+        //    return View(outletRegisterReportModel);
+        //}
+
+        public PartialViewResult OutletRegister(int outletRegisterId)
         {
             List<OutletRegisterReportModel> outletRegisterReportModel = new List<OutletRegisterReportModel>();
-            outletRegisterReportModel= _iReportService.GetOutletRegisterReport(21);
-            return View(outletRegisterReportModel);
+            outletRegisterReportModel = _iReportService.GetOutletRegisterReport(outletRegisterId);
+            return PartialView(outletRegisterReportModel);
         }
 
         [HttpGet]

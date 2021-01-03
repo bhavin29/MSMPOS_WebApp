@@ -13,7 +13,33 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form asp-action="OutletRegister" method="post" role="form">
-                                @if (Model.CloseDateTime == DateTime.MinValue && Model.Id >0 )
+                                @if (Model.CloseDateTime != DateTime.MinValue && Model.Id > 0)
+                                {
+                                    <button type="button" id="open" class="btn btn-primary pull-right" value="open modal" data-toggle="modal" data-target="#exampleModal">View</button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Register Summary</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="div_modal" data-url="@Url.Action("OutletRegister", "Report", new { outletRegisterId = @Model.Id })" data-id="@Model.Id"></div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END Modal -->
+                                }
+
+                                @if (Model.CloseDateTime == DateTime.MinValue && Model.Id > 0)
                                 {
                                     <label class="text-danger">Regiter is not closed by outlet user yet.</label>
                                 }
@@ -136,6 +162,20 @@
             $("#OutletRegister").prev().focus();
             $("#vModal").modal('hide');
         });
+
+        $('#open').click(function () {
+
+            var url = $("#div_modal").data("url");
+
+            $("#div_modal").load(url, function () {
+                $("#ModalRelation").modal("show");
+            });
+        })
+
+        $('#ModalRelation').on('show.bs.modal', function (event) {
+            var value = $('#textinputId').val();
+        });
+
     </script>
     <partial name="_ValidationScriptsPartial" />
 

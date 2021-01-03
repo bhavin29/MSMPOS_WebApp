@@ -58,15 +58,25 @@ namespace RocketPOS.Controllers.Master
         {
             outletRegisterModel.OutletList = _iDropDownService.GetOutletList();
             outletRegisterModel.UserList = _iDropDownService.GetUserList();
-            
+
             var errors = ModelState
     .Where(x => x.Value.Errors.Count > 0)
     .Select(x => new { x.Key, x.Value.Errors })
     .ToArray();
 
+            decimal value;
+            string errorString;
+            if (decimal.TryParse(outletRegisterModel.OpeningBalance.ToString(), out value) == true)
+            {
+                if (value <= 0)
+                {
+                    ModelState.AddModelError("OpeningBalance", "Opening balance should be more than zero");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
-                string errorString = this.ValidationOutletRegister(outletRegisterModel);
+                errorString = this.ValidationOutletRegister(outletRegisterModel);
                 if (!string.IsNullOrEmpty(errorString))
                 {
                     ViewBag.Validate = errorString;
@@ -74,7 +84,7 @@ namespace RocketPOS.Controllers.Master
                 }
             }
 
- 
+
             if (outletRegisterModel.Id > 0)
             {
                 var result = _iOutletRegisterService.UpdateOutletRegister(outletRegisterModel);
@@ -83,7 +93,17 @@ namespace RocketPOS.Controllers.Master
             else
             {
                 var result = _iOutletRegisterService.InsertOutletRegister(outletRegisterModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                if (result == 0)
+                {
+                    errorString = "User with outlet already exists for the same open date";
+                    ModelState.AddModelError("UserId", "User with outlet already exists for the same open date");
+                    ViewBag.Validate = errorString;
+                    return View(outletRegisterModel);
+                }
+                else
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                }
             }
             return RedirectToAction("Index", "OutletRegister");
         }
@@ -108,12 +128,12 @@ namespace RocketPOS.Controllers.Master
                 ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
                 return ErrorString;
             }
-            if (outletRegisterModel.OpeningBalance == null || outletRegisterModel.OpeningBalance == 0)
+            if (Math.Abs(outletRegisterModel.OpeningBalance) <= 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
                 return ErrorString;
             }
-   
+
             return ErrorString;
         }
 

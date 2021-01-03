@@ -33,7 +33,7 @@ namespace RocketPOS.Models
        
         [DisplayName("Opening Balance")]
         [Required(ErrorMessage = "Enter Opening Balance")]
-        public string OpeningBalance { get; set; }
+        public decimal OpeningBalance { get; set; }
  
         [DisplayName("No of Transaction")]
         public int TotalTransaction { get; set; }

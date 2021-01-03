@@ -23,7 +23,7 @@ namespace RocketPOS.Controllers.Reports
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public ReportController(IReportService iReportService, IDropDownService idropDownService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public ReportController(IReportService iReportService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iReportService = iReportService;
             _iDropDownService = idropDownService;
@@ -43,11 +43,6 @@ namespace RocketPOS.Controllers.Reports
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
 
-            //inventoryReportParamModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
-            //inventoryReportParamModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
-            //inventoryReportParamModel.IngredientList = _iDropDownService.GetIngredientList();
-
-
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
         }
@@ -57,7 +52,7 @@ namespace RocketPOS.Controllers.Reports
         {
 
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
-  
+
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
         }
@@ -73,7 +68,7 @@ namespace RocketPOS.Controllers.Reports
 
         [HttpGet]
         public ActionResult PurchaseReport(string fromDate, string toDate)
-          {
+        {
             List<PurchaseReportModel> purchaseReportList = new List<PurchaseReportModel>();
             PurchaseReportParamModel purchaseReportModel = new PurchaseReportParamModel();
             purchaseReportModel.draw = int.Parse(HttpContext.Request.Query["draw"]);
@@ -98,6 +93,27 @@ namespace RocketPOS.Controllers.Reports
             return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
         }
 
+        public ViewResult OutletRegister()
+        {
+            List<OutletRegisterReportModel> outletRegisterReportModel = new List<OutletRegisterReportModel>();
+            outletRegisterReportModel= _iReportService.GetOutletRegisterReport(21);
+            return View(outletRegisterReportModel);
+        }
 
+        [HttpGet]
+        public ActionResult OutletRegisterReport(int outletRegisterId)
+        {
+            List<OutletRegisterReportModel> outletRegisterModels = new List<OutletRegisterReportModel>();
+
+         //   OutletRegisterReportModel outletRegisterModel = new OutletRegisterReportModel();
+
+            outletRegisterModels = _iReportService.GetOutletRegisterReport(outletRegisterId);
+            return View(outletRegisterModels);
+
+            //string jsonData = JsonConvert.SerializeObject(purchaseReportModel.PurchaseReport);
+            // var jsonData = outletRegisterModels.ToArray();
+            //return Json(purchaseReportModel, json);
+            //  return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
+        }
     }
 }

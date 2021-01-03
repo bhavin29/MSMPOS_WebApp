@@ -13,6 +13,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <form asp-action="OutletRegister" method="post" role="form">
+                                @if (Model.CloseDateTime == DateTime.MinValue && Model.Id >0 )
+                                {
+                                    <label class="text-danger">Regiter is not closed by outlet user yet.</label>
+                                }
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
@@ -42,30 +46,30 @@
                                             <span asp-validation-for="OpeningBalance" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    @if (Model.Id > 0)
+                                    @if (Model.CloseDateTime != DateTime.MinValue)
                                     {
-                                <div class="col-md-6 col-lg-4">
-                                    <div class="form-group">
-                                        <label asp-for="CloseDateTime" class="control-label"></label>
-                                        <input asp-for="CloseDateTime" class="form-control" />
-                                        <span asp-validation-for="CloseDateTime" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="TotalTransaction" class="control-label"></label>
-                                        <input asp-for="TotalTransaction" class="form-control" />
-                                        <span asp-validation-for="TotalTransaction" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="TotalAmount" class="control-label"></label>
-                                        <input asp-for="TotalAmount" class="form-control" />
-                                        <span asp-validation-for="TotalAmount" class="text-danger"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <label asp-for="ApprovalNotes" class="control-label"></label>
-                                        <input asp-for="ApprovalNotes" class="form-control" />
-                                        <span asp-validation-for="ApprovalNotes" class="text-danger"></span>
-                                    </div>
-                                </div>
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="form-group">
+                                                <label asp-for="CloseDateTime" class="control-label"></label>
+                                                <input asp-for="CloseDateTime" class="form-control" />
+                                                <span asp-validation-for="CloseDateTime" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="TotalTransaction" class="control-label"></label>
+                                                <input asp-for="TotalTransaction" class="form-control" />
+                                                <span asp-validation-for="TotalTransaction" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="TotalAmount" class="control-label"></label>
+                                                <input asp-for="TotalAmount" class="form-control" />
+                                                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="ApprovalNotes" class="control-label"></label>
+                                                <input asp-for="ApprovalNotes" class="form-control" />
+                                                <span asp-validation-for="ApprovalNotes" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                     }
                                 </div>
                                 <div class="form-group">
@@ -73,7 +77,10 @@
                                     {
                                         @if (Model.Id > 0)
                                         {
-                                            <input type="submit" value="Approve" class="btn btn-primary btn-sm" />
+                                            @if (Model.CloseDateTime != DateTime.MinValue)
+                                            {
+                                                <input type="submit" value="Approve" class="btn btn-primary btn-sm" />
+                                            }
                                         }
                                         else
                                         {

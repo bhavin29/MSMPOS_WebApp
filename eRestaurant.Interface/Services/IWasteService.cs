@@ -15,7 +15,9 @@ namespace RocketPOS.Interface.Services
         int DeleteWaste(long WasteId);
         List<WasteDetailModel> GetWasteDetails(long purchaseId);
         WasteModel GetWasteById(long purchaseId);
-        int DeleteWasteDetails(long WasteDetailsId);
+        int DeleteWasteDetails(long wasteId, long foodManuId,  long ingredientId);
         long ReferenceNumber();
+        List<SelectListItem> FoodMenuListForLostAmount();
+        List<SelectListItem> IngredientListForLostAmount();
     }
 }

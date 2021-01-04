@@ -84,13 +84,33 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Quantity</label>
-                                                                <input class="form-control text-right" type="text" id="Quantity" />
+                                                                <input class="form-control text-right" type="number" id="Quantity" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">Loss Amount</label>
-                                                                <input class="form-control text-right" type="text" id="LossAmount" />
+                                                                <input class="form-control text-right" type="number" disabled="disabled" id="LossAmount" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3" hidden>
+                                                            <div class="form-group">
+                                                                <label asp-for="FoodMenuListForLostAmount" class="control-label">Food Menu</label>
+                                                                <select asp-for="FoodMenuIdForLostAmount"
+                                                                        class="form-control"
+                                                                        asp-items="@(new SelectList(Model.FoodMenuListForLostAmount, "Value", "Text"))">
+                                                                </select>
+                                                                <span asp-validation-for="FoodMenuId" class="text-danger"></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3" hidden>
+                                                            <div class="form-group">
+                                                                <label asp-for="IngredientListForLostAmount" class="control-label">Ingredient</label>
+                                                                <select asp-for="IngredientIdForLostAmount"
+                                                                        class="form-control"
+                                                                        asp-items="@(new SelectList(Model.IngredientListForLostAmount, "Value", "Text"))">
+                                                                </select>
+                                                                <span asp-validation-for="IngredientId" class="text-danger"></span>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -120,11 +140,13 @@
                                                                 </thead>
                                                                 @if (Model.Id > 0)
                                                                 {
+                                                                     var i = 0;
                                                                     @foreach (var item in Model.WasteDetail)
                                                                     {
                                                                         var tm = "#myModal" + item.WasteId;
                                                                         var mid = "myModal" + item.WasteId;
-                                                                        var rowId = "rowId" + item.WasteId;
+                                                                        var rowId = "rowId" + i;
+                                                                        i++;
                                                                         <tr id="@rowId">
                                                                             <td>
                                                                                 @item.FoodMenuId
@@ -149,7 +171,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
-                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                    <a href="#" data-itemid="@(item.FoodMenuId +"|"+ item.IngredientId)" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -164,7 +186,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.WasteId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@(item.FoodMenuId.ToString() +"|"+ item.IngredientId.ToString())" onclick="deleteOrder(@item.WasteId, @item.IngredientId, @item.FoodMenuId, @rowId)" class="btn bg-danger mr-1">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -186,27 +208,29 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="row">
-                                                        <div class="col-md-6 col-lg-4"></div>
-                                                        <div class="col-md-6 col-lg-4"></div>
+                                                        <div class="col-md-6 col-lg-8">
+                                                            <div class="form-group form-inline">
+                                                                <label asp-for="ReasonForWaste" class="col-md-3 col-form-label">Reason for Waste</label>
+                                                                <div class="col-md-9 p-0">
+                                                                    <input type="text" asp-for="ReasonForWaste" class="form-control input-full" placeholder="Enter Reason for Waste">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @*<div class="col-md-6 col-lg-4"></div>*@
                                                         <div class="col-md-6 col-lg-4">
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="TotalLossAmount" class="col-md-3 col-form-label">Total Loss Amount</label>
                                                                     <div class="col-md-9 p-0 ">
-                                                                        <input type="text" asp-for="TotalLossAmount" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
+                                                                        <input type="number" asp-for="TotalLossAmount" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
                                                                     </div>
                                                             </div>
-                                                            <div class="form-group form-inline">
-                                                                <label asp-for="ReasonForWaste" class="col-md-3 col-form-label">Reason for Waste</label>
-                                                                    <div class="col-md-9 p-0">
-                                                                        <input type="text" asp-for="ReasonForWaste" class="form-control input-full text-right" placeholder="Enter Input">
-                                                                    </div>
-                                                            </div>
-                                                            <div class="form-group form-inline">
+                                                          
+                                                            @*<div class="form-group form-inline">
                                                                 <label asp-for="WasteStatus" class="col-md-3 col-form-label">Waste Status</label>
                                                                     <div class="col-md-9 p-0">
                                                                         <input type="text" asp-for="WasteStatus" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
                                                                     </div>
-                                                            </div>
+                                                            </div>*@
                                                         </div>
                                                     </div>
                                                 </div>
@@ -248,11 +272,13 @@
 @section scripts{
     <script>
         dataArr = []
-
+        var TotalLossAmount = 0;
+        var WasteModelId = 0;
         if (@Model.Id > 0) {
             dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.WasteDetail))');
+            TotalLossAmount = parseFloat($("#TotalLossAmount").val());
+            WasteModelId = @Model.Id;
     }
-    console.log(dataArr);
     </script>
     <partial name="_ValidationScriptsPartial" />
     <script src="~/Scripts/Waste.js"></script>

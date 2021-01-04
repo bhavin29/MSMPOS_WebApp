@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System;
 
 namespace RocketPOS.Services
 {
@@ -36,9 +37,9 @@ namespace RocketPOS.Services
             return _iWasteRepository.DeleteWaste(wasteId);
         }
 
-        public int DeleteWasteDetails(long WasteDetailsId)
+        public int DeleteWasteDetails(long wasteId, long foodManuId, long ingredientId)
         {
-            return _iWasteRepository.DeleteWasteDetails(WasteDetailsId);
+            return _iWasteRepository.DeleteWasteDetails(wasteId,foodManuId,ingredientId);
         }
 
         public long ReferenceNumber()
@@ -62,7 +63,44 @@ namespace RocketPOS.Services
                 model.WasteDetail = _iWasteRepository.GetWasteDetails(wasteId);
             }
             return model;
+        }
+        public List<SelectListItem> FoodMenuListForLostAmount()
+        {
+            List<SelectListItem> foodManuForLostAmount = new List<SelectListItem>();
+
+            foodManuForLostAmount.Add(new SelectListItem { Text = "--Select--", Value = "0" });
+            List<DropDownModel> foodManuForLostAmountResult = _iWasteRepository.FoodMenuListForLostAmount();
+            if (foodManuForLostAmountResult != null && foodManuForLostAmountResult.Count > 0)
+            {
+                foreach (var item in foodManuForLostAmountResult)
+                {
+                    foodManuForLostAmount.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return foodManuForLostAmount;
+        }
+
+        public List<SelectListItem> IngredientListForLostAmount()
+        {
+            List<SelectListItem> ingredientForLostAmount = new List<SelectListItem>();
+
+            ingredientForLostAmount.Add(new SelectListItem { Text = "--Select--", Value = "0" });
+            List<DropDownModel> ingredientForLostAmountResult = _iWasteRepository.IngredientListForLostAmount();
+            if (ingredientForLostAmountResult != null && ingredientForLostAmountResult.Count > 0)
+            {
+                foreach (var item in ingredientForLostAmountResult)
+                {
+                    ingredientForLostAmount.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return ingredientForLostAmount;
+
 
         }
+
+    
+
     }
 }

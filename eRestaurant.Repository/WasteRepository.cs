@@ -42,11 +42,11 @@ namespace RocketPOS.Repository
             List<WasteModel> purchaseModelList = new List<WasteModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, W.WasteDateTime, W.EmployeeId, (E.LastName + ' ' + E.FirstName) as EmployeeName,W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " + 
+                var query = "SELECT W.Id, W.OutletId,O.OutletName, W.ReferenceNumber, W.WasteDateTime, W.EmployeeId, (E.LastName + ' ' + E.FirstName) as EmployeeName,W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
                             " FROM Waste W " +
                             " INNER JOIN Outlet O ON W.OutletId = O.Id " +
                             " INNER JOIN Employee E ON E.Id = W.EmployeeId " +
-                             " WHERE W.IsDeleted = 0 AND W.Id = "  + purhcaseId;
+                             " WHERE W.IsDeleted = 0 AND W.Id = " + purhcaseId;
 
                 purchaseModelList = con.Query<WasteModel>(query).AsList();
             }
@@ -55,27 +55,56 @@ namespace RocketPOS.Repository
         public int InsertWaste(WasteModel wasteModel)
         {
             int result = 0;
+            int detailResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Waste (OutletId, ReferenceNumber, WasteDateTime, EmployeeId, TotalLossAmount,  ReasonForWaste, WasteStatus,UserIdInserted ,[DateInserted], [IsDeleted])   " +
-                             "   VALUES           " +
-                             "  (@OutletId, @ReferenceNumber, @WasteDateTime, @EmployeeId, @TotalLossAmount,  @ReasonForWaste, @WasteStatus, 1,   GetUtcDate(),    0); " +
-                             "  SELECT CAST(SCOPE_IDENTITY() as int); ";
-               
+                var query = "INSERT INTO Waste " +
+                                "(OutletId, " +
+                                "ReferenceNumber, " +
+                                "WasteDateTime, " +
+                                "EmployeeId, " +
+                                "TotalLossAmount,  " +
+                                "ReasonForWaste, " +
+                                "WasteStatus," +
+                                "UserIdInserted ," +
+                                "[DateInserted], " +
+                                "[IsDeleted])   " +
+                                "   VALUES           " +
+                                "  (@OutletId, " +
+                                "@ReferenceNumber, " +
+                                "@WasteDateTime, " +
+                                "@EmployeeId, " +
+                                "@TotalLossAmount,  " +
+                                "@ReasonForWaste, " +
+                                "@WasteStatus, " +
+                                "1,   " +
+                                "GetUtcDate(),    " +
+                                "0); SELECT CAST(SCOPE_IDENTITY() as int); ";
+
                 result = con.ExecuteScalar<int>(query, wasteModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
-                    int detailResult = 0;
+                    var queryDetails = string.Empty;
                     foreach (var item in wasteModel.WasteDetail)
                     {
-                        var queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdUpdated],[IsDeleted])   " +
-                                              "VALUES " +
-                                              "(" + result + "," + item.FoodMenuId +"," + item.IngredientId +  "," + item.Qty + "," + item.LossAmount +
-                                              ",1,0);" +
-                                              " SELECT CAST(SCOPE_IDENTITY() as INT); ";
+                        if (item.FoodMenuId == 0)
+                        {
+                            queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
+                                                  "VALUES " +
+                                                  "(" + result + "," + item.FoodMenuId + "," + item.IngredientId + "," + item.Qty + "," + item.LossAmount +
+                                                  ",1,0);" +
+                                                  " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
+                        }
+                        else
+                        {
+                            queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
+                                                  " select " + result + ",FoodMenuId,IngredientId," + item.Qty + "," + item.Qty + " * i.SalesPrice" +
+                                                  ",1,0 from FoodMenuIngredient fmi inner join Ingredient i on fmi.IngredientId = i.id where FoodMenuId =" + item.FoodMenuId + ";" +
+                                                  " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
+                        }
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
 
@@ -94,7 +123,7 @@ namespace RocketPOS.Repository
                 }
             }
 
-            return result;
+            return detailResult;
 
         }
         public int UpdateWaste(WasteModel wasteModel)
@@ -106,9 +135,9 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "Update Waste set " +
                              "OutletId=@OutletId, ReferenceNumber=@ReferenceNumber, WasteDateTime=@WasteDateTime, EmployeeId=@EmployeeId, " +
-                             " TotalLossAmount=@TotalLossAmount, ReasonForWaste=@ReasonForWaste, WasteStatus=@WasteStatus " + 
+                             " TotalLossAmount=@TotalLossAmount, ReasonForWaste=@ReasonForWaste, WasteStatus=@WasteStatus " +
                              "  ,UserIdUpdated = 1, DateUpdated  = GetUtcDate()  where id= " + wasteModel.Id + ";";
-  
+
                 result = con.Execute(query, wasteModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -119,30 +148,41 @@ namespace RocketPOS.Repository
                         var queryDetails = string.Empty;
                         if (item.WasteId > 0)
                         {
-                            queryDetails = "Update [dbo].[WasteIngredient] set " +
-                                                 " [IngredientId]  = " + item.IngredientId + "," +
-                                                 " [FoodMenuId]   = " + item.FoodMenuId + "," +
-                                                 " [IngredientQty]        =  " + item.Qty + "," +
-                                                 " [LossAmount] = " + item.LossAmount + 
-                                                 " where id = " + item.WasteId + ";";
+                            if (item.FoodMenuId > 0)
+                            {
+                                queryDetails = " update w set w.IngredientQty = " + item.Qty + ",w.LossAmount = " + item.Qty + " * i.SalesPrice from WasteIngredient w " +
+                                    " inner join FoodMenuIngredient fmi on w.FoodMenuId = fmi.FoodMenuId inner join Ingredient i on fmi.IngredientId = i.id" +
+                                    " where w.FoodMenuId = " + item.FoodMenuId + " and WasteId = " + item.WasteId + " and w.IngredientId = i.id";
+                            }
+                            else
+                            {
+                                queryDetails = "Update [dbo].[WasteIngredient] set " +
+                                                  //" [IngredientId]  = " + item.IngredientId + "," +
+                                                  //" [FoodMenuId]   = " + item.FoodMenuId + "," +
+                                                  " [IngredientQty]        =  " + item.Qty + "," +
+                                                  " [LossAmount] = " + item.LossAmount +
+                                                  " where FoodMenuId = 0 and WasteId = " + item.WasteId + " and IngredientId = " + item.IngredientId + ";";
+                            }
                         }
                         else
                         {
-                            queryDetails = "INSERT INTO [dbo].[WasteIngredient]" +
-                                                  " ([WasteId]   " +
-                                                  " ,[IngredientId] " +
-                                                  " ,[FoodMenuId]    " +
-                                                  " ,[IngredientQty]          " +
-                                                  " ,[LossAmount]  " +
-                                                  " ,[UserIdUpdated]" +
-                                                  " ,[IsDeleted])   " +
-                                                  "VALUES           " +
-                                                  "(" + wasteModel.Id + "," +
-                                                  "" + item.IngredientId + "," +
-                                                  "" + item.FoodMenuId + "," +
-                                                  "" + item.Qty + "," +
-                                                  "" + item.LossAmount +
-                                                  ",1,0); ";
+                            if (item.FoodMenuId == 0)
+                            {
+                                queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
+                                                       "VALUES " +
+                                                       "(" + result + "," + item.FoodMenuId + "," + item.IngredientId + "," + item.Qty + "," + item.LossAmount +
+                                                       ",1,0);" +
+                                                       " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
+                            }
+                            else
+                            {
+                                queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
+                                                       " select " + result + ",FoodMenuId,IngredientId," + item.Qty + "," + item.LossAmount +
+                                                       ",1,0 from FoodMenuIngredient where FoodMenuId = " + item.FoodMenuId + ";" +
+                                                       " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
+                            }
+
+
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -190,20 +230,28 @@ namespace RocketPOS.Repository
             List<WasteDetailModel> purchaseDetails = new List<WasteDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select WI.Id as WasteId, WI.FoodMenuId, F.FoodMenuName, WI.IngredientId as IngredientId,i.IngredientName, WI.IngredientQty as Qty ," +
-                    " WI.lossAmount as LossAmount from Waste as W " +
-                    " inner join WasteIngredient as WI on W.id = WI.WasteId " +
-                    " inner join Ingredient i on WI.IngredientId = i.Id " +
-                    " inner join FoodMenu F ON F.Id = WI.FoodMenuId " +
-                    " where WI.IsDeleted = 0 AND " +
-                     " W.id = " + purchaseId + ";";
+
+                var query = "select W.Id as WasteId, WI.FoodMenuId, F.FoodMenuName, '0' as IngredientId,'' IngredientName, WI.IngredientQty as Qty , Sum(WI.lossAmount) as LossAmount " +
+                            " from Waste as W  inner join WasteIngredient as WI on W.id = WI.WasteId  inner join Ingredient i on WI.IngredientId = i.Id  inner join FoodMenu F ON F.Id = WI.FoodMenuId" +
+                            " where WI.IsDeleted = 0 AND W.id = " + purchaseId + " group by WI.IngredientQty,W.Id,WI.FoodMenuId,F.FoodMenuName" +
+                            " union all" +
+                            " select W.Id as WasteId, '0', '', i.id as IngredientId,i.IngredientName, WI.IngredientQty as Qty , WI.lossAmount as LossAmount" +
+                            " from Waste as W  inner join WasteIngredient as WI on W.id = WI.WasteId  inner join Ingredient i on WI.IngredientId = i.Id  and WI.FoodMenuId = 0" +
+                            " where WI.IsDeleted = 0 AND W.id = " + purchaseId + ";";
+                //var query = "select WI.Id as WasteId, WI.FoodMenuId, F.FoodMenuName, WI.IngredientId as IngredientId,i.IngredientName, WI.IngredientQty as Qty ," +
+                //    " WI.lossAmount as LossAmount from Waste as W " +
+                //    " inner join WasteIngredient as WI on W.id = WI.WasteId " +
+                //    " inner join Ingredient i on WI.IngredientId = i.Id " +
+                //    " inner join FoodMenu F ON F.Id = WI.FoodMenuId " +
+                //    " where WI.IsDeleted = 0 AND " +
+                //     " W.id = " + purchaseId + ";";
                 purchaseDetails = con.Query<WasteDetailModel>(query).AsList();
             }
 
             return purchaseDetails;
         }
 
-        public int DeleteWasteDetails(long WasteDetailsId)
+        public int DeleteWasteDetails(long wasteId, long foodManuId, long ingredientId)
         {
             int result = 0;
 
@@ -211,8 +259,18 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update WasteIngredient set IsDeleted = 1 where id = " + WasteDetailsId + ";";
+                var query = string.Empty;
+                if (ingredientId == 0)
+                {
+                    query = $"update WasteIngredient set IsDeleted = 1 where wasteid = " + wasteId + " and FoodMenuId = " + foodManuId + " ;";
+                    
+                }
+                else
+                {
+                    query = $"update WasteIngredient set IsDeleted = 1 where wasteid = " + wasteId + " and " +" IngredientId=" + ingredientId + " ;";
+                }
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+
                 if (result > 0)
                 {
                     sqltrans.Commit();
@@ -231,7 +289,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM Waste ;";
+                var query = $"SELECT ISNULL(max(CONVERT(numeric, ReferenceNumber)),0) + 1 FROM Waste;";
                 result = con.ExecuteScalar<long>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -242,5 +300,30 @@ namespace RocketPOS.Repository
             }
             return result;
         }
+
+        public List<DropDownModel> IngredientListForLostAmount()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id,SalesPrice as [Name] from Ingredient where IsDeleted= 0 Order by IngredientName";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+
+        public List<DropDownModel> FoodMenuListForLostAmount()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select FoodMenuId as Id,sum(i.SalesPrice) as [Name] from FoodMenu as F inner join FoodMenuIngredient as FMI on f.Id=FMI.FoodMenuId" +
+                                " inner join Ingredient as i on i.id = fmi.IngredientId" +
+                                " where F.IsDeleted = 0 group by FoodMenuId";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+
     }
 }

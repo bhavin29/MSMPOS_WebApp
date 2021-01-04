@@ -1,5 +1,6 @@
 ﻿var WasteDatatable;
-
+var FoodManuLostAmount = 0;
+var IngredientLostAmount = 0;
 $(document).ready(function () {
     $("#Waste").validate();
     WasteDatatable = $('#WasteOrderDetails').DataTable({
@@ -37,8 +38,13 @@ $(document).ready(function () {
 $('#addRow').on('click', function (e) {
     e.preventDefault();
     var message = validation();
-    debugger;
     if (message == '') {
+        if ($('#FoodMenuId').children("option:selected").text() == "--Select--") {
+            $('#FoodMenuId').val('0');
+        }
+        if ($('#IngredientId').children("option:selected").text() == "--Select--") {
+            $("#IngredientId").val('0')
+        }
         WasteDatatable.row('.active').remove().draw(false);
         var rowNode = WasteDatatable.row.add([
             $("#FoodMenuId").val(),
@@ -48,10 +54,10 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + $("#Quantity").val() + ' </td>',
             '<td class="text-right">' + $("#LossAmount").val() + ' </td>',
             $("#WasteId").val(),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + "|" + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + "|" + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +', '+ $("#FoodMenuId").val()  + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
         ]).draw(false);
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
@@ -62,9 +68,12 @@ $('#addRow').on('click', function (e) {
             foodMenuName: $('#FoodMenuId').children("option:selected").text(),
             ingredientName: $('#IngredientId').children("option:selected").text()
         });
-        $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
+        TotalLossAmount += parseFloat($("#LossAmount").val());
+        $("#TotalLossAmount").val(TotalLossAmount);
         clearItem();
+        $("#FoodMenuId").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -148,23 +157,21 @@ function deleteOrderItem(id) {
     debugger;
     return $.ajax({
         dataType: "json",
-        //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         type: "GET",
-        // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
-        url: "/Waste/DeleteWasteDetail",
+        url: "/Waste/DeleteWasteDetails",
         data: "wasteId=" + id
-        //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
 }
 
-function deleteOrder(wasteId, ingredientId, rowId) {
-    var id = wasteId;
-    if (ingredientId == "0") {
+function deleteOrder(wasteId, ingredientId, foodMenuId, rowId) {
+    //var id = $(this).attr('data-itemId');
+    //var val = id.split("|");
+    if (wasteId == "0") {
         for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].ingredientId == id) {
-                TotalAmount = dataArr[i].total;
-                GrandTotal -= TotalAmount;
-                $("#TotalLossAmount").val(GrandTotal);
+            if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
+                LossAmount = dataArr[i].lossAmount;
+                TotalLossAmount -= LossAmount;
+                $("#TotalLossAmount").val(TotalLossAmount);
                 dataArr.splice(i, 1);
                 WasteDatatable.row(rowId).remove().draw(false);
                 jQuery.noConflict();
@@ -173,10 +180,9 @@ function deleteOrder(wasteId, ingredientId, rowId) {
         }
     }
     else {
-        $.when(deleteOrderItem(ingredientId).then(function (res) {
+        $.when(deleteOrderItem(wasteId + "|" + foodMenuId + "|" + ingredientId).then(function (res) {
             console.log(res)
             if (res.status == 200) {
-                debugger;
                 for (var i = 0; i < dataArr.length; i++) {
                     if (dataArr[i].ingredientId == id) {
                         TotalAmount = dataArr[i].total;
@@ -205,8 +211,6 @@ $(document).on('click', 'a.editItem', function (e) {
         $("#aModal").modal('show');
     }
     else {
-        debugger;
-  
         e.preventDefault();
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
@@ -216,33 +220,97 @@ $(document).on('click', 'a.editItem', function (e) {
             $(this).parents('tr').addClass('active');
         }
         var id = $(this).attr('data-itemId');
+        var val = id.split("|");
         for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].ingredientId == id) {
-                    $("#IngredientId").val(dataArr[i].ingredientId),
+            if (dataArr[i].ingredientId == val[1] && dataArr[i].foodMenuId == val[0]) {
+                $("#IngredientId").val(dataArr[i].ingredientId),
                     $("#FoodMenuId").val(dataArr[i].foodMenuId),
-                    $("#Quantity").val(dataArr[i].qty),
+                    $("#IngredientIdForLostAmount").val(dataArr[i].ingredientId)
+                $("#FoodMenuIdForLostAmount").val(dataArr[i].foodMenuId);
+                $("#Quantity").val(dataArr[i].qty),
                     $("#LossAmount").val(dataArr[i].lossAmount),
                     $("#WasteId").val(dataArr[i].wasteId)
+                TotalLossAmount = $("#TotalLossAmount").val();
+                LossAmount = dataArr[i].lossAmount;
+                TotalLossAmount -= LossAmount;
+                $("#TotalLossAmount").val(TotalLossAmount);
                 dataArr.splice(i, 1);
                 $(this).remove();
+                break;
             }
         }
+        if ($("#IngredientId").val() > 0) {
+            DropdownValueChange(1);
+        }
+        else {
+            DropdownValueChange(0);
+        }
+        if (WasteModelId > 0) {
+            $("#FoodMenuId").attr("disabled", "disabled");
+            $("#IngredientId").attr("disabled", "disabled");
+        }
     }
-    debugger;
-
 });
 
+$(function () {
+    $("#IngredientId").change(function () {
+        DropdownValueChange(1);
+    });
+});
+$(function () {
+    $("#FoodMenuId").change(function () {
+        DropdownValueChange(0);
+    });
+});
+function DropdownValueChange(id) {
+    if (id == 1) {
+        var value = $('select[name=IngredientId]').val();
+        if (value != "0") {
+            $("#FoodMenuId").attr("disabled", "disabled");
+            $("#IngredientIdForLostAmount").val(value);
+            IngredientLostAmount = $('#IngredientIdForLostAmount').children("option:selected").text()
+        }
+        else {
+            $("#FoodMenuId").removeAttr("disabled");
+            $("#IngredientIdForLostAmount").val("0")
+        }
+    }
+    else {
+        var value = $('select[name=FoodMenuId]').val();
+        if (value != "0") {
+            $("#IngredientId").attr("disabled", "disabled");
+            $("#FoodMenuIdForLostAmount").val(value);
+            FoodManuLostAmount = $('#FoodMenuIdForLostAmount').children("option:selected").text()
+        }
+        else {
+            $("#IngredientId").removeAttr("disabled");
+            $("#FoodMenuIdForLostAmount").val(0);
+        }
+    }
+}
+
+
+$("#Quantity").blur(function () {
+    if (FoodManuLostAmount > 0) {
+        var Amount = $("#Quantity").val() * FoodManuLostAmount;
+    }
+    else {
+        var Amount = $("#Quantity").val() * IngredientLostAmount;
+    }
+    $("#LossAmount").val(Amount);
+
+});
 
 function validation() {
     debugger;
     var message = '';
 
     if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-        message = "Select ingredient"
+        if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
+            message = "Select Food Menu OR Ingredient"
+        }
     }
-    else if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == 0) {
-        message = "Select Food Menu"
-    }
+
     else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
         message = "Enter quantity"
     }
@@ -257,9 +325,13 @@ function validation() {
 }
 
 function clearItem() {
-    $("#IngredientId").val(''),
-        $("#FoodMenuId").val(''),
+    $("#IngredientId").val('0'),
+        $("#FoodMenuId").val('0'),
         $("#Quantity").val(''),
         $("#LossAmount").val(''),
         $("#WasteId").val('0')
+    $("#IngredientId").removeAttr("disabled");
+    $("#FoodMenuId").removeAttr("disabled");
+    FoodManuLostAmount = 0;
+    IngredientLostAmount = 0;
 }

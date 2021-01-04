@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.Mvc;
 using RocketPOS.Models;
 namespace RocketPOS.Interface.Repository
 {
@@ -12,7 +13,9 @@ namespace RocketPOS.Interface.Repository
         int DeleteWaste(long WasteId);
         List<WasteDetailModel> GetWasteDetails(long purchaseId);
         List<WasteModel> GetWasteById(long purchaseId);
-        int DeleteWasteDetails(long WasteDetailsId);
+        int DeleteWasteDetails(long wasteId, long foodManuId, long ingredientId);
         long ReferenceNumber();
+        List<DropDownModel> FoodMenuListForLostAmount();
+        List<DropDownModel> IngredientListForLostAmount();
     }
 }

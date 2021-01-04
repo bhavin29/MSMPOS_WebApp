@@ -36,6 +36,10 @@ namespace RocketPOS.Models
         public string ReasonForWaste { get; set; }
         public  int WasteStatus { get; set; }
         public List<WasteDetailModel> WasteDetail { get; set; }
+        public List<SelectListItem> FoodMenuListForLostAmount { get; set; }
+        public List<SelectListItem> IngredientListForLostAmount { get; set; }
+        public decimal FoodMenuIdForLostAmount { get; set; }
+        public decimal IngredientIdForLostAmount { get; set; }
 
     }
     public class    WasteDetailModel

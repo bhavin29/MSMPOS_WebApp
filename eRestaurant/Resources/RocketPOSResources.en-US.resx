@@ -138,8 +138,14 @@
   <data name="ValidCategory" xml:space="preserve">
     <value>Select cagegory</value>
   </data>
+  <data name="ValidEmployee" xml:space="preserve">
+    <value>Select Resposible Person</value>
+  </data>
   <data name="ValidIngredientName" xml:space="preserve">
     <value>Enter valid ingredient name</value>
+  </data>
+  <data name="ValidOutlet" xml:space="preserve">
+    <value>Select Outlet</value>
   </data>
   <data name="ValidPurchaseDetails" xml:space="preserve">
     <value>At least one order should be entered</value>

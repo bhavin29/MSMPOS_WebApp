@@ -41,12 +41,15 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public ActionResult GetOrderById(long wasteId)
         {
-            WasteModel wasteModel = new WasteModel();
-            wasteModel.OutletList = _iDropDownService.GetOutletList();
-            wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
-            wasteModel.IngredientList = _iDropDownService.GetIngredientList();
-            wasteModel.EmployeeList = _iDropDownService.GetEmployeeList();
- 
+            WasteModel wasteModel = new WasteModel()
+            {
+                OutletList = _iDropDownService.GetOutletList(),
+                FoodMenuList = _iDropDownService.GetFoodMenuList(),
+                IngredientList = _iDropDownService.GetIngredientList(),
+                EmployeeList = _iDropDownService.GetEmployeeList(),
+                FoodMenuListForLostAmount = _iWasteService.FoodMenuListForLostAmount(),
+                IngredientListForLostAmount = _iWasteService.IngredientListForLostAmount(),
+            };
             wasteModel = _iWasteService.GetWasteById(wasteId);
             
             return View(wasteModel);
@@ -61,7 +64,6 @@ namespace RocketPOS.Controllers.Transaction
             {
                 long wasteId = Convert.ToInt64(id);
                 wasteModel = _iWasteService.GetWasteById(wasteId);
-
             }
             else
             {
@@ -73,6 +75,8 @@ namespace RocketPOS.Controllers.Transaction
             wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             wasteModel.IngredientList = _iDropDownService.GetIngredientList();
             wasteModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            wasteModel.FoodMenuListForLostAmount = _iWasteService.FoodMenuListForLostAmount();
+            wasteModel.IngredientListForLostAmount = _iWasteService.IngredientListForLostAmount();
 
 
             return View(wasteModel);
@@ -147,9 +151,10 @@ namespace RocketPOS.Controllers.Transaction
             return RedirectToAction(nameof(WasteList));
         }
 
-        public ActionResult DeleteWasteDetails(long wasteId)
+        public ActionResult DeleteWasteDetails(string wasteId)
         {
-            long result = _iWasteService.DeleteWasteDetails(wasteId);
+            var obj = wasteId.Split("|");
+            long result = _iWasteService.DeleteWasteDetails(Convert.ToInt64(obj[0]), Convert.ToInt64(obj[1]), Convert.ToInt64(obj[2]));
             if (result > 0)
             {
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
@@ -160,14 +165,14 @@ namespace RocketPOS.Controllers.Transaction
         private string ValidationWaste(WasteModel wasteModel)
         {
             string ErrorString = string.Empty;
-            //if (string.IsNullOrEmpty(wasteModel.ReferenceNo.ToString()) || wasteModel.ReferenceNo == 0)
-            //{
-            //    ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
-            //    return ErrorString;
-            //}
             if (string.IsNullOrEmpty(wasteModel.EmployeeId.ToString()) || wasteModel.EmployeeId == 0)
             {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
+                ErrorString = _locService.GetLocalizedHtmlString("ValidEmployee");
+                return ErrorString;
+            }
+            if (string.IsNullOrEmpty(wasteModel.EmployeeId.ToString()) || wasteModel.EmployeeId == 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidOutlet");
                 return ErrorString;
             }
             if (wasteModel.WasteDetail == null || wasteModel.WasteDetail.Count < 1)

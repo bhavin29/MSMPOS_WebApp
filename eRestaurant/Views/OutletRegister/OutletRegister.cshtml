@@ -1,0 +1,142 @@
+﻿@model RocketPOS.Models.OutletRegisterModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Open/Close Outlet Register</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="OutletRegister" method="post" role="form">
+                                @if (Model.CloseDateTime == DateTime.MinValue && Model.Id >0 )
+                                {
+                                    <label class="text-danger">Regiter is not closed by outlet user yet.</label>
+                                }
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="OutletList" class="control-label">Outlet</label>
+                                            <select asp-for="OutletId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="OutletId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="UserList" class="control-label">User</label>
+                                            <select asp-for="UserId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.UserList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="UserId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="OpenDate" class="control-label"></label>
+                                            <input asp-for="OpenDate" type="date" class="form-control" />
+                                            <span asp-validation-for="OpenDate" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="OpeningBalance" class="control-label"></label>
+                                            <input asp-for="OpeningBalance" class="form-control" />
+                                            <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    @if (Model.CloseDateTime != DateTime.MinValue)
+                                    {
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="form-group">
+                                                <label asp-for="CloseDateTime" class="control-label"></label>
+                                                <input asp-for="CloseDateTime" class="form-control" />
+                                                <span asp-validation-for="CloseDateTime" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="TotalTransaction" class="control-label"></label>
+                                                <input asp-for="TotalTransaction" class="form-control" />
+                                                <span asp-validation-for="TotalTransaction" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="TotalAmount" class="control-label"></label>
+                                                <input asp-for="TotalAmount" class="form-control" />
+                                                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="ApprovalNotes" class="control-label"></label>
+                                                <input asp-for="ApprovalNotes" class="form-control" />
+                                                <span asp-validation-for="ApprovalNotes" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            @if (Model.CloseDateTime != DateTime.MinValue)
+                                            {
+                                                <input type="submit" value="Approve" class="btn btn-primary btn-sm" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                        }
+                                    }
+                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#OutletRegister").prev().focus();
+            $("#vModal").modal('hide');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}

@@ -35,9 +35,7 @@ namespace RocketPOS.Services
         public int DeleteOutlet(int outletId)
         {
             return _iOutletRepository.DeleteOutlet(outletId);
-        }
-
-    
+        }  
 
         List<OutletModel> IOutletService.GetOutletList()
         {

@@ -1,0 +1,82 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.Reports.OutletRegisterReportModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
+}
+
+@*Dropdown with Ingredient CAtegory, Ingredient, Food menu, ALter Qty*@
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Register Report</h2>
+                </div>
+                <div class="table-responsive">
+                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                        <div class="col-sm-12">
+                            <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                <thead role="row">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.RegisterTitle)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.RegisterValue)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tfoot role="row">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.RegisterTitle)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.RegisterValue)
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RegisterTitle)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RegisterValue)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#OutletRegisterReport').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+        });
+    </script>
+}

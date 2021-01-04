@@ -7,19 +7,17 @@ using RocketPOS.Models;
 
 namespace RocketPOS.Interface.Services
 {
-   public interface IDropDownService
+    public interface IDropDownService
     {
         List<SelectListItem> GetIngredientCategoryList();
         List<SelectListItem> GetUnitList();
         List<SelectListItem> GetOutletList();
         List<SelectListItem> GetStoreList();
-
         List<SelectListItem> GetFoodMenuCategoryList();
         List<SelectListItem> GetFoodMenuList();
-
         List<SelectListItem> GetEmployeeList();
-		   List<SelectListItem> GetSupplierList();
+        List<SelectListItem> GetSupplierList();
         List<SelectListItem> GetIngredientList();
-
+        List<SelectListItem> GetUserList();
     }
 }

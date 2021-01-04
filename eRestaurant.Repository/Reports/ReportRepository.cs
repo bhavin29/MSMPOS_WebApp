@@ -80,5 +80,20 @@ namespace RocketPOS.Repository.Reports
 
             return purchaseReportModel;
         }
+
+        public List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId)
+        {
+            List<OutletRegisterReportModel> outletRegisterReportModels = new List<OutletRegisterReportModel>();
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+
+                var query = "Exec rptUserRegister " + OutletRegisterId + ";";
+                    outletRegisterReportModels = con.Query<OutletRegisterReportModel>(query).ToList();
+            }
+
+            return outletRegisterReportModels;
+        }
+
     }
 }

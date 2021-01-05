@@ -37,7 +37,7 @@ $(document).ready(function () {
 
 $('#addRow').on('click', function (e) {
     e.preventDefault();
-    var message = validation();
+    var message = validation(0);
     if (message == '') {
         if ($('#FoodMenuId').children("option:selected").text() == "--Select--") {
             $('#FoodMenuId').val('0');
@@ -45,20 +45,34 @@ $('#addRow').on('click', function (e) {
         if ($('#IngredientId').children("option:selected").text() == "--Select--") {
             $("#IngredientId").val('0')
         }
+        var dataItemId = $("#FoodMenuId").val() + "|" + $("#IngredientId").val();
+        var myModal = $("#FoodMenuId").val() + $("#IngredientId").val()
+        var rowId = "rowId" + $("#FoodMenuId").val() + $("#IngredientId").val()
+        var FoodMenuName = '';
+        var IngredietnName = '';
+        if ($('#FoodMenuId').val() != 0) {
+            FoodMenuName = $('#FoodMenuId').children("option:selected").text();
+        }
+        if ($('#IngredientId').val() != 0) {
+            IngredietnName = $('#IngredientId').children("option:selected").text();
+        }
+
         WasteDatatable.row('.active').remove().draw(false);
         var rowNode = WasteDatatable.row.add([
             $("#FoodMenuId").val(),
-            $('#FoodMenuId').children("option:selected").text(),
+            FoodMenuName,
             $("#IngredientId").val(),
-            $('#IngredientId').children("option:selected").text(),
+            IngredietnName,
             '<td class="text-right">' + $("#Quantity").val() + ' </td>',
             '<td class="text-right">' + $("#LossAmount").val() + ' </td>',
             $("#WasteId").val(),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + "|" + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
-            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + dataItemId + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + myModal + '"><i class="fa fa-times"></i></a></div></td > ' +
+            '<div class="modal fade" id="myModal' + myModal + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + "|" + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +', '+ $("#FoodMenuId").val()  + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
-        ]).draw(false);
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + dataItemId + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ', ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
+        ]).node().id = rowId;
+        WasteDatatable.draw(false);
+
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
             ingredientId: $("#IngredientId").val(),
@@ -68,14 +82,17 @@ $('#addRow').on('click', function (e) {
             foodMenuName: $('#FoodMenuId').children("option:selected").text(),
             ingredientName: $('#IngredientId').children("option:selected").text()
         });
+
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
+
+        // $('#WasteOrderDetails').find('tr').attr('id', myModal);
         TotalLossAmount += parseFloat($("#LossAmount").val());
         $("#TotalLossAmount").val(TotalLossAmount);
         clearItem();
         $("#FoodMenuId").focus();
     }
-    else if (message != '') {
+    else {
         $(".modal-body").text(message);
         $("#save").hide();
         jQuery.noConflict();
@@ -84,6 +101,10 @@ $('#addRow').on('click', function (e) {
     }
 });
 
+$('#Cancle').on('click', function (e) {
+    e.preventDefault();
+    clearItem();
+})
 function saveOrder(data) {
     return $.ajax({
         dataType: 'json',
@@ -97,15 +118,9 @@ function saveOrder(data) {
 };
 
 $(function () {
-    $('#saveOrder').click(function () {
-        if (!WasteDatatable.data().any() || WasteDatatable.data().row == null) {
-            var message = 'At least one order should be entered'
-            $(".modal-body").text(message);
-            $("#save").hide();
-            jQuery.noConflict();
-            $("#aModal").modal('show');
-        }
-        else {
+    $('#saveOrder').click(function (e) {
+        var message = validation(1);
+        if (message == '') {
             $("#waste").on("submit", function (e) {
                 e.preventDefault();
                 var data = ({
@@ -143,6 +158,13 @@ $(function () {
 
             });
         }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
     })
 });
 $("#save").click(function () {
@@ -166,12 +188,14 @@ function deleteOrderItem(id) {
 function deleteOrder(wasteId, ingredientId, foodMenuId, rowId) {
     //var id = $(this).attr('data-itemId');
     //var val = id.split("|");
+    var deletedataArr = []
     if (wasteId == "0") {
         for (var i = 0; i < dataArr.length; i++) {
             if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
                 LossAmount = dataArr[i].lossAmount;
                 TotalLossAmount -= LossAmount;
                 $("#TotalLossAmount").val(TotalLossAmount);
+                //deletedataArr = dataArr.slice(i, i);
                 dataArr.splice(i, 1);
                 WasteDatatable.row(rowId).remove().draw(false);
                 jQuery.noConflict();
@@ -184,14 +208,14 @@ function deleteOrder(wasteId, ingredientId, foodMenuId, rowId) {
             console.log(res)
             if (res.status == 200) {
                 for (var i = 0; i < dataArr.length; i++) {
-                    if (dataArr[i].ingredientId == id) {
-                        TotalAmount = dataArr[i].total;
-                        GrandTotal -= TotalAmount;
-                        $("#TotalLossAmount").val(GrandTotal);
+                    if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
+                        TotalAmount = dataArr[i].lossAmount;
+                        TotalLossAmount -= TotalAmount;
+                        $("#TotalLossAmount").val(TotalLossAmount);
                         dataArr.splice(i, 1);
                         WasteDatatable.row(rowId).remove().draw(false);
                         jQuery.noConflict();
-                        $("#myModal2" + rowId).modal('hide');
+                        $("#myModal" + i).modal('hide');
                     }
                 }
                 console.log(res);
@@ -235,7 +259,6 @@ $(document).on('click', 'a.editItem', function (e) {
                 TotalLossAmount -= LossAmount;
                 $("#TotalLossAmount").val(TotalLossAmount);
                 dataArr.splice(i, 1);
-                $(this).remove();
                 break;
             }
         }
@@ -255,14 +278,23 @@ $(document).on('click', 'a.editItem', function (e) {
 $(function () {
     $("#IngredientId").change(function () {
         DropdownValueChange(1);
+        $("#Quantity").val('');
+        $("#LossAmount").val('');
     });
 });
 $(function () {
     $("#FoodMenuId").change(function () {
         DropdownValueChange(0);
+        $("#Quantity").val('');
+        $("#LossAmount").val('');
     });
 });
 function DropdownValueChange(id) {
+    debugger;
+    $("#FoodMenuIdForLostAmount").val("0");
+    $("#IngredientIdForLostAmount").val("0");
+    FoodManuLostAmount = 0;
+    IngredientLostAmount = 0;
     if (id == 1) {
         var value = $('select[name=IngredientId]').val();
         if (value != "0") {
@@ -272,7 +304,6 @@ function DropdownValueChange(id) {
         }
         else {
             $("#FoodMenuId").removeAttr("disabled");
-            $("#IngredientIdForLostAmount").val("0")
         }
     }
     else {
@@ -284,13 +315,14 @@ function DropdownValueChange(id) {
         }
         else {
             $("#IngredientId").removeAttr("disabled");
-            $("#FoodMenuIdForLostAmount").val(0);
         }
     }
+
 }
 
 
 $("#Quantity").blur(function () {
+    debugger;
     if (FoodManuLostAmount > 0) {
         var Amount = $("#Quantity").val() * FoodManuLostAmount;
     }
@@ -301,25 +333,51 @@ $("#Quantity").blur(function () {
 
 });
 
-function validation() {
-    debugger;
+function validation(id) {
     var message = '';
+    if ($("#OutletId").val() == '' || $("#OutletId").val() == 0) {
+        message = "Select Outlet"
+        return message;
+    }
 
-    if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-        if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
-            message = "Select Food Menu OR Ingredient"
+    if ($("#EmployeeId").val() == '' || $("#EmployeeId").val() == 0) {
+        message = "Select Employee"
+        return message;
+    }
+
+    if (id == 1) {
+        if (!WasteDatatable.data().any() || WasteDatatable.data().row == null) {
+            var message = 'At least one order should be entered'
+            return message;
+            //$(".modal-body").text(message);
+            //$("#save").hide();
+            //jQuery.noConflict();
+            //$("#aModal").modal('show');
+        }
+        if ($("#ReasonForWaste").val() == '') {
+            message = "Enter waste reason"
+            return message;
         }
     }
 
-    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
-        message = "Enter quantity"
-    }
-    for (var i = 0; i < dataArr.length; i++) {
-        if ($("#IngredientId").val() == dataArr[i].ingredientId) {
-            message = "Ingredient already selected!"
-            break;
+    if (id == 0) {
+        if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
+            if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
+                message = "Select Food Menu OR Ingredient"
+                return message;
+            }
+        }
+        if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+            message = "Enter quantity"
+            return message;
         }
 
+        for (var i = 0; i < dataArr.length; i++) {
+            if ($("#IngredientId").val() == dataArr[i].ingredientId && $("#FoodMenuId").val() == dataArr[i].foodMenuId) {
+                message = "Item already selected!"
+                break;
+            }
+        }
     }
     return message;
 }
@@ -332,6 +390,8 @@ function clearItem() {
         $("#WasteId").val('0')
     $("#IngredientId").removeAttr("disabled");
     $("#FoodMenuId").removeAttr("disabled");
+    $("#FoodMenuIdForLostAmount").val('0');
+    $("#IngredientIdForLostAmount").val('0');
     FoodManuLostAmount = 0;
     IngredientLostAmount = 0;
 }

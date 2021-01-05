@@ -170,14 +170,14 @@ namespace RocketPOS.Repository
                             {
                                 queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
                                                        "VALUES " +
-                                                       "(" + result + "," + item.FoodMenuId + "," + item.IngredientId + "," + item.Qty + "," + item.LossAmount +
+                                                       "(" + wasteModel.Id + "," + item.FoodMenuId + "," + item.IngredientId + "," + item.Qty + "," + item.LossAmount +
                                                        ",1,0);" +
                                                        " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
                             }
                             else
                             {
                                 queryDetails = "INSERT INTO WasteIngredient ([WasteId],FoodMenuId,[IngredientId] ,IngredientQty, LossAmount, [UserIdInserted],[IsDeleted])   " +
-                                                       " select " + result + ",FoodMenuId,IngredientId," + item.Qty + "," + item.LossAmount +
+                                                       " select " + wasteModel.Id + ",FoodMenuId,IngredientId," + item.Qty + "," + item.LossAmount +
                                                        ",1,0 from FoodMenuIngredient where FoodMenuId = " + item.FoodMenuId + ";" +
                                                        " SELECT CAST(ReferenceNumber as INT) from waste where id = " + result + "; ";
                             }
@@ -267,7 +267,7 @@ namespace RocketPOS.Repository
                 }
                 else
                 {
-                    query = $"update WasteIngredient set IsDeleted = 1 where wasteid = " + wasteId + " and " +" IngredientId=" + ingredientId + " ;";
+                    query = $"update WasteIngredient set IsDeleted = 1 where wasteid = " + wasteId + " and " +" IngredientId=" + ingredientId + " and FoodMenuId = 0;";
                 }
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 

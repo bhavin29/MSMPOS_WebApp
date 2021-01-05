@@ -85,7 +85,8 @@ function saveOrder(data) {
 };
 
 $(function () {
-    $('#saveOrder').click(function () {
+    $('#saveOrder').click(function (e) {
+        e.preventDefault();
         if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
             var message = 'At least one order should be entered'
             $(".modal-body").text(message);
@@ -95,7 +96,6 @@ $(function () {
         }
         else {
             $("#purchase").on("submit", function (e) {
-                e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),

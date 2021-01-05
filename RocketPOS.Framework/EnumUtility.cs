@@ -63,4 +63,12 @@ namespace RocketPOS.Framework
         [Display(Name = "Stock Out")]
         StockOUT = 2,
     }
+
+    public enum WasteStatus
+    {
+        [Display(Name = "Pending")]
+        Pending = 1,
+        [Display(Name = "Approved")]
+        Approved = 2,
+    }
 }

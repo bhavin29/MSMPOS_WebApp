@@ -9,7 +9,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
 
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public string StoreName { get; set; }
         public string Employee { get; set; }
         public int UserId { get; set; }

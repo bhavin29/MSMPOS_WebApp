@@ -6,6 +6,7 @@ using Dapper;
 using RocketPOS.Interface.Repository;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Repository
 {
@@ -190,8 +191,10 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, ReferenceNumber=@ReferenceNumber,EntryDate=@EntryDate ,EmployeeId=@,Notes " +
-                             ",[UserIdUpdated] = 1 ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryAdjustmentModel.Id + ";";
+                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, EntryDate='" + inventoryAdjustmentModel.Date.ToShortDateString() + "' " +
+                             ",EmployeeId=@EmployeeId,Notes=@Notes " +
+                             ",[UserIdUpdated] = " + LoginInfo.Userid +
+                             ",[DateUpdated]  = GetUtcDate()  where id= " + inventoryAdjustmentModel.Id + ";";
                 result = con.Execute(query, inventoryAdjustmentModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

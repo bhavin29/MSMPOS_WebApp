@@ -93,6 +93,12 @@
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label"></label>
+                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <hr />
                                                     <div class="row">
@@ -103,9 +109,10 @@
                                                                         <th style="width:35%">IngredientId</th>
                                                                         <th style="width:35%">Ingredient</th>
                                                                         <th style="width:15%" class="text-right">Quantity</th>
+                                                                        <th style="width:35%">ComsumptionStatusId</th>
                                                                         <th style="width:20%" class="text-right">Comsumption STatus</th>
                                                                         <th style="width:25%" class="text-center">Actions</th>
-                                                                        <th style="width:10%">InventoryAdjustmentId</th>
+                                                                        <th style="width:25%" class="text-center">InventoryAdjustmentId</th>
                                                                     </tr>
                                                                 </thead>
                                                                 @if (Model.Id > 0)
@@ -115,28 +122,31 @@
                                                                         var tm = "#myModal" + item.InventoryAdjustmentId;
                                                                         var mid = "myModal" + item.InventoryAdjustmentId;
                                                                         var rowId = "rowId" + item.InventoryAdjustmentId;
-                                                                        <tr id="@rowId">
-                                                                            <td>
-                                                                                @item.IngredientId
-                                                                            </td>
-                                                                            <td>
-                                                                                @item.IngredientName
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                @item.Quantity
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                @item.ConsumpationStatus
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="form-button-action">
-                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                @item.InventoryAdjustmentId
-                                                                            </td>
-                                                                        </tr>
+                                                            <tr id="@rowId">
+                                                                <td>
+                                                                    @item.IngredientId
+                                                                </td>
+                                                                <td>
+                                                                    @item.IngredientName
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    @item.Quantity
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    @item.ConsumpationStatus
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    @item.ConsumpationStatus
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-button-action">
+                                                                        <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    @item.InventoryAdjustmentId
+                                                                </td>
+                                                            </tr>
                                                                         <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                             <div class="modal-dialog">
                                                                                 <div class="modal-content">

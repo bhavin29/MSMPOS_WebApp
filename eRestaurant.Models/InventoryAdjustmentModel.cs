@@ -36,7 +36,6 @@ namespace RocketPOS.Models
     public class InventoryAdjustmentDetailModel
     {
         public long InventoryAdjustmentId { get; set; }
-        public int ReferenceNo { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public decimal Quantity { get; set; }

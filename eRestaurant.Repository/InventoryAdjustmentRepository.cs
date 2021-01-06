@@ -69,7 +69,7 @@ namespace RocketPOS.Repository
                               "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
-               inventoryAdjustmentModels = con.Query<InventoryAdjustmentModel>(query).AsList();
+                inventoryAdjustmentModels = con.Query<InventoryAdjustmentModel>(query).AsList();
             }
             return inventoryAdjustmentModels;
         }
@@ -81,9 +81,9 @@ namespace RocketPOS.Repository
             {
                 var query = "SELECT IAI.Id,IAI.InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.IntgredientQty,IAI.ConsumptionStatus " +
                              " FROM InventoryAdjustmentIngredient IAI " +
-                             " INNER JOIN InventoryAdjustmentIngredient IA ON IAI.InventoryAdjustmentId = IA.Id " +
-                             " INNER JOIN Ingredient I ON I.Id = IAI.IngredientId " + invAdjId;
-                 inventoryAdjustmentDetailModels = con.Query<InventoryAdjustmentDetailModel>(query).AsList();
+                             " INNER JOIN InventoryAdjustment IA ON IAI.InventoryAdjustmentId = IA.Id " +
+                             " INNER JOIN Ingredient I ON I.Id = IAI.IngredientId and IA.Id =" + invAdjId;
+                inventoryAdjustmentDetailModels = con.Query<InventoryAdjustmentDetailModel>(query).AsList();
             }
 
             return inventoryAdjustmentDetailModels;
@@ -95,7 +95,7 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentViewModel> inventoryAdjustmentModels = new List<InventoryAdjustmentViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber,IA.EntryDate,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
+                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
                               "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 ;";
@@ -109,27 +109,40 @@ namespace RocketPOS.Repository
         public int InsertInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel)
         {
             int result = 0;
+            int detailResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO InventoryAdjustment " +
-                             "  ( Id ,StoreId, ReferenceNumber,EntryDate ,EmployeeId,Notes ) " + 
+                             "  ( StoreId, ReferenceNumber,EntryDate ,EmployeeId,Notes ) " +
                              "   VALUES           " +
-                             "  ( @Id ,@StoreId, @ReferenceNumber,@EntryDate ,@EmployeeId,@Notes ); " +
+                             "  ( @StoreId, @ReferenceNo, @Date ,@EmployeeId,@Notes ); " +
                              "   SELECT CAST(Scope_Identity()  as int); ";
                 result = con.ExecuteScalar<int>(query, inventoryAdjustmentModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
-                    int detailResult = 0;
+                    
                     foreach (var item in inventoryAdjustmentModel.InventoryAdjustmentDetail)
                     {
+                        int consumptionId = 0;
+                        if (item.ConsumpationStatus.Value.ToString() == "StockIN")
+                        {
+                            consumptionId = 1;
+                        }
+                        else
+                        {
+                            consumptionId = 2;
+                        }
                         var queryDetails = "INSERT INTO InventoryAdjustmentIngredient" +
-                                              " (Id,InventoryAdjustmentId,IngredientId,IntgredientQty,ConsumptionStatus) " +
+                                              " (InventoryAdjustmentId,IngredientId,IntgredientQty,ConsumptionStatus) " +
                                               "VALUES           " +
-                                              "(" + result + ",@IngredientId,@IntgredientQty,@ConsumptionStatus); " +
-                                              " SELECT CAST(SCOPE_IDENTITY() as INT); ";
+                                              "(" + result + "," +
+                                              "" + item.IngredientId + "," +
+                                              "" + item.Quantity + "," +
+                                              "" + consumptionId + "); " +
+                                              " SELECT CAST(ReferenceNumber as INT) from InventoryAdjustment where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -147,7 +160,7 @@ namespace RocketPOS.Repository
                     sqltrans.Rollback();
                 }
             }
-            return result;
+            return detailResult;
         }
 
         public long ReferenceNumber()

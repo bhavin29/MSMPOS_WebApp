@@ -31,6 +31,8 @@ namespace RocketPOS.Models
         public ConsumpationStatus? ConsumpationStatus { get; set; }
         public List<InventoryAdjustmentDetailModel> InventoryAdjustmentDetail { get; set; }
 
+        public int[] DeletedId { get; set; }
+
     }
 
     public class InventoryAdjustmentDetailModel

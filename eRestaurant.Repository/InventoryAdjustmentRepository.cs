@@ -6,7 +6,6 @@ using Dapper;
 using RocketPOS.Interface.Repository;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
-using RocketPOS.Framework;
 
 namespace RocketPOS.Repository
 {
@@ -66,7 +65,7 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentModel> inventoryAdjustmentModels = new List<InventoryAdjustmentModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber,IA.EntryDate,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
+                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.ReferenceNumber as ReferenceNo,IA.EntryDate as Date,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
                               "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
@@ -80,10 +79,11 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentDetailModel> inventoryAdjustmentDetailModels = new List<InventoryAdjustmentDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IAI.Id,IAI.InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.IntgredientQty,IAI.ConsumptionStatus " +
+                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.IntgredientQty as Quantity, IAI.ConsumptionStatus as ConsumpationStatus " +
                              " FROM InventoryAdjustmentIngredient IAI " +
                              " INNER JOIN InventoryAdjustment IA ON IAI.InventoryAdjustmentId = IA.Id " +
-                             " INNER JOIN Ingredient I ON I.Id = IAI.IngredientId and IA.Id =" + invAdjId;
+                             " INNER JOIN Ingredient I ON I.Id = IAI.IngredientId " +
+                             " where IA.Id =" + invAdjId + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
                 inventoryAdjustmentDetailModels = con.Query<InventoryAdjustmentDetailModel>(query).AsList();
             }
 
@@ -124,7 +124,7 @@ namespace RocketPOS.Repository
 
                 if (result > 0)
                 {
-                    
+
                     foreach (var item in inventoryAdjustmentModel.InventoryAdjustmentDetail)
                     {
                         int consumptionId = 0;
@@ -191,28 +191,42 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, EntryDate='" + inventoryAdjustmentModel.Date.ToShortDateString() + "' " +
-                             ",EmployeeId=@EmployeeId,Notes=@Notes " +
-                             ",[UserIdUpdated] = " + LoginInfo.Userid +
-                             ",[DateUpdated]  = GetUtcDate()  where id= " + inventoryAdjustmentModel.Id + ";";
+
+                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, ReferenceNumber=@ReferenceNo,EntryDate=@Date ,EmployeeId=@EmployeeId,Notes = @Notes" +
+                             ",[UserIdUpdated] = 1 ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryAdjustmentModel.Id + ";";
                 result = con.Execute(query, inventoryAdjustmentModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
                     int detailResult = 0;
+                    if (inventoryAdjustmentModel.DeletedId != null)
+                    {
+                        foreach (var item in inventoryAdjustmentModel.DeletedId)
+                        {
+                            var deleteQuery = $"update InventoryAdjustmentIngredient set IsDeleted = 1 where id = " + item + ";";
+                            result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                    }
+
                     foreach (var item in inventoryAdjustmentModel.InventoryAdjustmentDetail)
                     {
                         var queryDetails = string.Empty;
+                        int consumptionId = 0;
+                        if (item.ConsumpationStatus.Value.ToString() == "StockIN")
+                        {
+                            consumptionId = 1;
+                        }
+                        else
+                        {
+                            consumptionId = 2;
+                        }
                         if (item.InventoryAdjustmentId > 0)
                         {
 
-                            queryDetails = "Update InventoryAdjustmentIngredient SET InventoryAdjustmentId, IngredientId,IntgredientQty,ConsumptionStatus where id = " + item.InventoryAdjustmentId + ";";
-
-
                             queryDetails = "Update InventoryAdjustmentIngredient SET " +
-                                                 " ,IngredientId = " + item.IngredientId +
+                                                 " IngredientId = " + item.IngredientId +
                                                  " ,IntgredientQty   = " + item.Quantity +
-                                                 ",ConsumptionStatus=  " + item.ConsumpationStatus +
+                                                 ",ConsumptionStatus=  " + consumptionId +
                                                  " WHERE Id = " + item.InventoryAdjustmentId + ";";
                         }
                         else
@@ -223,7 +237,7 @@ namespace RocketPOS.Repository
                                                   "(" + inventoryAdjustmentModel.Id + "," +
                                                   "" + item.IngredientId + "," +
                                                   "" + item.Quantity + "," +
-                                                  "" + item.ConsumpationStatus + ",1,0)";
+                                                  "" + consumptionId + ",1,0)";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }

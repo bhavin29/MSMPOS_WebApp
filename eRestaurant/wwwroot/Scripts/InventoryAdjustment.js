@@ -1,7 +1,7 @@
 ﻿var InventoryAdjustmentDatatable;
 var editDataArr = [];
+var deletedId = [];
 $(document).ready(function () {
-
     $("#InventoryAdjustment").validate();
     InventoryAdjustmentDatatable = $('#InventoryAdjustmentOrderDetails').DataTable({
         "paging": false,
@@ -32,7 +32,7 @@ $(document).ready(function () {
                 "searchable": false
             }
 
-           ]
+        ]
     });
 });
 
@@ -45,32 +45,37 @@ $('#cancel').on('click', function (e) {
 
 $('#addRow').on('click', function (e) {
     e.preventDefault();
-    var message = validation();
+    var message = validation(0);
+    var rowId = "rowId" + $("#IngredientId").val();
+    var Qty = $("#Quantity").val();
+    Qty = parseFloat(Qty).toFixed(4);
     if (message == '') {
         InventoryAdjustmentDatatable.row('.active').remove().draw(false);
         var rowNode = InventoryAdjustmentDatatable.row.add([
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
-            $("#Quantity").val(),
+            Qty,
             $("#ConsumpationStatus").val(),
             $('#ConsumpationStatus').children("option:selected").text(),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
-            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal"' + $("#IngredientId").val() + '"><i class="fa fa-times"></i></a></div></td > ' +
+            '<div class="modal fade" id=myModal"' + $("#IngredientId").val() + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#InventoryAdjustmentId").val()
-        ]).draw(false);
+        ]).node().id = rowId;
+        InventoryAdjustmentDatatable.draw(false);
         dataArr.push({
-            IngredientId: $("#IngredientId").val(),
-            Quantity: $("#Quantity").val(),
-            ConsumpationStatus: $("#ConsumpationStatus").val(),
-            InventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
-            IngredientName: $('#IngredientId').children("option:selected").text()
+            ingredientId: $("#IngredientId").val(),
+            quantity: $("#Quantity").val(),
+            consumpationStatus: $("#ConsumpationStatus").val(),
+            inventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
+            ingredientName: $('#IngredientId').children("option:selected").text()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         clearItem();
         editDataArr = [];
+        $("#IngredientId").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -95,15 +100,8 @@ function saveOrder(data) {
 
 $(function () {
     $('#saveOrder').click(function () {
-        if (!InventoryAdjustmentDatatable.data().any() || InventoryAdjustmentDatatable.data().row == null) {
-            var message = 'No data available!'
-            $(".modal-body").text(message);
-            $("#save").hide();
-            jQuery.noConflict();
-            $("#aModal").modal('show');
-        }
-        else {
-            debugger;
+        var message = validation(1);
+        if (message == '') {
             $("#InventoryAdjustment").on("submit", function (e) {
                 e.preventDefault();
                 var data = ({
@@ -116,7 +114,8 @@ $(function () {
                     SupplierList: [],
                     EmployeeList: [],
                     IngredientList: [],
-                    InventoryAdjustmentDetail: dataArr
+                    InventoryAdjustmentDetail: dataArr,
+                    DeletedId: deletedId
                 });
                 $.when(saveOrder(data)).then(function (response) {
                     if (response.status == "200") {
@@ -140,8 +139,16 @@ $(function () {
 
             });
         }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
     })
 });
+
 $("#save").click(function () {
     window.location.href = "/InventoryAdjustment/InventoryAdjustmentList";
 });
@@ -150,52 +157,17 @@ $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
 
-function deleteOrderItem(id) {
-    debugger;
-    return $.ajax({
-        dataType: "json",
-        //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        type: "GET",
-        // beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
-        url: "/InventoryAdjustment/DeleteInventoryAdjustmentDetails",
-        data: "InventoryAdjustmentId=" + id
-        //headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-    });
-}
-
-function deleteOrder(purchaseId, ingredientId, rowId) {
-    var id = ingredientId;
-    if (purchaseId == "0") {
-        for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].IngredientId == id) {
-                dataArr.splice(i, 1);
-                InventoryAdjustmentDatatable.row(rowId).remove().draw(false);
-                jQuery.noConflict();
-                $("#myModal0").modal('hide');
-            }
+function deleteOrder(id, rowId) {
+    for (var i = 0; i < dataArr.length; i++) {
+        if (dataArr[i].ingredientId == id) {
+            deletedId.push(dataArr[i].inventoryAdjustmentId);
+            dataArr.splice(i, 1);
+            InventoryAdjustmentDatatable.row(rowId).remove().draw(false);
+            jQuery.noConflict();
+            $("#myModal" + id).modal('hide');
         }
     }
-    else {
-        $.when(deleteOrderItem(InventoryAdjustmentId).then(function (res) {
-            console.log(res)
-            if (res.status == 200) {
-                debugger;
-                for (var i = 0; i < dataArr.length; i++) {
-                    if (dataArr[i].ingredientId == id) {
-                        dataArr.splice(i, 1);
-                        InventoryAdjustmentDatatable.row(rowId).remove().draw(false);
-                        jQuery.noConflict();
-                        $("#myModal2" + rowId).modal('hide');
-                    }
-                }
-                console.log(res);
-            }
-        }).fail(function (err) {
-            console.log(err);
-        }));
-    }
 };
-
 
 $(document).on('click', 'a.editItem', function (e) {
     debugger;
@@ -217,36 +189,49 @@ $(document).on('click', 'a.editItem', function (e) {
         }
         var id = $(this).attr('data-itemId');
         for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].IngredientId == id) {
-                $("#IngredientId").val(dataArr[i].IngredientId),
-                    $("#Quantity").val(dataArr[i].Quantity),
-                    $("#ConsumpationStatus").val(dataArr[i].ConsumpationStatus),
-                    $("#InventoryAdjustmentId").val(dataArr[i].InventoryAdjustmentId);
-                editDataArr = dataArr.splice(i,1);
+            if (dataArr[i].ingredientId == id) {
+                $("#IngredientId").val(dataArr[i].ingredientId),
+                    $("#Quantity").val(dataArr[i].quantity),
+                    $("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
+                    $("#InventoryAdjustmentId").val(dataArr[i].inventoryAdjustmentId);
+                editDataArr = dataArr.splice(i, 1);
             }
         }
     }
 });
 
-function validation() {
+function validation(id) {
     var message = '';
-    debugger;
-    if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-        message = "Select ingredient"
-    }
-    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
-        message = "Enter Quantity"
-    }
-    else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
-        message = "Select Comsumption Status"
-    }
- 
-    for (var i = 0; i < dataArr.length; i++) {
-        if ($("#IngredientId").val() == dataArr[i].ingredientId) {
-            message = "Ingredient already selected!"
-            break;
+
+    if (id == 1) {
+        if (!InventoryAdjustmentDatatable.data().any() || InventoryAdjustmentDatatable.data().row == null) {
+            var message = 'At least one order should be entered'
+            return message;
         }
-     }
+        if ($("#Notes").val() == '') {
+            message = "Enter reason"
+            return message;
+        }
+    }
+
+    if (id == 0) {
+        if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
+            message = "Select ingredient"
+        }
+        else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+            message = "Enter Quantity"
+        }
+        else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
+            message = "Select Comsumption Status"
+        }
+
+        for (var i = 0; i < dataArr.length; i++) {
+            if ($("#IngredientId").val() == dataArr[i].ingredientId) {
+                message = "Ingredient already selected!"
+                break;
+            }
+        }
+    }
     return message;
 }
 

@@ -119,34 +119,40 @@
                                                                 {
                                                                     @foreach (var item in Model.InventoryAdjustmentDetail)
                                                                     {
-                                                                        var tm = "#myModal" + item.InventoryAdjustmentId;
-                                                                        var mid = "myModal" + item.InventoryAdjustmentId;
-                                                                        var rowId = "rowId" + item.InventoryAdjustmentId;
-                                                            <tr id="@rowId">
-                                                                <td>
-                                                                    @item.IngredientId
-                                                                </td>
-                                                                <td>
-                                                                    @item.IngredientName
-                                                                </td>
-                                                                <td class="text-right">
-                                                                    @item.Quantity
-                                                                </td>
-                                                                <td class="text-right">
-                                                                    @item.ConsumpationStatus
-                                                                </td>
-                                                                <td class="text-right">
-                                                                    @item.ConsumpationStatus
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-button-action">
-                                                                        <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    @item.InventoryAdjustmentId
-                                                                </td>
-                                                            </tr>
+                                                                        var tm = "#myModal" + item.IngredientId;
+                                                                        var mid = "myModal" + item.IngredientId;
+                                                                        var rowId = "rowId" + item.IngredientId;
+                                                                        <tr id="@rowId">
+                                                                            <td>
+                                                                                @item.IngredientId
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.IngredientName
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.Quantity
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.ConsumpationStatus
+                                                                            </td>
+
+                                                                            @if (item.ConsumpationStatus.Value.ToString() == "StockIN")
+                                                                            {
+                                                                                <td class="text-right"> Stock In </td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td class="text-right"> Stock Out </td>
+                                                                            }
+                                                                            <td>
+                                                                                <div class="form-button-action">
+                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.InventoryAdjustmentId
+                                                                            </td>
+                                                                        </tr>
                                                                         <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                                             <div class="modal-dialog">
                                                                                 <div class="modal-content">
@@ -158,7 +164,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.InventoryAdjustmentId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -180,17 +186,16 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="row">
-                                                        <div class="col-md-6 col-lg-4"></div>
-                                                        <div class="col-md-6 col-lg-4"></div>
-                                                        <div class="col-md-6 col-lg-4">
+                                                        <div class="col-md-6 col-lg-6">
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="Notes" class="col-md-3 col-form-label">Notes</label>
                                                                 <div class="col-md-9 p-0 ">
-                                                                    <input type="text" asp-for="Notes" class="form-control input-full text-right" placeholder="Enter Input">
+                                                                    <input type="text"  asp-for="Notes" class="form-control input-full text" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                        <div class="col-md-6 col-lg-4"></div>
+                                                </div>
                                                 </div>
                                             </div>
                                         </div>

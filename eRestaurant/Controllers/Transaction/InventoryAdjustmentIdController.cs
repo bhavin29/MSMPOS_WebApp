@@ -146,14 +146,10 @@ namespace RocketPOS.Controllers.Transaction
         private string ValidationInveotryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel)
         {
             string ErrorString = string.Empty;
-            //if (string.IsNullOrEmpty(purchaseModel.ReferenceNo.ToString()) || purchaseModel.ReferenceNo == 0)
-            //{
-            //    ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
-            //    return ErrorString;
-            //}
+          
             if (string.IsNullOrEmpty(inventoryAdjustmentModel.StoreId.ToString()) || inventoryAdjustmentModel.StoreId == 0)
             {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
+                ErrorString = _locService.GetLocalizedHtmlString("ValidStoreName");
                 return ErrorString;
             }
             if (string.IsNullOrEmpty(inventoryAdjustmentModel.EmployeeId.ToString()) || inventoryAdjustmentModel.EmployeeId == 0)

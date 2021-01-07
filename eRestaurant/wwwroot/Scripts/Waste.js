@@ -349,10 +349,6 @@ function validation(id) {
         if (!WasteDatatable.data().any() || WasteDatatable.data().row == null) {
             var message = 'At least one order should be entered'
             return message;
-            //$(".modal-body").text(message);
-            //$("#save").hide();
-            //jQuery.noConflict();
-            //$("#aModal").modal('show');
         }
         if ($("#ReasonForWaste").val() == '') {
             message = "Enter waste reason"

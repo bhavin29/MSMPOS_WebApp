@@ -141,6 +141,9 @@
   <data name="ValidEmployee" xml:space="preserve">
     <value>Select Resposible Person</value>
   </data>
+  <data name="ValidFormStore" xml:space="preserve">
+    <value>Select From Store</value>
+  </data>
   <data name="ValidIngredientName" xml:space="preserve">
     <value>Enter valid ingredient name</value>
   </data>
@@ -161,6 +164,15 @@
   </data>
   <data name="ValidSupplier" xml:space="preserve">
     <value>Select Supplier</value>
+  </data>
+  <data name="ValidToStore" xml:space="preserve">
+    <value>Select To Store</value>
+  </data>
+  <data name="ValidTransferDetails" xml:space="preserve">
+    <value>At least one detail should be entered</value>
+  </data>
+  <data name="ValidTransferNote" xml:space="preserve">
+    <value>Enter Transfer Note</value>
   </data>
   <data name="ValidUnit" xml:space="preserve">
     <value>Select Unit</value>

@@ -238,9 +238,7 @@ function DueAmount() {
 }
 
 function validation() {
-    debugger;
     var message = '';
-
     if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
         message = "Select ingredient"
     }
@@ -255,10 +253,8 @@ function validation() {
             message = "Ingredient already selected!"
             break;
         }
-
     }
     return message;
-
 }
 
 function clearItem() {

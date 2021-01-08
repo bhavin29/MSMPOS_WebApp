@@ -37,6 +37,7 @@ namespace RocketPOS.Services
                              Id = inventory.Id,
                              ReferenceNo = inventory.ReferenceNo,
                              FromStoreId = inventory.FromStoreId,
+                             ToStoreId = inventory.ToStoreId,
                              EmployeeId = inventory.EmployeeId,
                              Date = inventory.Date,
                              Notes = inventory.Notes,

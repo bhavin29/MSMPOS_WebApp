@@ -148,14 +148,14 @@ namespace RocketPOS.Controllers.Transaction
         private string ValidationInveotryTransfer(InventoryTransferModel inventoryTransferModel)
         {
             string ErrorString = string.Empty;
-            //if (string.IsNullOrEmpty(purchaseModel.ReferenceNo.ToString()) || purchaseModel.ReferenceNo == 0)
-            //{
-            //    ErrorString = _locService.GetLocalizedHtmlString("ValidReferenceNo");
-            //    return ErrorString;
-            //}
             if (string.IsNullOrEmpty(inventoryTransferModel.FromStoreId.ToString()) || inventoryTransferModel.FromStoreId == 0)
             {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
+                ErrorString = _locService.GetLocalizedHtmlString("ValidFormStore");
+                return ErrorString;
+            }
+            if (string.IsNullOrEmpty(inventoryTransferModel.ToStoreId.ToString()) || inventoryTransferModel.ToStoreId == 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidToStore");
                 return ErrorString;
             }
             if (string.IsNullOrEmpty(inventoryTransferModel.EmployeeId.ToString()) || inventoryTransferModel.EmployeeId == 0)
@@ -163,9 +163,16 @@ namespace RocketPOS.Controllers.Transaction
                 ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
                 return ErrorString;
             }
+
+            if (string.IsNullOrEmpty(inventoryTransferModel.Notes.ToString()))
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidTransferNote");
+                return ErrorString;
+            }
+            
             if (inventoryTransferModel.InventoryTransferDetail == null || inventoryTransferModel.InventoryTransferDetail.Count < 1)
             {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                ErrorString = _locService.GetLocalizedHtmlString("ValidTransferDetails");
                 return ErrorString;
             }
 

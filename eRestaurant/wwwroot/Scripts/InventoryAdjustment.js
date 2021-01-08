@@ -170,7 +170,6 @@ function deleteOrder(id, rowId) {
 };
 
 $(document).on('click', 'a.editItem', function (e) {
-    debugger;
     if (!InventoryAdjustmentDatatable.data().any() || InventoryAdjustmentDatatable.data().row == null) {
         var message = 'No data available!'
         $(".modal-body").text(message);

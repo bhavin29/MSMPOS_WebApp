@@ -1,5 +1,6 @@
 ﻿@using Microsoft.Extensions.Localization;
 @using  RocketPOS.Models;
+@using RocketPOS.Framework;
 @model RocketPOS.Models.InventoryTransferModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
@@ -89,8 +90,10 @@
                                                         </div>
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label class="control-label">Comsumption Status</label>
-                                                                <input class="form-control text-right" type="text" id="ConsumpationStatus" />
+                                                                <label asp-for="ConsumpationStatus" class="control-label">Status</label>
+                                                                <select asp-for="ConsumpationStatus" class="form-control" asp-items="Html.GetEnumSelectList<ConsumpationStatus>()">
+                                                                    <option selected="selected" value="">--Select Consumpation--</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
@@ -99,6 +102,12 @@
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
                                                                 <input class="form-control" type="hidden" id="InventoryTransferId" value="0" />
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label"></label>
+                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -111,18 +120,19 @@
                                                                         <th style="width:35%">IngredientId</th>
                                                                         <th style="width:35%">Ingredient</th>
                                                                         <th style="width:15%" class="text-right">Quantity</th>
+                                                                        <th style="width:35%">ComsumptionStatusId</th>
                                                                         <th style="width:20%" class="text-right">Comsumption STatus</th>
                                                                         <th style="width:25%" class="text-center">Actions</th>
-                                                                        <th style="width:10%">InventoryTransferId</th>
+                                                                        <th style="width:25%" class="text-center">InventoryAdjustmentId</th>
                                                                     </tr>
                                                                 </thead>
                                                                 @if (Model.Id > 0)
                                                                 {
                                                                     @foreach (var item in Model.InventoryTransferDetail)
                                                                     {
-                                                                        var tm = "#myModal" + item.InventoryTransferId;
-                                                                        var mid = "myModal" + item.InventoryTransferId;
-                                                                        var rowId = "rowId" + item.InventoryTransferId;
+                                                                        var tm = "#myModal" + item.IngredientId;
+                                                                        var mid = "myModal" + item.IngredientId;
+                                                                        var rowId = "rowId" + item.IngredientId;
                                                                         <tr id="@rowId">
                                                                             <td>
                                                                                 @item.IngredientId
@@ -136,6 +146,15 @@
                                                                             <td class="text-right">
                                                                                 @item.ConsumpationStatus
                                                                             </td>
+
+                                                                            @if (item.ConsumpationStatus.Value.ToString() == "StockIN")
+                                                                            {
+                                                                                <td class="text-right"> Stock In </td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td class="text-right"> Stock Out </td>
+                                                                            }
                                                                             <td>
                                                                                 <div class="form-button-action">
                                                                                     <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
@@ -156,7 +175,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.InventoryTransferId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -178,16 +197,15 @@
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="row">
-                                                        <div class="col-md-6 col-lg-4"></div>
-                                                        <div class="col-md-6 col-lg-4"></div>
-                                                        <div class="col-md-6 col-lg-4">
+                                                        <div class="col-md-6 col-lg-6">
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="Notes" class="col-md-3 col-form-label">Notes</label>
                                                                 <div class="col-md-9 p-0 ">
-                                                                    <input type="text" asp-for="Notes" class="form-control input-full text-right" placeholder="Enter Input">
+                                                                    <input type="text" asp-for="Notes" class="form-control input-full text" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div class="col-md-6 col-lg-4"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -230,7 +248,6 @@
         if (@Model.Id > 0) {
             dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.InventoryTransferDetail))');
         }
-    console.log(dataArr);
     </script>
     <partial name="_ValidationScriptsPartial" />
     <script src="~/Scripts/InventoryTransfer.js"></script>

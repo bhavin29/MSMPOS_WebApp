@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RocketPOS.Framework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -30,17 +31,23 @@ namespace RocketPOS.Models
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public string Notes { get; set; }
+                
         public List<InventoryTransferDetailModel> InventoryTransferDetail { get; set; }
+
+        [EnumDataType(typeof(TableStatus))]
+        public ConsumpationStatus? ConsumpationStatus { get; set; }
+        public int[] DeletedId { get; set; }
 
     }
 
     public class InventoryTransferDetailModel
     {
         public long InventoryTransferId { get; set; }
-        public int ReferenceNo { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public decimal Quantity { get; set; }
-        public string ConsumpationStatus { get; set; }
+
+        [EnumDataType(typeof(TableStatus))]
+        public ConsumpationStatus? ConsumpationStatus { get; set; }
     }
 }

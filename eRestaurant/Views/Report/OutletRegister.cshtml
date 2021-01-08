@@ -5,20 +5,21 @@
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("OutletRegister");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("OutletRegister");
 }
 
 @*Dropdown with Ingredient CAtegory, Ingredient, Food menu, ALter Qty*@
 
-<div class="page-inner">
+@*<div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header text-center">
                     <h2>Register Report</h2>
-                </div>
+                </div>*@
+
                 <div class="table-responsive">
                     <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
                         <div class="col-sm-12">
@@ -60,11 +61,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
+       
+            @*</div>
         </div>
     </div>
 </div>
-</div>
+</div>*@
+
 @section Scripts {
     <script>
         $(document).ready(function () {

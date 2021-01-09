@@ -6,6 +6,7 @@ using Dapper;
 using RocketPOS.Interface.Repository;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Repository
 {
@@ -118,9 +119,9 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [InventoryTransfer] " +
-                             "  ( FromStoreId, ToStoreId,ReferenceNumber,EntryDate ,EmployeeId,Notes ) " +
+                             "  ( FromStoreId, ToStoreId,ReferenceNumber,EntryDate ,EmployeeId,Notes,UserIdUpdated,DateInserted,IsDeleted  ) " +
                              "   VALUES           " +
-                             "  ( @FromStoreId, @ToStoreId,@ReferenceNo,@Date ,@EmployeeId,@Notes ); " +
+                             "  ( @FromStoreId, @ToStoreId,@ReferenceNo,@Date ,@EmployeeId,@Notes," + LoginInfo.Userid + ",GetUTCDate(),0); " +
                              "   SELECT CAST(Scope_Identity()  as int); ";
                 result = con.ExecuteScalar<int>(query, inventoryTransferModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -139,12 +140,13 @@ namespace RocketPOS.Repository
                         }
 
                         var queryDetails = "INSERT INTO InventoryTransferIngredient" +
-                                              " (InventoryTransferId,IngredientId,IntgredientQty,ConsumptionStatus) " +
+                                              " (InventoryTransferId,IngredientId,IntgredientQty,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + item.IngredientId + "," +
                                               "" + item.Quantity + "," +
-                                              "" + consumptionId + "); " +
+                                              "" + consumptionId + "," +
+                                               "" + LoginInfo.Userid + ",GetUtcDate(),0); " +
                                               " SELECT CAST(ReferenceNumber as INT) from [InventoryTransfer] where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -194,7 +196,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "Update  InventoryTransfer SET FromStoreId=@FromStoreId,ToStoreId=@ToStoreId, ReferenceNumber=@ReferenceNo,EntryDate=@Date ,EmployeeId=@EmployeeId, Notes=@Notes " +
-                             ",[UserIdUpdated] = 1 ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryTransferModel.Id + ";";
+                             ",[UserIdUpdated] = " + LoginInfo.Userid + " ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryTransferModel.Id + ";";
                 result = con.Execute(query, inventoryTransferModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -204,7 +206,7 @@ namespace RocketPOS.Repository
                     {
                         foreach (var item in inventoryTransferModel.DeletedId)
                         {
-                            var deleteQuery = $"update InventoryTransferIngredient set IsDeleted = 1 where id = " + item + ";";
+                            var deleteQuery = $"update InventoryTransferIngredient set IsDeleted = 1, , UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
                             result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
                     }
@@ -227,17 +229,21 @@ namespace RocketPOS.Repository
                                 " ,IngredientId = " + item.IngredientId +
                                 " ,IntgredientQty = " + item.Quantity +
                                 " ,ConsumptionStatus = " + consumptionId +
+                                " ,UserIdUpdated = " + LoginInfo.Userid +
+                                " ,DateUpdated = GetUTCDate()," +
+                                " ,IsDeleted = 0" +
                                 " where id = " + item.InventoryTransferId + ";";
                         }
                         else
                         {
                             queryDetails = "INSERT INTO InventoryTransferIngredient" +
-                                                  " (InventoryTransferId, IngredientId,IntgredientQty,ConsumptionStatus,UserIdUpdated,IsDeleted)   " +
+                                                  " (InventoryTransferId, IngredientId,IntgredientQty,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryTransferModel.Id + "," +
                                                   "" + item.IngredientId + "," +
                                                   "" + item.Quantity + "," +
-                                                  "" + consumptionId + ",1,0)";
+                                                  "" + consumptionId + "," +
+                                                  "" + LoginInfo.Userid + ",GetUTCDate(),0)";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }

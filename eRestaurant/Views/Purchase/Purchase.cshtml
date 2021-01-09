@@ -65,24 +65,30 @@
                                                                 <span asp-validation-for="IngredientId" class="text-danger"></span>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label">Unit Price</label>
                                                                 <input class="form-control text-right" type="number" placeholder="0.00" id="UnitPrice" />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label">Quantity</label>
                                                                 <input class="form-control text-right" type="text" placeholder="0.00" id="Quantity" />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label"></label>
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
                                                                 <input class="form-control" type="hidden" id="PurchaseId" value="0" />
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div class="form-group">
+                                                                <label class="control-label"></label>
+                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -144,7 +150,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>

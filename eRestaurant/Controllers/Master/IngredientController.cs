@@ -17,7 +17,7 @@ namespace RocketPOS.Controllers
         private readonly IIngredientService _iIngredientService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
-        private LocService _locService;
+        private readonly LocService _locService;
 
         public IngredientController(IIngredientService ingredientService,
             IDropDownService idropDownService,

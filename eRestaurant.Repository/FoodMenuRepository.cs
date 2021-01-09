@@ -28,7 +28,7 @@ namespace RocketPOS.Repository
             {
                 var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             "SalesPrice, FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, "+
-                            "Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 " +
+                            "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 " +
                             "ORDER BY FoodMenuName ";
                 FoodMenuModel = con.Query<FoodMenuModel>(query).ToList();
             }
@@ -39,6 +39,7 @@ namespace RocketPOS.Repository
         public int InsertFoodMenu(FoodMenuModel foodMenuModel)
         {
             int result = 0;
+            int detailsResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -50,9 +51,22 @@ namespace RocketPOS.Repository
                     "(  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @ColourCode, @BigThumb, @MediumThumb, @SmallThumb,@SalesPrice, @Notes, " +
                     "@IsVegItem, @IsBeverages,@FoodVat,@Foodcess, @OfferIsAvailable,  @Position,  @OutletId, @IsActive)" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
+                
                 result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
+                {
+                    
+                    foreach (var item in foodMenuModel.FoodMenuDetails)
+                    {
+                        var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption) values (" +
+                            "" + result + "," +
+                            "" + item.IngredientId + "," +
+                            "" + item.Consumption + "); SELECT CAST(SCOPE_IDENTITY() as INT);";
+                        detailsResult = con.Execute(detailsQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                    }
+                }
+                if (detailsResult > 0)
                 {
                     sqltrans.Commit();
                 }

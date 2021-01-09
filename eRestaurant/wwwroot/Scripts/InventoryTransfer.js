@@ -100,7 +100,6 @@ function saveOrder(data) {
 };
 
 $(function () {
-
     $('#saveOrder').click(function () {
         var message = validation(1);
         if (message == '') {
@@ -141,7 +140,6 @@ $(function () {
                 }).fail(function (err) {
                     console.log(err);
                 });
-
             });
         }
         else {
@@ -164,14 +162,14 @@ $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
 
-function deleteOrderItem(id) {
-    return $.ajax({
-        dataType: "json",
-        type: "GET",
-        url: "/InventoryTransfer/DeleteInventoryTransferDetails",
-        data: "InventoryTransferId=" + id
-    });
-}
+//function deleteOrderItem(id) {
+//    return $.ajax({
+//        dataType: "json",
+//        type: "GET",
+//        url: "/InventoryTransfer/DeleteInventoryTransferDetails",
+//        data: "InventoryTransferId=" + id
+//    });
+//}
 
 function deleteOrder(id, rowId) {
     for (var i = 0; i < dataArr.length; i++) {
@@ -230,33 +228,34 @@ function validation(id) {
     else if ($("#EmployeeId").val() == '' || $("#EmployeeId").val() == '0') {
         message = "Select Supplier"
     }
-
-    if (id == 1) {
-        if (!InventoryTransferDatatable.data().any() || InventoryTransferDatatable.data().row == null) {
-            var message = 'At least one detail should be entered'
-            return message;
-        }
-        if ($("#Notes").val() == '') {
-            message = "Enter reason"
-            return message;
-        }
-    }
     else {
-        if (id == 0) {
-            if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-                message = "Select ingredient"
+        if (id == 1) {
+            if (!InventoryTransferDatatable.data().any() || InventoryTransferDatatable.data().row == null) {
+                var message = 'At least one detail should be entered'
+                return message;
             }
-            else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
-                message = "Enter Quantity"
+            if ($("#Notes").val() == '') {
+                message = "Enter reason"
+                return message;
             }
-            else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
-                message = "Select Comsumption Status"
-            }
+        }
+        else {
+            if (id == 0) {
+                if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
+                    message = "Select ingredient"
+                }
+                else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+                    message = "Enter Quantity"
+                }
+                else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
+                    message = "Select Comsumption Status"
+                }
 
-            for (var i = 0; i < dataArr.length; i++) {
-                if ($("#IngredientId").val() == dataArr[i].ingredientId) {
-                    message = "Ingredient already selected!"
-                    break;
+                for (var i = 0; i < dataArr.length; i++) {
+                    if ($("#IngredientId").val() == dataArr[i].ingredientId) {
+                        message = "Ingredient already selected!"
+                        break;
+                    }
                 }
             }
         }

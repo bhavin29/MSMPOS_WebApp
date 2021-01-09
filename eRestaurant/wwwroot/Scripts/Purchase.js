@@ -1,4 +1,6 @@
 ﻿var PurchaseDatatable;
+var editDataArr = [];
+var deletedId = [];
 
 $(document).ready(function () {
     $("#purchase").validate();
@@ -30,35 +32,51 @@ $(document).ready(function () {
     });
 });
 
+$('#cancel').on('click', function (e) {
+    debugger;
+    e.preventDefault();
+    GrandTotal += editDataArr[0].total;
+    $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(4));
+    DueAmount();
+    clearItem();
+    dataArr.push(editDataArr[0]);
+    editDataArr = [];
+});
+
 $('#addRow').on('click', function (e) {
     e.preventDefault();
-    var message = validation();
+    var message = validation(0);
+
+    var Qty = parseFloat($("#Quantity").val()).toFixed(4);
+    var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(4);
+    var Total = parseFloat($("#UnitPrice").val() * $("#Quantity").val()).toFixed(4);
+
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
         var rowNode = PurchaseDatatable.row.add([
             '<td class="text-right">' + $("#IngredientId").val() + ' </td>',
             $('#IngredientId').children("option:selected").text(),
-            '<td class="text-right">' + $("#UnitPrice").val()  + ' </td>',
-            '<td class="text-right">' + $("#Quantity").val() + ' </td>',
-            '<td class="text-right">' + $("#UnitPrice").val() * $("#Quantity").val() + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > '+
-            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
-            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">'+
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() +',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
+            '<td class="text-right">' + UnitPrice + ' </td>',
+            '<td class="text-right">' + Qty + ' </td>',
+            '<td class="text-right">' + Total + ' </td>',
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
+            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val()
         ]).draw(false).nodes();
         dataArr.push({
             ingredientId: $("#IngredientId").val(),
-            unitPrice: $("#UnitPrice").val(),
-            quantity: $("#Quantity").val(),
-            total: $("#UnitPrice").val() * $("#Quantity").val(),
+            unitPrice: UnitPrice,
+            quantity: Qty,
+            total: Total,
             purchaseId: $("#PurchaseId").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
         GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
-        $("#GrandTotal").val(GrandTotal);
+        $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(4));
         DueAmount();
         clearItem();
         $("#IngredientId").focus();
@@ -85,17 +103,11 @@ function saveOrder(data) {
 };
 
 $(function () {
-    $('#saveOrder').click(function (e) {
-        e.preventDefault();
-        if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
-            var message = 'At least one order should be entered'
-            $(".modal-body").text(message);
-            $("#save").hide();
-            jQuery.noConflict();
-            $("#aModal").modal('show');
-        }
-        else {
+    $('#saveOrder').click(function () {
+        var message = validation(1);
+        if (message == '') {
             $("#purchase").on("submit", function (e) {
+                e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
@@ -106,7 +118,8 @@ $(function () {
                     Paid: $("#Paid").val(),
                     SupplierList: [],
                     IngredientList: [],
-                    PurchaseDetails: dataArr
+                    PurchaseDetails: dataArr,
+                    DeletedId: deletedId
                 });
                 $.when(saveOrder(data)).then(function (response) {
                     if (response.status == "200") {
@@ -132,6 +145,7 @@ $(function () {
         }
     })
 });
+
 $("#save").click(function () {
     window.location.href = "/Purchase/PurchaseList";
 });
@@ -140,53 +154,20 @@ $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
 
-function deleteOrderItem(id) {
-    return $.ajax({
-        dataType: "json",
-        type: "GET",
-        url: "/Purchase/DeletePurchaseDetails",
-        data: "purchaseId=" + id
-    });
-}
-
 function deleteOrder(purchaseId, ingredientId, rowId) {
     var id = ingredientId;
-    if (purchaseId == "0") {
-        for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].ingredientId == id) {
-                TotalAmount = dataArr[i].total;
-                GrandTotal -= TotalAmount;
-                $("#GrandTotal").val(GrandTotal);
-                DueAmount();
-                dataArr.splice(i, 1);
-                PurchaseDatatable.row(rowId).remove().draw(false);
-                jQuery.noConflict();
-                $("#myModal0").modal('hide');
-            }
+    for (var i = 0; i < dataArr.length; i++) {
+        if (dataArr[i].ingredientId == id) {
+            TotalAmount = dataArr[i].total;
+            GrandTotal -= TotalAmount;
+            $("#GrandTotal").val(GrandTotal);
+            DueAmount();
+            deletedId.push(dataArr[i].purchaseId);
+            dataArr.splice(i, 1);
+            PurchaseDatatable.row(rowId).remove().draw(false);
+            jQuery.noConflict();
+            $("#myModal" + purchaseId).modal('hide');
         }
-    }
-    else {
-        $.when(deleteOrderItem(purchaseId).then(function (res) {
-            console.log(res)
-            if (res.status == 200) {
-                debugger;
-                for (var i = 0; i < dataArr.length; i++) {
-                    if (dataArr[i].ingredientId == id) {
-                        TotalAmount = dataArr[i].total;
-                        GrandTotal -= TotalAmount;
-                        $("#GrandTotal").val(GrandTotal);
-                        DueAmount();
-                        dataArr.splice(i, 1);
-                        PurchaseDatatable.row(rowId).remove().draw(false);
-                        jQuery.noConflict();
-                        $("#myModal2" + rowId).modal('hide');
-                    }
-                }
-                console.log(res);
-            }
-        }).fail(function (err) {
-            console.log(err);
-        }));
     }
 };
 
@@ -200,6 +181,9 @@ $(document).on('click', 'a.editItem', function (e) {
     }
     else {
         e.preventDefault();
+        if (editDataArr.length > 0) {
+            dataArr.push(editDataArr[0]);
+        }
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
         }
@@ -215,13 +199,11 @@ $(document).on('click', 'a.editItem', function (e) {
                     $("#Quantity").val(dataArr[i].quantity),
                     $("#PurchaseId").val(dataArr[i].purchaseId)
                 GrandTotal = $("#GrandTotal").val();
-
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
                 $("#GrandTotal").val(GrandTotal);
                 DueAmount();
-                dataArr.splice(i, 1);
-                $(this).remove();
+                editDataArr = dataArr.splice(i, 1);
             }
         }
     }
@@ -237,28 +219,44 @@ function DueAmount() {
     $("#Due").val(Due);
 }
 
-function validation() {
+function validation(id) {
     var message = '';
-    if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-        message = "Select ingredient"
+    if ($("#SupplierId").val() == '' || $("#SupplierId").val() == '0') {
+        message = "Select Supplier"
+        return message;
     }
-    else if ($("#UnitPrice").val() == '' || $("#UnitPrice").val() == 0) {
-        message = "Enter unit price"
+
+    if (id == 1) {
+        if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
+            var message = 'At least one order should be entered'
+            return message;
+        }
     }
-    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
-        message = "Enter quantity"
-    }
-    for (var i = 0; i < dataArr.length; i++) {
-        if ($("#IngredientId").val() == dataArr[i].ingredientId) {
-            message = "Ingredient already selected!"
-            break;
+    else {
+        if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
+            message = "Select ingredient"
+            return message;
+        }
+        else if ($("#UnitPrice").val() == '' || $("#UnitPrice").val() == 0) {
+            message = "Enter unit price"
+            return message;
+        }
+        else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+            message = "Enter quantity"
+            return message;
+        }
+        for (var i = 0; i < dataArr.length; i++) {
+            if ($("#IngredientId").val() == dataArr[i].ingredientId) {
+                message = "Ingredient already selected!"
+                break;
+            }
         }
     }
     return message;
 }
 
 function clearItem() {
-    $("#IngredientId").val(''),
+    $("#IngredientId").val('0'),
         $("#UnitPrice").val(''),
         $("#Quantity").val(''),
         $("#Amount").val(''),

@@ -45,7 +45,7 @@ namespace RocketPOS.Models
         public decimal FoodMenuIdForLostAmount { get; set; }
         public decimal IngredientIdForLostAmount { get; set; }
 
-
+        public string[] DeletedId { get; set; }
 
     }
     public class    WasteDetailModel

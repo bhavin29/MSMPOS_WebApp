@@ -1,6 +1,8 @@
 ﻿var WasteDatatable;
 var FoodManuLostAmount = 0;
 var IngredientLostAmount = 0;
+var editDataArr = [];
+var deletedId = [];
 $(document).ready(function () {
     $("#Waste").validate();
     WasteDatatable = $('#WasteOrderDetails').DataTable({
@@ -35,6 +37,14 @@ $(document).ready(function () {
     });
 });
 
+$('#Cancle').on('click', function (e) {
+    e.preventDefault();
+    TotalLossAmount += editDataArr[0].lossAmount;
+    $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(4));
+    clearItem();
+    $("#FoodMenuId").focus();
+})
+
 $('#addRow').on('click', function (e) {
     e.preventDefault();
     var message = validation(0);
@@ -57,22 +67,24 @@ $('#addRow').on('click', function (e) {
             IngredietnName = $('#IngredientId').children("option:selected").text();
         }
 
+        var Qty = parseFloat($("#Quantity").val()).toFixed(2);
+        var LossAmount = parseFloat($("#LossAmount").val()).toFixed(4);
+
         WasteDatatable.row('.active').remove().draw(false);
         var rowNode = WasteDatatable.row.add([
-            $("#FoodMenuId").val(),
-            FoodMenuName,
-            $("#IngredientId").val(),
-            IngredietnName,
-            '<td class="text-right">' + $("#Quantity").val() + ' </td>',
-            '<td class="text-right">' + $("#LossAmount").val() + ' </td>',
-            $("#WasteId").val(),
+            '<td>' + $("#FoodMenuId").val() + '</td>',
+            '<td>' + FoodMenuName + '</td>',
+            '<td>' + $("#IngredientId").val() + '</td>',
+            '<td>' + IngredietnName + '</td>',
+            '<td class="text-right">' + Qty + ' </td>',
+            '<td class="text-right">' + LossAmount + ' </td>',
+            '<td>' + $("#WasteId").val() + '</td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + dataItemId + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + myModal + '"><i class="fa fa-times"></i></a></div></td > ' +
             '<div class="modal fade" id="myModal' + myModal + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + dataItemId + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ', ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
         ]).node().id = rowId;
         WasteDatatable.draw(false);
-
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
             ingredientId: $("#IngredientId").val(),
@@ -86,9 +98,8 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
 
-        // $('#WasteOrderDetails').find('tr').attr('id', myModal);
-        TotalLossAmount += parseFloat($("#LossAmount").val());
-        $("#TotalLossAmount").val(TotalLossAmount);
+        TotalLossAmount += ($("#LossAmount").val() * 1);
+        $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(4));
         clearItem();
         $("#FoodMenuId").focus();
     }
@@ -101,10 +112,6 @@ $('#addRow').on('click', function (e) {
     }
 });
 
-$('#Cancle').on('click', function (e) {
-    e.preventDefault();
-    clearItem();
-})
 function saveOrder(data) {
     return $.ajax({
         dataType: 'json',
@@ -118,7 +125,7 @@ function saveOrder(data) {
 };
 
 $(function () {
-    $('#saveOrder').click(function (e) {
+    $('#saveOrder').click(function () {
         var message = validation(1);
         if (message == '') {
             $("#waste").on("submit", function (e) {
@@ -134,7 +141,8 @@ $(function () {
                     WasteStatus: $("#WasteStatus").val(),
                     EmployeeList: [],
                     IngredientList: [],
-                    WasteDetail: dataArr
+                    WasteDetail: dataArr,
+                    DeletedId: deletedId
                 });
                 $.when(saveOrder(data)).then(function (response) {
                     if (response.status == "200") {
@@ -186,45 +194,41 @@ function deleteOrderItem(id) {
 }
 
 function deleteOrder(wasteId, ingredientId, foodMenuId, rowId) {
-    //var id = $(this).attr('data-itemId');
-    //var val = id.split("|");
-    var deletedataArr = []
-    if (wasteId == "0") {
-        for (var i = 0; i < dataArr.length; i++) {
-            if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
-                LossAmount = dataArr[i].lossAmount;
-                TotalLossAmount -= LossAmount;
-                $("#TotalLossAmount").val(TotalLossAmount);
-                //deletedataArr = dataArr.slice(i, i);
-                dataArr.splice(i, 1);
-                WasteDatatable.row(rowId).remove().draw(false);
-                jQuery.noConflict();
-                $("#myModal0").modal('hide');
-            }
+    for (var i = 0; i < dataArr.length; i++) {
+        if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
+            LossAmount = dataArr[i].lossAmount;
+            TotalLossAmount -= LossAmount;
+            $("#TotalLossAmount").val(TotalLossAmount);
+            deletedId.push(wasteId + "|" + foodMenuId + "|" + ingredientId);
+            dataArr.splice(i, 1);
+            WasteDatatable.row(rowId).remove().draw(false);
+            jQuery.noConflict();
+            $("#myModal" + wasteId).modal('hide');
         }
     }
-    else {
-        $.when(deleteOrderItem(wasteId + "|" + foodMenuId + "|" + ingredientId).then(function (res) {
-            console.log(res)
-            if (res.status == 200) {
-                for (var i = 0; i < dataArr.length; i++) {
-                    if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
-                        TotalAmount = dataArr[i].lossAmount;
-                        TotalLossAmount -= TotalAmount;
-                        $("#TotalLossAmount").val(TotalLossAmount);
-                        dataArr.splice(i, 1);
-                        WasteDatatable.row(rowId).remove().draw(false);
-                        jQuery.noConflict();
-                        $("#myModal" + i).modal('hide');
-                    }
-                }
-                console.log(res);
-            }
-        }).fail(function (err) {
-            console.log(err);
-        }));
-    }
 };
+//else {
+//    $.when(deleteOrderItem(wasteId + "|" + foodMenuId + "|" + ingredientId).then(function (res) {
+//        console.log(res)
+//        if (res.status == 200) {
+//            for (var i = 0; i < dataArr.length; i++) {
+//                if (dataArr[i].ingredientId == ingredientId && dataArr[i].foodMenuId == foodMenuId) {
+//                    TotalAmount = dataArr[i].lossAmount;
+//                    TotalLossAmount -= TotalAmount;
+//                    $("#TotalLossAmount").val(TotalLossAmount);
+//                    dataArr.splice(i, 1);
+//                    WasteDatatable.row(rowId).remove().draw(false);
+//                    jQuery.noConflict();
+//                    $("#myModal" + i).modal('hide');
+//                }
+//            }
+//            console.log(res);
+//        }
+//    }).fail(function (err) {
+//        console.log(err);
+//    }));
+//}
+//};
 
 $(document).on('click', 'a.editItem', function (e) {
     if (!WasteDatatable.data().any() || WasteDatatable.data().row == null) {

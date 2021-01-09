@@ -25,6 +25,7 @@ namespace RocketPOS.Models
         public decimal Paid { get; set; }
         public string Message { get; set; }
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
+        public int[] DeletedId { get; set; }
     }
    
     public class PurchaseDetailsModel

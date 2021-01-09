@@ -20,56 +20,71 @@
                     <h2>Register Report</h2>
                 </div>*@
 
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead role="row">
-                                    <tr>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.RegisterTitle)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.RegisterValue)
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tfoot role="row">
-                                    <tr>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.RegisterTitle)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.RegisterValue)
-                                        </th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RegisterTitle)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RegisterValue)
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-       
-            @*</div>
+<script type="text/javascript">
+
+    function PrintPartOfPage(dvprintid) {
+        alert("Pop-up dialog-box");
+        var prtContent = document.getElementById(dvprintid);
+        var WinPrint = window.open('', '', 'letf=100,top=100,width=600,height=600');
+        debugger;
+        WinPrint.document.write(prtContent.innerHTML);
+        WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        //WinPrint.close()
+    }
+
+</script>
+
+<div class="table-responsive">
+    <input type="button" onclick="PrintPartOfPage('basic-datatables_wrapper')" value="Print Portion" />
+    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+        <div class="col-sm-12">
+            <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                <thead role="row">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterTitle)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterValue)
+                        </th>
+                    </tr>
+                </thead>
+                <tfoot role="row">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterTitle)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.RegisterValue)
+                        </th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegisterTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RegisterValue)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-</div>*@
+
+
 
 @section Scripts {
     <script>
+      
+
         $(document).ready(function () {
             $('#OutletRegisterReport').DataTable({
                 dom: 'Bfrtip',
@@ -81,5 +96,7 @@
                 ]
             });
         });
+
+ 
     </script>
 }

@@ -284,6 +284,7 @@
         </div>
 
         <!-- Sidebar -->
+
         <div class="sidebar sidebar-style-2">
             <div class="sidebar-wrapper scrollbar scrollbar-inner">
                 <div class="sidebar-content">
@@ -328,31 +329,6 @@
                                 <i class="fas fa-home"></i>
                                 <p>Dashboard</p>
                                 <span class="caret"></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Report" asp-action="purchase">
-                                <span class="sub-item">Purchase Report</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
-                                <span class="sub-item">Register Report</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Waste" asp-action="WasteList">
-                                <span class="sub-item">Waste</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
-                                <span class="sub-item">Adjustment</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
-                                <span class="sub-item">Transfer</span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -410,8 +386,8 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
-                                            <span class="sub-item">Store Transfer</span>
+                                        <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
+                                            <span class="sub-item">Transfer</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -426,18 +402,13 @@
                             <div class="collapse" id="Reports">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
-                                            <span class="sub-item">Inventory</span>
+                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
+                                            <span class="sub-item">Purchase</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a asp-area="" asp-controller="InventoryAdjustment" asp-action="Index">
-                                            <span class="sub-item">Adjustment</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
-                                            <span class="sub-item">Store Transfer</span>
+                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
+                                            <span class="sub-item">Register Report</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -551,6 +522,8 @@
                 </div>
             </div>
         </div>
+
+
         <!-- End Sidebar -->
         <div class="main-panel">
             <div class="content">

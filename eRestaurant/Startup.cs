@@ -145,6 +145,9 @@ namespace RocketPOS
             services.AddScoped<IOutletRegisterRepository, OutletRegisterRepository>();
             services.AddScoped<IOutletRegisterService, OutletRegisterService>();
 
+            services.AddScoped<ILoginRepository, LoginRepository>();
+            services.AddScoped<ILoginService, LoginService>();
+
             services.AddHttpClient();
         }
 
@@ -189,7 +192,7 @@ namespace RocketPOS
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Index}/{id?}");
             });
 
 

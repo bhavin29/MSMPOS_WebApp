@@ -17,7 +17,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IFoodMenuService _iFoodMenuService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
-        private LocService _locService;
+        private readonly LocService _locService;
 
         public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
@@ -43,6 +43,7 @@ namespace RocketPOS.Controllers.Master
                 foodMenuModel = _iFoodMenuService.GetFoodMenueById(foodMenuId);
             }
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            foodMenuModel.IngredientList = _iDropDownService.GetIngredientList();
 
             return View(foodMenuModel);
         }

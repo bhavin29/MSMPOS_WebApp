@@ -6,6 +6,7 @@ using Dapper;
 using RocketPOS.Interface.Repository;
 using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Repository
 {
@@ -47,6 +48,7 @@ namespace RocketPOS.Repository
         public int InsertPurchase(PurchaseModel purchaseModel)
         {
             int result = 0;
+            int detailResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -76,14 +78,14 @@ namespace RocketPOS.Repository
                              "   @Paid,      " +
                              "   @Due,       " +
                              "   'Notes'," +
-                             "   1,   " +
+                             "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
                 result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
-                    int detailResult = 0;
+                   
                     foreach (var item in purchaseModel.PurchaseDetails)
                     {
                         var queryDetails = "INSERT INTO [dbo].[PurchaseIngredient]" +
@@ -101,10 +103,10 @@ namespace RocketPOS.Repository
                                               "" + item.IngredientId + "," +
                                               "" + item.UnitPrice + "," +
                                               "" + item.Quantity + "," +
+                                              "" + item.Total + ",0," +
                                               "" + item.Total + "," +
-                                              "0," +
-                                              "" + item.Total + ",1,0);";
-                        detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseNumber as INT) from Purchase where id = " + result + "; ";
+                        detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
 
@@ -123,8 +125,7 @@ namespace RocketPOS.Repository
                 }
             }
 
-            return result;
-
+            return detailResult;
         }
         public int UpdatePurchase(PurchaseModel purchaseModel)
         {
@@ -140,13 +141,21 @@ namespace RocketPOS.Repository
                              "  ,[GrandTotal]  = @GrandTotal   " +
                              "  ,[PaidAmount] = @Paid    " +
                              "  ,[DueAmount] =  @Due    " +
-                             "  ,[UserIdUpdated] = 1 " +
+                             "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
                              "  ,[DateUpdated]  = GetUtcDate()  where id= " + purchaseModel.Id + ";";
                 result = con.Execute(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
                     int detailResult = 0;
+                    if (purchaseModel.DeletedId != null)
+                    {
+                        foreach (var item in purchaseModel.DeletedId)
+                        {
+                            var deleteQuery = $"update PurchaseIngredient set IsDeleted = 1, UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
+                            result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                    }
                     foreach (var item in purchaseModel.PurchaseDetails)
                     {
                         var queryDetails = string.Empty;
@@ -157,7 +166,10 @@ namespace RocketPOS.Repository
                                                  " [UnitPrice]   = " + item.UnitPrice + "," +
                                                  " [Qty]        =  " + item.Quantity + "," +
                                                  " [GrossAmount] = " + item.Total + "," +
-                                                 " [TotalAmount] = " + item.Total + " where id = "+ item.PurchaseId +";";
+                                                 " [TotalAmount] = " + item.Total + "," +
+                                                 " [UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                                 " [DateUpdated] = GetUTCDate() " +
+                                                 " where id = " + item.PurchaseId + ";";
                         }
                         else
                         {
@@ -169,16 +181,16 @@ namespace RocketPOS.Repository
                                                   " ,[GrossAmount]  " +
                                                   " ,[TaxAmount]    " +
                                                   " ,[TotalAmount]  " +
-                                                  " ,[UserIdUpdated]" +
-                                                  " ,[IsDeleted])   " +
-                                                  "VALUES           " +
+                                                  " ,[UserIdUpdated] ) " +
+                                                  " VALUES           " +
                                                   "(" + purchaseModel.Id + "," +
                                                   "" + item.IngredientId + "," +
                                                   "" + item.UnitPrice + "," +
                                                   "" + item.Quantity + "," +
                                                   "" + item.Total + "," +
                                                   "0," +
-                                                  "" + item.Total + ",1,0); ";
+                                                  "" + item.Total + "," +
+                                                  "" + LoginInfo.Userid + "); ";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }

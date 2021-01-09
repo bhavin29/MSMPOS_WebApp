@@ -8,7 +8,6 @@ using RocketPOS.Interface.Repository;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using RocketPOS.Interface.Repository;
 
 namespace RocketPOS.Repository 
 {

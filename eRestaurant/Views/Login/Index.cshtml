@@ -13,7 +13,7 @@
     <meta name="author" content="">
     <link rel="icon" href="~/img/icon.ico" type="image/x-icon" />
 
-    <title>Signin For RocketPOS</title>
+    <title>Login to RocketPOS</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.1/examples/sign-in/">
 
@@ -24,22 +24,52 @@
     <link href="~/css/singin.css" rel="stylesheet">
 </head>
 
-<body class="text-center">
-    <form class="form-signin">
-        <img class="mb-4" src="~/img/Mainwindow_Logo.bmp" alt="" style="width:auto">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-        <label for="inputPassword" class="sr-only">Password</label>
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
+<body>
+    <div class="page-inner">
+        <div class="col-md-auto">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-signin">
+                                <table>
+                                    <tr>
+                                        <img class="mb-4" src="~/img/Mainwindow_Logo.bmp" alt="" style="width:auto">
+                                    </tr>
+                                    <tr>
+                                        <div class="form-group">
+                                            <label for="inputEmail" class="control-label">Username</label>
+                                            @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                        <div class="form-group">
+                                            <label for="inputPassword" class="control-label">Password</label>
+                                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                        <div class="checkbox mb-3">
+                                            <label>
+                                                <input type="checkbox" value="remember-me"> Remember me
+                                            </label>
+                                        </div>
+                                    </tr>
+                                    <tr>
+                                        <button asp-page-handler="LogIn" class="btn btn-lg btn-primary btn-block">Sign in</button>
+                                    </tr>
+                                </table>
+                            </form>
+
+                            <p class="mt-5 mb-3 text-muted">&copy; RocketPOS 2021-2022</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <button asp-page-handler="LogIn" class="btn btn-lg btn-primary btn-block">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2021-2022</p>
-    </form>
+    </div>
+
     <div class="modal fade" id="vModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -62,9 +92,9 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
             <script type="text/javascript">
-            $(function () {
-                $("#vModal").modal('show');
-            });
+                $(function () {
+                    $("#vModal").modal('show');
+                });
             </script>
         }
     }

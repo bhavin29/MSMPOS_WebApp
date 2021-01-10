@@ -35,7 +35,7 @@ namespace RocketPOS.Controllers
                 }
                 else
                 {
-                    ViewBag.Validate = "UserName and Password Not Match";
+                    ViewBag.Validate = "Invalid Username or Password!!!";
                 }
             }
             return View();

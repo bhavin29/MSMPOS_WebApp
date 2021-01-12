@@ -59,9 +59,9 @@ $('#addRow').on('click', function (e) {
         FoodManuDetailsDatatable.draw(false);
         dataArr.push({
             ingredientId: $("#IngredientId").val(),
-            consumption: $("#Consumption").val(),
+            Consumption: $("#Consumption").val(),
             ingredientName: $('#IngredientId').children("option:selected").text(),
-            foodManuId: $("#FoodMenuId").val()
+            foodMenuId: $("#FoodMenuId").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -79,6 +79,7 @@ $('#addRow').on('click', function (e) {
 });
 
 function saveOrder(data) {
+    console.log(data);
     return $.ajax({
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -92,9 +93,11 @@ function saveOrder(data) {
 
 $(function () {
     $('#saveOrder').click(function () {
+        debugger;
         var message = validation(1);
         if (message == '') {
-            $("#FoodMenu").on("submit", function (e) {
+            $("#foodMenu").on("submit", function (e) {
+                debugger;
                 e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
@@ -119,7 +122,7 @@ $(function () {
                     IngredientId: $("#IngredientId").val(),
                     IngredientList: [],
                     FoodCategoryList: [],
-                    InventoryAdjustmentDetail: dataArr,
+                    FoodMenuDetails: dataArr,
                     DeletedId: deletedId
                 });
                 $.when(saveOrder(data)).then(function (response) {
@@ -196,7 +199,7 @@ $(document).on('click', 'a.editItem', function (e) {
             if (dataArr[i].ingredientId == id) {
                 $("#IngredientId").val(dataArr[i].ingredientId),
                     $("#Consumption").val(dataArr[i].consumption),
-                    $("#FoodMenuId").val(dataArr[i].foodManuId);
+                    $("#FoodMenuId").val(dataArr[i].foodMenuId);
                 editDataArr = dataArr.splice(i, 1);
             }
         }

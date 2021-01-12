@@ -8,6 +8,7 @@ using RocketPOS.Interface.Repository;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Repository
 {
@@ -36,6 +37,37 @@ namespace RocketPOS.Repository
             return FoodMenuModel;
         }
 
+        public List<FoodMenuModel> GetFoodMenuById(long foodMenuId)
+        {
+            List<FoodMenuModel> foodManuModelList = new List<FoodMenuModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                            "SalesPrice, FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
+                            "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 and " +
+                            " FM.Id = " + foodMenuId +
+                            " ORDER BY FoodMenuName;";
+
+                foodManuModelList = con.Query<FoodMenuModel>(query).AsList();
+            }
+            return foodManuModelList;
+        }
+
+        public List<FoodManuDetailsModel> GetFoodMenuDetails(long foodMenuId)
+        {
+            List<FoodManuDetailsModel> foodMenuDetails = new List<FoodManuDetailsModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+
+                var query = "select FoodMenuId,IngredientId,i.ingredientName,Consumption from FoodmenuIngredient as a inner join foodmenu b on " +
+                    "a.foodMenuId = b.id inner join ingredient as i on a.IngredientId = i.id where b.id = " + foodMenuId + ";";
+
+                foodMenuDetails = con.Query<FoodManuDetailsModel>(query).AsList();
+            }
+
+            return foodMenuDetails;
+        }
+
         public int InsertFoodMenu(FoodMenuModel foodMenuModel)
         {
             int result = 0;
@@ -52,7 +84,7 @@ namespace RocketPOS.Repository
                     "@IsVegItem, @IsBeverages,@FoodVat,@Foodcess, @OfferIsAvailable,  @Position,  @OutletId, @IsActive)" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 
-                result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
+                result = con.ExecuteScalar<int>(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
@@ -82,28 +114,78 @@ namespace RocketPOS.Repository
         public int UpdateFoodMenu(FoodMenuModel foodMenuModel)
         {
             int result = 0;
+            int detailsResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE FoodMenu SET "+
-                     "FoodCategoryId=@FoodCategoryId, FoodMenuName=@FoodMenuName, FoodMenuCode=@FoodMenuCode, ColourCode=@ColourCode,"+
-                     "BigThumb=@BigThumb, MediumThumb=@MediumThumb, SmallThumb=@SmallThumb,SalesPrice=@SalesPrice, Notes=@Notes, "+
-                     "IsVegItem=@IsVegItem, IsBeverages=@IsBeverages,FoodVat=@FoodVat, Foodcess=@Foodcess, OfferIsAvailable=@OfferIsAvailable,"+
-                     "Position=@Position, OutletId=@OutletId, IsActive=@IsActive "+
-                    "WHERE Id = @Id;";
+                var query = "UPDATE FoodMenu SET " +
+                     "FoodCategoryId=@FoodCategoryId, " +
+                     "FoodMenuName=@FoodMenuName, " +
+                     "FoodMenuCode=@FoodMenuCode, " +
+                     "ColourCode=@ColourCode," +
+                     "BigThumb=@BigThumb, " +
+                     "MediumThumb=@MediumThumb, " +
+                     "SmallThumb=@SmallThumb, " +
+                     "SalesPrice=@SalesPrice, " +
+                     "Notes=@Notes, " +
+                     "IsVegItem=@IsVegItem, " +
+                     "IsBeverages=@IsBeverages,FoodVat=@FoodVat, " +
+                     "Foodcess=@Foodcess, " +
+                     "OfferIsAvailable=@OfferIsAvailable," +
+                     "Position=@Position, " +
+                     "OutletId=@OutletId, " +
+                     "IsActive=@IsActive " +
+                     ",[UserIdUpdated] = " + LoginInfo.Userid + " " +
+                     ",[DateUpdated]  = GetUtcDate() WHERE Id = @Id;";
                 result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
                 {
-                    sqltrans.Commit();
+                    int detailResult = 0;
+                    if (foodMenuModel.DeletedId != null)
+                    {
+                        foreach (var item in foodMenuModel.DeletedId)
+                        {
+                            var deleteQuery = $"update FoodMenuIngredient set IsDeleted = 1, UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
+                            result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                    }
+                    foreach (var item in foodMenuModel.FoodMenuDetails)
+                    {
+                        var queryDetails = string.Empty;
+                        if (item.FoodMenuId > 0)
+                        {
+                            queryDetails = "Update [dbo].[FoodMenuIngredient] set " +
+                                                 " [FoodMenuId]  = " + item.FoodMenuId + "," +
+                                                 " [IngredientId]   = " + item.IngredientId + "," +
+                                                 " [Consumption]        =  " + item.Consumption + "," +
+                                                 " [UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                                 " [DateUpdated] = GetUTCDate() " +
+                                                 " where id = " + item.FoodMenuId + ";";
+                        }
+                        else
+                        {
+                            var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption,[UserIdUpdated] ) values (" +
+                           "" + foodMenuModel.Id + "," +
+                           "" + item.IngredientId + "," +
+                           "" + item.Consumption + "," +
+                            "" + LoginInfo.Userid + "); ";
+                        }
+                        detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                    }
+
+                    if (result > 0)
+                    {
+                        sqltrans.Commit();
+                    }
+                    else
+                    {
+                        sqltrans.Rollback();
+                    }
                 }
-                else
-                {
-                    sqltrans.Rollback();
-                }
+                return result;
             }
-            return result;
         }
 
         public int DeleteFoodMenu(int foodMenuId)

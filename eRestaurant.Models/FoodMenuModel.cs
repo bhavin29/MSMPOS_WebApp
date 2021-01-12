@@ -40,23 +40,20 @@ namespace RocketPOS.Models
         public decimal Consumption { get; set; }
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
-
-        public string Message { get; set; }
         public List<FoodManuDetailsModel> FoodMenuDetails { get; set; }
         public int[] DeletedId { get; set; }
-
-        public class FoodManuDetailsModel
-        {
-            public long FoodMenuId { get; set; }
-            public int IngredientId { get; set; }
-            public string IngredientName { get; set; }
-            public decimal Consumption { get; set; }
-        }
 
         public FoodMenuModel()
         {
             IsActive = true;
         }
+    }
+    public class FoodManuDetailsModel
+    {
+        public long FoodMenuId { get; set; }
+        public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
+        public decimal Consumption { get; set; }
     }
 }
 

@@ -11,37 +11,45 @@ namespace RocketPOS.Services
 {
     public class FoodMenuService : IFoodMenuService
     {
-        private readonly IFoodMenuRpository _IFoodMenuReportsitory;
+        private readonly IFoodMenuRpository _iFoodMenuReportsitory;
 
         public FoodMenuService(IFoodMenuRpository iAddondRepository)
         {
-            _IFoodMenuReportsitory = iAddondRepository;
+            _iFoodMenuReportsitory = iAddondRepository;
         }
 
         public List<FoodMenuModel> GetFoodMenuList()
         {
 
-            return _IFoodMenuReportsitory.GetFoodMenuList();
+            return _iFoodMenuReportsitory.GetFoodMenuList();
         }
 
         public int InsertFoodMenu(FoodMenuModel FoodMenuModel)
         {
-            return _IFoodMenuReportsitory.InsertFoodMenu(FoodMenuModel);
+            return _iFoodMenuReportsitory.InsertFoodMenu(FoodMenuModel);
         }
 
         public int UpdateFoodMenu(FoodMenuModel FoodMenuModel)
         {
-            return _IFoodMenuReportsitory.UpdateFoodMenu(FoodMenuModel);
+            return _iFoodMenuReportsitory.UpdateFoodMenu(FoodMenuModel);
         }
 
         public int DeleteFoodMenu(int FoodMenuID)
         {
-            return _IFoodMenuReportsitory.DeleteFoodMenu(FoodMenuID);
+            return _iFoodMenuReportsitory.DeleteFoodMenu(FoodMenuID);
         }
 
-        public FoodMenuModel GetFoodMenueById(int FoodMenuId)
+        public FoodMenuModel GetFoodMenueById(int foodMenuId)
         {
-            return _IFoodMenuReportsitory.GetFoodMenuList().Where(x => x.Id == FoodMenuId).FirstOrDefault();
+            List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
+            FoodMenuModel model = new FoodMenuModel();
+
+            model = _iFoodMenuReportsitory.GetFoodMenuById(foodMenuId).ToList().SingleOrDefault();
+            if (model != null)
+            {
+                model.FoodMenuDetails = _iFoodMenuReportsitory.GetFoodMenuDetails(foodMenuId);
+            }
+            return model;
         }
     }
 }

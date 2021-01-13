@@ -260,13 +260,7 @@ namespace RocketPOS.Repository
                             " select W.Id as WasteId, '0', '', i.id as IngredientId,i.IngredientName, WI.IngredientQty as Qty , WI.lossAmount as LossAmount" +
                             " from Waste as W  inner join WasteIngredient as WI on W.id = WI.WasteId  inner join Ingredient i on WI.IngredientId = i.Id  and WI.FoodMenuId = 0" +
                             " where WI.IsDeleted = 0 AND W.id = " + purchaseId + ";";
-                //var query = "select WI.Id as WasteId, WI.FoodMenuId, F.FoodMenuName, WI.IngredientId as IngredientId,i.IngredientName, WI.IngredientQty as Qty ," +
-                //    " WI.lossAmount as LossAmount from Waste as W " +
-                //    " inner join WasteIngredient as WI on W.id = WI.WasteId " +
-                //    " inner join Ingredient i on WI.IngredientId = i.Id " +
-                //    " inner join FoodMenu F ON F.Id = WI.FoodMenuId " +
-                //    " where WI.IsDeleted = 0 AND " +
-                //     " W.id = " + purchaseId + ";";
+               
                 purchaseDetails = con.Query<WasteDetailModel>(query).AsList();
             }
 

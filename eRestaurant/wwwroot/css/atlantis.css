@@ -1,4 +1,4 @@
-/*!
+logo-header .logo .navbar-brand /*!
 
  =========================================================
  * Atlantis Bootstrap Dashboard (Bootstrap 4)
@@ -78,9 +78,10 @@ danger-color : #f3545d
 
 -------------------------------------------------------------------*/
 *:focus {
-  outline: 0 !important;
-  -webkit-box-shadow: none !important;
-  box-shadow: none !important; }
+    outline: 0 !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
 
 /*   Typography    */
 body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, p, .navbar, .brand, .btn-simple, .alert, a, .td-name, td, button.close {
@@ -329,7 +330,9 @@ body {
     .logo-header .logo .navbar-brand {
       padding-top: 0px;
       padding-bottom: 0px;
-      margin-right: 0px; }
+      margin-right: 0px;
+      margin-left:-20px;
+    }
   .logo-header .nav-toggle {
     position: absolute;
     top: 0;

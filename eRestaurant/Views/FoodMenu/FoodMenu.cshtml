@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-action="FoodMenu" method="post" role="form">
+                            <form asp-action="FoodMenu" method="post" id="foodMenu" role="form">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
@@ -148,7 +148,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label"></label>
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
-                                                                <input class="form-control" type="hidden" id="FoodMenuId" value="0" />
+                                                                <input class="form-control" id="FoodMenuId" value="0" />
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
                                                             </div>
                                                         </div>
@@ -225,20 +225,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    @if (Model != null)
-                                    {
-                                        @if (Model.Id > 0)
-                                        {
-                                            <input id="saveOrder" type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                        }
-                                        else
-                                        {
-                                            <input id="saveOrder" type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                        }
-                                    }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-
+                                <div class="form-button-action">
+                                    <div>
+                                        @*@if (Model != null)
+        {
+            @if (Model.Id > 0)
+            {
+                <input id="saveOrder" type="submit" value="Edit" class="btn btn-primary" />
+            }
+            else
+            {
+                <input id="saveOrder" type="submit" value="Add" class="btn btn-primary" />
+            }
+        }*@
+                                        <input id="saveOrder" type="submit" value="Save" class="btn btn-primary" />
+                                    </div>
+                                    <div style="margin-left:10px">
+                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary" />
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -266,12 +270,13 @@
         </div>
     </div>
 </div>
-@section Scripts{
+@section scripts{
     <script>
     dataArr = []
     if (@Model.Id > 0) {
-    dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.FoodMenuDetails))');
-    }
+                dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.FoodMenuDetails))');
+        }
+       console.log(dataArr);
     </script>
     <partial name="_ValidationScriptsPartial" />
     <script src="~/Scripts/FoodManu.js"></script>

@@ -15,8 +15,7 @@ namespace RocketPOS.Interface.Repository
 
         int DeleteFoodMenu(int foodMenuID);
 
-
-
-
+        List<FoodMenuModel> GetFoodMenuById(long foodMenuId);
+        List<FoodManuDetailsModel> GetFoodMenuDetails(long foodMenuId);
     }
 }

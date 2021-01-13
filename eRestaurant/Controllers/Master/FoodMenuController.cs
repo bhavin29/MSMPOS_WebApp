@@ -50,32 +50,38 @@ namespace RocketPOS.Controllers.Master
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult FoodMenu(FoodMenuModel foodMenuModel, string submitButton)
+        public ActionResult FoodMenu(FoodMenuModel foodMenuModel)
         {
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            
+            string foodMenuMessage = string.Empty;
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationFoodMenu(foodMenuModel);
                 if (!string.IsNullOrEmpty(errorString))
                 {
-                    ViewBag.Validate = errorString;
+                    foodMenuMessage = errorString;
                     return View(foodMenuModel);
                 }
             }
-
-            if (foodMenuModel.Id > 0)
+            if (foodMenuModel.FoodMenuDetails!= null)
             {
-                var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                if (foodMenuModel.Id > 0)
+                {
+                    var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
+                    foodMenuMessage = _locService.GetLocalizedHtmlString("EditSuccss");
+                }
+                else
+                {
+                    var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
+                    foodMenuMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
+                }
             }
             else
             {
-                var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                foodMenuMessage = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
+                return Json(new { error = true, message = foodMenuMessage, status = 201 });
             }
- 
-            return RedirectToAction("Index", "FoodMenu");
+            return Json(new { error = false, message = foodMenuMessage, status = 200 });
         }
 
         public ActionResult Delete(int id)

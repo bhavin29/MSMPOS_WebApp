@@ -332,6 +332,27 @@
             </a>
         </li>*@
                         <li class="nav-item">
+                            <a data-toggle="collapse" href="#Reports">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Reports</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="Reports">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
+                                            <span class="sub-item">Purchase</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
+                                            <span class="sub-item">Register Report</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
                             <a data-toggle="collapse" href="#Foodmenu">
                                 <i class="fas fa-layer-group"></i>
                                 <p>Food Menu</p>

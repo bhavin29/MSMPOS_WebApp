@@ -26,6 +26,11 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetOutletRegisterReport(OutletRegisterId);
         }
 
+        public PrintReceiptA4 GetPrintReceiptA4Detail(int CustomerOrderId)
+        {
+            return _iReportRepository.GetPrintReceiptA4Detail(CustomerOrderId);
+        }
+
         public List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate)
         {
             return _iReportRepository.GetPurchaseReport(fromDate,toDate);

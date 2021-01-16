@@ -35,7 +35,7 @@ namespace RocketPOS.Models
         public decimal Foodcess { get; set; }
         public bool OfferIsAvailable { get; set; }
         public int Position { get; set; }
-        public int OutletId { get; set; }
+        public string OutletId { get; set; }
         public bool IsActive { get; set; }
         public decimal Consumption { get; set; }
         public int? IngredientId { get; set; }

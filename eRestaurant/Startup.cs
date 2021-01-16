@@ -42,7 +42,7 @@ namespace RocketPOS
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-            services.AddControllersWithViews();
+                 services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
 
          services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()

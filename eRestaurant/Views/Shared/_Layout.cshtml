@@ -325,95 +325,12 @@
                         </div>*@
                     <ul class="nav nav-primary">
                         @*<li class="nav-item active">
-                                <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-                                    <i class="fas fa-home"></i>
-                                    <p>Dashboard</p>
-                                    <span class="caret"></span>
-                                </a>
-                            </li>*@
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="OutletRegister" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Register</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Purchase" asp-action="PurchaseList">
-                                <i class="fas fa-desktop"></i>
-                                <span>Purchase</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Waste" asp-action="WasteList">
-                                <i class="fas fa-desktop"></i>
-                                <span>Waste</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Customer</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Supplier" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Supplier</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="EmployeeAttendance" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Attendance</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#Inventory">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Inventory</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="Inventory">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
-                                            <span class="sub-item">Inventory</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
-                                            <span class="sub-item">Adjustment</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
-                                            <span class="sub-item">Transfer</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#Reports">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Reports</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="Reports">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
-                                            <span class="sub-item">Purchase</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
-                                            <span class="sub-item">Register Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+            <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+                <i class="fas fa-home"></i>
+                <p>Dashboard</p>
+                <span class="caret"></span>
+            </a>
+        </li>*@
                         <li class="nav-item">
                             <a data-toggle="collapse" href="#Foodmenu">
                                 <i class="fas fa-layer-group"></i>
@@ -515,6 +432,89 @@
                                     </li>
                                     <li>
 
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="OutletRegister" asp-action="Index">
+                                <i class="fas fa-desktop"></i>
+                                <span>Register</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Purchase" asp-action="PurchaseList">
+                                <i class="fas fa-desktop"></i>
+                                <span>Purchase</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Waste" asp-action="WasteList">
+                                <i class="fas fa-desktop"></i>
+                                <span>Waste</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Customer" asp-action="Index">
+                                <i class="fas fa-desktop"></i>
+                                <span>Customer</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Supplier" asp-action="Index">
+                                <i class="fas fa-desktop"></i>
+                                <span>Supplier</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="EmployeeAttendance" asp-action="Index">
+                                <i class="fas fa-desktop"></i>
+                                <span>Attendance</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="collapse" href="#Inventory">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Inventory</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="Inventory">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
+                                            <span class="sub-item">Inventory</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
+                                            <span class="sub-item">Adjustment</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
+                                            <span class="sub-item">Transfer</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="collapse" href="#Reports">
+                                <i class="fas fa-layer-group"></i>
+                                <p>Reports</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="Reports">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
+                                            <span class="sub-item">Purchase</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
+                                            <span class="sub-item">Register Report</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

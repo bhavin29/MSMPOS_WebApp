@@ -11,5 +11,6 @@ namespace RocketPOS.Interface.Repository.Reports
         List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate);
         List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId);
 
+        PrintReceiptA4 GetPrintReceiptA4Detail(int CustomerOrderId);
     }
 }

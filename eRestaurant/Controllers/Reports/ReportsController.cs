@@ -12,6 +12,9 @@ using RocketPOS.Resources;
 using RocketPOS.Interface.Services.Reports;
 using RocketPOS.Models.Reports;
 using Newtonsoft.Json;
+using System.IO;
+using System.Text;
+using SelectPdf;
 
 namespace RocketPOS.Controllers.Reports
 {
@@ -87,6 +90,7 @@ namespace RocketPOS.Controllers.Reports
                 purchaseReportModel.ToDate = DateTime.Now;
             }
 
+
             //string jsonData = JsonConvert.SerializeObject(purchaseReportModel.PurchaseReport);
             var jsonData = purchaseReportList.ToArray();
             //return Json(purchaseReportModel, json);
@@ -112,7 +116,7 @@ namespace RocketPOS.Controllers.Reports
         {
             List<OutletRegisterReportModel> outletRegisterModels = new List<OutletRegisterReportModel>();
 
-         //   OutletRegisterReportModel outletRegisterModel = new OutletRegisterReportModel();
+            //OutletRegisterReportModel outletRegisterModel = new OutletRegisterReportModel();
 
             outletRegisterModels = _iReportService.GetOutletRegisterReport(outletRegisterId);
             return View(outletRegisterModels);
@@ -121,6 +125,88 @@ namespace RocketPOS.Controllers.Reports
             // var jsonData = outletRegisterModels.ToArray();
             //return Json(purchaseReportModel, json);
             //  return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
+        }
+
+        public ActionResult PrintReceiptA4(int id,string clientName,string address1, string address2, string phone)
+        {
+            PrintReceiptA4 printReceiptA4 = new PrintReceiptA4();
+            printReceiptA4 = _iReportService.GetPrintReceiptA4Detail(id);
+            string pdf_page_size = string.Empty, pdf_orientation = string.Empty;
+            var sb = new StringBuilder();
+            sb.Append(@"<html>
+                    <style type='text/css'>
+                        table, tr, td {
+                        border: 1px solid;
+                    }
+                    tr.noBorder td {
+                    border: 0;
+                    }
+                    </style>
+                    <body>
+                        <table border=1 width='1280' Height='800'>
+                        <tr align='center' Height='50'>
+	                    <td colspan='6'><div align='right'>");
+
+                sb.Append(clientName +"</br>"+ address1+"</br>" + address2+ "</br>" + phone);
+                sb.Append(@"</div></td>
+                            </tr>
+                            <tr align='center' Height='50'>
+                            	<td colspan='6'>INVOICE </td>
+                            </tr>
+                            <tr Height='50'>
+                            <td colspan=3 >Customer Name : "+ printReceiptA4.PrintReceiptDetail.CustomerName + @" </td>
+                                  	<td colspan=3>Mode of payment : "+ printReceiptA4.PrintReceiptDetail.PaymentMethodName + @"</td>
+                            </tr>
+                            <tr Height='50'>
+                            	<td colspan=3>Invoice : "+ printReceiptA4 .PrintReceiptDetail.SalesInvoiceNumber+ @"</td>
+                            	<td colspan=3>Date : "+ printReceiptA4.PrintReceiptDetail.BillDateTime + @"</td>
+                            </tr>
+                            <tr Height='30' class='noBorder'>
+                            	<td colspan=3 >Item</td>
+                            	<td width=50 >Qty</td>
+                            	<td >Rate</td>
+                            	<td >Amount</td>
+                            </tr>");
+
+            foreach (var item in printReceiptA4.PrintReceiptItemList)
+            {
+                sb.AppendFormat(@"<tr  Height='30' class='noBorder'><td colspan=3 >{0}</td><td width=50 >{1}</td><td>{2}</td><td>{3}</td></tr>", item.FoodMenuName,item.FoodMenuQty,item.FoodMenuRate,item.Price);
+            }
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Gross Total</td><td >" + printReceiptA4.PrintReceiptDetail.GrossAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Vatable</td><td >"+ printReceiptA4 .PrintReceiptDetail.VatableAmount+ "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Non Vatable</td><td >" + printReceiptA4.PrintReceiptDetail.NonVatableAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Total Tax</td><td >" + printReceiptA4.PrintReceiptDetail.TaxAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Grand Total</td><td >" + printReceiptA4.PrintReceiptDetail.TotalAmount + "</td></tr>");
+            sb.Append(@" <tr Height='30'>
+                            <td colspan='6'>Remarks :  </td>
+                            </tr>
+                            </body>
+                            </table>
+                            </html>");
+            pdf_page_size = "A4";
+            PdfPageSize pageSize = (PdfPageSize)Enum.Parse(typeof(PdfPageSize), pdf_page_size, true);
+            pdf_orientation = "Portrait";
+            PdfPageOrientation pdfOrientation = (PdfPageOrientation)Enum.Parse(typeof(PdfPageOrientation), pdf_orientation, true);
+            //// instantiate a html to pdf converter object
+            HtmlToPdf converter = new HtmlToPdf();
+            //// set converter options
+            converter.Options.PdfPageSize = PdfPageSize.A4;
+            converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
+            ////converter.Options.WebPageWidth = webPageWidth;
+            ////converter.Options.WebPageHeight = webPageHeight;
+            converter.Options.MarginLeft = 10;
+            converter.Options.MarginRight = 10;
+            converter.Options.MarginTop = 20;
+            converter.Options.MarginBottom = 20;
+            //// create a new pdf document converting an url
+            PdfDocument doc = converter.ConvertHtmlString(sb.ToString());
+            //// save pdf document
+            //doc.Save("Select.pdf");
+            byte[] pdf = doc.Save();
+            return new FileContentResult(pdf, "application/pdf")
+            {
+                FileDownloadName = "Document.pdf"
+            };
         }
     }
 }

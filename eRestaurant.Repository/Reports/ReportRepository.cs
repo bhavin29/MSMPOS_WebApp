@@ -95,5 +95,33 @@ namespace RocketPOS.Repository.Reports
             return outletRegisterReportModels;
         }
 
+        public PrintReceiptA4 GetPrintReceiptA4Detail(int CustomerOrderId)
+        {
+            PrintReceiptA4 printReceiptA4 = new PrintReceiptA4();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string customerOrderDetail = string.Empty;
+                string customerOrderItems = string.Empty;
+                customerOrderDetail = "SELECT b.CustomerOrderId,b.Id As BillId,CO.SalesInvoiceNumber,B.BillDateTime,O.OutletName,U.Username,C.CustomerName,B.GrossAmount,B.TaxAmount,B.VatableAmount,CO.NonVatableAmount, B.Discount,B.ServiceCharge,B.TotalAmount,PM.PaymentMethodName,BD.BillAmount FROM Bill B  "+
+                              " INNER JOIN CustomerOrder CO ON B.CustomerOrderId = CO.Id " +
+                              " INNER JOIN BillDetail BD ON B.Id = BD.BillId " +
+                              " INNER JOIN Outlet O ON O.Id = B.OutletId " +
+                              " INNER JOIN[User] U ON U.ID = B.UserIdInserted " +
+                              " INNER JOIN Customer C ON C.Id = b.CustomerId " +
+                              " INNER JOIN PaymentMethod PM ON PM.Id = BD.PaymentMethodId " +
+                              " WHERE b.CustomerOrderId =  " + CustomerOrderId;
+
+                customerOrderItems = "SELECT FM.FoodMenuName,COI.FoodMenuQty,COI.FoodMenuRate,COI.Price,   " +
+                             " (select case when foodmenutaxtype = 1 then 'V' when foodmenutaxtype = 2 then 'E' when foodmenutaxtype = 3 then 'Z' ELSE '' end) AS FOODVAT " +
+                             " FROM CustomerOrderItem  COI " +
+                             " INNER JOIN FoodMenu FM ON FM.ID = COI.FoodMenuId " +
+                             " WHERE CustomerOrderId =  " + CustomerOrderId;
+
+                printReceiptA4.PrintReceiptDetail = con.Query<PrintReceiptModel>(customerOrderDetail).FirstOrDefault();
+                printReceiptA4.PrintReceiptItemList = con.Query<PrintReceiptItemModel>(customerOrderItems).ToList();
+
+                return printReceiptA4;
+            }
+        }
     }
 }

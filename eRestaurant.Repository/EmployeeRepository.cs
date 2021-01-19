@@ -45,15 +45,18 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Employee");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 
                 //HireDate,OriginalHireDate,TerminationDate,RehireDate,DOB,
                 //@HireDate,@OriginalHireDate,@TerminationDate,@RehireDate,@DOB,
                 var query = "INSERT INTO Employee " +
-                            "(FirstName,MiddleName,LastName,Designation,Email,Phone,AlterPhone,PresentAdress,PermanentAdress,picture,DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip,CitizenShip,TerminationReason,VolunteryTermination,RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,Gender,Country,MaritalStatus,EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone,EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone,IsActive) " +
+                            "(Id,FirstName,MiddleName,LastName,Designation,Email,Phone,AlterPhone,PresentAdress,PermanentAdress,picture,DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip,CitizenShip,TerminationReason,VolunteryTermination,RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,Gender,Country,MaritalStatus,EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone,EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone,IsActive) " +
                              " VALUES " +
-                             " (@FirstName,@MiddleName,@LastName,@Designation,@Email,@Phone,@AlterPhone,@PresentAdress,@PermanentAdress,@picture,@DegreeName,@UniversityName,@CGP,@PassingYear,@CompanyName,@WorkingPeriod,@Duties,@Suoervisor,@Signature,@State,@City,@Zip,@CitizenShip,@TerminationReason,@VolunteryTermination,@RateType,@Rate,@PayFrequency,@PayFrequencyTxt,@HourlyRate2,@HourlyRate3,@Gender,@Country,@MaritalStatus,@EthnicGroup,@SSN,@WorkInState,@LiveInState,@HomeEmail,@BusinessEmail,@HomePhone,@BUsinessPhone,@CellPhone,@EmergConct,@EmergHPhone,@EmergWPhone,@EmergContctRelation,@AltEmContct,@AltEmgHPhone,@AltEmgWPhone,@IsActive);" +
+                             "(" + MaxId + ", @FirstName,@MiddleName,@LastName,@Designation,@Email,@Phone,@AlterPhone,@PresentAdress,@PermanentAdress,@picture,@DegreeName,@UniversityName,@CGP,@PassingYear,@CompanyName,@WorkingPeriod,@Duties,@Suoervisor,@Signature,@State,@City,@Zip,@CitizenShip,@TerminationReason,@VolunteryTermination,@RateType,@Rate,@PayFrequency,@PayFrequencyTxt,@HourlyRate2,@HourlyRate3,@Gender,@Country,@MaritalStatus,@EthnicGroup,@SSN,@WorkInState,@LiveInState,@HomeEmail,@BusinessEmail,@HomePhone,@BUsinessPhone,@CellPhone,@EmergConct,@EmergHPhone,@EmergWPhone,@EmergContctRelation,@AltEmContct,@AltEmgHPhone,@AltEmgWPhone,@IsActive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, employeeModel, sqltrans, 0, System.Data.CommandType.Text);
 

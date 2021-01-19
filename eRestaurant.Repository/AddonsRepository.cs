@@ -36,12 +36,15 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Addons");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Addons (AddonsName," +
+                var query = "INSERT INTO Addons (Id,AddonsName," +
                             "Price, " +
                             "IsActive)" +
-                            "VALUES (@AddonsName," +
+                            "VALUES (" + MaxId + ",@AddonsName," +
                             "@Price," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, addonsModel, sqltrans, 0, System.Data.CommandType.Text);

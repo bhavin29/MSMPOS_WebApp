@@ -74,13 +74,16 @@ namespace RocketPOS.Repository
             int detailsResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("FoodMenu");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO FoodMenu "+
-                    "(  FoodCategoryId, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb, SalesPrice, Notes, IsVegItem, IsBeverages,"+
+                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb, SalesPrice, Notes, IsVegItem, IsBeverages,"+
                     " FoodVat, Foodcess, OfferIsAvailable,  Position,  OutletId, IsActive) " +
                     "Values "+
-                    "(  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @ColourCode, @BigThumb, @MediumThumb, @SmallThumb,@SalesPrice, @Notes, " +
+                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @ColourCode, @BigThumb, @MediumThumb, @SmallThumb,@SalesPrice, @Notes, " +
                     "@IsVegItem, @IsBeverages,@FoodVat,@Foodcess, @OfferIsAvailable,  @Position,  @OutletId, @IsActive)" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 

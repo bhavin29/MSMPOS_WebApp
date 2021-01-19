@@ -36,15 +36,18 @@ namespace RocketPOS.Repository
 
         public int InsertVarient(VarientModel varientModel)
         {
+            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+            int MaxId = commonRepository.GetMaxId("Varient");
+
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Varient (VarientName,FoodMenuId," +
+                var query = "INSERT INTO Varient (Id,VarientName,FoodMenuId," +
                             "Price, " +
                             "IsActive)" +
-                            "VALUES (@VarientName,@FoodMenuId," +
+                            "VALUES (" + MaxId + ",@VarientName,@FoodMenuId," +
                             "@Price," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, varientModel, sqltrans, 0, System.Data.CommandType.Text);

@@ -65,14 +65,16 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("IngredientCategory");
 
                 ingredientCategoryModel.RawMaterialType = (ingredientCategoryModel.RawMaterialType == 0) ? null : ingredientCategoryModel.RawMaterialType;
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO IngredientCategory (IngredientCategoryName," +
+                var query = "INSERT INTO IngredientCategory (Id,IngredientCategoryName," +
                             "RawMaterialType,Notes, " +
                             "IsActive)" +
-                            "VALUES (@IngredientCategoryName," +
+                            "VALUES (" + MaxId + ",@IngredientCategoryName," +
                             "@RawMaterialType,@Notes," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, ingredientCategoryModel, sqltrans, 0, System.Data.CommandType.Text);

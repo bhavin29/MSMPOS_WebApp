@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>RocketPOS</title>
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-    <link rel="icon" href="~/img/icon.ico" type="image/x-icon" />
+    <link rel="icon" href="~/img/RocketPOS48.ico" type="image/x-icon" />
 
     <script src="../js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -250,28 +250,28 @@
                         <li class="nav-item dropdown hidden-caret">
                             <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
                                 <div class="avatar-sm">
-                                    <img src="~/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+                                    <img src="~/img/profile3.png" alt="..." class="avatar-img rounded-circle">
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-user animated fadeIn">
                                 <div class="dropdown-user-scroll scrollbar-outer">
-                                    <li>
-                                        <div class="user-box">
-                                            <div class="avatar-lg"><img src="~/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
-                                            <div class="u-text">
-                                                <h4>Hizrian</h4>
-                                                <p class="text-muted">hello@example.com</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                    @*<li>
+                                            <div class="user-box">
+                                                <div class="avatar-lg"><img src="~/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
+                                                <div class="u-text">
+                                                    <h4>Hizrian</h4>
+                                                    <p class="text-muted">hello@example.com</p><a href="profile.html" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li>
+                                        </li>*@
                                     <li>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">My Profile</a>
-                                        <a class="dropdown-item" href="#">My Balance</a>
-                                        <a class="dropdown-item" href="#">Inbox</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Account Setting</a>
-                                        <div class="dropdown-divider"></div>
+                                        @*<div class="dropdown-divider"></div>*@
+                                        @*<a class="dropdown-item" href="#">My Profile</a>
+                                            <a class="dropdown-item" href="#">My Balance</a>
+                                            <a class="dropdown-item" href="#">Inbox</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Account Setting</a>
+                                            <div class="dropdown-divider"></div>*@
                                         <a class="dropdown-item" href="Login/Index">Logout</a>
                                     </li>
                                 </div>
@@ -325,33 +325,33 @@
                         </div>*@
                     <ul class="nav nav-primary">
                         @*<li class="nav-item active">
-            <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-                <i class="fas fa-home"></i>
-                <p>Dashboard</p>
-                <span class="caret"></span>
-            </a>
-        </li>*@
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#Reports">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Reports</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="Reports">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
-                                            <span class="sub-item">Purchase</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
-                                            <span class="sub-item">Register Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                                <a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
+                                    <i class="fas fa-home"></i>
+                                    <p>Dashboard</p>
+                                    <span class="caret"></span>
+                                </a>
+                            </li>*@
+                        @*<li class="nav-item">
+                                <a data-toggle="collapse" href="#Reports">
+                                    <i class="fas fa-layer-group"></i>
+                                    <p>Reports</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="Reports">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a asp-area="" asp-controller="Report" asp-action="purchase">
+                                                <span class="sub-item">Purchase</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
+                                                <span class="sub-item">Register Report</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>*@
                         <li class="nav-item">
                             <a data-toggle="collapse" href="#Foodmenu">
                                 <i class="fas fa-layer-group"></i>
@@ -436,11 +436,11 @@
                                             <span class="sub-item">Bank</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    @*<li>
                                         <a asp-area="" asp-controller="ExpenseCategory" asp-action="Index">
                                             <span class="sub-item">Expsence Category</span>
                                         </a>
-                                    </li>
+                                    </li>*@
                                     <li>
                                         <a asp-area="" asp-controller="Employee" asp-action="Index">
                                             <span class="sub-item">Employee</span>
@@ -456,89 +456,89 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="OutletRegister" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Register</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Purchase" asp-action="PurchaseList">
-                                <i class="fas fa-desktop"></i>
-                                <span>Purchase</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Waste" asp-action="WasteList">
-                                <i class="fas fa-desktop"></i>
-                                <span>Waste</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Customer" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Customer</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Supplier" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Supplier</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="EmployeeAttendance" asp-action="Index">
-                                <i class="fas fa-desktop"></i>
-                                <span>Attendance</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#Inventory">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Inventory</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="Inventory">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a asp-area="" asp-controller="Inventory" asp-action="Index">
-                                            <span class="sub-item">Inventory</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
-                                            <span class="sub-item">Adjustment</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
-                                            <span class="sub-item">Transfer</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#Reports">
-                                <i class="fas fa-layer-group"></i>
-                                <p>Reports</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="Reports">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="purchase">
-                                            <span class="sub-item">Purchase</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
-                                            <span class="sub-item">Register Report</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @*<li class="nav-item">
+                                <a asp-area="" asp-controller="OutletRegister" asp-action="Index">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Register</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Purchase" asp-action="PurchaseList">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Purchase</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Waste" asp-action="WasteList">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Waste</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Customer" asp-action="Index">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Customer</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Supplier" asp-action="Index">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Supplier</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="EmployeeAttendance" asp-action="Index">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Attendance</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="collapse" href="#Inventory">
+                                    <i class="fas fa-layer-group"></i>
+                                    <p>Inventory</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="Inventory">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a asp-area="" asp-controller="Inventory" asp-action="Index">
+                                                <span class="sub-item">Inventory</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
+                                                <span class="sub-item">Adjustment</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
+                                                <span class="sub-item">Transfer</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+                                <a data-toggle="collapse" href="#Reports">
+                                    <i class="fas fa-layer-group"></i>
+                                    <p>Reports</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="Reports">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a asp-area="" asp-controller="Report" asp-action="purchase">
+                                                <span class="sub-item">Purchase</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-area="" asp-controller="Report" asp-action="OutletRegister">
+                                                <span class="sub-item">Register Report</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>*@
                     </ul>
                 </div>
             </div>
@@ -555,24 +555,24 @@
             <!--<footer class="footer">
                 <div class="container-fluid">
                     <nav class="pull-left">-->
-                        @*<ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="https://www.themekita.com">
-                                        ThemeKita
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        Help
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">
-                                        Licenses
-                                    </a>
-                                </li>
-                            </ul>*@
-                    <!--</nav>
+            @*<ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://www.themekita.com">
+                            ThemeKita
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Help
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            Licenses
+                        </a>
+                    </li>
+                </ul>*@
+            <!--</nav>
                     <div class="copyright ml-auto">
                         2020, made with <i class="fa fa-heart heart text-danger"></i> by <a href="https://www.RocketPOS.com">Rocket POS</a>
                     </div>

@@ -41,14 +41,16 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 UserModel.RoleTypeId = (UserModel.RoleTypeId == 0) ? null : UserModel.RoleTypeId;
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("IngredientUnit");
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //LastLogin,LastLogout,
 
-                var query = "INSERT INTO [User] (EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,IPAdress,Counter,IsActive) " +
+                var query = "INSERT INTO [User] (Id,EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,IPAdress,Counter,IsActive) " +
                            "Values"+
-                           "  (@EmployeeId,@OutletId,@Username,@Password,@ThumbToken,@RoleTypeId,@IPAdress,@Counter,@IsActive); " +
+                           "  (" + MaxId + ",@EmployeeId,@OutletId,@Username,@Password,@ThumbToken,@RoleTypeId,@IPAdress,@Counter,@IsActive); " +
                             "SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, UserModel, sqltrans, 0, System.Data.CommandType.Text);
 

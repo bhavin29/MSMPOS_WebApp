@@ -60,11 +60,14 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Bank");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Bank (BankName," +
+                var query = "INSERT INTO Bank (Id,BankName," +
                             "AccountName,AccountNumber,Branch,SignaturePicture) " +
-                            "VALUES (@BankName," +
+                            "VALUES (" + MaxId + ",@BankName," +
                             "@AccountName,@AccountNumber,@Branch,@SignaturePicture " +
                             "); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, bankModel, sqltrans, 0, System.Data.CommandType.Text);

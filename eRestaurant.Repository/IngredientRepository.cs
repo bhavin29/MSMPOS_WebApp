@@ -41,9 +41,12 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Ingredient");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT into Ingredient(IngredientName," +
+                var query = "INSERT into Ingredient(Id,IngredientName," +
                     "Code, " +
                     "IngredientCategoryId," +
                     "IngredientUnitId," +
@@ -51,7 +54,7 @@ namespace RocketPOS.Repository
                     "SalesPrice," +
                     "AlterQty," +
                     "IsActive) " +
-                    "VALUES(@IngredientName," +
+                    "VALUES(" + MaxId + ",@IngredientName," +
                     " @Code," +
                     " @CategoryId," +
                     "@UnitId," +

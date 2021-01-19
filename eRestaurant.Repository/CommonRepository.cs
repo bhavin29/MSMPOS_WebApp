@@ -46,5 +46,16 @@ namespace RocketPOS.Repository
 
             return result;
         }
+
+        public int GetMaxId(string TableName)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string query = "SELECT ISNULL(Max(Id),0)+1 FROM " + TableName.ToString();
+                result = con.ExecuteScalar<string>(query);
+            }
+            return Int16.Parse(result);
+        }
     }
 }

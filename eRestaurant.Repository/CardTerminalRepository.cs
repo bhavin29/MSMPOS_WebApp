@@ -40,12 +40,15 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("CardTerminal");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO CardTerminal (CardTerminalName," +
+                var query = "INSERT INTO CardTerminal (Id, CardTerminalName," +
                             "OutletId, " +
                             "IsActive)" +
-                            "VALUES (@CardTerminalName," +
+                            "VALUES (" + MaxId + ",@CardTerminalName," +
                             "@OutletId," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, cardTerminalModel, sqltrans, 0, System.Data.CommandType.Text);

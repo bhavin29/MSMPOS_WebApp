@@ -39,10 +39,13 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("PaymentMethod");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO PaymentMethod (PaymentMethodName,IsBank,IsIntegration,IsActive)" +
-                            "VALUES (@PaymentMethodName, @IsBank,@IsIntegration,@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
+                var query = "INSERT INTO PaymentMethod (Id,PaymentMethodName,IsBank,IsIntegration,IsActive)" +
+                            "VALUES (" + MaxId + ",@PaymentMethodName, @IsBank,@IsIntegration,@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, PaymentMethodModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

@@ -40,13 +40,16 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Outlet");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO Outlet"+
-                             "(StoreId, OutletName, OutletAddress1, OutletAddress2, OutletPhone, OutletEmail," +
+                             "(Id,StoreId, OutletName, OutletAddress1, OutletAddress2, OutletPhone, OutletEmail," +
                              " InvoiceHeader, InvoiceFooter, IsCollectTax, IsPreorPostPayment, IsActive, IsLock)" +
                             "VALUES " +
-                            "( @StoreId, @OutletName, @OutletAddress1, @OutletAddress2, @OutletPhone, @OutletEmail, "+
+                            "(" + MaxId + ", @StoreId, @OutletName, @OutletAddress1, @OutletAddress2, @OutletPhone, @OutletEmail, " +
                             "@InvoiceHeader, @InvoiceFooter, @IsCollectTax, @IsPreorPostPayment, @IsActive, @IsLock); "+
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);

@@ -27,11 +27,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT iD,FirstName,MiddleName,LastName,Designation,Email,Phone,AlterPhone,PresentAdress,PermanentAdress,picture," +
-                            "DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip," +
-                            "CitizenShip,HireDate,OriginalHireDate,TerminationDate,TerminationReason,VolunteryTermination,RehireDate, " +
-                            "RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,DOB,Gender,Country,MaritalStatus," +
-                            "EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone," +
-                            "EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone,IsActive " +
+                            //"DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip," +
+                            //"CitizenShip,HireDate,OriginalHireDate,TerminationDate,TerminationReason,VolunteryTermination,RehireDate, " +
+                            //"RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,DOB,Gender,Country,MaritalStatus," +
+                            //"EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone," +
+                            //"EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone" +
+                            " IsActive " +
                             "FROM Employee WHERE IsDeleted = 0 " +
                             "ORDER BY Lastname + ' ' + FirstName ";
                 addonsModel = con.Query<EmployeeModel>(query).ToList();
@@ -54,9 +55,10 @@ namespace RocketPOS.Repository
                 //HireDate,OriginalHireDate,TerminationDate,RehireDate,DOB,
                 //@HireDate,@OriginalHireDate,@TerminationDate,@RehireDate,@DOB,
                 var query = "INSERT INTO Employee " +
-                            "(Id,FirstName,MiddleName,LastName,Designation,Email,Phone,AlterPhone,PresentAdress,PermanentAdress,picture,DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip,CitizenShip,TerminationReason,VolunteryTermination,RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,Gender,Country,MaritalStatus,EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone,EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone,IsActive) " +
-                             " VALUES " +
-                             "(" + MaxId + ", @FirstName,@MiddleName,@LastName,@Designation,@Email,@Phone,@AlterPhone,@PresentAdress,@PermanentAdress,@picture,@DegreeName,@UniversityName,@CGP,@PassingYear,@CompanyName,@WorkingPeriod,@Duties,@Suoervisor,@Signature,@State,@City,@Zip,@CitizenShip,@TerminationReason,@VolunteryTermination,@RateType,@Rate,@PayFrequency,@PayFrequencyTxt,@HourlyRate2,@HourlyRate3,@Gender,@Country,@MaritalStatus,@EthnicGroup,@SSN,@WorkInState,@LiveInState,@HomeEmail,@BusinessEmail,@HomePhone,@BUsinessPhone,@CellPhone,@EmergConct,@EmergHPhone,@EmergWPhone,@EmergContctRelation,@AltEmContct,@AltEmgHPhone,@AltEmgWPhone,@IsActive);" +
+                            "(Id,FirstName,MiddleName,LastName,Designation,Email,Phone,AlterPhone,PresentAdress,PermanentAdress,picture" +
+                             //,DegreeName,UniversityName,CGP,PassingYear,CompanyName,WorkingPeriod,Duties,Suoervisor,Signature,State,City,Zip,CitizenShip,TerminationReason,VolunteryTermination,RateType,Rate,PayFrequency,PayFrequencyTxt,HourlyRate2,HourlyRate3,Gender,Country,MaritalStatus,EthnicGroup,SSN,WorkInState,LiveInState,HomeEmail,BusinessEmail,HomePhone,BUsinessPhone,CellPhone,EmergConct,EmergHPhone,EmergWPhone,EmergContctRelation,AltEmContct,AltEmgHPhone,AltEmgWPhone,IsActive) " +
+                             " )VALUES " +
+                             "(" + MaxId + ", @FirstName,@MiddleName,@LastName,@Designation,@Email,@Phone,@AlterPhone,@PresentAdress,@PermanentAdress,@picture)" +//,@DegreeName,@UniversityName,@CGP,@PassingYear,@CompanyName,@WorkingPeriod,@Duties,@Suoervisor,@Signature,@State,@City,@Zip,@CitizenShip,@TerminationReason,@VolunteryTermination,@RateType,@Rate,@PayFrequency,@PayFrequencyTxt,@HourlyRate2,@HourlyRate3,@Gender,@Country,@MaritalStatus,@EthnicGroup,@SSN,@WorkInState,@LiveInState,@HomeEmail,@BusinessEmail,@HomePhone,@BUsinessPhone,@CellPhone,@EmergConct,@EmergHPhone,@EmergWPhone,@EmergContctRelation,@AltEmContct,@AltEmgHPhone,@AltEmgWPhone,@IsActive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, employeeModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -96,46 +98,46 @@ namespace RocketPOS.Repository
                             "PresentAdress=@PresentAdress," +
                             "PermanentAdress=@PermanentAdress," +
                             "picture=@picture," +
-                            "DegreeName=@DegreeName," +
-                            "UniversityName=@UniversityName," +
-                            "CGP=@CGP," +
-                            "PassingYear=@PassingYear," +
-                            "CompanyName=@CompanyName," +
-                            "WorkingPeriod=@WorkingPeriod," +
-                            "Duties=@Duties," +
-                            "Suoervisor=@Suoervisor," +
-                            "Signature=@Signature," +
-                            "State=@State," +
-                            "City=@City," +
-                            "Zip=@Zip," +
-                            "CitizenShip=@CitizenShip," +
-                            "TerminationReason=@TerminationReason," +
-                            "VolunteryTermination=@VolunteryTermination," +
-                            "RateType=@RateType," +
-                            "Rate=@Rate," +
-                            "PayFrequency=@PayFrequency," +
-                            "PayFrequencyTxt=@PayFrequencyTxt," +
-                            "HourlyRate2=@HourlyRate2," +
-                            "HourlyRate3=@HourlyRate3," +
-                            "Gender=@Gender," +
-                            " Country=@ Country," +
-                            "MaritalStatus=@MaritalStatus," +
-                            "EthnicGroup=@EthnicGroup," +
-                            "SSN=@SSN," +
-                            "WorkInState=@WorkInState," +
-                            "LiveInState=@LiveInState," +
-                            "HomeEmail=@HomeEmail," +
-                            "BusinessEmail=@BusinessEmail," +
-                            "HomePhone=@HomePhone," +
-                            "BUsinessPhone=@BUsinessPhone," +
-                            "CellPhone=@CellPhone," +
-                            "EmergConct=@EmergConct," +
-                            "EmergHPhone=@EmergHPhone," +
-                            "EmergWPhone=@EmergWPhone," +
-                            "EmergContctRelation=@EmergContctRelation," +
-                            "AltEmContct=@AltEmContct," +
-                            "AltEmgHPhone=@AltEmgHPhone," +
-                            "AltEmgWPhone=@AltEmgWPhone," +
+                           // "DegreeName=@DegreeName," +
+                            //"UniversityName=@UniversityName," +
+                            //"CGP=@CGP," +
+                            //"PassingYear=@PassingYear," +
+                            //"CompanyName=@CompanyName," +
+                            //"WorkingPeriod=@WorkingPeriod," +
+                            //"Duties=@Duties," +
+                            //"Suoervisor=@Suoervisor," +
+                            //"Signature=@Signature," +
+                            //"State=@State," +
+                            //"City=@City," +
+                            //"Zip=@Zip," +
+                            //"CitizenShip=@CitizenShip," +
+                            //"TerminationReason=@TerminationReason," +
+                            //"VolunteryTermination=@VolunteryTermination," +
+                            //"RateType=@RateType," +
+                            //"Rate=@Rate," +
+                            //"PayFrequency=@PayFrequency," +
+                            //"PayFrequencyTxt=@PayFrequencyTxt," +
+                            //"HourlyRate2=@HourlyRate2," +
+                            //"HourlyRate3=@HourlyRate3," +
+                            //"Gender=@Gender," +
+                            //" Country=@ Country," +
+                            //"MaritalStatus=@MaritalStatus," +
+                            //"EthnicGroup=@EthnicGroup," +
+                            //"SSN=@SSN," +
+                            //"WorkInState=@WorkInState," +
+                            //"LiveInState=@LiveInState," +
+                            //"HomeEmail=@HomeEmail," +
+                            //"BusinessEmail=@BusinessEmail," +
+                            //"HomePhone=@HomePhone," +
+                            //"BUsinessPhone=@BUsinessPhone," +
+                            //"CellPhone=@CellPhone," +
+                            //"EmergConct=@EmergConct," +
+                            //"EmergHPhone=@EmergHPhone," +
+                            //"EmergWPhone=@EmergWPhone," +
+                            //"EmergContctRelation=@EmergContctRelation," +
+                            //"AltEmContct=@AltEmContct," +
+                            //"AltEmgHPhone=@AltEmgHPhone," +
+                            //"AltEmgWPhone=@AltEmgWPhone," +
                             "IsActive=@IsActive " +
                             "WHERE Id = @Id;";
                 result = con.Execute(query, employeeModel, sqltrans, 0, System.Data.CommandType.Text);

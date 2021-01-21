@@ -19,6 +19,11 @@ namespace RocketPOS.Models
         public List<SelectListItem> StoreList { get; set; }
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
+        public int? FoodMenuId { get; set; }
+        public List<SelectListItem> FoodMenuList { get; set; }
+        public int? EmployeeId { get; set; }
+        public List<SelectListItem> EmployeeList { get; set; }
+        
         [Required(ErrorMessage = "Select Date")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
@@ -28,7 +33,6 @@ namespace RocketPOS.Models
         public string Message { get; set; }
         public string Notes { get; set; }
         public int InventoryType { get; set; }
-        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }
     }
@@ -39,6 +43,8 @@ namespace RocketPOS.Models
         public int ReferenceNo { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+        public int FoodMenuId { get; set; }
+        public string FoodMenuName { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Quantity { get; set; }
         public decimal Total { get; set; }

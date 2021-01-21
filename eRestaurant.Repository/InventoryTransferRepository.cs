@@ -230,7 +230,7 @@ namespace RocketPOS.Repository
                                 " ,IntgredientQty = " + item.Quantity +
                                 " ,ConsumptionStatus = " + consumptionId +
                                 " ,UserIdUpdated = " + LoginInfo.Userid +
-                                " ,DateUpdated = GetUTCDate()," +
+                                " ,DateUpdated = GetUTCDate()" +
                                 " ,IsDeleted = 0" +
                                 " where id = " + item.InventoryTransferId + ";";
                         }

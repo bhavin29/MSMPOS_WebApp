@@ -28,6 +28,7 @@ namespace RocketPOS.Services
                              Id = purchase.Id,
                              ReferenceNo = purchase.ReferenceNo,
                              SupplierId = purchase.SupplierId,
+                             EmployeeId = purchase.EmployeeId,
                              StoreId = purchase.StoreId,
                              Date = purchase.Date,
                              GrandTotal = purchase.GrandTotal,
@@ -72,9 +73,63 @@ namespace RocketPOS.Services
             return _iPurchaseRepository.DeletePurchaseDetails(PurchaseDetailsId);
         }
 
-        public long ReferenceNumber()
+        public string ReferenceNumber()
         {
             return _iPurchaseRepository.ReferenceNumber();
+        }
+
+        public PurchaseModel GetPurchaseFoodMenuById(long purchaseId)
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+
+            var model = (from purchase in _iPurchaseRepository.GetPurchaseFoodMenuById(purchaseId).ToList()
+                         select new PurchaseModel()
+                         {
+                             Id = purchase.Id,
+                             ReferenceNo = purchase.ReferenceNo,
+                             SupplierId = purchase.SupplierId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             Date = purchase.Date,
+                             GrandTotal = purchase.GrandTotal,
+                             Due = purchase.Due,
+                             Paid = purchase.Paid,
+                             Notes = purchase.Notes
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.PurchaseDetails = (from purchasedetails in _iPurchaseRepository.GetPurchaseFoodMenuDetails(purchaseId)
+                                         select new PurchaseDetailsModel()
+                                         {
+                                             PurchaseId = purchasedetails.PurchaseId,
+                                             FoodMenuId = purchasedetails.FoodMenuId,
+                                             Quantity = purchasedetails.Quantity,
+                                             UnitPrice = purchasedetails.UnitPrice,
+                                             Total = purchasedetails.Total,
+                                             FoodMenuName = purchasedetails.FoodMenuName
+                                         }).ToList();
+            }
+            return model;
+        }
+
+        public List<PurchaseViewModel> GetPurchaseFoodMenuList()
+        {
+            return _iPurchaseRepository.GetPurchaseFoodMenuList();
+        }
+
+        public int InsertPurchaseFoodMenu(PurchaseModel purchaseModel)
+        {
+            return _iPurchaseRepository.InsertPurchaseFoodMenu(purchaseModel);
+        }
+
+        public int UpdatePurchaseFoodMenu(PurchaseModel purchaseModel)
+        {
+            return _iPurchaseRepository.UpdatePurchaseFoodMenu(purchaseModel);
+        }
+
+        public string ReferenceNumberFoodMenu()
+        {
+            return _iPurchaseRepository.ReferenceNumberFoodMenu();
         }
     }
 }

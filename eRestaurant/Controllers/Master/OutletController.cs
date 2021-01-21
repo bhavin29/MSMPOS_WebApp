@@ -29,10 +29,10 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index()
         {
-            List<OutletModel> adonsList = new List<OutletModel>();
-            adonsList = _iOutletService.GetOutletList().ToList();
+            List<OutletModel> outletModels = new List<OutletModel>();
+            outletModels = _iOutletService.GetOutletList().ToList();
   
-            return View(adonsList);
+            return View(outletModels);
         }
 
         public ActionResult Outlet(int? id)

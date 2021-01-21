@@ -31,7 +31,7 @@ namespace RocketPOS.Controllers
                 int result = _iLoginService.GetLogin(userName, password);
                 if (result > 0)
                 {
-                    return View("Views/Home/Index.cshtml");
+                    return View("~/Views/Home/Index.cshtml");
                 }
                 else
                 {

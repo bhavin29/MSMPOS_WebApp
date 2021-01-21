@@ -24,6 +24,9 @@ using System.Reflection;
 using RocketPOS.Resources;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace RocketPOS
 {
@@ -42,18 +45,23 @@ namespace RocketPOS
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-                 services.AddControllersWithViews();
+            services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
 
-         services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
-        .AddDataAnnotationsLocalization(options =>
-        {
-            options.DataAnnotationLocalizerProvider = (type, factory) =>
+            services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
+           .AddDataAnnotationsLocalization(options =>
+           {
+               options.DataAnnotationLocalizerProvider = (type, factory) =>
+               {
+                   var assemblyName = new AssemblyName(typeof(RocketPOSResources).GetTypeInfo().Assembly.FullName);
+                   return factory.Create("RocketPOSResources", assemblyName.Name);
+               };
+           });
+
+            services.AddMvc().AddRazorPagesOptions(options =>
             {
-                var assemblyName = new AssemblyName(typeof(RocketPOSResources).GetTypeInfo().Assembly.FullName);
-                return factory.Create("RocketPOSResources", assemblyName.Name);
-            };
-        });
+                options.Conventions.AddPageRoute("/Login/Index", "");
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.Configure<RequestLocalizationOptions>(
                 options =>
@@ -74,10 +82,10 @@ namespace RocketPOS
                     options.RequestCultureProviders.Insert(0, new QueryStringRequestCultureProvider());
                 });
 
-            services.AddMvc().AddViewOptions(options =>
-            {
-                    options.HtmlHelperOptions.ClientValidationEnabled = false;
-            });
+            //services.AddMvc().AddViewOptions(options =>
+            //{
+            //    options.HtmlHelperOptions.ClientValidationEnabled = false;
+            //});
 
             services.Configure<HtmlHelperOptions>(o => o.ClientValidationEnabled = false);
 
@@ -88,6 +96,11 @@ namespace RocketPOS
             services.AddOptions<IngredientModel>().ValidateDataAnnotations();
             services.AddControllersWithViews();
 
+            services.AddControllers(options =>
+            {
+                options.EnableEndpointRouting = false;
+
+            });
 
             services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IIngredientRepository, IngredientRepository>();
@@ -154,21 +167,13 @@ namespace RocketPOS
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            app.UseMvcWithDefaultRoute();
+
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions.Value);
             app.UseStaticFiles();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             var cultureInfo = new CultureInfo("en-GB");
             cultureInfo.NumberFormat.CurrencySymbol = "£";
@@ -187,18 +192,36 @@ namespace RocketPOS
                 SupportedUICultures = supportedCultures
             });
 
+            app.UseExceptionHandler(
+                options =>
+                {
+                    options.Run(
+                        async context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                            context.Response.ContentType = "text/html";
+                            var exceptionObject = context.Features.Get<IExceptionHandlerFeature>();
+                            if (null != exceptionObject)
+                            {
+                                var errorMessage = $"<b>Exception Error: {exceptionObject.Error.Message} </b> {exceptionObject.Error.StackTrace}";
+                                await context.Response.WriteAsync(errorMessage).ConfigureAwait(false);
+                            }
+                        });
+                }
+            );
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Login}/{action=Index}/{id?}");
+                    template: "default",
+                    defaults: new
+                    {
+                        controller = "Login",
+                        action = "Index"
+                    });
             });
-
-
-
-
-
         }
     }
+
 }

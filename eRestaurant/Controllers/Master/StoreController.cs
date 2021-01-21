@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
 
 namespace RocketPOS.Controllers.Master
+
 {
     public class StoreController : Controller
     {
@@ -26,21 +24,36 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
 
         }
-
+        
         public ActionResult Index()
         {
+
             List<StoreModel> storeModel = new List<StoreModel>();
-            storeModel = _istoreService.GetStoreList().ToList();
+            try
+            {
+                storeModel = _istoreService.GetStoreList().ToList();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("Store",ex.Message.ToString());
+            }
             return View(storeModel);
           }
 
         public ActionResult Store(int? id)
         {
             StoreModel storeModel = new StoreModel();
-            if (id > 0)
+            try
             {
-                int storeId = Convert.ToInt32(id);
-                storeModel = _istoreService.GetStoreById(storeId);
+                if (id > 0)
+                {
+                    int storeId = Convert.ToInt32(id);
+                    storeModel = _istoreService.GetStoreById(storeId);
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("Store", ex.Message.ToString());
             }
 
             return View(storeModel);

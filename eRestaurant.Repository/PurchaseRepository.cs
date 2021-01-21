@@ -38,8 +38,8 @@ namespace RocketPOS.Repository
             List<PurchaseModel> purchaseModelList = new List<PurchaseModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid " +
+                var query = "select Purchase.Id as Id, Purchase.StoreId,PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
+                      "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.Isdeleted = 0 and Purchase.Id = " + purhcaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
             }
@@ -55,6 +55,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [dbo].[Purchase] " +
                              "  ([PurchaseNumber] " +
+                             "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
                              "  ,[PurchaseDate]   " +
@@ -69,6 +70,7 @@ namespace RocketPOS.Repository
                              "  ,[IsDeleted])     " +
                              "   VALUES           " +
                              "  (@ReferenceNo,  " +
+                             "   @InventoryType,      " +
                              "   @SupplierId,      " +
                              "   1,         " +
                              "   @Date,    " +
@@ -77,7 +79,7 @@ namespace RocketPOS.Repository
                              "   @GrandTotal,      " +
                              "   @Paid,      " +
                              "   @Due,       " +
-                             "   'Notes'," +
+                             "   @Notes," +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
@@ -136,11 +138,13 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "Update [dbo].[Purchase] set " +
                              "  [SupplierId]  = @SupplierId" +
+                             "  ,[InventoryType]  = @InventoryType" +
                              "  ,[PurchaseDate] = @Date  " +
                              "  ,[GrossAmount]  =  @GrandTotal  " +
                              "  ,[GrandTotal]  = @GrandTotal   " +
                              "  ,[PaidAmount] = @Paid    " +
                              "  ,[DueAmount] =  @Due    " +
+                             "  ,[Notes] =  @Notes    " +
                              "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
                              "  ,[DateUpdated]  = GetUtcDate()  where id= " + purchaseModel.Id + ";";
                 result = con.Execute(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);

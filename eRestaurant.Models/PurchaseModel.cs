@@ -15,6 +15,8 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Select Supplier")]
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
+        public int? StoreId { get; set; }
+        public List<SelectListItem> StoreList { get; set; }
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
         [Required(ErrorMessage = "Select Date")]
@@ -24,6 +26,9 @@ namespace RocketPOS.Models
         public decimal Due { get; set; }
         public decimal Paid { get; set; }
         public string Message { get; set; }
+        public string Notes { get; set; }
+        public int InventoryType { get; set; }
+        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }
     }

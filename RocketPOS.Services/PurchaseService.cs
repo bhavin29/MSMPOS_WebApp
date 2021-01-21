@@ -28,10 +28,12 @@ namespace RocketPOS.Services
                              Id = purchase.Id,
                              ReferenceNo = purchase.ReferenceNo,
                              SupplierId = purchase.SupplierId,
+                             StoreId = purchase.StoreId,
                              Date = purchase.Date,
                              GrandTotal = purchase.GrandTotal,
                              Due = purchase.Due,
-                             Paid = purchase.Paid
+                             Paid = purchase.Paid,
+                             Notes = purchase.Notes
                          }).SingleOrDefault();
             if(model != null)
             {

@@ -112,10 +112,12 @@ $(function () {
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
                     SupplierId: $("#SupplierId").val(),
+                    StoreId: $("#StoreId").val(),
                     Date: $("#Date").val(),
                     GrandTotal: $("#GrandTotal").val(),
                     Due: $("#Due").val(),
                     Paid: $("#Paid").val(),
+                    Notes: $("#Notes").val(),
                     SupplierList: [],
                     IngredientList: [],
                     PurchaseDetails: dataArr,
@@ -223,6 +225,11 @@ function validation(id) {
     var message = '';
     if ($("#SupplierId").val() == '' || $("#SupplierId").val() == '0') {
         message = "Select Supplier"
+        return message;
+    }
+
+    if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
+        message = "Select Store"
         return message;
     }
 

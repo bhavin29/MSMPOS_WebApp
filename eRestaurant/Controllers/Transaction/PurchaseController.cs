@@ -62,6 +62,7 @@ namespace RocketPOS.Controllers.Transaction
                 purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(purchaseModel);
         }
@@ -87,7 +88,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 if (purchaseModel.PurchaseDetails.Count > 0)
                 {
-
+                    purchaseModel.InventoryType = 2;
                     if (purchaseModel.Id > 0)
                     {
 

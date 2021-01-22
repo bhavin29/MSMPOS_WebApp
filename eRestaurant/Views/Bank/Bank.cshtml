@@ -49,16 +49,18 @@
                                     {
                                         @if (Model.Id > 0)
                                         {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Edit" class="btn btn-primary" />
                                         }
                                         else
                                         {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Add" class="btn btn-primary" />
                                         }
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
                                     }
+                                    <a href='@Url.Action("Index", "Bank")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+
                                 </div>
                             </form>
+                            @*<input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />*@
                         </div>
                     </div>
                 </div>

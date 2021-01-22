@@ -32,6 +32,8 @@ namespace RocketPOS.Controllers.Transaction
         // GET: PurchaseFoodMenu
         public ActionResult PurchaseFoodMenuList()
         {
+          
+
             List<PurchaseViewModel> purchaseList = new List<PurchaseViewModel>();
             purchaseList = _iPurchaseService.GetPurchaseFoodMenuList().ToList();
             return View(purchaseList);
@@ -58,7 +60,6 @@ namespace RocketPOS.Controllers.Transaction
             else
             {
                 purchaseModel.Date = DateTime.Now;
-                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -70,7 +71,7 @@ namespace RocketPOS.Controllers.Transaction
         // POST: Purchase/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel)
+        public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel, string Cancel)
         {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
@@ -102,6 +103,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
+                        purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
                         int result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {

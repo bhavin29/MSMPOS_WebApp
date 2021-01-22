@@ -31,14 +31,21 @@ namespace RocketPOS.Controllers
                 int result = _iLoginService.GetLogin(userName, password);
                 if (result > 0)
                 {
-                    return View("~/Views/Home/Index.cshtml");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
+                    ViewBag.Message = "";
                     ViewBag.Validate = "Invalid Username or Password!!!";
                 }
             }
             return View();
+        }
+
+        public ActionResult Login(string message)
+        {
+            ViewBag.Message = message ?? "";
+            return RedirectToAction("~/Views/Home/Index.cshtml");
         }
 
     }

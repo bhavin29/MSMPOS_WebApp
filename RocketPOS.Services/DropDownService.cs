@@ -25,7 +25,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetIngredientCategoryList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -42,7 +42,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetUnitList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -59,7 +59,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetOutletList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -76,7 +76,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetStoreList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -93,7 +93,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = "0" });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = "0" });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -110,7 +110,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuCategoryList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -127,7 +127,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetEmployeeList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -144,7 +144,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> supplierList = new List<SelectListItem>();
 
-            supplierList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            supplierList.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> supplierListResult = _dropDownRepository.GetSupplierList().ToList();
             if (supplierListResult != null && supplierListResult.Count > 0)
             {
@@ -160,7 +160,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> ingredientList = new List<SelectListItem>();
 
-            ingredientList.Add(new SelectListItem { Text = "--Select--", Value = "0" });
+            ingredientList.Add(new SelectListItem { Text = "Select", Value = "0" });
             List<DropDownModel> ingredientListResult = _dropDownRepository.GetIngredientList().ToList();
             if (ingredientListResult != null && ingredientListResult.Count > 0)
             {
@@ -176,7 +176,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> ingredientList = new List<SelectListItem>();
 
-            ingredientList.Add(new SelectListItem { Text = "--Select--", Value = String.Empty });
+            ingredientList.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> ingredientListResult = _dropDownRepository.GetUserList().ToList();
             if (ingredientListResult != null && ingredientListResult.Count > 0)
             {

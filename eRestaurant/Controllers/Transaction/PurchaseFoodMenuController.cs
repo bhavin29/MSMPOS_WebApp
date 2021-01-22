@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RocketPOS.Controllers.Transaction
 {
-    public class PurchaseController : Controller
+    public class PurchaseFoodMenuController : Controller
     {
         private readonly IPurchaseService _iPurchaseService;
         private readonly IDropDownService _iDropDownService;
@@ -19,7 +18,7 @@ namespace RocketPOS.Controllers.Transaction
         private readonly LocService _locService;
 
 
-        public PurchaseController(IPurchaseService purchaseService,
+        public PurchaseFoodMenuController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService)
@@ -30,53 +29,53 @@ namespace RocketPOS.Controllers.Transaction
             _locService = locService;
         }
 
-        // GET: Purchase
-        public ActionResult PurchaseList()
+        // GET: PurchaseFoodMenu
+        public ActionResult PurchaseFoodMenuList()
         {
             List<PurchaseViewModel> purchaseList = new List<PurchaseViewModel>();
-            purchaseList = _iPurchaseService.GetPurchaseList().ToList();
+            purchaseList = _iPurchaseService.GetPurchaseFoodMenuList().ToList();
             return View(purchaseList);
         }
 
-        // GET: Purchase/Details/5
+        // GET: PurchaseFoodMenu/Details/5
         [HttpGet]
         public ActionResult GetOrderById(long purchaseId)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
-            purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+            purchaseModel = _iPurchaseService.GetPurchaseFoodMenuById(purchaseId);
             return View(purchaseModel);
         }
 
         // GET: Purchase/Create
-        public ActionResult Purchase(long? id)
+        public ActionResult PurchaseFoodMenu(long? id)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
             if (id > 0)
             {
                 long purchaseId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+                purchaseModel = _iPurchaseService.GetPurchaseFoodMenuById(purchaseId);
             }
             else
             {
                 purchaseModel.Date = DateTime.Now;
-                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
+                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(purchaseModel);
         }
 
         // POST: Purchase/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Purchase(PurchaseModel purchaseModel)
+        public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel)
         {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)
             {
@@ -91,11 +90,11 @@ namespace RocketPOS.Controllers.Transaction
             {
                 if (purchaseModel.PurchaseDetails.Count > 0)
                 {
-                    purchaseModel.InventoryType = 2;
+                    purchaseModel.InventoryType = 1;
                     if (purchaseModel.Id > 0)
                     {
 
-                        int result = _iPurchaseService.UpdatePurchase(purchaseModel);
+                        int result = _iPurchaseService.UpdatePurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
@@ -103,7 +102,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        int result = _iPurchaseService.InsertPurchase(purchaseModel);
+                        int result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
@@ -133,7 +132,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
             }
-            return RedirectToAction(nameof(PurchaseList));
+            return RedirectToAction(nameof(PurchaseFoodMenuList));
         }
 
         public ActionResult DeletePurchaseDetails(long purchaseId)

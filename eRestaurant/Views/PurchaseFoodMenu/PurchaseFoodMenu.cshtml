@@ -77,12 +77,12 @@
                                                     <div class="row">
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label asp-for="IngredientList" class="control-label">Ingredient</label>
-                                                                <select asp-for="IngredientId"
+                                                                <label asp-for="FoodMenuList" class="control-label">Food Menu</label>
+                                                                <select asp-for="FoodMenuId"
                                                                         class="form-control"
-                                                                        asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
                                                                 </select>
-                                                                <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                                                <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
@@ -118,8 +118,8 @@
                                                             <table id="PurchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th style="width:35%">IngredientId</th>
-                                                                        <th style="width:35%">Ingredient</th>
+                                                                        <th style="width:35%">FoodMenuId</th>
+                                                                        <th style="width:35%">FoodMenuName</th>
                                                                         <th style="width:20%" class="text-right">Unit Price</th>
                                                                         <th style="width:15%" class="text-right">Quantity</th>
                                                                         <th style="width:20%" class="text-right">Amount</th>
@@ -130,16 +130,16 @@
                                                                 @if (Model.Id > 0)
                                                                 {
                                                                     @foreach (var item in Model.PurchaseDetails)
-                                                                        {
-                                                                            var tm = "#myModal" + item.PurchaseId;
-                                                                            var mid = "myModal" + item.PurchaseId;
-                                                                            var rowId = "rowId" + item.PurchaseId;
+                                                                    {
+                                                                        var tm = "#myModal" + item.PurchaseId;
+                                                                        var mid = "myModal" + item.PurchaseId;
+                                                                        var rowId = "rowId" + item.PurchaseId;
                                                                         <tr id="@rowId">
                                                                             <td>
-                                                                                @item.IngredientId
+                                                                                @item.FoodMenuId
                                                                             </td>
                                                                             <td>
-                                                                                @item.IngredientName
+                                                                                @item.FoodMenuName
                                                                             </td>
                                                                             <td class="text-right">
                                                                                 @item.UnitPrice
@@ -152,7 +152,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
-                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                    <a href="#" data-itemid="@item.FoodMenuId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
@@ -170,7 +170,7 @@
                                                                                         @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                                                     </div>
                                                                                     <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.PurchaseId, @item.IngredientId,@rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                                        <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.PurchaseId, @item.FoodMenuId,@rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
                                                                                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
@@ -227,7 +227,7 @@
                                     </div>
                                 </div>
                                 <div class="form-button-action">
-                                    <input type="submit" asp-action="PurchaseList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
+                                    <input type="submit" asp-action="PurchaseFoodMenuList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
                                     <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
                                 </div>
                             </form>
@@ -287,5 +287,5 @@ var TotalAmount = 0;
     console.log(dataArr);
     </script>
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/Scripts/Purchase.js"></script>
+    <script src="~/Scripts/PurchaseFoodMenu.js"></script>
 }

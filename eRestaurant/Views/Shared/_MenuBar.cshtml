@@ -1,0 +1,104 @@
+﻿<header>
+    <nav class="navbar  navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <a class="navbar-brand" href="~/Home">
+            <img src="~/img/Mainwindow_Logo_Inner.bmp" width="114" height="30" alt="">
+        </a>
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Master
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="~/Bank">Bank</a>
+                            <a class="dropdown-item" href="~/Outlet">Outlet</a>
+                            <a class="dropdown-item" href="~/Store">Store</a>
+                            <a class="dropdown-item" href="~/Tables">Tables</a>
+                            <a class="dropdown-item" href="~/PaymentMethod">Payment Method</a>
+                            <a class="dropdown-item" href="~/Employee">Employee</a>
+                            <a class="dropdown-item" href="~/User">User</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkFM" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Food Menu
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkFM">
+                            <a class="dropdown-item" href="~/FoodMenuCategory">Food Menu Category</a>
+                            <a class="dropdown-item" href="~/FoodMenu">Food Menu</a>
+                            <a class="dropdown-item" href="~/IngredientUnit">Ingredient Unit</a>
+                            <a class="dropdown-item" href="~/IngredientCategory">Ingredient Category</a>
+                            <a class="dropdown-item" href="~/Ingredient">Ingredient</a>
+                            <a class="dropdown-item" href="~/Addons">Addons</a>
+                            <a class="dropdown-item" href="~/Ingredient">Varient</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkPu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Purchase
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkPu">
+                            <a class="dropdown-item" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
+                                <span>Purchase</span>
+                            </a>
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryTransferFoodMenu" asp-action="InventoryTransferFoodMenuList">
+                                <span>Stock Transfer</span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Stock
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <a class="dropdown-item" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
+                                <span>Stock In</span>
+                            </a>
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryTransferFoodMenu" asp-action="InventoryTransferFoodMenuList">
+                                <span>Stock Transfer</span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Supplier" asp-action="Index">
+                            <span>Supplier</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <form class="form-inline my-2 my-lg-0">
+                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
+                    <span>Logout</span>
+                </a>
+            </form>
+        </div>
+    </nav>
+
+</header>
+
+@*<header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">WebApplication3</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>*@

@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Food Menu</h2>
+                    <h5>Manage Food Menu</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -241,7 +241,7 @@
                                         <input id="saveOrder" type="submit" value="Save" class="btn btn-primary" />
                                     </div>
                                     <div style="margin-left:10px">
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary" />
+                                        <a href='@Url.Action("Index", "FoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     </div>
                                 </div>
                             </form>

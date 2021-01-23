@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Varient</h2>
+                    <h5>Manage Varient</h5>
                 </div>
                 <div class="card-body">
 
@@ -47,20 +47,20 @@
                                         </div>
                                     }
                                 }
-                                <div class="form-group">
-                                    @if (Model != null)
+                            <div class="form-group">
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
                                     {
-                                        @if (Model.Id > 0)
-                                        {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                        }
-                                        else
-                                        {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                        }
+                                        <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
                                     }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-                                </div>
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                    }
+                                }
+                                <a href='@Url.Action("Index", "Varient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                            </div>
                             </form>
                         </div>
                     </div>

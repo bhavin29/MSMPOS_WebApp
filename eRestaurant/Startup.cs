@@ -160,7 +160,7 @@ namespace RocketPOS
 
             services.AddScoped<ILoginRepository, LoginRepository>();
             services.AddScoped<ILoginService, LoginService>();
-
+            services.AddScoped<IEmailService, EmailService>();
             services.AddHttpClient();
         }
 

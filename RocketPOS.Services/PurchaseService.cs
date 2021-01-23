@@ -92,9 +92,12 @@ namespace RocketPOS.Services
                              StoreId = purchase.StoreId,
                              Date = purchase.Date,
                              GrandTotal = purchase.GrandTotal,
+                             DiscountAmount = purchase.DiscountAmount,
+                             TaxAmount = purchase.TaxAmount,
                              Due = purchase.Due,
                              Paid = purchase.Paid,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             Status = purchase.Status
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -105,6 +108,10 @@ namespace RocketPOS.Services
                                              FoodMenuId = purchasedetails.FoodMenuId,
                                              Quantity = purchasedetails.Quantity,
                                              UnitPrice = purchasedetails.UnitPrice,
+                                             DiscountAmount = purchasedetails.DiscountAmount,
+                                             DiscountPercentage = purchasedetails.DiscountPercentage,
+                                             TaxAmount = purchasedetails.TaxAmount,
+                                             TaxPercentage = purchasedetails.TaxPercentage,
                                              Total = purchasedetails.Total,
                                              FoodMenuName = purchasedetails.FoodMenuName
                                          }).ToList();
@@ -130,6 +137,16 @@ namespace RocketPOS.Services
         public string ReferenceNumberFoodMenu()
         {
             return _iPurchaseRepository.ReferenceNumberFoodMenu();
+        }
+
+        public decimal GetTaxByFoodMenuId(int foodMenuId)
+        {
+            return _iPurchaseRepository.GetTaxByFoodMenuId(foodMenuId);
+        }
+
+        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        {
+            return _iPurchaseRepository.GetFoodMenuLastPrice(foodMenuId);
         }
     }
 }

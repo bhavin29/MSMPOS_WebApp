@@ -67,8 +67,8 @@ namespace RocketPOS.Repository.Reports
                              "Purchase.PaidAmount as Paid," +
                              "Purchase.DueAmount as Due," +
                              "STUFF( (SELECT ', ' + convert(varchar(10), i1.IngredientName, 120)" +
-                              " FROM Ingredient i1 inner join PurchaseIngredient on PurchaseIngredient.IngredientId = i1.Id" +
-                              " where Purchase.id = PurchaseIngredient.PurchaseId" +
+                              " FROM Ingredient i1 inner join PurchaseDetail on PurchaseDetail.IngredientId = i1.Id" +
+                              " where Purchase.id = PurchaseDetail.PurchaseId" +
                               " FOR XML PATH(''))" +
                               " , 1, 2, '')  AS Ingredients," +
                              " 'Rocket Admin' as PurchaseBy" +

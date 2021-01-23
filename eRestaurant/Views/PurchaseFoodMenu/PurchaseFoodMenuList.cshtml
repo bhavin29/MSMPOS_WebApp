@@ -29,8 +29,9 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                </thead>
+</thead>
                                 <tfoot>
                                     <tr>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
@@ -39,6 +40,7 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     </tr>
                                 </tfoot>
@@ -47,32 +49,35 @@
                                     {
                                         var tm = "#myModal" + item.Id;
                                         var mid = "myModal" + item.Id;
-                                        <tr role="row">
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.SupplierName)
-                                            </td>
-                                            <td class="text-right">
-                                                @Html.DisplayFor(modelItem => item.GrandTotal)
-                                            </td>
-                                            <td class="text-right">
-                                                @Html.DisplayFor(modelItem => item.Due)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayName("Rocket")
-                                            </td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="PurchaseFoodMenu" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Due)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseFoodMenu" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                                <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                         <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">

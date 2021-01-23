@@ -15,6 +15,7 @@ namespace RocketPOS.Models
         public decimal GrandTotal { get; set; }
         public decimal Due { get; set; }
         public int UserId { get; set; }
+        public string Status { get; set; }
         public List<PurchaseDetailsModel> purchaseDetails { get; set; }
     }
 }

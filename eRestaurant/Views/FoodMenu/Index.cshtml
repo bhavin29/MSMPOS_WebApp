@@ -8,121 +8,139 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("FoodMenu");
 }
 
-<div class="page-inner">
-    <div class="page-header"></div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <a asp-action="FoodMenu" class="pull-right btn btn-primary">Add</a>
-                    <h2>Food Menu</h2>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                            <div class="col-sm-12">
-                                <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                    <thead row="root">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodCategoryName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodMenuName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodMenuCode)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IsVegItem)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IsBeverages)
-                                            </th>
-                                            <th>@Html.DisplayName("Action")</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot row="root">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodCategoryName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodMenuName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.FoodMenuCode)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IsVegItem)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IsBeverages)
-                                            </th>
-                                            <th>@Html.DisplayName("Action")</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            var tm = "#myModal" + item.Id;
-                                            var mid = "myModal" + item.Id;
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">FoodMenu</h5>
+            </div>
+            <div class="float-right">
+                <a asp-action="FoodMenu" class="btn btn-primary float-sm-left ">Add</a>
 
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FoodCategoryName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IsVegItem)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IsBeverages)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IsActive)
-                                                </td>
-                                                <td>
-                                                    <div class="form-button-action">
-                                                        <a asp-action="FoodMenu" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </tbody>
-                                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead row="root">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodCategoryName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodMenuName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodMenuCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IsVegItem)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IsBeverages)
+                            </th>
+                            <th>@Html.DisplayName("Action")</th>
+                        </tr>
+                    </thead>
+                    <tfoot row="root">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodCategoryName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodMenuName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FoodMenuCode)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IsVegItem)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.IsBeverages)
+                            </th>
+                            <th>@Html.DisplayName("Action")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodCategoryName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsVegItem)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsBeverages)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="FoodMenu" class="fa fa-edit" asp-route-Id="@item.Id">Edit<i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete<i class="fa fa-times"></i></a>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+<br />
+<br />
+
 @section Scripts {
     <script>
         $(document).ready(function () {
             var table = $('#@dataTableName').DataTable();
         });
     </script>
+    <script>
+        $(function () {
+            $('#dataTable').DataTable({
+                "pageLength": 3,
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+        });
+    </script>
+
 }

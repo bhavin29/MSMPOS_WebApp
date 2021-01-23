@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Ingredient</h2>
+                    <h5>Manage Ingredient</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -68,23 +68,16 @@
                                         }
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-button-action">
-                                            @if (Model.Id > 0)
-                                            {
-                                                <input type="submit" value="Edit" class="btn btn-primary" />
-                                            }
-                                            else
-                                            {
-                                                <input type="submit" value="Add" class="btn btn-primary" />
-                                            }
-                                            <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    @if (Model.Id > 0)
+                                    {
+                                        <input type="submit" value="Edit" class="btn btn-primary" />
+                                    }
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="btn btn-primary" />
+                                    }
+                                    <a href='@Url.Action("Index", "Ingredient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                 </div>
                             </form>
                         </div>

@@ -12,7 +12,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
+                    <div class="col-md-8"><h4 >@ViewData["Title"]</h4></div>
                     <div class="col-md-4"><a asp-action="PurchaseFoodMenu" class="pull-right btn btn-primary">Add Purchase</a></div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                     </div>
                                                 </div>
                                             </div>

@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Outlet</h2>
+                    <h5>Manage Outlet</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -24,60 +24,50 @@
                                             <span asp-validation-for="StoreId" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="OutletName" class="control-label"></label>
+                                            <label asp-for="OutletName" class="control-label">Outlet</label>
                                             <input asp-for="OutletName" class="form-control" />
                                             <span asp-validation-for="OutletName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="OutletAddress1" class="control-label"></label>
+                                            <label asp-for="OutletAddress1" class="control-label">Address 1</label>
                                             <input asp-for="OutletAddress1" class="form-control" />
                                             <span asp-validation-for="OutletAddress1" class="text-danger"></span>
                                         </div>
-                                        <div class="form-group">
-                                            <label asp-for="OutletAddress2" class="control-label"></label>
-                                            <input asp-for="OutletAddress2" class="form-control" />
-                                            <span asp-validation-for="OutletAddress2" class="text-danger"></span>
-                                        </div>
-
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="OutletPhone" class="control-label"></label>
+                                            <label asp-for="OutletAddress2" class="control-label">Address 2</label>
+                                            <input asp-for="OutletAddress2" class="form-control" />
+                                            <span asp-validation-for="OutletAddress2" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="OutletPhone" class="control-label">Phone</label>
                                             <input asp-for="OutletPhone" class="form-control" />
                                             <span asp-validation-for="OutletPhone" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="OutletEmail" class="control-label"></label>
-                                            <input asp-for="OutletEmail" class="form-control" />
+                                            <label asp-for="OutletEmail" class="control-label">Email</label>
+                                            <input type="email" asp-for="OutletEmail" class="form-control" aria-describedby="emailHelp" placeholder="Enter email"/>
                                             <span asp-validation-for="OutletEmail" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="InvoiceHeader" class="control-label"></label>
-                                            <input asp-for="InvoiceHeader" class="form-control" />
-                                            <span asp-validation-for="InvoiceHeader" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="InvoiceFooter" class="control-label"></label>
-                                            <input asp-for="InvoiceFooter" class="form-control" />
-                                            <span asp-validation-for="InvoiceFooter" class="text-danger"></span>
+                                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="IsCollectTax" class="control-label"></label>
-                                            <input asp-for="IsCollectTax" class="form-control" />
+                                            <label asp-for="IsCollectTax" class="form-check-label" style="margin: 30px 0 0 0px"></label>
+                                            <input asp-for="IsCollectTax" class="form-check-input" style="margin: 30Px 0 0 25px" />
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="IsPreorPostPayment" class="control-label"></label>
-                                            <input asp-for="IsPreorPostPayment" class="form-control" />
+                                            <label asp-for="IsPreorPostPayment" class="form-check-label" style="margin: 35px 0 0 0px"></label>
+                                            <input asp-for="IsPreorPostPayment" class="form-check-input" style="margin: 35px 0 0 16px" />
                                         </div>
                                         @if (Model != null)
                                         {
                                             @if (Model.Id > 0)
                                             {
                                                 <div class="form-group">
-                                                    <label asp-for="IsActive" class="control-label"></label>
-                                                    <input asp-for="IsActive" class="form-control" />
+                                                    <label asp-for="IsActive" class="form-check-label" style="margin: 35px 0 0 0px"></label>
+                                                    <input asp-for="IsActive" class="form-check-input" style="margin: 35Px 0 0 42px" />
                                                 </div>
                                             }
                                         }
@@ -88,14 +78,14 @@
                                     {
                                         @if (Model.Id > 0)
                                         {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Edit" class="btn btn-primary" />
                                         }
                                         else
                                         {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
+                                            <input type="submit" value="Add" class="btn btn-primary" />
                                         }
                                     }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                    <a href='@Url.Action("Index", "Outlet")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
 
                                 </div>
                             </form>

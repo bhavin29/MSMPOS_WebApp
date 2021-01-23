@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage FoodMenu Category</h2>
+                    <h5>Manage Food Menu Category</h5>
                 </div>
                 <div class="card-body">
 
@@ -31,24 +31,22 @@
                                         <span asp-validation-for="Id" class="text-danger"></span>
                                     </div>*@
                                 <div class="form-group">
-                                    <label asp-for="FoodMenuCategoryName" class="control-label"></label>
+                                    <label asp-for="FoodMenuCategoryName" class="control-label">Food Menu Category</label>
                                     <input asp-for="FoodMenuCategoryName" class="form-control" />
                                     <span asp-validation-for="FoodMenuCategoryName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Notes" class="control-label"></label>
-                                    <input asp-for="Notes" class="form-control" />
+                                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
                                     <span asp-validation-for="Notes" class="text-danger"></span>
                                 </div>
                                 @if (Model != null)
                                 {
                                     @if (Model.Id > 0)
                                     {
-
                                         <div class="form-group">
-                                            <label asp-for="IsActive" class="control-label"></label>
-                                            <input asp-for="IsActive" class="form-control" />
-                                            <span class="alert-danger" asp-validation-for="IsActive"></span>
+                                            <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                            <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 42px"  />
                                         </div>
                                     }
                                 }
@@ -57,20 +55,20 @@
                                         <input asp-for="UserId" class="form-control" />
                                         <span asp-validation-for="UserId" class="text-danger"></span>
                                     </div>*@
-                                <div class="form-group">
-                                    @if (Model != null)
+                            <div class="form-group">
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
                                     {
-                                        @if (Model.Id > 0)
-                                        {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                        }
-                                        else
-                                        {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                        }
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                        <input type="submit" value="Edit" class="btn btn-primary" />
                                     }
-                                </div>
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="btn btn-primary" />
+                                    }
+                                    <a href='@Url.Action("Index", "FoodMenuCategory")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                }
+                            </div>
                             </form>
                         </div>
                     </div>

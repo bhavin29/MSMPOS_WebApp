@@ -1,13 +1,12 @@
 ﻿@model RocketPOS.Models.AddonsModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
 <div class="page-inner">
     <div class="page-header"></div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Addons</h2>
+                    <h5>Manage Addons</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -16,7 +15,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="AddonsName" class="control-label"></label>
+                                            <label asp-for="AddonsName" class="control-label">Addons</label>
                                             <input asp-for="AddonsName" class="form-control" />
                                             <span asp-validation-for="AddonsName" class="text-danger"></span>
                                         </div>
@@ -29,32 +28,28 @@
                                         {
                                             @if (Model.Id > 0)
                                             {
-
-                                                <div class="form-check">
-                                                    <label class="orm-check-label">
-                                                        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
-                                                        <span class="form-check-sign">Is Active</span>
-                                                    </label>
+                                                <div class="form-group">
+                                                    <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                    <input asp-for="IsActive" class="form-check-input" style="margin: 15Px 0 0 42px" />
+                                                    <span class="alert-danger" asp-validation-for="IsActive"></span>
                                                 </div>
                                             }
                                         }
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        @if (Model != null)
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
                                         {
-                                            @if (Model.Id > 0)
-                                            {
-                                                <input type="submit" value="Edit" formnovalidate class="btn btn-primary" />
-                                            }
-                                            else
-                                            {
-                                                <input type="submit" value="Add" formnovalidate class="btn btn-primary" />
-                                            }
-                                            <input type="submit" asp-action="Index" value="Cancel" class="btn btn-danger" />
+                                            <input type="submit" value="Edit" formnovalidate class="btn btn-primary" />
                                         }
-                                    </div>
+                                        else
+                                        {
+                                            <input type="submit" value="Add" formnovalidate class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "Addons")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    }
                                 </div>
                             </form>
                         </div>

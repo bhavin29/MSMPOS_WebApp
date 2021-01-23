@@ -7,54 +7,55 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage User</h2>
+                    <h5>Manage User</h5>
                 </div>
                 <div class="card-body">
-
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <form asp-action="User">
-                                <div class="form-group">
-                                    <label asp-for="EmployeeList" class="control-label">Employee</label>
-                                    <select asp-for="EmployeeId" class="form-control"
-                                            asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="OutletList" class="control-label">Outlet</label>
-                                    <select asp-for="OutletId" class="form-control"
-                                            asp-items="@(new MultiSelectList(Model.OutletList, "Value", "Text"))">
-                                    </select>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="EmployeeList" class="control-label">Employee</label>
+                                            <select asp-for="EmployeeId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="OutletList" class="control-label">Outlet</label>
+                                            <select asp-for="OutletId" class="form-control"
+                                                    asp-items="@(new MultiSelectList(Model.OutletList, "Value", "Text"))">
+                                            </select>
 
-                                    <select multiple="multiple" class="multi-select" id="my_multi_select1" asp-for="@Model.OutletList" asp-items="(List<SelectListItem>)ViewBag.OutletList"></select>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Username" class="control-label"></label>
-                                    <input asp-for="Username" class="form-control" />
-                                    <span asp-validation-for="Username" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Password" class="control-label"></label>
-                                    <input asp-for="Password" class="form-control" />
-                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                </div>
-                                @*<div class="form-group">
-                                    <label asp-for="ThumbToken" class="control-label"></label>
-                                    <input asp-for="ThumbToken" class="form-control" />
-                                    <span asp-validation-for="ThumbToken" class="text-danger"></span>
-                                </div>*@
-                                <div class="form-group">
-                                    <label asp-for="RoleTypeId" class="control-label">Role</label>
-                                    <select asp-for="RoleTypeId" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
-                                        <option selected="selected" value="">--Select role--</option>
-                                    </select>
-                                    <span asp-validation-for="RoleTypeId" class="text-danger" />
-                                    a
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Counter" class="control-label"></label>
-                                    <input asp-for="Counter" class="form-control" />
-                                    <span asp-validation-for="Counter" class="text-danger"></span>
+                                            <select multiple="multiple" class="multi-select" id="my_multi_select1" asp-for="@Model.OutletList" asp-items="(List<SelectListItem>)ViewBag.OutletList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="Username" class="control-label"></label>
+                                            <input asp-for="Username" class="form-control" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label"></label>
+                                            <input type="password" asp-for="Password" class="form-control" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="RoleTypeId" class="control-label">Role</label>
+                                            <select asp-for="RoleTypeId" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
+                                                <option selected="selected" value="">Select</option>
+                                            </select>
+                                            <span asp-validation-for="RoleTypeId" class="text-danger" />
+                                        </div>
+                                        @*<div class="form-group">
+                                            <label asp-for="Counter" class="control-label"></label>
+                                            <input asp-for="Counter" class="form-control" />
+                                            <span asp-validation-for="Counter" class="text-danger"></span>
+                                        </div>*@
+                                    </div>
                                 </div>
                                 @if (Model != null)
                                 {
@@ -62,25 +63,25 @@
                                     {
 
                                         <div class="form-group">
-                                            <label asp-for="IsActive" class="control-label"></label>
-                                            <input asp-for="IsActive" class="form-control" />
+                                            <label asp-for="IsActive" class="control-label" style="margin: 7px 0 0 20px"></label>
+                                            <input asp-for="IsActive" class="form-check-input" style="margin: 7Px 0 0 42px"  />
                                         </div>
                                     }
                                 }
-                                <div class="form-group">
-                                    @if (Model != null)
+                            <div class="form-group">
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
                                     {
-                                        @if (Model.Id > 0)
-                                        {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                        }
-                                        else
-                                        {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                        }
+                                        <input type="submit" value="Edit" class="btn btn-primary" />
                                     }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
-                                </div>
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="btn btn-primary" />
+                                    }
+                                }
+                                <a href='@Url.Action("Index", "User")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                            </div>
                             </form>
                         </div>
                     </div>

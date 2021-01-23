@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Payment Method</h2>
+                    <h5>Manage Payment Method</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -20,12 +20,12 @@
                                     <span asp-validation-for="PaymentMethodName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="IsBank" class="control-label"></label>
-                                    <input asp-for="IsBank" class="form-control" />
+                                    <label asp-for="IsBank" class="form-check-label" style="margin: 5px 0 0 0px"></label>
+                                    <input asp-for="IsBank"  class="form-check-input" style="margin: 7Px 0 0 57px"/>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="IsIntegration" class="control-label"></label>
-                                    <input asp-for="IsIntegration" class="form-control" />
+                                    <label asp-for="IsIntegration" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                    <input asp-for="IsIntegration" class="form-check-input" style="margin: 12Px 0 0 24px" />
                                 </div>
                                 @if (Model != null)
                                 {
@@ -33,26 +33,26 @@
                                     {
 
                                         <div class="form-group">
-                                            <label asp-for="IsActive" class="control-label"></label>
-                                            <input asp-for="IsActive" class="form-control" />
+                                                <label asp-for="IsActive"   class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                <input asp-for="IsActive" class="form-check-input" style="margin: 7Px 0 0 42px" />
                                         </div>
                                     }
                                 }
-                                <div class="form-group">
-                                    @if (Model != null)
+                            <div class="form-group">
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
                                     {
-                                        @if (Model.Id > 0)
-                                        {
-                                            <input type="submit" value="Edit" class="btn btn-primary btn-sm" />
-                                        }
-                                        else
-                                        {
-                                            <input type="submit" value="Add" class="btn btn-primary btn-sm" />
-                                        }
+                                        <input type="submit" value="Edit" class="btn btn-primary" />
                                     }
-                                    <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary btn-sm" />
+                                    else
+                                    {
+                                        <input type="submit" value="Add" class="btn btn-primary" />
+                                    }
+                                }
+                                <a href='@Url.Action("Index", "PaymentMethod")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
 
-                                </div>
+                            </div>
                             </form>
                         </div>
                     </div>

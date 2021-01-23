@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h2>Manage Food Menu</h2>
+                    <h5>Manage Food Menu</h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -32,80 +32,55 @@
                                             <input asp-for="FoodMenuName" class="form-control" />
                                             <span asp-validation-for="FoodMenuName" class="text-danger"></span>
                                         </div>
+                                        @*<div class="form-group">
+                                                <label asp-for="FoodMenuCode" class="control-label"></label>
+                                                <input asp-for="FoodMenuCode" class="form-control" />
+                                                <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="ColourCode" class="control-label"></label>
+                                                <input asp-for="ColourCode" class="form-control" />
+                                                <span asp-validation-for="ColourCode" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="BigThumb" class="control-label"></label>
+                                                <input asp-for="BigThumb" class="form-control" />
+                                                <span asp-validation-for="BigThumb" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="MediumThumb" class="control-label"></label>
+                                                <input asp-for="MediumThumb" class="form-control" />
+                                                <span asp-validation-for="MediumThumb" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="SmallThumb" class="control-label"></label>
+                                                <input asp-for="SmallThumb" class="form-control" />
+                                                <span asp-validation-for="SmallThumb" class="text-danger"></span>
+                                            </div>*@
                                         <div class="form-group">
-                                            <label asp-for="FoodMenuCode" class="control-label"></label>
-                                            <input asp-for="FoodMenuCode" class="form-control" />
-                                            <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="ColourCode" class="control-label"></label>
-                                            <input asp-for="ColourCode" class="form-control" />
-                                            <span asp-validation-for="ColourCode" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="BigThumb" class="control-label"></label>
-                                            <input asp-for="BigThumb" class="form-control" />
-                                            <span asp-validation-for="BigThumb" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="MediumThumb" class="control-label"></label>
-                                            <input asp-for="MediumThumb" class="form-control" />
-                                            <span asp-validation-for="MediumThumb" class="text-danger"></span>
+                                            <label asp-for="Notes" class="control-label"></label>
+                                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                                            <span asp-validation-for="Notes" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
-                                        <div class="form-group">
-                                            <label asp-for="SmallThumb" class="control-label"></label>
-                                            <input asp-for="SmallThumb" class="form-control" />
-                                            <span asp-validation-for="SmallThumb" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Notes" class="control-label"></label>
-                                            <input asp-for="Notes" class="form-control" />
-                                            <span asp-validation-for="Notes" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="SalesPrice" class="control-label"></label>
-                                            <input asp-for="SalesPrice" class="form-control" />
-                                            <span asp-validation-for="SalesPrice" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="FoodVat" class="control-label"></label>
-                                            <input asp-for="FoodVat" class="form-control" />
-                                            <span asp-validation-for="FoodVat" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Foodcess" class="control-label"></label>
-                                            <input asp-for="Foodcess" class="form-control" />
-                                            <span asp-validation-for="Foodcess" class="text-danger"></span>
-                                        </div>
                                         <div class="form-group">
                                             <label asp-for="Position" class="control-label"></label>
                                             <input asp-for="Position" class="form-control" />
                                             <span asp-validation-for="Position" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group">
-                                            <label asp-for="IsVegItem" class="control-label"></label>
-                                            <input asp-for="IsVegItem" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="IsBeverages" class="control-label"></label>
-                                            <input asp-for="IsBeverages" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="OfferIsAvailable" class="control-label"></label>
-                                            <input asp-for="OfferIsAvailable" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Position" class="control-label"></label>
-                                            <input asp-for="Position" class="form-control" />
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="OutletId" class="control-label"></label>
-                                            <input asp-for="OutletId" class="form-control" />
-                                        </div>
+                                        @*<div class="form-group">
+                                                <label asp-for="IsVegItem" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                <input asp-for="IsVegItem" class="form-check-input" style="margin: 12Px 0 0 24px" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="IsBeverages" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                <input asp-for="IsBeverages" class="form-check-input" style="margin: 12Px 0 0 24px" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label asp-for="OfferIsAvailable" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                <input asp-for="OfferIsAvailable" class="form-check-input" style="margin: 12Px 0 0 24px" />
+                                            </div>*@
 
                                         @if (Model != null)
                                         {
@@ -113,15 +88,15 @@
                                             {
 
                                                 <div class="form-group">
-                                                    <label asp-for="IsActive" class="control-label"></label>
-                                                    <input asp-for="IsActive" class="form-control" />
+                                                    <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                                    <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 24px" />
                                                 </div>
                                             }
                                         }
                                     </div>
                                 </div>
                                 <hr />
-                                <h3>Food Manu Details</h3>
+                                <h5>Food Manu Details</h5>
                                 <div>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -148,14 +123,12 @@
                                                             <div class="form-group">
                                                                 <label class="control-label"></label>
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
-                                                                <input class="form-control" id="FoodMenuId" value="0" />
-                                                                <input asp-for="Id" class="form-control" type="hidden" />
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label"></label>
-                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
+                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">Cancel</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -165,7 +138,7 @@
                                                             <table id="FoodManuDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th style="width:35%">IngredientId</th>
+                                                                        <th style="width:5%">IngredientId</th>
                                                                         <th style="width:35%">Ingredient</th>
                                                                         <th style="width:15%" class="text-right">Consumption</th>
                                                                         <th style="width:35%">Actions</th>
@@ -210,7 +183,7 @@
                                                                                     </div>
                                                                                     <div class="modal-footer">
                                                                                         <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -225,23 +198,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br/>
                                 <div class="form-button-action">
                                     <div>
                                         @*@if (Model != null)
-        {
-            @if (Model.Id > 0)
-            {
-                <input id="saveOrder" type="submit" value="Edit" class="btn btn-primary" />
-            }
-            else
-            {
-                <input id="saveOrder" type="submit" value="Add" class="btn btn-primary" />
-            }
-        }*@
+                                            {
+                                                @if (Model.Id > 0)
+                                                {
+                                                    <input id="saveOrder" type="submit" value="Edit" class="btn btn-primary" />
+                                                }
+                                                else
+                                                {
+                                                    <input id="saveOrder" type="submit" value="Add" class="btn btn-primary" />
+                                                }
+                                            }*@
                                         <input id="saveOrder" type="submit" value="Save" class="btn btn-primary" />
-                                    </div>
-                                    <div style="margin-left:10px">
-                                        <input type="submit" asp-action="Index" value="Cancel" class="btn btn-primary" />
+                                        <a href='@Url.Action("Index", "FoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     </div>
                                 </div>
                             </form>

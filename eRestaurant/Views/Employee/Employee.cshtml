@@ -15,20 +15,18 @@
                             <form asp-action="Employee">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
-
-                                        <div asp-validation-summary="All" class="text-danger"></div>
                                         <div class="form-group">
-                                            <label asp-for="FirstName" class="control-label"></label>
+                                            <label asp-for="FirstName" class="control-label">First Name</label>
                                             <input asp-for="FirstName" class="form-control" />
                                             <span asp-validation-for="FirstName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="MiddleName" class="control-label"></label>
+                                            <label asp-for="MiddleName" class="control-label">Middle Nmae</label>
                                             <input asp-for="MiddleName" class="form-control" />
                                             <span asp-validation-for="MiddleName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="LastName" class="control-label"></label>
+                                            <label asp-for="LastName" class="control-label">Last Name</label>
                                             <input asp-for="LastName" class="form-control" />
                                             <span asp-validation-for="LastName" class="text-danger"></span>
                                         </div>
@@ -42,7 +40,7 @@
 
                                         <div class="form-group">
                                             <label asp-for="Email" class="control-label"></label>
-                                            <input asp-for="Email" class="form-control" />
+                                            <input asp-for="Email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
                                             <span asp-validation-for="Email" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
@@ -51,13 +49,13 @@
                                             <span asp-validation-for="Phone" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="AlterPhone" class="control-label"></label>
+                                            <label asp-for="AlterPhone" class="control-label">Alternative Phone</label>
                                             <input asp-for="AlterPhone" class="form-control" />
                                             <span asp-validation-for="AlterPhone" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="PresentAdress" class="control-label"></label>
-                                            <input asp-for="PresentAdress" class="form-control" />
+                                            <label asp-for="PresentAdress" class="control-label">Present Address 1</label>
+                                            <textarea asp-for="PresentAdress" class="form-control" rows="2"></textarea>
                                             <span asp-validation-for="PresentAdress" class="text-danger"></span>
                                         </div>
 
@@ -65,20 +63,22 @@
                                     <div class="col-md-6 col-lg-4">
 
                                         <div class="form-group">
-                                            <label asp-for="PermanentAdress" class="control-label"></label>
-                                            <input asp-for="PermanentAdress" class="form-control" />
+                                            <label asp-for="PermanentAdress" class="control-label">Permanent Adress</label>
+                                            <textarea asp-for="PermanentAdress" class="form-control" rows="2"></textarea>
                                             <span asp-validation-for="PermanentAdress" class="text-danger"></span>
                                         </div>
-                                        <div class="form-group">
-                                            <label asp-for="picture" class="control-label"></label>
-                                            <input asp-for="picture" class="form-control" />
-                                            <span asp-validation-for="picture" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="IsActive" class="control-label"></label>
-                                            <input asp-for="IsActive" class="form-control" />
-                                        </div>
-
+                                        @*<div class="form-group">
+                                                <label asp-for="picture" class="control-label">Picture</label>
+                                                <input asp-for="picture" class="form-control" />
+                                                <span asp-validation-for="picture" class="text-danger"></span>
+                                            </div>*@
+                                        @if (Model.Id > 0)
+                                        {
+                                            <div class="form-group">
+                                                <label asp-for="IsActive" class="form-check-label" style="margin: 10px 0 0 0px"></label>
+                                                <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 42px" />
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -101,11 +101,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
+<br />
 <div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">

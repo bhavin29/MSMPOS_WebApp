@@ -82,7 +82,7 @@ $('#addRow').on('click', function (e) {
             '<td><div class="form-button-action"><a href="#" data-itemId="' + dataItemId + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + myModal + '"><i class="fa fa-times"></i></a></div></td > ' +
             '<div class="modal fade" id="myModal' + myModal + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + dataItemId + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ', ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div ></div >'
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + dataItemId + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ', ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >'
         ]).node().id = rowId;
         WasteDatatable.draw(false);
         dataArr.push({

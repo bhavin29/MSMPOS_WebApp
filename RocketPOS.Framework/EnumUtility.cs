@@ -71,4 +71,14 @@ namespace RocketPOS.Framework
         [Display(Name = "Approved")]
         Approved = 2,
     }
+
+    public enum PurchaseStatus
+    {
+        [Display(Name = "Created")]
+        Created = 1,
+        [Display(Name = "Approved")]
+        Approved = 2,
+        [Display(Name = "Rejected")]
+        Rejected = 3,
+    }
 }

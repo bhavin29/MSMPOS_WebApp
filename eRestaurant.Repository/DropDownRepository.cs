@@ -141,5 +141,17 @@ namespace RocketPOS.Repository
             return dropDownModels;
         }
 
+        public List<DropDownModel> GetFoodMenuListBySupplier(int id)
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select FM.Id,FM.FoodMenuName as [Name], FM.SalesPrice as Optional from SupplierItem SI "+
+                            "Inner Join FoodMenu FM ON FM.Id = SI.FoodMenuId " +
+                            "where SI.SupplierId = "+ id + " AND FM.IsActive = 1 AND FM.IsDeleted = 0 Order by FM.FoodMenuName";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

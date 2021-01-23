@@ -21,5 +21,7 @@ namespace RocketPOS.Interface.Repository
         int InsertPurchaseFoodMenu(PurchaseModel purchaseModel);
         int UpdatePurchaseFoodMenu(PurchaseModel purchaseModel);
         string ReferenceNumberFoodMenu();
+        decimal GetTaxByFoodMenuId(int foodMenuId);
+        decimal GetFoodMenuLastPrice(int foodMenuId);
     }
 }

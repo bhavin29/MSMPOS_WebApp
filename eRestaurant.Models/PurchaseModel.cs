@@ -28,11 +28,16 @@ namespace RocketPOS.Models
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public decimal GrandTotal { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
         public decimal Due { get; set; }
         public decimal Paid { get; set; }
         public string Message { get; set; }
         public string Notes { get; set; }
+        public string SupplierEmail { get; set; }
         public int InventoryType { get; set; }
+        public int Status { get; set; }
+        public bool IsSendEmail { get; set; }        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }
     }
@@ -46,6 +51,10 @@ namespace RocketPOS.Models
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
         public decimal UnitPrice { get; set; }
+        public decimal DiscountAmount { get; set; }
+        public decimal DiscountPercentage { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal TaxPercentage { get; set; }
         public decimal Quantity { get; set; }
         public decimal Total { get; set; }
     }

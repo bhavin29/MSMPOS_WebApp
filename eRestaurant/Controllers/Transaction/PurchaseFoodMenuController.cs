@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
@@ -16,24 +17,27 @@ namespace RocketPOS.Controllers.Transaction
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
-
+        private readonly ISupplierService _iSupplierService;
+        private readonly IEmailService _iEmailService;
 
         public PurchaseFoodMenuController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
-            LocService locService)
+            LocService locService,
+            ISupplierService supplierService,
+            IEmailService emailService)
         {
             _iPurchaseService = purchaseService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
+            _iSupplierService = supplierService;
+            _iEmailService = emailService;
         }
 
         // GET: PurchaseFoodMenu
         public ActionResult PurchaseFoodMenuList()
         {
-          
-
             List<PurchaseViewModel> purchaseList = new List<PurchaseViewModel>();
             purchaseList = _iPurchaseService.GetPurchaseFoodMenuList().ToList();
             return View(purchaseList);
@@ -63,7 +67,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
             return View(purchaseModel);
         }
@@ -74,7 +78,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel, string Cancel)
         {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
             string purchaseMessage = string.Empty;
@@ -99,15 +103,30 @@ namespace RocketPOS.Controllers.Transaction
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
+                            if (purchaseModel.IsSendEmail)
+                            {
+                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                                {
+                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                                }
+                            }
                         }
                     }
                     else
                     {
                         purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
+                        
                         int result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
+                            if (purchaseModel.IsSendEmail)
+                            {
+                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                                {
+                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                                }
+                            }
                         }
                     }
                 }
@@ -162,6 +181,39 @@ namespace RocketPOS.Controllers.Transaction
             }
 
             return ErrorString;
+        }
+
+        [HttpGet]
+        public ActionResult GetSupplierDetail(int supplierId)
+        {
+            SupplierModel supplierModel = new SupplierModel();
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListBySupplier(supplierId);
+            supplierModel = _iSupplierService.GetSupplierById(supplierId);
+            return Json(new { email = supplierModel.SupplierEmail, purchaseModel.FoodMenuList });
+        }
+
+        [HttpGet]
+        public ActionResult GetFoodMenuList()
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            return Json(new { purchaseModel.FoodMenuList });
+        }
+
+        [HttpGet]
+        public ActionResult GetTaxByFoodMenuId(int foodMenuId)
+        {
+            decimal taxPercentage = 0;
+            taxPercentage = _iPurchaseService.GetTaxByFoodMenuId(foodMenuId);
+            return Json(new { TaxPercentage = taxPercentage });
+        }
+
+        public ActionResult GetFoodMenuLastPrice(int foodMenuId)
+        {
+            decimal unitPrice = 0;
+            unitPrice = _iPurchaseService.GetFoodMenuLastPrice(foodMenuId);
+            return Json(new { UnitPrice = unitPrice });
         }
     }
 }

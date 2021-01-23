@@ -532,5 +532,14 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public decimal GetTaxByFoodMenuId(int foodMenuId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

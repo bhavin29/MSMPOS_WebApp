@@ -14,7 +14,7 @@ namespace RocketPOS.Framework
             {
                 MailMessage message = new MailMessage();
                 SmtpClient smtp = new SmtpClient();
-                message.From = new MailAddress("FromEmailAddress");
+                message.From = new MailAddress("BHAVINKCS@GMAIL.COM");
                 message.To.Add(new MailAddress(email));
                 message.Subject = "Test";
                 message.IsBodyHtml = true; //to make message body as html  
@@ -23,7 +23,7 @@ namespace RocketPOS.Framework
                 smtp.Host = "smtp.gmail.com"; //for gmail host  
                 smtp.UseDefaultCredentials = false;
                 smtp.EnableSsl = true;
-                smtp.Credentials = new NetworkCredential("FromEmailAddress", "FromEmailAddressPassword");
+                smtp.Credentials = new NetworkCredential("bhavinkcs@gmail.com", "Sahaj#123");
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }

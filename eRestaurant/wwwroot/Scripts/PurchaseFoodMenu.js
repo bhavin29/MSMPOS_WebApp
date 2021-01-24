@@ -21,7 +21,7 @@ $(document).ready(function () {
         "info": false,
         "searching": false,
         "oLanguage": {
-            "sEmptyTable": "No data available"
+            "EmptyTable": "No data available"
         },
         "columnDefs": [
             {
@@ -35,7 +35,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5,10],
+                "targets": [5,6,10],
                 "visible": false,
                 "searchable": false
             }
@@ -46,7 +46,7 @@ $(document).ready(function () {
 $('#cancel').on('click', function (e) {
     e.preventDefault();
     GrandTotal += editDataArr[0].total;
-    $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(4));
+    $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
     DueAmount();
     clearItem();
     dataArr.push(editDataArr[0]);
@@ -54,9 +54,9 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
+ 
     e.preventDefault();
     var message = validation(0);
-
     var Discount = 0;
     var DiscountAmount = 0;
     var TaxPercentage = 0;
@@ -71,14 +71,14 @@ $('#addRow').on('click', function (e) {
         success: function (data) {
             var obj = JSON.parse(data);
             TaxPercentage = obj.taxPercentage;
-            TaxPercentage = parseFloat(TaxPercentage).toFixed(4);
+            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
         }
     });
 
-    var Qty = parseFloat($("#Quantity").val()).toFixed(4);
-    Discount = parseFloat($("#Discount").val()).toFixed(4);
-    var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(4);
-    var Total = parseFloat($("#UnitPrice").val() * $("#Quantity").val()).toFixed(4);
+    var Qty = parseFloat($("#Quantity").val()).toFixed(2);
+    Discount = parseFloat($("#Discount").val()).toFixed(2);
+    var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
+    var Total = parseFloat($("#UnitPrice").val() * $("#Quantity").val()).toFixed(2);
     
     Qty = getNum(Qty);
     Discount = getNum(Discount);
@@ -87,13 +87,13 @@ $('#addRow').on('click', function (e) {
     Total = getNum(Total);
 
     if (Discount > 0) {
-        DiscountAmount = ((parseFloat(Total) * parseFloat(Discount)) / 100).toFixed(4);
-        DisAmtTotal = parseFloat(parseFloat(DiscountAmount)+parseFloat($("#DiscountAmount").val())).toFixed(4);
-        Total = (parseFloat(Total) - parseFloat(DiscountAmount)).toFixed(4);
+        DiscountAmount = ((parseFloat(Total) * parseFloat(Discount)) / 100).toFixed(2);
+        DisAmtTotal = parseFloat(parseFloat(DiscountAmount)+parseFloat($("#DiscountAmount").val())).toFixed(2);
+        Total = (parseFloat(Total) - parseFloat(DiscountAmount)).toFixed(2);
     }
     if (TaxPercentage > 0) {
-        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(4);
-        Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(4);
+        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
+        Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
     }
 
     if (message == '') {
@@ -101,14 +101,14 @@ $('#addRow').on('click', function (e) {
         var rowNode = PurchaseDatatable.row.add([
             '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
             $('#FoodMenuId').children("option:selected").text(),
-            '<td class="text-right">' + UnitPrice + ' </td>',
             '<td class="text-right">' + Qty + ' </td>',
+            '<td class="text-right">' + UnitPrice + ' </td>',
             '<td class="text-right">' + Discount + ' </td>',
             '<td class="text-right">' + DiscountAmount + ' </td>',
             '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal0"><i class="fa fa-times"></i></a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editItem"></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -133,16 +133,16 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(6).addClass('text-right');
         //GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
         //GrandTotal += Total;
-        
+        debugger;
         DisPerTotal = calculateColumn(3);
         //DisAmtTotal = calculateColumn(4);
-        TaxPerTotal = calculateColumn(4);
-        TaxAmtTotal = calculateColumn(5);
-        GTotal = calculateColumn(6);
+        //TaxPerTotal = calculateColumn(5);
+        TaxAmtTotal = calculateColumn(4);
+        GTotal = calculateColumn(5);
         GrandTotal = GTotal;
-        $("#DiscountAmount").val(parseFloat(DisAmtTotal).toFixed(4));
-        $("#TaxAmount").val(parseFloat(TaxAmtTotal).toFixed(4));
-        $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(4));
+        $("#DiscountAmount").val(parseFloat(DisAmtTotal).toFixed(2));
+        $("#TaxAmount").val(parseFloat(TaxAmtTotal).toFixed(2));
+        $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
         DueAmount();
         clearItem();
         $("#FoodMenuId").focus();
@@ -464,12 +464,12 @@ $('#chkAllFoodMenu').change(function () {
 
 function getNum(val) {
     val = +val || 0
-    return val;
+    return val.toFixed(2);
 }
 
 function calculateColumn(index) {
     var total = 0;
-    $('#PurchaseOrderDetails tr').each(function () {
+    $('#PurchaseOrderDetails tbody tr').each(function () {
         var value = parseFloat($('td', this).eq(index).text());
         if (!isNaN(value)) {
             total += value;

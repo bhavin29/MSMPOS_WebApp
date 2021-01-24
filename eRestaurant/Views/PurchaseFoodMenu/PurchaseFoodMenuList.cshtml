@@ -7,104 +7,100 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu");
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8"><h4 >@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="PurchaseFoodMenu" class="pull-right btn btn-primary">Add Purchase</a></div>
-                </div>
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">Purchase Food Menu</h5>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
-                                    <tr role="row">
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-</thead>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Total")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Due Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var tm = "#myModal" + item.Id;
-                                        var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SupplierName)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.GrandTotal)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.Due)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayName("Rocket")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Status)
-                                        </td>
-                                        <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseFoodMenu" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
+            <div class="float-right">
+                <a asp-action="PurchaseFoodMenu" class="btn btn-primary float-sm-left ">Add</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SupplierName)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.GrandTotal)
+                                </td>
+                                <td>
+                                    @Html.DisplayName("Rocket")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="PurchaseFoodMenu" class="fa fa-edit" asp-route-Id="@item.Id">Edit<i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete<i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                         </div>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
+ 
 @section Scripts {
     <script>
         $(document).ready(function () {

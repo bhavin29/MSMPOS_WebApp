@@ -67,5 +67,26 @@ body {
   bottom: 0;
   width: 100%;
   white-space: nowrap;
-  line-height: 40px; /* Vertically center the text there */
+  line-height: 30px; /* Vertically center the text there */
 }
+
+.table-wrap {
+    height: 250px;
+    overflow-y: auto;
+}
+
+.card-header {
+    padding-left: 10px !important;
+    padding-top: 2px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+table tr td {
+    height: 20px !important;
+    padding-left: 10px !important;
+    padding-top: 0px !important;
+    padding-right: 0px !important;
+    padding-bottom: 0px !important;
+}
+

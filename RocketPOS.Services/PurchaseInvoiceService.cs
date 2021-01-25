@@ -30,7 +30,7 @@ namespace RocketPOS.Services
                              SupplierId = purchase.SupplierId,
                              EmployeeId = purchase.EmployeeId,
                              StoreId = purchase.StoreId,
-                             PrchaseInvoiceDate = purchase.PrchaseInvoiceDate,
+                             PurchaseInvoiceDate = purchase.PurchaseInvoiceDate,
                              GrossAmount = purchase.GrossAmount,
                              TaxAmount = purchase.TaxAmount,
                              TotalAmount = purchase.TotalAmount,
@@ -44,13 +44,13 @@ namespace RocketPOS.Services
                          }).SingleOrDefault();
             if (model != null)
             {
-                model.purchaseInvoiceDetailModels = (from purchasedetails in _iPurchaseInvoiceRepository.GetPurchaseInvoiceDetails(purchaseId)
+                model.purchaseInvoiceDetails = (from purchasedetails in _iPurchaseInvoiceRepository.GetPurchaseInvoiceDetails(purchaseId)
                                          select new PurchaseInvoiceDetailModel()
                                          {
                                              PurchaseInvoiceId = purchasedetails.PurchaseInvoiceId,
                                              IngredientId = purchasedetails.IngredientId,
                                              POQTY = purchasedetails.POQTY,
-                                             GRNQTY = purchasedetails.GRNQTY,
+                                             InvoiceQty = purchasedetails.InvoiceQty,
                                              UnitPrice = purchasedetails.UnitPrice,
                                              GrossAmount = purchasedetails.GrossAmount,
                                              DiscountPercentage = purchasedetails.DiscountPercentage,
@@ -69,7 +69,7 @@ namespace RocketPOS.Services
         }
         public int InsertPurchaseInvoice(PurchaseInvoiceModel purchaseModel)
         {
-            return _iPurchaseInvoiceRepository.insertPurchaseInvoice(purchaseModel);
+            return _iPurchaseInvoiceRepository.InsertPurchaseInvoice(purchaseModel);
         }
         public int UpdatePurchaseInvoice(PurchaseInvoiceModel purchaseModel)
         {
@@ -102,7 +102,7 @@ namespace RocketPOS.Services
                              SupplierId = purchase.SupplierId,
                              EmployeeId = purchase.EmployeeId,
                              StoreId = purchase.StoreId,
-                             PrchaseInvoiceDate = purchase.PrchaseInvoiceDate,
+                             PurchaseInvoiceDate = purchase.PurchaseInvoiceDate,
                              GrossAmount = purchase.GrossAmount,
                              TaxAmount = purchase.TaxAmount,
                              TotalAmount = purchase.TotalAmount,
@@ -116,13 +116,13 @@ namespace RocketPOS.Services
                          }).SingleOrDefault();
             if (model != null)
             {
-                model.purchaseInvoiceDetailModels = (from purchasedetails in _iPurchaseInvoiceRepository.GetPurchaseInvoiceFoodMenuDetails(purchaseId)
+                model.purchaseInvoiceDetails = (from purchasedetails in _iPurchaseInvoiceRepository.GetPurchaseInvoiceFoodMenuDetails(purchaseId)
                                          select new PurchaseInvoiceDetailModel()
                                          {
                                              PurchaseInvoiceId = purchasedetails.PurchaseInvoiceId,
                                              IngredientId = purchasedetails.IngredientId,
                                              POQTY = purchasedetails.POQTY,
-                                             GRNQTY = purchasedetails.GRNQTY,
+                                             InvoiceQty = purchasedetails.InvoiceQty,
                                              UnitPrice = purchasedetails.UnitPrice,
                                              GrossAmount = purchasedetails.GrossAmount,
                                              DiscountPercentage = purchasedetails.DiscountPercentage,
@@ -154,6 +154,15 @@ namespace RocketPOS.Services
         public string ReferenceNumberFoodMenu()
         {
             return _iPurchaseInvoiceRepository.ReferenceNumberFoodMenu();
+        }
+        public decimal GetTaxByFoodMenuId(int foodMenuId)
+        {
+            return _iPurchaseInvoiceRepository.GetTaxByFoodMenuId(foodMenuId);
+        }
+
+        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        {
+            return _iPurchaseInvoiceRepository.GetFoodMenuLastPrice(foodMenuId);
         }
     }
 }

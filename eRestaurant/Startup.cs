@@ -157,10 +157,14 @@ namespace RocketPOS
             services.AddScoped<IWasteService, WasteService>();
             services.AddScoped<IOutletRegisterRepository, OutletRegisterRepository>();
             services.AddScoped<IOutletRegisterService, OutletRegisterService>();
-
             services.AddScoped<ILoginRepository, LoginRepository>();
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPurchaseGRNRepository, PurchaseGRNRepository>();
+            services.AddScoped<IPurchaseGRNService, PurchaseGRNService>();
+            services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
+            services.AddScoped<IPurchaseInvoiceService, PurchaseInvoiceService>();
+
             services.AddHttpClient();
         }
 

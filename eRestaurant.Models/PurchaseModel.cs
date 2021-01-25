@@ -8,7 +8,6 @@ namespace RocketPOS.Models
 {
     public class PurchaseModel
     {
-
         public long Id { get; set; }
         [Required(ErrorMessage = "Enter Reference No")]
         public string ReferenceNo { get; set; }

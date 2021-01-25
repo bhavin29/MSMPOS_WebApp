@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.Mvc;
 
 namespace RocketPOS.Models
 {
@@ -12,9 +13,16 @@ namespace RocketPOS.Models
         public string ReferenceNo { get; set; }
         public string PurchaseNumber { get; set; }
         public DateTime PurchaseGRNDate { get; set; }
-        public int SupplierId { get; set; }
-        public int StoreId { get; set; }
-        public int EmployeeId { get; set; }
+        public int? SupplierId { get; set; }
+        public List<SelectListItem> SupplierList { get; set; }
+        public int? StoreId { get; set; }
+        public List<SelectListItem> StoreList { get; set; }
+        public int? IngredientId { get; set; }
+        public List<SelectListItem> IngredientList { get; set; }
+        public int? FoodMenuId { get; set; }
+        public List<SelectListItem> FoodMenuList { get; set; }
+        public int? EmployeeId { get; set; }
+        public List<SelectListItem> EmployeeList { get; set; }
         public decimal GrossAmount { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal TotalAmount { get; set; }
@@ -26,6 +34,10 @@ namespace RocketPOS.Models
         public string VehicleNumber { get; set; }
         public string Notes { get; set; }
         public List<PurchaseGRNDetailModel> PurchaseGRNDetails { get; set; }
+        public int[] DeletedId { get; set; }
+        public bool IsSendEmail { get; set; }
+        public string SupplierEmail { get; set; }
+
 
     }
 

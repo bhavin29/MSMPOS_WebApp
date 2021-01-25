@@ -8,7 +8,7 @@ namespace RocketPOS.Interface.Repository
     public interface IPurchaseInvoiceRepository
     {
         List<PurchaseInvoiceViewModel> GetPurchaseInvoiceList();
-        int insertPurchaseInvoice(PurchaseInvoiceModel PurchaseInvoiceModel);
+        int InsertPurchaseInvoice(PurchaseInvoiceModel PurchaseInvoiceModel);
         int UpdatePurchaseInvoice(PurchaseInvoiceModel PurchaseInvoiceModel);
         int DeletePurchaseInvoice(long PurchaseInvoiceId);
         List<PurchaseInvoiceDetailModel> GetPurchaseInvoiceDetails(long PurchaseInvoiceId);
@@ -21,5 +21,7 @@ namespace RocketPOS.Interface.Repository
         int InsertPurchaseInvoiceFoodMenu(PurchaseInvoiceModel PurchaseInvoiceModel);
         int UpdatePurchaseInvoiceFoodMenu(PurchaseInvoiceModel PurchaseInvoiceModel);
         string ReferenceNumberFoodMenu();
+        decimal GetTaxByFoodMenuId(int foodMenuId);
+        decimal GetFoodMenuLastPrice(int foodMenuId);
     }
 }

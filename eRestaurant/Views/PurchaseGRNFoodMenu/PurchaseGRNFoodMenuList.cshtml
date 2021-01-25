@@ -1,0 +1,107 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.PurchaseGRNViewModel>
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Food Menu Purchase GRN");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseGRNFoodMenu");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">Purchase GRN - Food Menu</h5>
+            </div>
+            <div class="float-right">
+                <a asp-action="PurchaseGRNFoodMenu" class="btn btn-primary float-sm-left ">Add</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseGRNFoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead>
+                        <tr role="row">
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SupplierName)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.GrandTotal)
+                                </td>
+                                <td>
+                                    @Html.DisplayName("Rocket")
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable({
+                "order": [[1, "desc"],[2, "desc"]]
+            });
+        });
+    </script>
+}

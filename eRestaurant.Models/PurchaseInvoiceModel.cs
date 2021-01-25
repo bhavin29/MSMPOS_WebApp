@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.Mvc;
 
 namespace RocketPOS.Models
 {
@@ -11,10 +12,17 @@ namespace RocketPOS.Models
         public int PurchaseOrderId { get; set; }
         public string ReferenceNo { get; set; }
         public string PurchaseNumber { get; set; }
-        public string PrchaseInvoiceDate { get; set; }
-        public int SupplierId { get; set; }
-        public int StoreId { get; set; }
-        public int EmployeeId { get; set; }
+        public string PurchaseInvoiceDate { get; set; }
+        public int? SupplierId { get; set; }
+        public List<SelectListItem> SupplierList { get; set; }
+        public int? StoreId { get; set; }
+        public List<SelectListItem> StoreList { get; set; }
+        public int? IngredientId { get; set; }
+        public List<SelectListItem> IngredientList { get; set; }
+        public int? FoodMenuId { get; set; }
+        public List<SelectListItem> FoodMenuList { get; set; }
+        public int? EmployeeId { get; set; }
+        public List<SelectListItem> EmployeeList { get; set; }
         public decimal GrossAmount { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal TotalAmount { get; set; }
@@ -25,7 +33,8 @@ namespace RocketPOS.Models
         public string DriverName { get; set; }
         public string VehicleNumber { get; set; }
         public  string Notes { get; set; }
-        public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetailModels { get; set; }
+        public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetails { get; set; }
+        public int[] DeletedId { get; set; }
     }
     public class PurchaseInvoiceDetailModel
     {
@@ -37,7 +46,7 @@ namespace RocketPOS.Models
         public int FoodMenuId { get; set; }
         public int IngredientId { get; set; }
         public decimal POQTY { get; set; }
-        public decimal GRNQTY { get; set; }
+        public decimal InvoiceQty { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal GrossAmount { get; set; }
         public decimal DiscountPercentage { get; set; }

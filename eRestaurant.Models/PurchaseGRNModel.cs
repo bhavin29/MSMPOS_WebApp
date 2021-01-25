@@ -12,8 +12,10 @@ namespace RocketPOS.Models
         public int InventoryType { get; set; }
         public int PurchaseOrderID { get; set; }
         public string ReferenceNo { get; set; }
-        public string PurchaseNumber { get; set; }
-        public string PurchaseGRNDate { get; set; }
+        public string PurchaseId { get; set; }
+        [Required(ErrorMessage = "Select Date")]
+        [DataType(DataType.Date)]
+        public DateTime PurchaseGRNDate { get; set; }
  
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }

@@ -11,8 +11,9 @@ var TaxAmountTotal = 0;
 var TotalAmount = 0
 var Status = 0;
 
-
 $(document).ready(function () {
+    debugger;
+
     var supId = $("#SupplierId").val();
     if (supId != null && supId != 0) {
         GetSupplierDetailsById(supId);
@@ -38,7 +39,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5, 7],
+                "targets": [5, 7,11],
                 "visible": false,
                 "searchable": false
             }
@@ -57,6 +58,7 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
+    debugger;
     e.preventDefault();
     var message = validation(0);
     var DiscountPercentage = 0;
@@ -98,7 +100,7 @@ $('#addRow').on('click', function (e) {
         TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
         // Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
     }
-
+    debugger;
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
 
@@ -126,9 +128,10 @@ $('#addRow').on('click', function (e) {
             unitPrice: UnitPrice,
             discountAmount: DiscountAmount,
             discountPercentage: DiscountPercentage,
+            grossAmount: GRNQty * UnitPrice,
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
-            totalAmount: TotalAmount,
+            totalAmount: Total,
             purchaseGRNId: $("#PurchaseGRNId").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
@@ -160,27 +163,7 @@ $('#addRow').on('click', function (e) {
     }
 });
 
-//       
-//        data: data,
-
-
-//function saveOrder(data) {
-//    console.log(data);
-//    debugger;
-//    return $.ajax({
-//        dataType: 'json',
-//        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-//        type: 'POST',
-//        beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
-//        url: 'PurchaseGRNFoodMenu',
-//        data: data,
-//        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-//    });
-//};
-
-
 function saveOrder(data) {
-    debugger;
     return $.ajax({
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -191,8 +174,6 @@ function saveOrder(data) {
         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
 };
-
-
 
 $(function () {
     $('#saveOrder').click(function () {
@@ -210,7 +191,11 @@ $(function () {
                     GrossAmount: $("#GrossAmount").val(),
                     TaxAmount: $("#TaxAmount").val(),
                     TotalAmount: $("#TotalAmount").val(),
-                    Notes: $("#Notes").val(),
+                    DeliveryNoteNumber: $("#DeliveryNoteNumber").val(),
+                    DeliveryDate: $("#DeliveryDate").val(),
+                    DriverName: $("#DriverName").val(),
+                    VehicleNumber: $("#VehicleNumber").val(),
+                   Notes: $("#Notes").val(),
                     SupplierList: [],
                     FoodMenuList: [],
                     PurchaseGRNDetails: dataArr,
@@ -218,7 +203,6 @@ $(function () {
                 });
                 $.when(saveOrder(data)).then(function (response) {
                     if (response.status == "200") {
-                        debugger;
                         $(".modal-body").text(response.message);
                         $("#save").show();
                         $("#ok").hide();
@@ -552,4 +536,3 @@ function GetFoodMenuLastPrice(foodMenuId) {
     });
 }
 
-s

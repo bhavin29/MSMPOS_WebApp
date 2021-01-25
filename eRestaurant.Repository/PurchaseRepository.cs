@@ -23,9 +23,9 @@ namespace RocketPOS.Repository
             List<PurchaseViewModel> purchaseViewModelList = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select Purchase.Id as Id, PurchaseId as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due " +
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 order by PurchaseDate, purchaseNumber desc";
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 order by PurchaseDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
 
@@ -38,7 +38,7 @@ namespace RocketPOS.Repository
             List<PurchaseModel> purchaseModelList = new List<PurchaseModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,PurchaseId as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
@@ -54,7 +54,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [dbo].[Purchase] " +
-                             "  ([PurchaseNumber] " +
+                             "  ([PurchaseId] " +
                              "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
@@ -109,7 +109,7 @@ namespace RocketPOS.Repository
                                               "" + item.Quantity + "," +
                                               "" + item.Total + ",0," +
                                               "" + item.Total + "," +
-                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseNumber as INT) from Purchase where id = " + result + "; ";
+                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseId as INT) from Purchase where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -283,7 +283,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseNumber as int)),0) + 1), 6) FROM purchase where InventoryType=2;";
+                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 6) FROM purchase where InventoryType=2;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -300,7 +300,7 @@ namespace RocketPOS.Repository
             List<PurchaseModel> purchaseModelList = new List<PurchaseModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,PurchaseNumber as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
@@ -313,10 +313,10 @@ namespace RocketPOS.Repository
             List<PurchaseViewModel> purchaseViewModelList = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
                     "case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status "+
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 order by PurchaseDate, purchaseNumber desc";
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 order by PurchaseDate, Purchase.Id desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -354,7 +354,7 @@ namespace RocketPOS.Repository
                 }
 
                 var query = "INSERT INTO [dbo].[Purchase] " +
-                             "  ([PurchaseNumber] " +
+                             "  ([PurchaseId] " +
                              "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
@@ -429,7 +429,7 @@ namespace RocketPOS.Repository
                                               "" + item.TaxPercentage + "," +
                                               "" + item.TaxAmount + "," +
                                               "" + item.Total + "," +
-                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseNumber as INT) from Purchase where id = " + result + "; ";
+                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseId as INT) from Purchase where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -579,7 +579,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseNumber as int)),0) + 1), 6) FROM purchase where InventoryType=1;";
+                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 6) FROM purchase where InventoryType=1;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {

@@ -11,7 +11,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-11">
-                <h5 class="card-title">Purchase Food Menu</h5>
+                <h5 class="card-title">Purchase Order</h5>
             </div>
             <div class="float-right">
                 <a asp-action="PurchaseFoodMenu" class="btn btn-primary float-sm-left ">Add</a>
@@ -25,23 +25,23 @@
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead>
                         <tr role="row">
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                         </tr>
                     </tfoot>
                     <tbody>

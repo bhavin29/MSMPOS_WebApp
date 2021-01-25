@@ -11,7 +11,7 @@ namespace RocketPOS.Models
         public int InventoryType { get; set; }
         public int PurchaseOrderId { get; set; }
         public string ReferenceNo { get; set; }
-        public string PurchaseNumber { get; set; }
+        public string PurchaseId { get; set; }
         public string PurchaseInvoiceDate { get; set; }
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }

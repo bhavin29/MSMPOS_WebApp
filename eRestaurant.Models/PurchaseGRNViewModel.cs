@@ -12,7 +12,7 @@ namespace RocketPOS.Models
      
         public string Date { get; set; }
         public string SupplierName { get; set; }
-        public decimal GrandTotal { get; set; }
+        public decimal TotalAmount   { get; set; }
         public decimal Due { get; set; }
         public int UserId { get; set; }
         public List<PurchaseGRNDetailModel> purchaseGRNDetails { get; set; }

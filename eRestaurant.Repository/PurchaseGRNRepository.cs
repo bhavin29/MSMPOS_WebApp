@@ -581,7 +581,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchasNumber),0) + 1), 6) FROM purchase where InventoryType=1;";
+                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchasNumber),0) + 1), 6) FROM purchaseGRN where InventoryType=1;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {

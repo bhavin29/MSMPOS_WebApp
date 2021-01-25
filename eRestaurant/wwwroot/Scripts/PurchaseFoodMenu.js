@@ -35,7 +35,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5,6,10],
+                "targets": [5, 6, 10],
                 "visible": false,
                 "searchable": false
             }
@@ -54,7 +54,7 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
- 
+
     e.preventDefault();
     var message = validation(0);
     var Discount = 0;
@@ -79,7 +79,7 @@ $('#addRow').on('click', function (e) {
     Discount = parseFloat($("#Discount").val()).toFixed(2);
     var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
     var Total = parseFloat($("#UnitPrice").val() * $("#Quantity").val()).toFixed(2);
-    
+
     Qty = getNum(Qty);
     Discount = getNum(Discount);
     TaxPercentage = getNum(TaxPercentage);
@@ -88,7 +88,7 @@ $('#addRow').on('click', function (e) {
 
     if (Discount > 0) {
         DiscountAmount = ((parseFloat(Total) * parseFloat(Discount)) / 100).toFixed(2);
-        DisAmtTotal = parseFloat(parseFloat(DiscountAmount)+parseFloat($("#DiscountAmount").val())).toFixed(2);
+        DisAmtTotal = parseFloat(parseFloat(DiscountAmount) + parseFloat($("#DiscountAmount").val())).toFixed(2);
         Total = (parseFloat(Total) - parseFloat(DiscountAmount)).toFixed(2);
     }
     if (TaxPercentage > 0) {
@@ -133,7 +133,7 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(6).addClass('text-right');
         //GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
         //GrandTotal += Total;
-        debugger;
+
         DisPerTotal = calculateColumn(3);
         //DisAmtTotal = calculateColumn(4);
         //TaxPerTotal = calculateColumn(5);
@@ -216,6 +216,13 @@ $(function () {
                 });
 
             });
+        }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
         }
     })
 });

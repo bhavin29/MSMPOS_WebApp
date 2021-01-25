@@ -59,7 +59,20 @@
                             Stock
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
-                            <a class="dropdown-item" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
+                                <span>Stock In</span>
+                            </a>
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
+                                <span>Stock Transfer</span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Food Menu - Stock
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustmentFoodMenu" asp-action="InventoryAdjustmentFoodMenuList">
                                 <span>Stock In</span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryTransferFoodMenu" asp-action="InventoryTransferFoodMenuList">

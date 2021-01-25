@@ -2,10 +2,8 @@
 @model RocketPOS.Models.PurchaseGRNModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
-@{
-    //ViewData["Title"] = "Purchase";
-    //List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
-}
+
+
 <div class="row">
     <div class="col-md-12">
         <div class="card">
@@ -18,7 +16,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form asp-action="PurchaseGRNFoodMenu" method="post" id="purchaseGRNform" role="form">
+                <form asp-action="PurchaseGRNFoodMenu" method="post" id="purchaseGRN" role="form">
                     <div class="row">
                         @if (Model.Id > 0)
                         {
@@ -71,28 +69,27 @@
                                         <div class="form-group">
                                             <label class="control-label"></label>
                                             <button id="LoadProduct" class="btn btn-light">Load Product</button>
-                                            <input class="form-control" type="hidden" id="PurchaseId" value="0" />
                                             <input asp-for="Id" class="form-control" type="hidden" />
                                         </div>
                                     </div>
-                                    @*<div class="col-md-3 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
-                                                <div class="col-md-12 p-0 ">
-                                                    <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
-                                                </div>
+                                    <div class="col-md-3 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
+                                            <div class="col-md-12 p-0 ">
+                                                <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pr-1 pl-1">
-                                            <div class="form-group" style="margin-top:27px">
-                                                <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
-                                            </div>
+                                    </div>
+                                    <div class="col-md-2 pr-1 pl-1">
+                                        <div class="form-group" style="margin-top:27px">
+                                            <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
                                         </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
-                                            </div>
-                                        </div>*@
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             @*<div class="row">
@@ -154,7 +151,7 @@
                                     <div class="form-group">
                                         <label class="control-label"></label>
                                         <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
-                                        <input class="form-control" type="hidden" id="PurchaseId" value="0" />
+                                        <input class="form-control" type="hidden" id="PurchaseGRNId" value="0" />
                                         <input asp-for="Id" class="form-control" type="hidden" />
                                     </div>
                                 </div>
@@ -170,7 +167,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-wrap">
-                                <table id="PurchaseGRNDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                <table id="purchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                     <thead>
                                         <tr>
                                             <th style="width:0%">FoodMenuId</th>
@@ -180,7 +177,7 @@
                                             <th style="width:10%" class="text-right">Price</th>
                                             <th style="width:0%" class="text-right">Dis%</th>
                                             <th style="width:10%" class="text-right">Dis Amt</th>
-                                            @*<th style="width:0%" class="text-right">Tax%</th>*@
+                                            <th style="width:0%" class="text-right">Tax%</th>
                                             <th style="width:10%" class="text-right">Tax Amt</th>
                                             <th style="width:10%" class="text-right">Total</th>
                                             <th style="width:10%" class="text-center">Action</th>
@@ -215,9 +212,9 @@
                                                 <td class="text-right">
                                                     @item.DiscountAmount.ToString("N")
                                                 </td>
-                                                @*<td class="text-right">
-                                                        @item.TaxAmount.ToString("N")
-                                                    </td>*@
+                                                <td class="text-right">
+                                                    @item.TaxAmount.ToString("N")
+                                                </td>
                                                 <td class="text-right">
                                                     @item.TaxAmount.ToString("N")
                                                 </td>
@@ -296,12 +293,12 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-inline fc-left">
-                                                <label asp-for="GrossAmount">Gross Total: </label>
-                                                @Html.DisplayText(Model.GrossAmount.ToString("0.00"));
-                                                <label asp-for="TaxAmount">VAT</label>
-                                                @Html.DisplayText(Model.TaxAmount.ToString("0.00"));
-                                                <label asp-for="TotalAmount">Total Amount: </label>
-                                                @Html.DisplayText(Model.TotalAmount.ToString("0.00"));
+                                                <label asp-for="GrossAmount" class="control-label">Gross Amount</label>
+                                                <input type="text" asp-for="GrossAmount" class="form-control input-full text-left">
+                                                <label asp-for="TaxAmount" class="control-label">VAT </label>
+                                                <input type="text" asp-for="TaxAmount" class="form-control input-full text-left">
+                                                <label asp-for="TotalAmount" class="control-label">Total Amount</label>
+                                                <input type="text" asp-for="TotalAmount" class="form-control input-full text-left">
                                             </div>
                                         </div>
                                     </div>
@@ -336,23 +333,6 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                </div>
-                <div class="modal-footer">
-                    <button id="deleteBtn" onclick="deleteOrder(0, ,0)" class="btn bg-danger mr-1">Delete</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
 
 @section scripts{
     <script>

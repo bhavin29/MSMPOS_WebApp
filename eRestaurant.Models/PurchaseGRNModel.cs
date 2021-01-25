@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Web.Mvc;
 
@@ -12,7 +13,8 @@ namespace RocketPOS.Models
         public int PurchaseOrderID { get; set; }
         public string ReferenceNo { get; set; }
         public string PurchaseNumber { get; set; }
-        public DateTime PurchaseGRNDate { get; set; }
+        public string PurchaseGRNDate { get; set; }
+ 
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
         public int? StoreId { get; set; }
@@ -56,6 +58,7 @@ namespace RocketPOS.Models
         public decimal DiscountPercentage { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TaxAmount { get; set; }
+        public decimal TaxPercentage { get; set; }
         public decimal TotalAmount { get; set; }
     }
 }

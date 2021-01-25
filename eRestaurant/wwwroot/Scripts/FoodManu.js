@@ -80,6 +80,7 @@ $('#addRow').on('click', function (e) {
 
 function saveOrder(data) {
     console.log(data);
+    debugger;
     return $.ajax({
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',

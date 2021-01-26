@@ -12,142 +12,89 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="card-title">Manage Purchase Invoice</h5>
+                        <h5 class="card-title">Create Purchase Invoice</h5>
                     </div>
 
                 </div>
             </div>
             <div class="card-body">
                 <form asp-action="PurchaseInvoiceFoodMenu" method="post" id="purchaseInvoice" role="form">
-                    <div class="row">
-                        @if (Model.Id > 0)
-                        {
-                            <div class="col-md-12">
-                                <div>
-                                    <div class="row">
-                                        <div class="col-md-2 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="ReferenceNo" class="control-label">Order No.</label>
-                                                <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
-                                                <span asp-validation-for="ReferenceNo" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-1 pr-0 pl-0">
+                                <div class="form-group">
+                                    <label asp-for="ReferenceNo" class="control-label">Number</label>
+                                    <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
+                                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
                                 </div>
                             </div>
-                        }
-                        <div class="col-md-12">
-                            <div>
-                                <div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="StoreList" class="control-label">Store</label>
-                                            <select asp-for="StoreId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
-                                            </select>
-                                            <span asp-validation-for="StoreId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="SupplierList" class="control-label">Supplier</label>
-                                            <select asp-for="SupplierId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))"
-                                                    onchange="GetSupplierDetails(SupplierId)">
-                                            </select>
-                                            <span asp-validation-for="SupplierId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="ReferenceNo" class="control-label">Reference</label>
-                                            <input asp-for="ReferenceNo" class="form-control" />
-                                            <span asp-validation-for="ReferenceNo" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label class="control-label"></label>
-                                            <button id="LoadProduct" class="btn btn-light">Load Product</button>
-                                            <input class="form-control" type="hidden" id="PurchaseId" value="0" />
-                                            <input asp-for="Id" class="form-control" type="hidden" />
-                                        </div>
-                                    </div>
-                                    @*<div class="col-md-3 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
-                                                <div class="col-md-12 p-0 ">
-                                                    <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 pr-1 pl-1">
-                                            <div class="form-group" style="margin-top:27px">
-                                                <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
-                                            </div>
-                                        </div>*@
+                            <div class="col-md-2 pr-2 pl-2">
+                                <div class="form-group">
+                                    <label asp-for="StoreList" class="control-label">Store</label>
+                                    <select asp-for="StoreId"
+                                            class="form-control"
+                                            asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                                    </select>
+                                    <span asp-validation-for="StoreId" class="text-danger"></span>
                                 </div>
                             </div>
-                            @*<div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
-                                            <select asp-for="EmployeeId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                            </select>
-                                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="PurchaseInvoiceDate" class="control-label"></label>
-                                            <input asp-for="PurchaseInvoiceDate" type="date" class="form-control" />
-                                            <span asp-validation-for="PurchaseInvoiceDate" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>*@
+                            <div class="col-md-3 pr-2 pl-2">
+                                <div class="form-group">
+                                    <label asp-for="SupplierList" class="control-label">Supplier</label>
+                                    <select asp-for="SupplierId"
+                                            class="form-control"
+                                            asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))"
+                                            onchange="GetSupplierDetails(SupplierId)">
+                                    </select>
+                                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pr-2 pl-2">
+                                <div class="form-group">
+                                    <label asp-for="ReferenceNo" class="control-label">Reference</label>
+                                    <input asp-for="ReferenceNo" class="form-control" />
+                                    <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-1 pr-2 pl-2">
+                                <div class="form-group">
+                                    <label class="control-label"></label>
+                                    <button id="LoadProduct" class="btn btn-light">Load Product</button>
+                                    <input class="form-control" type="hidden" id="PurchaseId" value="0" />
+                                    <input asp-for="Id" class="form-control" type="hidden" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr />
-                    <h5 style="margin-left:-7px" class="control-label">Food Menu Detail</h5>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
                                 <div class="col-md-6 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label asp-for="FoodMenuList" class="control-label">Food Menu</label>
+                                        <label asp-for="FoodMenuList" class="control-label">Product</label>
                                         <select asp-for="FoodMenuId"
                                                 class="form-control " onchange="GetFoodMenuLastPrice(FoodMenuId)">
                                             <option value="">Select</option>
-                                            @*asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">*@
                                         </select>
                                         <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label class="control-label text-right">Invoice Qty</label>
-                                        <input class="form-control text-right" type="text" value="1" placeholder="0.00" id="InvoiceQty" />
+                                        <label class="control-label text-right">Quantity</label>
+                                        <input class="form-control text-right" type="number" min="1" max="9999" placeholder="0.00" id="InvoiceQty" />
                                     </div>
                                 </div>
-                                <div class="col-md-2 pr-2 pl-2">
+                                <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Price</label>
-                                        <input class="form-control text-right" type="number" placeholder="0.00" id="UnitPrice" />
+                                        <input class="form-control text-right" type="number" min="1" max="9999999" placeholder="0.00" id="UnitPrice" />
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Disc%</label>
-                                        <input class="form-control text-right" type="text" value="0" placeholder="0.00" id="DiscountPercentage" />
+                                        <input class="form-control text-right" type="number" value="0" min="0" max="100" placeholder="0.00" id="DiscountPercentage" />
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
@@ -158,32 +105,27 @@
                                         <input asp-for="Id" class="form-control" type="hidden" />
                                     </div>
                                 </div>
-                                <div class="col-md-1 pr-2 pl-2">
-                                    <div class="form-group">
-                                        <label class="control-label"></label>
-                                        <button id="cancel" class="btn btn-light" style="margin-top: 22px">Reset</button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-wrap">
-                                <table id="PurchaseInvoiceDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                <table id="purchaseOrderDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                     <thead>
                                         <tr>
                                             <th style="width:0%">FoodMenuId</th>
-                                            <th style="width:35%">Food Menu</th>
+                                            <th style="width:35%">Product</th>
                                             <th style="width:5%" class="text-right">PO Qty</th>
-                                            <th style="width:10%" class="text-right">Invoice Qty</th>
+                                            <th style="width:10%" class="text-right">Received Qty</th>
                                             <th style="width:10%" class="text-right">Price</th>
-                                            <th style="width:0%" class="text-right">Dis%</th>
-                                            <th style="width:10%" class="text-right">Dis Amt</th>
-                                            @*<th style="width:0%" class="text-right">Tax%</th>*@
-                                            <th style="width:10%" class="text-right">Tax Amt</th>
+                                            <th style="width:10%" class="text-right">Dis%</th>
+                                            <th style="width:0%" class="text-right">Dis Amt</th>
+                                            <th style="width:0%" class="text-right">Tax%</th>
+                                            <th style="width:0%" class="text-right">Tax Amt</th>
                                             <th style="width:10%" class="text-right">Total</th>
                                             <th style="width:10%" class="text-center">Action</th>
+                                            <th style="width:0%" class="text-center">.</th>
                                         </tr>
                                     </thead>
                                     @if (Model.Id > 0)
@@ -215,16 +157,16 @@
                                                 <td class="text-right">
                                                     @item.DiscountAmount.ToString("N")
                                                 </td>
-                                                @*<td class="text-right">
-                                                        @item.TaxAmount.ToString("N")
-                                                    </td>*@
+                                                <td class="text-right">
+                                                    @item.TaxAmount.ToString("N")
+                                                </td>
                                                 <td class="text-right">
                                                     @item.TaxAmount.ToString("N")
                                                 </td>
                                                 <td class="text-right">
                                                     @item.TotalAmount.ToString("N")
                                                 </td>
-                                                <td>
+                                                <td class="text-left">
                                                     <div class="form-button-action">
                                                         <a href="#" data-itemid="@item.FoodMenuId" class="btn btn-link  editItem"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
                                                     </div>
@@ -261,9 +203,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-2 pr-2 pl-2">
+                                        <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="DeliveryNoteNumber" class="control-label">Delivery Note No.</label>
+                                                <label asp-for="DeliveryNoteNumber" class="control-label">Del. Note No.</label>
                                                 <input type="text" asp-for="DeliveryNoteNumber" class="form-control input-full text-left">
                                             </div>
                                         </div>
@@ -274,19 +216,19 @@
                                                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pr-2 pl-2">
+                                        <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
                                                 <label asp-for="DriverName" class="control-label">Driver Name</label>
                                                 <input type="text" asp-for="DriverName" class="form-control input-full text-left">
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pr-2 pl-2">
+                                        <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
                                                 <label asp-for="VehicleNumber" class="control-label">Vehicle Number</label>
                                                 <input type="text" asp-for="VehicleNumber" class="form-control input-full text-left">
                                             </div>
                                         </div>
-                                        <div class="col-md-4 pl-2 pr-2">
+                                        <div class="col-md-7 pl-2 pr-2">
                                             <div class="form-group">
                                                 <label asp-for="Notes" class="control-label ">Notes</label>
                                                 <textarea asp-for="Notes" class="form-control input-full text-left" rows="1" cols="50"></textarea>
@@ -296,12 +238,18 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group form-inline fc-left">
-                                                <label asp-for="GrossAmount">Gross Total: </label>
-                                                @Html.DisplayText(Model.GrossAmount.ToString("0.00"));
-                                                <label asp-for="TaxAmount">VAT</label>
-                                                @Html.DisplayText(Model.TaxAmount.ToString("0.00"));
-                                                <label asp-for="TotalAmount">Total Amount: </label>
-                                                @Html.DisplayText(Model.TotalAmount.ToString("0.00"));
+                                                <div class="col-md-1 pr-2 pl-2">
+                                                    <label asp-for="GrossAmount" class="control-label">Gross Amount</label>
+                                                    <input asp-for="GrossAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                                </div>
+                                                <div class="col-md-1 pr-2 pl-2">
+                                                    <label asp-for="TaxAmount" class="control-label">VAT </label>
+                                                    <input asp-for="TaxAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                                </div>
+                                                <div class="col-md-1 pr-2 pl-2">
+                                                    <label asp-for="TotalAmount" class="control-label">Total Amount</label>
+                                                    <input asp-for="TotalAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -336,24 +284,6 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                </div>
-                <div class="modal-footer">
-                    <button id="deleteBtn" onclick="deleteOrder(0, ,0)" class="btn bg-danger mr-1">Delete</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
-
 @section scripts{
     <script>
         dataArr = []

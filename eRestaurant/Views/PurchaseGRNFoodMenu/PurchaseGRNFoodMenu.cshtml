@@ -8,7 +8,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="card-title">Manage Goods Receipt Note</h5>
+                        <h5 class="card-title">Create Goods Receipt Note</h5>
                     </div>
 
                 </div>
@@ -19,7 +19,7 @@
                         <div class="col-md-12">
                             <div>
                                 <div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
+                                    <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
                                             <label asp-for="ReferenceNo" class="control-label">Order No.</label>
                                             <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
@@ -56,52 +56,15 @@
                                     <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
                                             <label class="control-label"></label>
-                                            <button id="LoadProduct" class="btn btn-light">Load Product</button>
+                                            <button id="LoadProduct" class="btn btn-light" style="margin-top: 22px" onclick="GetPurchaseGRNbyPO(POReference)">Load</button>
+                                            <input class="form-control" type="hidden" id="PurchaseGRNId1" value="0" />
                                             <input asp-for="Id" class="form-control" type="hidden" />
                                         </div>
                                     </div>
-                                    @*<div class="col-md-3 pr-2 pl-2">
-                                                <div class="form-group">
-                                                    <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
-                                                    <div class="col-md-12 p-0 ">
-                                                        <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 pr-1 pl-1">
-                                                <div class="form-group" style="margin-top:27px">
-                                                    <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
-                                                </div>
-                                            </div
-                                        <div class="col-md-2">
-                                            <div class="form-group">
-                                                <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
-                                            </div>
-                                        </div>>*@
                                 </div>
                             </div>
-                            @*<div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
-                                            <select asp-for="EmployeeId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                            </select>
-                                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="PurchaseGRNDate" class="control-label"></label>
-                                            <input asp-for="PurchaseGRNDate" type="date" class="form-control" />
-                                            <span asp-validation-for="PurchaseGRNDate" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                </div>*@
                         </div>
                     </div>
-                    <hr />
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
@@ -117,20 +80,20 @@
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label class="control-label text-right">GRN Qty</label>
-                                        <input class="form-control text-right" type="text" value="1" placeholder="0.00" id="GRNQty" />
+                                        <label class="control-label text-right">Quantity</label>
+                                        <input class="form-control text-right" type="number" min="1" max="99999" value="1" placeholder="0.00" id="GRNQty" />
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Price</label>
-                                        <input class="form-control text-right" type="number" placeholder="0.00" id="UnitPrice" />
+                                        <input class="form-control text-right" type="number" min="0" max="99999" placeholder="0.00" id="UnitPrice" />
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Disc%</label>
-                                        <input class="form-control text-right" type="text" value="0" placeholder="0.00" id="DiscountPercentage" />
+                                        <input class="form-control text-right" type="number" min="0" max="100" placeholder="0.00" id="DiscountPercentage" />
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
@@ -141,12 +104,6 @@
                                         <input asp-for="Id" class="form-control" type="hidden" />
                                     </div>
                                 </div>
-                                @*<div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label class="control-label"></label>
-                                            <button id="cancel" class="btn btn-light" style="margin-top: 22px">Reset</button>
-                                        </div>
-                                    </div>*@
                             </div>
                         </div>
                     </div>
@@ -157,16 +114,16 @@
                                     <thead>
                                         <tr>
                                             <th style="width:0%">FoodMenuId</th>
-                                            <th style="width:25%">Food Menu</th>
-                                            <th style="width:8%" class="text-right">PO Qty</th>
-                                            <th style="width:8%" class="text-right">GRN Qty</th>
-                                            <th style="width:8%" class="text-right">Price</th>
-                                            <th style="width:0%" class="text-right">Dis%</th>
-                                            <th style="width:8%" class="text-right">Dis Amt</th>
+                                            <th style="width:45%">Product</th>
+                                            <th style="width:10%" class="text-right">PO Qty</th>
+                                            <th style="width:10%" class="text-right">Received Qty</th>
+                                            <th style="width:10%" class="text-right">Price</th>
+                                            <th style="width:10%" class="text-right">Dis%</th>
+                                            <th style="width:0%" class="text-right">Dis Amt</th>
                                             <th style="width:0%" class="text-right">Tax%</th>
-                                            <th style="width:8%" class="text-right">Tax Amt</th>
-                                            <th style="width:8%" class="text-right">Total</th>
-                                            <th style="width:8%">Action</th>
+                                            <th style="width:0%" class="text-right">Tax Amt</th>
+                                            <th style="width:0%" class="text-right">Total</th>
+                                            <th style="width:10%">Action</th>
                                             <th style="width:0%" class="text-center">Id</th>
                                         </tr>
                                     </thead>
@@ -209,7 +166,7 @@
                                                     <td class="text-right">
                                                         @item.TotalAmount.ToString("N")
                                                     </td>
-                                                    <td>
+                                                    <td class="text-left">
                                                         <div class="form-button-action">
                                                             <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
                                                         </div>
@@ -255,7 +212,7 @@
                                         </div>
                                         <div class="col-md-2 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="DeliveryDate" class="control-label"></label>
+                                                <label asp-for="DeliveryDate" class="control-label">Delivery Date</label>
                                                 <input asp-for="DeliveryDate" type="date" class="form-control" />
                                                 <span asp-validation-for="DeliveryDate" class="text-danger"></span>
                                             </div>
@@ -268,7 +225,7 @@
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="VehicleNumber" class="control-label">Vehicle Number</label>
+                                                <label asp-for="VehicleNumber" class="control-label">Vehicle No.</label>
                                                 <input asp-for="VehicleNumber" class="form-control input-full text-left">
                                             </div>
                                         </div>
@@ -284,15 +241,15 @@
                                             <div class="form-group form-inline fc-left">
                                                 <div class="col-md-1 pr-2 pl-2">
                                                     <label asp-for="GrossAmount" class="control-label">Gross Amount</label>
-                                                    <input asp-for="GrossAmount" style="width:80px" class="form-control input-full text-right">
+                                                    <input asp-for="GrossAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
                                                 </div>
                                                 <div class="col-md-1 pr-2 pl-2">
                                                     <label asp-for="TaxAmount" class="control-label">VAT </label>
-                                                    <input asp-for="TaxAmount" style="width:80px" class="form-control input-full text-right">
+                                                    <input asp-for="TaxAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
                                                 </div>
                                                 <div class="col-md-1 pr-2 pl-2">
                                                     <label asp-for="TotalAmount" class="control-label">Total Amount</label>
-                                                    <input asp-for="TotalAmount" style="width:80px" class="form-control input-full text-right">
+                                                    <input asp-for="TotalAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
                                                 </div>
                                             </div>
                                         </div>
@@ -344,9 +301,9 @@ var TotalAmount = 0;
     <script src="~/Scripts/PurchaseGRNFoodMenu.js"></script>
 
     <!-- Page level plugin JavaScript-->
-    <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+    <!--<script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>-->
 
 
 }

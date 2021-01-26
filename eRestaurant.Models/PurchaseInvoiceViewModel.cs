@@ -8,6 +8,7 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
+        public string POReferenceNo { get; set; }
 
         public string Date { get; set; }
         public string SupplierName { get; set; }

@@ -283,7 +283,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 6) FROM purchase where InventoryType=2;";
+                var query = $"SELECT RIGHT('PO-' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 12) FROM purchase where InventoryType=2;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -354,7 +354,7 @@ namespace RocketPOS.Repository
                 }
 
                 var query = "INSERT INTO [dbo].[Purchase] " +
-                             "  ([PurchaseId] " +
+                             "  ([ReferenceNo] " +
                              "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
@@ -429,7 +429,8 @@ namespace RocketPOS.Repository
                                               "" + item.TaxPercentage + "," +
                                               "" + item.TaxAmount + "," +
                                               "" + item.Total + "," +
-                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseId as INT) from Purchase where id = " + result + "; ";
+                                              "" + LoginInfo.Userid + ",0);  SELECT SCOPE_IDENTITY();";
+
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -579,7 +580,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 6) FROM purchase where InventoryType=1;";
+                var query = $"SELECT RIGHT('PO-' + convert(varchar(8), isnull(count(*), 0) + 1), 12) FROM purchase where InventoryType = 1 and isdeleted = 0; ";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {

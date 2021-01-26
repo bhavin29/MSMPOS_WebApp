@@ -64,6 +64,7 @@ namespace RocketPOS.Controllers.Transaction
             else
             {
                 purchaseModel.PurchaseGRNDate = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -78,10 +79,9 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult PurchaseGRNFoodMenu(PurchaseGRNModel purchaseModel, string Submit)
         {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-
+            purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
             purchaseModel.PurchaseGRNDate = DateTime.Now;
 
             string purchaseMessage = string.Empty;

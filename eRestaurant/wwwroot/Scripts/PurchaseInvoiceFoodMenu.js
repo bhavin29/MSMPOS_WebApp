@@ -4,18 +4,23 @@ var deletedId = [];
 var DisPerTotal = 0;
 var DisAmtTotal = 0;
 var TaxPerTotal = 0;
-var TaxAmtTotal = 0;
+var TaxAmount = 0;
 var GTotal = 0;
+var GrossAmount = 0;
+var TaxAmountTotal = 0;
+var TotalAmount = 0
 var Status = 0;
-
 
 $(document).ready(function () {
     var supId = $("#SupplierId").val();
+
     if (supId != null && supId != 0) {
         GetSupplierDetailsById(supId);
     }
+    debugger;
     $("#purchaseInvoice").validate();
-    PurchaseDatatable = $('#PurchaseInvoiceDetails').DataTable({
+
+    PurchaseDatatable = $('#purchaseOrderDetails').DataTable({
         "paging": false,
         "ordering": false,
         "info": false,
@@ -35,7 +40,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5],
+                "targets": [6, 8,11],
                 "visible": false,
                 "searchable": false
             }
@@ -45,8 +50,8 @@ $(document).ready(function () {
 
 $('#cancel').on('click', function (e) {
     e.preventDefault();
-    GrandTotal += editDataArr[0].total;
-    $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
+    TotalAmount += editDataArr[0].total;
+    $("#TotalAmount").val(parseFloat(TotalAmount).toFixed(2));
     DueAmount();
     clearItem();
     dataArr.push(editDataArr[0]);
@@ -54,9 +59,10 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
-     e.preventDefault();
+    debugger;
+    e.preventDefault();
     var message = validation(0);
-    var Discount = 0;
+    var DiscountPercentage = 0;
     var DiscountAmount = 0;
     var TaxPercentage = 0;
     var TaxAmount = 0;
@@ -73,44 +79,49 @@ $('#addRow').on('click', function (e) {
             TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
         }
     });
-    debugger;
     var POQty = parseFloat($("#POQty").val()).toFixed(2);
-    var GRNQty = parseFloat($("#GRNQty").val()).toFixed(2);
-    DiscountPer = parseFloat($("#DiscountPercentage").val()).toFixed(2);
+    var InvoiceQty = parseFloat($("#InvoiceQty").val()).toFixed(2);
+    DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
+
     var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
-    var Total = parseFloat($("#UnitPrice").val() * $("#GRNQty").val()).toFixed(2);
-    
+    var Total = parseFloat($("#UnitPrice").val() * $("#InvoiceQty").val()).toFixed(2);
+    debugger;
     POQty = getNum(POQty);
-    GRNQty = getNum(GRNQty);
-    DiscountPer = getNum(DiscountPer);
+    InvoiceQty = getNum(InvoiceQty);
+    DiscountPercentage = getNum(DiscountPercentage);
     TaxPercentage = getNum(TaxPercentage);
     UnitPrice = getNum(UnitPrice);
     Total = getNum(Total);
 
-    if (DiscountPer > 0) {
-        DiscountAmount = ((parseFloat(Total) * parseFloat(DiscountPer)) / 100).toFixed(2);
-        DisAmtTotal = parseFloat(parseFloat(DiscountAmount)+parseFloat($("#DiscountAmount").val())).toFixed(2);
+    if (DiscountPercentage > 0) {
+        DiscountAmount = ((parseFloat(Total) * parseFloat(DiscountPercentage)) / 100).toFixed(2);
+        DisAmtTotal = parseFloat(parseFloat(DiscountAmount) + parseFloat($("#DiscountAmount").val())).toFixed(2);
         Total = (parseFloat(Total) - parseFloat(DiscountAmount)).toFixed(2);
     }
-    if (TaxPercentage > 0) {
-        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
-        Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+    else {
+        DiscountAmount = parseFloat(0).toFixed(2);
     }
 
+    if (TaxPercentage > 0) {
+        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
+        // Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+    }
+    debugger;
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
+
         var rowNode = PurchaseDatatable.row.add([
             '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
             $('#FoodMenuId').children("option:selected").text(),
             '<td class="text-right">' + POQty + ' </td>',
-            '<td class="text-right">' + GRNQty + ' </td>',
+            '<td class="text-right">' + InvoiceQty + ' </td>',
             '<td class="text-right">' + UnitPrice + ' </td>',
             '<td class="text-right">' + DiscountPercentage + ' </td>',
             '<td class="text-right">' + DiscountAmount + ' </td>',
-            //'<td class="text-right">' + TaxPercentage + ' </td>',
+            '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editItem"></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"" ></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -118,15 +129,16 @@ $('#addRow').on('click', function (e) {
         ]).draw(false).nodes();
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
-            POquantity: POQty,
-            GRNquantity: GRNQty,
+            poQty: POQty,
+            InvoiceQty: InvoiceQty,
             unitPrice: UnitPrice,
             discountAmount: DiscountAmount,
             discountPercentage: DiscountPercentage,
+            grossAmount: InvoiceQty * UnitPrice,
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
-            total: Total,
-            purchaseId: $("#PurchaseInvoiceId").val()
+            totalAmount: Total,
+            purchaseInvoiceId: $("#PurchaseInvoiceId").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -134,22 +146,19 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(4).addClass('text-right');
         $(rowNode).find('td').eq(5).addClass('text-right');
         $(rowNode).find('td').eq(6).addClass('text-right');
-        $(rowNode).find('td').eq(6).addClass('text-right');
-        //GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
-        //GrandTotal += Total;
-        debugger;
-        //DisPerTotal = calculateColumn(3);
+
         DisAmtTotal = calculateColumn(4);
-        //TaxPerTotal = calculateColumn(5);
-        //TaxAmtTotal = calculateColumn(4);
-        GTotal = calculateColumn(5);
-        GrandTotal = GTotal;
-        $("#DiscountAmount").val(parseFloat(DisAmtTotal).toFixed(2));
-        $("#TaxAmount").val(parseFloat(TaxAmtTotal).toFixed(2));
-        $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
+        TaxAmountTotal = calculateColumn(5);
+        GrossAmount = calculateGross();
+        TotalAmount = GrossAmount - DisAmtTotal;
+
+        $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
+        $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
+        $("#TotalAmount").val(parseFloat(TotalAmount).toFixed(2));
+
         DueAmount();
         clearItem();
-        $("#FoodMenuId").focus();
+        $("#FoodMenuId").focus()
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -166,7 +175,7 @@ function saveOrder(data) {
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         type: 'POST',
         beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
-        url: 'PurchaseInvoiceFoodMenu\PurchaseInvoiceFoodMenuList',
+        url: 'PurchaseInvoiceFoodMenu',
         data: data,
         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
@@ -174,37 +183,32 @@ function saveOrder(data) {
 
 $(function () {
     $('#saveOrder').click(function () {
-        debugger;
         var message = validation(1);
         if (message == '') {
-            $("#purchaseInvoiceform").on("submit", function (e) {
-                   debugger;
+            $("#purchaseInvoice").on("submit", function (e) {
                 e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
-                    SupplierId: $("#SupplierId").val(),
-                    //SupplierEmail: $("#SupplierEmail").val(),
-                    //IsSendEmail: $("#IsSendEmail").is(":checked") ? "true" : "false",
                     StoreId: $("#StoreId").val(),
-                    EmployeeId: $("#EmployeeId").val(),
-                    Date: $("#Date").val(),
-                    GrandTotal: $("#GrandTotal").val(),
+                    SupplierId: $("#SupplierId").val(),
+                    SupplierEmail: $("#SupplierEmail").val(),
+                    IsSendEmail: $("#IsSendEmail").is(":checked") ? "true" : "false",
+                    GrossAmount: $("#GrossAmount").val(),
                     TaxAmount: $("#TaxAmount").val(),
-                    DiscountAmount: $("#DiscountAmount").val(),
-                    Due: $("#DueAmount").val(),
-                    Paid: $("#PaidAmount").val(),
+                    TotalAmount: $("#TotalAmount").val(),
+                    DeliveryNoteNumber: $("#DeliveryNoteNumber").val(),
+                    DeliveryDate: $("#DeliveryDate").val(),
+                    DriverName: $("#DriverName").val(),
+                    VehicleNumber: $("#VehicleNumber").val(),
                     Notes: $("#Notes").val(),
-                    Status: 1,
                     SupplierList: [],
                     FoodMenuList: [],
-                    PurchaseDetails: dataArr,
+                    PurchaseInvoiceDetails: dataArr,
                     DeletedId: deletedId
                 });
                 $.when(saveOrder(data)).then(function (response) {
-                    debugger;
                     if (response.status == "200") {
-                        debugger;
                         $(".modal-body").text(response.message);
                         $("#save").show();
                         $("#ok").hide();
@@ -225,6 +229,13 @@ $(function () {
 
             });
         }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
     })
 });
 
@@ -243,9 +254,10 @@ $(function () {
                     StoreId: $("#StoreId").val(),
                     EmployeeId: $("#EmployeeId").val(),
                     Date: $("#PurchaseInvoiceDate").val(),
-                    GrandTotal: $("#GrossTotal").val(),
-                    TaxAmount: $("#TaxAmount").val(),
+                    GrossTotal: $("#GrossTotal").val(),
+                    TaxAmountTotal: $("#TaxAmount").val(),
                     DiscountAmount: $("#DiscountAmount").val(),
+                    TotalAmount: $("#TotalAmount").val(),
                     Due: $("#DueAmount").val(),
                     Paid: $("#PaidAmount").val(),
                     Notes: $("#Notes").val(),
@@ -290,13 +302,27 @@ $('#ok').click(function () {
 
 function deleteOrder(purchaseId, foodMenuId, rowId) {
     var id = foodMenuId;
+
+    GrossAmount = $("#GrossAmount").val();
+    TaxAmountTotal = $("#TaxAmount").val();
+    TotalAmount = $("#TotalAmount").val();
+
+
     for (var i = 0; i < dataArr.length; i++) {
         if (dataArr[i].foodMenuId == id) {
-            TotalAmount = dataArr[i].total;
-            GrandTotal -= TotalAmount;
-            $("#GrossAmount").val(GrandTotal);
-            DueAmount();
-            deletedId.push(dataArr[i].purchaseId);
+            Gross = dataArr[i].unitPrice * dataArr[i].Invoiceqty;
+            Tax = dataArr[i].taxAmount;
+            Total = dataArr[i].totalAmount;
+            debugger;
+            GrossAmount -= Gross;
+            TaxAmountTotal -= Tax;
+            TotalAmount -= Total;
+
+            $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
+            $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
+            $("#TotalAmount").val(parseFloat(TotalAmount).toFixed(2));
+
+            deletedId.push(dataArr[i].purchaseInvoiceId);
             dataArr.splice(i, 1);
             PurchaseDatatable.row(rowId).remove().draw(false);
             jQuery.noConflict();
@@ -330,9 +356,10 @@ $(document).on('click', 'a.editItem', function (e) {
             if (dataArr[i].foodMenuId == id) {
                 $("#FoodMenuId").val(dataArr[i].foodMenuId),
                     $("#POQty").val(dataArr[i].quantity),
-                    $("#GRNQty").val(dataArr[i].quantity),
+                    $("#InvoiceQty").val(dataArr[i].quantity),
                     $("#UnitPrice").val(dataArr[i].unitPrice),
-                    $("#Discount").val(dataArr[i].Discount),
+                    $("#DiscountPercentage").val(dataArr[i].DiscountPercentage),
+                    $("#DiscountAmounts").val(dataArr[i].Discount),
                     $("#PurchaseInvoiceId").val(dataArr[i].purchaseId)
                 GrandTotal = $("#GrossAmount").val();
                 TotalAmount = dataArr[i].total;
@@ -371,7 +398,6 @@ function validation(id) {
         message = "Select Employee"
         return message;
     }
-
     if (id == 1) {
         if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
             var message = 'At least one order should be entered'
@@ -391,7 +417,7 @@ function validation(id) {
             message = "Enter quantity"
             return message;
         }
-        else if ($("#GRNQty").val() == '' || $("#GRNQty").val() == 0) {
+        else if ($("#InvoiceQty").val() == '' || $("#InvoiceQty").val() == 0) {
             message = "Enter quantity"
             return message;
         }
@@ -409,9 +435,8 @@ function clearItem() {
     $("#FoodMenuId").val('0'),
         $("#UnitPrice").val(''),
         $("#POQty").val('1'),
-        $("#GRNQty").val('1'),
-        $("#Discount").val(''),
-        $("#GrossAmount").val(''),
+        $("#InvoiceQty").val('1'),
+        $("#DiscountPercentage").val(''),
         $("#PurchaseInvoiceId").val('0')
 }
 
@@ -483,11 +508,25 @@ function getNum(val) {
 
 function calculateColumn(index) {
     var total = 0;
-    $('#PurchaseInvoiceDetails tbody tr').each(function () {
+    $('#purchaseOrderDetails tbody tr').each(function () {
         var value = parseFloat($('td', this).eq(index).text());
         if (!isNaN(value)) {
             total += value;
         }
+    });
+    return total;
+}
+
+function calculateGross() {
+    var total = 0;
+    $('#purchaseOrderDetails tbody tr').each(function () {
+        var Invoiceqty = parseFloat($('td', this).eq(2).text());
+        var Price = parseFloat($('td', this).eq(3).text());
+        if (!isNaN(Price)) {
+            total += (Invoiceqty * Price);
+        }
+
+
     });
     return total;
 }
@@ -509,3 +548,23 @@ function GetFoodMenuLastPrice(foodMenuId) {
     });
 }
 
+
+function GetPurchaseInvoicebyPO(poReference) {
+
+    poReference = $("#POReference").val();
+    $.ajax({
+        url: "/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu",
+        data: { "id": poReference },
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            $("#UnitPrice").val('');
+            var obj = JSON.parse(data);
+            $("#UnitPrice").val(parseFloat(obj.unitPrice));
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+    debugger;
+}

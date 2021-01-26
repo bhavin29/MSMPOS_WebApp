@@ -16,7 +16,7 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Select Date")]
         [DataType(DataType.Date)]
         public DateTime PurchaseGRNDate { get; set; }
- 
+
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
         public int? StoreId { get; set; }
@@ -27,13 +27,19 @@ namespace RocketPOS.Models
         public List<SelectListItem> FoodMenuList { get; set; }
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal GrossAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TaxAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal PaidAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal DueAmount { get; set; }
         public string DeliveryNoteNumber { get; set; }
-        public string DeliveryDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? DeliveryDate { get; set; }
         public string DriverName { get; set; }
         public string VehicleNumber { get; set; }
         public string Notes { get; set; }
@@ -53,14 +59,23 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal POQTY { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal GRNQTY { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal UnitPrice { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal GrossAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal DiscountPercentage { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal DiscountAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TaxAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TaxPercentage { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
     }
 }

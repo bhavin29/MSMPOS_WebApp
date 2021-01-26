@@ -64,6 +64,7 @@ namespace RocketPOS.Controllers.Transaction
             else
             {
                 purchaseModel.Date = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -81,6 +82,8 @@ namespace RocketPOS.Controllers.Transaction
             //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+ 
+            
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)
             {

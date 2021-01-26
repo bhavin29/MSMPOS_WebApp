@@ -23,8 +23,8 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceViewModel> purchaseViewModelList = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoiceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.[GrossAmount] as GrandTotal,PurchaseInvoice.DueAmount as Due " +
+                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [PurchaseInvoiceDate],Supplier.SupplierName," +
+                    "PurchaseInvoice.GrossAmount,PurchaseInvoice.TaxAmount,PurchaseInvoice.TotalAmount " +
                     "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=2 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
@@ -37,14 +37,13 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,PurchaseId as ReferenceNo,PurchaseInvoiceDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      " PurchaseInvoice.[GrossAmount] as GrandTotal,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.Notes " +
+                      " PurchaseInvoice.[GrossAmount] as GrandTotal,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.DeliveryNoteNumber,PurchaseInvoice.DeliveryDate,PurchaseInvoice.DriverName,PurchaseInvoice.VehicleNumber,PurchaseInvoice.Notes " +
                       " ,[DeliveryNoteNumber], [DeliveryDate],[DriverName],[VehicleNumber] " +
                       " from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=2 And PurchaseInvoice.Isdeleted = 0 and PurchaseInvoice.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseInvoiceModel>(query).AsList();
             }
             return purchaseModelList;
         }
-
         public int InsertPurchaseInvoice(PurchaseInvoiceModel purchaseInvoiceModel)
         {
             int result = 0;
@@ -109,7 +108,7 @@ namespace RocketPOS.Repository
                                              " ,[FoodMenuId] " +
                                              " ,[IngredientId] " +
                                              " ,[POQty] " +
-                                             " ,[GRNQty] " +
+                                             " ,[InvoiceQty] " +
                                              " ,[UnitPrice] " +
                                              " ,[GrossAmount] " +
                                              " ,[DiscountPercentage]  " +
@@ -130,7 +129,7 @@ namespace RocketPOS.Repository
                                               item.DiscountAmount + "," +
                                               item.TaxAmount + "," +
                                               item.TotalAmount + "," +
-                                    LoginInfo.Userid + ",0); SELECT CAST(PurchaseInvoiceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
+                                    LoginInfo.Userid + ",0); SELECT CAST(ReferenceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -202,7 +201,7 @@ namespace RocketPOS.Repository
                                               ",[FoodMenuId]             = " + item.FoodMenuId +
                                               ",[IngredientId]           = " + item.IngredientId +
                                               ",[POQty]                  = " + item.POQTY +
-                                              ",[GRNQty]                 = " + item.InvoiceQty +
+                                              ",[InvoiceQty]                 = " + item.InvoiceQty +
                                               ",[UnitPrice]              = " + item.UnitPrice +
                                               ",[GrossAmount]            = " + item.GrossAmount +
                                               ",[DiscountPercentage]     = " + item.DiscountPercentage +
@@ -220,7 +219,7 @@ namespace RocketPOS.Repository
                                               ",[FoodMenuId] " +
                                               ",[IngredientId] " +
                                               ",[POQty] " +
-                                              ",[GRNQty] " +
+                                              ",[InvoiceQty] " +
                                               ",[UnitPrice] " +
                                               ",[GrossAmount] " +
                                               ",[DiscountPercentage] " +
@@ -287,9 +286,9 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceDetailModel> purchaseDetails = new List<PurchaseInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT PG.[PurchaseInvoiceId],PG.[FoodMenuId],PG.[IngredientId],PG.[POQty],PG.[GRNQty],PG.[UnitPrice],PG.[GrossAmount],PG.[DiscountPercentage],PG.[DiscountAmount],PG.[TaxAmount],PG.[TotalAmount], " +
+                var query = " SELECT PG.[PurchaseInvoiceId],PG.[FoodMenuId],PG.[IngredientId],PG.[POQty],PG.[InvoiceQty],PG.[UnitPrice],PG.[GrossAmount],PG.[DiscountPercentage],PG.[DiscountAmount],PG.[TaxAmount],PG.[TotalAmount], " +
                          " IngredientName" +
-                         " FROM PurchaseInvoice PG INNER JOIN PURCHASEGRNDetail PGD" +
+                         " FROM PurchaseInvoice PG INNER JOIN PURCHASEInvoiceDetail PGD" +
                          " inner join Ingredient as i on pin.IngredientId = i.Id" +
                          " INNER JOIN FOODMENU FM ON FM.ID = PGD.FOODMENUID" +
                          " WHERE PG.id = " + purchaseId + " AND PG.InventoryType = 2 and PGD.isdeleted = 0 and PG.isdeleted = 0";
@@ -325,7 +324,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchaseId),0) + 1), 6) FROM PurchaseInvoice where InventoryType=2;";
+                var query = $"SELECT RIGHT('' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchaseId),0) + 1), 6) FROM PurchaseInvoice where InventoryType=2;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -341,8 +340,8 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceModel> purchaseModelList = new List<PurchaseInvoiceModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,PurchaseInvoiceNumber as ReferenceNo,PurchaseInvoiceDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      "PurchaseInvoice.GrandTotal as GrandTotal,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.Notes " +
+                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseInvoiceDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
+                      "PurchaseInvoice.GrossAmount, PurchaseInvoice.TaxAmount,PurchaseInvoice.TotalAmount,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.DeliveryNoteNumber ,PurchaseInvoice.DeliveryDate ,PurchaseInvoice.DriverName ,PurchaseInvoice.VehicleNumber,PurchaseInvoice.Notes " +
                       "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 and PurchaseInvoice.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseInvoiceModel>(query).AsList();
             }
@@ -353,8 +352,8 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceViewModel> purchaseViewModelList = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseId as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.GrossAmount as GrandTotal,PurchaseInvoice.DueAmount as Due " +
+                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
+                    "PurchaseInvoice.TotalAMount,PurchaseInvoice.DueAmount as Due " +
                     "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
@@ -365,9 +364,9 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceDetailModel> purchaseDetails = new List<PurchaseInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseInvoiceId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total " +
-                            "from purchase as P inner join PurchaseInvoiceIngredient as PIN on P.id = pin.PurchaseInvoiceId " +
-                            "inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                var query = "select pin.Id as PurchaseInvoiceId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.POQty,PIN.InvoiceQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
+                            " from purchaseInvoice as P inner join PurchaseInvoiceDetail as PIN on P.id = pin.PurchaseInvoiceId " +
+                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseInvoiceDetailModel>(query).AsList();
             }
 
@@ -382,7 +381,8 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [dbo].[PurchaseInvoice] " +
-                             "  ([PurchaseInvoiceNumber] " +
+                             "  ([PurchaseId] " +
+                             "  ,[ReferenceNumber] " +
                              "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
@@ -390,25 +390,34 @@ namespace RocketPOS.Repository
                              "  ,[PurchaseInvoiceDate]   " +
                              "  ,[GrossAmount]    " +
                              "  ,[TaxAmount]      " +
-                             "  ,[GrandTotal]     " +
+                             "  ,[TotalAmount]     " +
+                              " ,[DeliveryNoteNumber] " +
+                             "  ,[DeliveryDate] " +
+                             "  ,[DriverName]   " +
+                             "  ,[VehicleNumber]  " +
                              "  ,[PaidAmount]     " +
                              "  ,[DueAmount]      " +
                              "  ,[Notes]          " +
                              "  ,[UserIdUpdated]  " +
                              "  ,[DateInserted]   " +
-                             "  ,[IsDeleted])     " +
+                             "  ,[IsDeleted] )     " +
                              "   VALUES           " +
-                             "  (@ReferenceNo,  " +
+                             "  (@PurchaseId,  " +
+                             "  @ReferenceNo,  " +
                              "   @InventoryType,      " +
                              "   @SupplierId,      " +
                              "   @StoreId,         " +
                              "   @EmployeeId,         " +
-                             "   @Date,    " +
-                             "   @GrandTotal,     " +
-                             "   0,       " +
-                             "   @GrandTotal,      " +
-                             "   @Paid,      " +
-                             "   @Due,       " +
+                             "   @PurchaseInvoiceDate,    " +
+                             "   @GrossAmount,     " +
+                             "   @TaxAmount,     " +
+                             "   @TotalAmount,     " +
+                             "  @DeliveryNoteNumber," +
+                             "  @DeliveryDate," +
+                             "  @DriverName," +
+                             " @VehicleNumber," +
+                             "   @PaidAmount,      " +
+                             "   @DueAmount,       " +
                              "   @Notes," +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
@@ -421,23 +430,23 @@ namespace RocketPOS.Repository
                     foreach (var item in purchaseModel.purchaseInvoiceDetails)
                     {
                         var queryDetails = "INSERT INTO [dbo].[PurchaseInvoiceDetail]" +
-                                             "  ,[PurchaseInvoiceId] " +
+                                             "  ([PurchaseInvoiceId] " +
                                              " ,[FoodMenuId] " +
                                              " ,[IngredientId] " +
                                              " ,[POQty] " +
-                                             " ,[GRNQty] " +
+                                             " ,[InvoiceQty] " +
                                              " ,[UnitPrice] " +
                                              " ,[GrossAmount] " +
                                              " ,[DiscountPercentage]  " +
                                              " ,[DiscountAmount] " +
                                              " ,[TaxAmount] " +
-                                             " ,[TotalAmount]  " +
+                                            " ,[TotalAmount]  " +
                                              " ,[UserIdUpdated]" +
                                               " ,[IsDeleted])   " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               item.FoodMenuId + "," +
-                                              item.IngredientId + "," +
+                                              "null ," +
                                               item.POQTY + "," +
                                               item.InvoiceQty + "," +
                                               item.UnitPrice + "," +
@@ -446,7 +455,7 @@ namespace RocketPOS.Repository
                                               item.DiscountAmount + "," +
                                               item.TaxAmount + "," +
                                               item.TotalAmount + "," +
-                                    LoginInfo.Userid + ",0); SELECT CAST(PurchaseInvoiceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
+                                    LoginInfo.Userid + ",0); SELECT CAST(ReferenceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -480,12 +489,15 @@ namespace RocketPOS.Repository
                              "   [SupplierId]  = @SupplierId" +
                              "  ,[StoreId]  = @StoreId" +
                              "  ,[EmployeeId]  = @EmployeeId" +
-                             "  ,[InventoryType]  = @InventoryType" +
-                             "  ,[PurchaseInvoiceDate] = @Date  " +
-                             "  ,[GrossAmount]  =  @GrandTotal  " +
-                             "  ,[GrandTotal]  = @GrandTotal   " +
-                             "  ,[PaidAmount] = @Paid    " +
-                             "  ,[DueAmount] =  @Due    " +
+                             "  ,[GrossAmount]  =  @GrossAmount  " +
+                             "  ,[TaxAmount]  = @TaxAmount   " +
+                             "  ,[TotalAmount]  = @TotalAmount   " +
+                              " ,[DeliveryNoteNumber] =@DeliveryNoteNumber " +
+                             "  ,[DeliveryDate]=@DeliveryDate  " +
+                             "  ,[DriverName] =@DriverName  " +
+                             "  ,[VehicleNumber] =@VehicleNumber  " +
+                             "  ,[PaidAmount] = @PaidAmount    " +
+                             "  ,[DueAmount] =  @DueAmount    " +
                              "  ,[Notes] =  @Notes    " +
                              "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
                              "  ,[DateUpdated]  = GetUtcDate()  where id= " + purchaseModel.Id + ";";
@@ -508,17 +520,16 @@ namespace RocketPOS.Repository
                         if (item.PurchaseInvoiceId > 0)
                         {
                             queryDetails = "Update [dbo].[PurchaseInvoiceDetail] set " +
-                                             ",[PurchaseInvoiceId]		  	 = " + item.PurchaseInvoiceId +
-                                              ",[FoodMenuId]             = " + item.FoodMenuId +
-                                              ",[IngredientId]           = " + item.IngredientId +
-                                              ",[POQty]                  = " + item.POQTY +
-                                              ",[GRNQty]                 = " + item.InvoiceQty +
-                                              ",[UnitPrice]              = " + item.UnitPrice +
-                                              ",[GrossAmount]            = " + item.GrossAmount +
-                                              ",[DiscountPercentage]     = " + item.DiscountPercentage +
-                                              ",[DiscountAmount]         = " + item.DiscountAmount +
-                                              ",[TaxAmount]              = " + item.TaxAmount +
-                                              ",[TotalAmount]            = " + item.TotalAmount +
+                                             "[PurchaseInvoiceId] = " + purchaseModel.Id +
+                                              ",[FoodMenuId]  = " + item.FoodMenuId +
+                                              ",[POQty]  = " + item.POQTY +
+                                              ",[InvoiceQty]   = " + item.InvoiceQty +
+                                              ",[UnitPrice]   = " + item.UnitPrice +
+                                              ",[GrossAmount]   = " + item.GrossAmount +
+                                              ",[DiscountPercentage] = " + item.DiscountPercentage +
+                                              ",[DiscountAmount]  = " + item.DiscountAmount +
+                                              ",[TaxAmount]   = " + item.TaxAmount +
+                                              ",[TotalAmount]  = " + item.TotalAmount +
                                                " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
                                                  " [DateUpdated] = GetUTCDate() " +
                                                  " where id = " + item.PurchaseInvoiceId + ";";
@@ -526,11 +537,11 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO [dbo].[PurchaseInvoiceDetail]" +
-                                              "  ,[PurchaseInvoiceId] " +
+                                              "  ([PurchaseInvoiceId] " +
                                               " ,[FoodMenuId] " +
                                               " ,[IngredientId] " +
                                               " ,[POQty] " +
-                                              " ,[GRNQty] " +
+                                              " ,[InvoiceQty] " +
                                               " ,[UnitPrice] " +
                                               " ,[GrossAmount] " +
                                               " ,[DiscountPercentage]  " +
@@ -540,9 +551,9 @@ namespace RocketPOS.Repository
                                               " ,[UserIdUpdated]" +
                                                " ,[IsDeleted])   " +
                                                "VALUES           " +
-                                               "(" + result + "," +
+                                               "(" + purchaseModel.Id + "," +
                                                item.FoodMenuId + "," +
-                                               item.IngredientId + "," +
+                                                 "null," +
                                                item.POQTY + "," +
                                                item.InvoiceQty + "," +
                                                item.UnitPrice + "," +
@@ -551,7 +562,7 @@ namespace RocketPOS.Repository
                                                item.DiscountAmount + "," +
                                                item.TaxAmount + "," +
                                                item.TotalAmount + "," +
-                                     LoginInfo.Userid + ",0); SELECT CAST(PurchaseInvoiceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
+                                     LoginInfo.Userid + ",0); SELECT SCOPE_IDENTITY() ";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -582,7 +593,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchasNumber),0) + 1), 6) FROM purchase where InventoryType=1;";
+                var query = $"SELECT RIGHT('' + CONVERT(VARCHAR(8),ISNULL(MAX(ReferenceNumber),0) + 1), 6) FROM purchaseInvoice where InventoryType=1 and ISDeleted=0;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -617,7 +628,5 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
-
-     
     }
 }

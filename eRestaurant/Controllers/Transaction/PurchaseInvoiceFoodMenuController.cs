@@ -63,7 +63,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.PurchaseInvoiceDate = DateTime.Now.ToString("dd/MM/yyyy");
+                purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
+                purchaseModel.PurchaseInvoiceDate = DateTime.Now;
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -103,18 +104,12 @@ namespace RocketPOS.Controllers.Transaction
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
-                            //    if (purchaseModel.IsSendEmail)
-                            //    {
-                            //        if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
-                            //        {
-                            //            //  _iEmailService.SendEmailToForFoodMenuPurchaseInvoice(purchaseModel, purchaseModel.SupplierEmail);
-                            //        }
-                            //    }
                         }
                     }
                     else
                     {
                         purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
+                        purchaseModel.PurchaseInvoiceDate = DateTime.Now;
 
                         int result = _iPurchaseInvoiceService.InsertPurchaseInvoiceFoodMenu(purchaseModel);
                         if (result > 0)

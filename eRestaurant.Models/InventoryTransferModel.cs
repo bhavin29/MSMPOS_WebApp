@@ -26,12 +26,14 @@ namespace RocketPOS.Models
 
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
+        public int? FoodMenuId { get; set; }
+        public List<SelectListItem> FoodMenuList { get; set; }
 
         [Required(ErrorMessage = "Select Date")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
         public string Notes { get; set; }
-                
+        public int InventoryType { get; set; }
         public List<InventoryTransferDetailModel> InventoryTransferDetail { get; set; }
 
         [EnumDataType(typeof(TableStatus))]
@@ -45,6 +47,8 @@ namespace RocketPOS.Models
         public long InventoryTransferId { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+        public int FoodMenuId { get; set; }
+        public string FoodMenuName { get; set; }
         public decimal Quantity { get; set; }
 
         [EnumDataType(typeof(TableStatus))]

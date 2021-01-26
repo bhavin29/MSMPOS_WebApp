@@ -8,13 +8,38 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("InventoryAdjustment");
 }
 
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <label class="control-label">From Date</label>
+                            <input id="fromDate" type="date" class="form-control" />
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="control-label">To Date</label>
+                            <input id="toDate" type="date" class="form-control" />
+                        </div>
+                        <div class="col-sm-2">
+                            <a id="btnLoadData" onclick="return loadAdjustmentList();" class="btn btn-primary" data-dismiss="modal">Load</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="InventoryAdjustment" class="pull-right btn btn-primary">Add Inventory Adjestment</a></div>
+                    <div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class="pull-right btn btn-primary">Add Inventory Food Adjustment</a></div>
+                    <div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>
                 </div>
             </div>
             <div class="card-body">
@@ -30,59 +55,6 @@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                 </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var tm = "#myModal" + item.Id;
-                                        var mid = "myModal" + item.Id;
-                                        <tr role="row">
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.StoreName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayName("Rocket")
-                                            </td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="InventoryAdjustment" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -93,8 +65,81 @@
 </div>
 @section Scripts {
     <script>
+        var InventoryAdjustment = null;
         $(document).ready(function () {
-            var table = $('#@dataTableName').DataTable();
+            var myDate = new Date();
+            var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+            $("#fromDate").val(date);
+            $("#toDate").val(date);
+            InventoryAdjustment = $('#@dataTableName').DataTable();
+            loadAdjustmentList();
         });
+       
+        function loadAdjustmentList() {
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/InventoryAdjustment/InventoryAdjustmentListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val(),
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (InventoryAdjustment != null) {
+                        InventoryAdjustment.clear();
+                        InventoryAdjustment.destroy();
+                    }
+
+                    InventoryAdjustment = $("#InventoryAdjustment").DataTable({
+                        "data": data.inventoryAdjustment,
+                        "columns": [
+                            { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
+                            { "data": "date", "name": "Date", "autoWidth": true },
+                            { "data": "storeName", "name": "Store", "autoWidth": true },
+                            { "defaultContent": "Rocket", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a class="btn btn-link btn-primary btn-lg" href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType +'">Edit</a>' +
+                                        '<a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAdjustmentDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                },
+                            }
+                        ],
+                        columnDefs: [
+                            { targets: [4], orderable: false }
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+        function deleteAdjustmentDetail(id) {
+            $.ajax({
+                url: "/InventoryAdjustment/Delete/" + id,
+                data: { },
+                dataType: "json",
+                success: function (data) {
+                    loadAdjustmentList();
+                },
+                error: function (data) {
+                    loadAdjustmentList();
+                }
+            });
+        };
     </script>
 }

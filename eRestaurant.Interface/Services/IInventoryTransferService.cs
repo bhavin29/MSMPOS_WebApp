@@ -1,11 +1,13 @@
 ﻿using RocketPOS.Models;
+using System;
 using System.Collections.Generic;
 
 namespace RocketPOS.Interface.Services
 {
-    public interface  IInventoryTransferService
+    public interface IInventoryTransferService
     {
         List<InventoryTransferViewModel> GetInventoryTransferList();
+        List<InventoryTransferViewModel> GetInventoryTransferListByDate(DateTime fromDate, DateTime toDate);
         InventoryTransferModel GetInventoryTransferById(long id);
         int InsertInventoryTransfer(InventoryTransferModel inventoryTransferModel);
         int UpdateInventoryTransfer(InventoryTransferModel inventoryTransferModel);

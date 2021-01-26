@@ -8,7 +8,7 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
-
+        public int InventoryType { get; set; }
         public string Date { get; set; }
         public string StoreName { get; set; }
         public string Employee { get; set; }

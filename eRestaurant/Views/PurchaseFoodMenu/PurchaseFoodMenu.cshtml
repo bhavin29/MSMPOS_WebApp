@@ -2,17 +2,13 @@
 @model RocketPOS.Models.PurchaseModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
-@{
-    //ViewData["Title"] = "Purchase";
-    //List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
-}
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="card-title">Add Purchase Order</h5>
+                        <h5 class="card-title">Manage Purchase Order</h5>
                     </div>
 
                 </div>
@@ -101,18 +97,17 @@
                             </div>
                         </div>
                     </div>
-                    <hr />
-                    <h5 style="margin-left:-7px" class="control-label">Food Menu Detail</h5>
+                    @*<hr />
+                        <h5 style="margin-left:-7px" class="control-label">Food Menu Detail</h5>*@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-6 pr-2 pl-2">
+                                <div class="col-md-7 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label asp-for="FoodMenuList" class="control-label">Food Menu</label>
+                                        <label asp-for="FoodMenuList" class="control-label">Product</label>
                                         <select asp-for="FoodMenuId"
                                                 class="form-control " onchange="GetFoodMenuLastPrice(FoodMenuId)">
                                             <option value="">Select</option>
-                                            @*asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">*@
                                         </select>
                                         <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                     </div>
@@ -123,7 +118,7 @@
                                         <input class="form-control text-right" type="text" value="1" placeholder="0.00" id="Quantity" />
                                     </div>
                                 </div>
-                                <div class="col-md-2 pr-2 pl-2">
+                                <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Price</label>
                                         <input class="form-control text-right" type="number" placeholder="0.00" id="UnitPrice" />
@@ -138,17 +133,17 @@
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label"></label>
-                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
+                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px; font-weight: bold;">Add</button>
                                         <input class="form-control" type="hidden" id="PurchaseId" value="0" />
                                         <input asp-for="Id" class="form-control" type="hidden" />
                                     </div>
                                 </div>
-                                <div class="col-md-1 pr-2 pl-2">
-                                    <div class="form-group">
-                                        <label class="control-label"></label>
-                                        <button id="cancel" class="btn btn-light" style="margin-top: 22px">Reset</button>
-                                    </div>
-                                </div>
+                                @*<div class="col-md-1 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label class="control-label"></label>
+                                            <button id="cancel" class="btn btn-light" style="margin-top: 22px">Reset</button>
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
                     </div>
@@ -159,7 +154,7 @@
                                     <thead>
                                         <tr>
                                             <th style="width:0%">FoodMenuId</th>
-                                            <th style="width:45%">Food Menu</th>
+                                            <th style="width:35%">Food Menu</th>
                                             <th style="width:5%" class="text-right">Qty</th>
                                             <th style="width:10%" class="text-right">Price</th>
                                             <th style="width:10%" class="text-right">Dis%</th>
@@ -242,34 +237,34 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row">
-                                        <div class="col-md-8 pl-2 pr-2">
+                                        <div class="col-md-10 pl-2 pr-2">
                                             <div class="form-group form-inline">
                                                 <label asp-for="Notes" class="col-form-label ">Notes: </label>
-                                                <textarea asp-for="Notes" class="form-control input-full text-left" rows="1" cols="90"></textarea>
+                                                <textarea asp-for="Notes" class="form-control input-full text-left" rows="1" cols="140"></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-6 col-lg-4">
+                                        <div class="col-md-2 col-lg-4">
                                             <div class="form-group form-inline fc-right">
-                                                <label asp-for="GrandTotal" class="col-md-4 col-form-label text-right">Grand Total: </label>
-                                                <div class="col-md-8 p-0 ">
+                                                <label asp-for="GrandTotal" class="col-md-1 col-form-label text-right">Total: </label>
+                                                <div class="col-md-1 ">
                                                     <input type="number" asp-for="GrandTotal" class="form-control input-full text-right" disabled="disabled" placeholder="0.00">
-                                                    <input type="number" asp-for="DiscountAmount" class="form-control input-full text-right" disabled="disabled" hidden="hidden">
 
+                                                    <input type="number" asp-for="DiscountAmount" class="form-control input-full text-right" disabled="disabled" hidden="hidden">
                                                     <input type="number" asp-for="TaxAmount" class="form-control input-full text-right" disabled="disabled" hidden="hidden">
                                                 </div>
                                             </div>
-                                            <div class="form-group form-inline">
-                                                <label asp-for="Paid" class="col-md-4 col-form-label text-right">Paid: </label>
-                                                <div class="col-md-8 p-0">
-                                                    <input type="number" asp-for="Paid" class="form-control input-full text-right" step=0.00>
+                                            @*<div class="form-group form-inline">
+                                                    <label asp-for="Paid" class="col-md-4 col-form-label text-right">Paid: </label>
+                                                    <div class="col-md-8 p-0">
+                                                        <input type="number" asp-for="Paid" class="form-control input-full text-right" step=0.00>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group form-inline">
-                                                <label asp-for="Due" class="col-md-4 col-form-label text-right">Due: </label>
-                                                <div class="col-md-8 p-0">
-                                                    <input type="number" asp-for="Due" class="form-control input-full text-right" disabled="disabled" step=0.00>
-                                                </div>
-                                            </div>
+                                                <div class="form-group form-inline">
+                                                    <label asp-for="Due" class="col-md-4 col-form-label text-right">Due: </label>
+                                                    <div class="col-md-8 p-0">
+                                                        <input type="number" asp-for="Due" class="form-control input-full text-right" disabled="disabled" step=0.00>
+                                                    </div>
+                                                </div>*@
                                         </div>
                                     </div>
                                 </div>
@@ -311,23 +306,6 @@
         </div>
     </div>
 </div>
-@*<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                </div>
-                <div class="modal-body">
-                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                </div>
-                <div class="modal-footer">
-                    <button id="deleteBtn" onclick="deleteOrder(0, ,0)" class="btn bg-danger mr-1">Delete</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
 
 @section scripts{
     <script>
@@ -340,8 +318,6 @@ var TotalAmount = 0;
             GrandTotal = parseFloat($("#GrandTotal").val());
     }
     console.log(dataArr);
-
-
     </script>
     <partial name="_ValidationScriptsPartial" />
     <script src="~/Scripts/PurchaseFoodMenu.js"></script>

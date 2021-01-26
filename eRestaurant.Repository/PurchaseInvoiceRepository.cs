@@ -25,7 +25,7 @@ namespace RocketPOS.Repository
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoiceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
                     "PurchaseInvoice.[GrossAmount] as GrandTotal,PurchaseInvoice.DueAmount as Due " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=2 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, purchaseNumber desc";
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=2 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -36,7 +36,7 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceModel> purchaseModelList = new List<PurchaseInvoiceModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,PurchaseNumber as ReferenceNo,PurchaseInvoiceDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,PurchaseId as ReferenceNo,PurchaseInvoiceDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       " PurchaseInvoice.[GrossAmount] as GrandTotal,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.Notes " +
                       " ,[DeliveryNoteNumber], [DeliveryDate],[DriverName],[VehicleNumber] " +
                       " from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=2 And PurchaseInvoice.Isdeleted = 0 and PurchaseInvoice.Id = " + purchaseId;
@@ -57,7 +57,7 @@ namespace RocketPOS.Repository
                              " [InventoryType] " +
                              " ,[PurchaseOrderId] " +
                              " ,[ReferenceNumber] " +
-                             " ,[PurchaseNumber] " +
+                             " ,[PurchaseId] " +
                              " ,[PurchaseInvoiceDate] " +
                              " ,[SupplierId] " +
                              " ,[StoreId] " +
@@ -79,7 +79,7 @@ namespace RocketPOS.Repository
                              "  ( @InventoryType " +
                              " ,@PurchaseOrderId " +
                              " ,@ReferenceNumber " +
-                             " ,@PurchaseNumber " +
+                             " ,@PurchaseId " +
                              " ,@PurchaseInvoiceDate " +
                              " ,@SupplierId " +
                              " ,@StoreId " +
@@ -162,7 +162,7 @@ namespace RocketPOS.Repository
                 var query = "Update [dbo].[PurchaseInvoice] set " +
                             " InventoryType = @InventoryType " +
                             ",ReferenceNumber = @ReferenceN0 " +
-                            ",PurchaseNumber = @PurchaseNumber " +
+                            ",PurchaseId = @PurchaseId " +
                             ",PurchaseInvoiceDate = @PurchaseInvoiceDate " +
                             ",SupplierId = @SupplierId " +
                             ",StoreId = @StoreId " +
@@ -325,7 +325,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchaseNumber),0) + 1), 6) FROM PurchaseInvoice where InventoryType=2;";
+                var query = $"SELECT RIGHT('000000' + CONVERT(VARCHAR(8),ISNULL(MAX(PurchaseId),0) + 1), 6) FROM PurchaseInvoice where InventoryType=2;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -353,9 +353,9 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceViewModel> purchaseViewModelList = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select PurchaseInvoice.Id as Id, PurchaseId as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
                     "PurchaseInvoice.GrossAmount as GrandTotal,PurchaseInvoice.DueAmount as Due " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, purchaseNumber desc";
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
             return purchaseViewModelList;

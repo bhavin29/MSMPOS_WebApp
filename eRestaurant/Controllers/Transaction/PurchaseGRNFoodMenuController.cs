@@ -53,7 +53,6 @@ namespace RocketPOS.Controllers.Transaction
             return View(purchaseModel);
         }
 
-        // GET: PurchaseGRN/Create
         public ActionResult PurchaseGRNFoodMenu(long? id)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
@@ -64,7 +63,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.PurchaseGRNDate = DateTime.Now.ToShortDateString();
+                purchaseModel.PurchaseGRNDate = DateTime.Now;
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -83,7 +82,7 @@ namespace RocketPOS.Controllers.Transaction
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
 
-            purchaseModel.PurchaseGRNDate = DateTime.Now.ToShortDateString();
+            purchaseModel.PurchaseGRNDate = DateTime.Now;
 
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)
@@ -118,7 +117,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                       // purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                        purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
 
                         int result = _iPurchaseGRNService.InsertPurchaseGRNFoodMenu(purchaseModel);
                         if (result > 0)

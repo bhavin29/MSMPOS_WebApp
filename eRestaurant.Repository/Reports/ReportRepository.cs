@@ -60,7 +60,7 @@ namespace RocketPOS.Repository.Reports
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
 
-                var query = "select Purchase.Id as Id, PurchaseNumber as ReferenceNo," +
+                var query = "select Purchase.Id as Id, PurchaseId as ReferenceNo," +
                              "convert(varchar(12), PurchaseDate, 3) as [Date]," +
                              "Supplier.SupplierName as Supplier," +
                              "Purchase.GrandTotal as GrandTotal," +

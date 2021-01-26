@@ -13,5 +13,6 @@ namespace RocketPOS.Models
         public string ToStoreName { get; set; }
         public string Employee { get; set; }
         public int UserId { get; set; }
+        public int InventoryType { get; set; }
     }
 }

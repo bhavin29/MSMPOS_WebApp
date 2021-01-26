@@ -41,6 +41,7 @@ namespace RocketPOS.Services
                              EmployeeId = inventory.EmployeeId,
                              Date = inventory.Date,
                              Notes = inventory.Notes,
+                             InventoryType = inventory.InventoryType,
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -51,7 +52,9 @@ namespace RocketPOS.Services
                                                      IngredientId = inventoryAdjDetail.IngredientId,
                                                      Quantity = inventoryAdjDetail.Quantity,
                                                      ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
-                                                     IngredientName = inventoryAdjDetail.IngredientName
+                                                     IngredientName = inventoryAdjDetail.IngredientName,
+                                                     FoodMenuId= inventoryAdjDetail.FoodMenuId,
+                                                     FoodMenuName = inventoryAdjDetail.FoodMenuName
                                                  }).ToList();
             }
             return model;
@@ -66,6 +69,11 @@ namespace RocketPOS.Services
         public List<InventoryTransferViewModel> GetInventoryTransferList()
         {
             return _inventoryTransferRepository.GetInventoryTransferList();
+        }
+
+        public List<InventoryTransferViewModel> GetInventoryTransferListByDate(DateTime fromDate, DateTime toDate)
+        {
+            return _inventoryTransferRepository.GetInventoryTransferListByDate(fromDate, toDate);
         }
 
         public int InsertInventoryTransfer(InventoryTransferModel inventoryTransferModel)

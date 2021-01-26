@@ -37,6 +37,24 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoyTransferViewModels);
         }
 
+        public JsonResult InventoryTransferListByDate(string fromDate, string toDate)
+        {
+            List<InventoryTransferViewModel> inventoyTransferViewModels = new List<InventoryTransferViewModel>();
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.Now;
+                newToDate = DateTime.Now;
+            }
+            inventoyTransferViewModels = _inventoryTransferService.GetInventoryTransferListByDate(newFromDate, newToDate).ToList();
+            return Json(new { InventoryTransfer = inventoyTransferViewModels });
+        }
+
         [HttpGet]
         public ActionResult GetOrderById(long Id)
         {
@@ -45,7 +63,7 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryTransferModel);
         }
 
-        public ActionResult InventoryTransfer(long? id)
+        public ActionResult InventoryTransfer(long? id, int? inventoryType)
         {
             InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
             if (id > 0)
@@ -58,12 +76,13 @@ namespace RocketPOS.Controllers.Transaction
             {
                 inventoryTransferModel.Date = DateTime.Now;
                 inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
+                inventoryTransferModel.InventoryType = Convert.ToInt32(inventoryType);
             }
             inventoryTransferModel.FromStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
-
+            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             return View(inventoryTransferModel);
         }
 
@@ -75,6 +94,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
+            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             string purchaseMessage = string.Empty;
 
             if (!ModelState.IsValid)

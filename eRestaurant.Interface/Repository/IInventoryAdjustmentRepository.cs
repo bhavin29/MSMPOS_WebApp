@@ -8,6 +8,7 @@ namespace RocketPOS.Interface.Repository
     public interface IInventoryAdjustmentRepository
     {
         List<InventoryAdjustmentViewModel> GetInventoryAdjustmentList();
+        List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(DateTime fromDate, DateTime toDate);
         List<InventoryAdjustmentModel> GetInventoryAdjustmentById(long invAdjId);
         int InsertInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel);
         int UpdateInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel);

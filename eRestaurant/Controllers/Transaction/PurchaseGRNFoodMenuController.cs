@@ -53,18 +53,27 @@ namespace RocketPOS.Controllers.Transaction
             return View(purchaseModel);
         }
 
-        public ActionResult PurchaseGRNFoodMenu(long? id)
+        public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            if (id > 0)
+            if (purchaseId > 0)
             {
-                long purchaseId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuById(purchaseId);
+                purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
+                purchaseModel.PurchaseGRNDate = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
             }
             else
             {
-                purchaseModel.PurchaseGRNDate = DateTime.Now;
-                purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                if (id > 0)
+                {
+                    long purchaseGRNId = Convert.ToInt64(id);
+                    purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuById(purchaseGRNId);
+                }
+                else
+                {
+                    purchaseModel.PurchaseGRNDate = DateTime.Now;
+                    purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                }
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -110,7 +119,7 @@ namespace RocketPOS.Controllers.Transaction
                             {
                                 if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
                                 {
-                                  //  _iEmailService.SendEmailToForFoodMenuPurchaseGRN(purchaseModel, purchaseModel.SupplierEmail);
+                                    //  _iEmailService.SendEmailToForFoodMenuPurchaseGRN(purchaseModel, purchaseModel.SupplierEmail);
                                 }
                             }
                         }
@@ -127,7 +136,7 @@ namespace RocketPOS.Controllers.Transaction
                             {
                                 if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
                                 {
-                                  //  _iEmailService.SendEmailToForFoodMenuPurchaseGRN(purchaseModel, purchaseModel.SupplierEmail);
+                                    //  _iEmailService.SendEmailToForFoodMenuPurchaseGRN(purchaseModel, purchaseModel.SupplierEmail);
                                 }
                             }
                         }
@@ -217,6 +226,14 @@ namespace RocketPOS.Controllers.Transaction
             decimal unitPrice = 0;
             unitPrice = _iPurchaseGRNService.GetFoodMenuLastPrice(foodMenuId);
             return Json(new { UnitPrice = unitPrice });
+        }
+
+        [HttpGet]
+        public JsonResult GetPurchaseIdByPOReference(string poReference)
+        {
+            int purchaseId = 0;
+            purchaseId = _iPurchaseGRNService.GetPurchaseIdByPOReference(poReference);
+            return Json(new { purchaseId = purchaseId });
         }
     }
 }

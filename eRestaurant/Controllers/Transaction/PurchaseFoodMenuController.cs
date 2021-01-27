@@ -218,5 +218,15 @@ namespace RocketPOS.Controllers.Transaction
             unitPrice = _iPurchaseService.GetFoodMenuLastPrice(foodMenuId);
             return Json(new { UnitPrice = unitPrice });
         }
+
+        public ActionResult PurchaseGRNByPurchaseId(int id)
+        {
+            return RedirectToAction("PurchaseGRNFoodMenu", "PurchaseGRNFoodMenu", new { purchaseId = id });
+        }
+
+        public ActionResult PurchaseInvoiceByPurchaseId(int id)
+        {
+            return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu", new { purchaseId = id });
+        }
     }
 }

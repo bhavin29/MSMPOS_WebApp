@@ -102,6 +102,7 @@
                                         <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
                                         <input class="form-control" type="hidden" id="PurchaseGRNId" value="0" />
                                         <input asp-for="Id" class="form-control" type="hidden" />
+                                        <input asp-for="PurchaseId" class="form-control" type="hidden" />
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +129,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if (Model.Id > 0)
+                                        @if (Model.Id > 0 || Model.PurchaseId > 0)
                                         {
                                             @foreach (var item in Model.PurchaseGRNDetails)
                                             {
@@ -291,7 +292,7 @@
       var GrandTotal = 0;
 var TotalAmount = 0;
 
-        if (@Model.Id > 0) {
+        if (@Model.Id > 0 || @Model.PurchaseId > 0) {
             dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.PurchaseGRNDetails))');
             GrandTotal = parseFloat($("#GrandTotal").val());
     }

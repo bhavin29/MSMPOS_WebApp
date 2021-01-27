@@ -75,7 +75,7 @@
                                             <label asp-for="StoreList" class="control-label">Store</label>
                                             <select asp-for="StoreId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text",ViewBag.SelectedStore))">
                                             </select>
                                             <span asp-validation-for="StoreId" class="text-danger"></span>
                                         </div>

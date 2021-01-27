@@ -53,18 +53,27 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: PurchaseInvoice/Create
-        public ActionResult PurchaseInvoiceFoodMenu(long? id)
+        public ActionResult PurchaseInvoiceFoodMenu(long? id, long? purchaseId)
         {
             PurchaseInvoiceModel purchaseModel = new PurchaseInvoiceModel();
-            if (id > 0)
+            if (purchaseId > 0)
             {
-                long purchaseId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuById(purchaseId);
+                purchaseModel = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
+                purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
             }
             else
             {
-                purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
-                purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+                if (id > 0)
+                {
+                    long purchaseInvoiceId = Convert.ToInt64(id);
+                    purchaseModel = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuById(purchaseInvoiceId);
+                }
+                else
+                {
+                    purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
+                    purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+                }
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
@@ -209,6 +218,14 @@ namespace RocketPOS.Controllers.Transaction
             decimal unitPrice = 0;
             unitPrice = _iPurchaseInvoiceService.GetFoodMenuLastPrice(foodMenuId);
             return Json(new { UnitPrice = unitPrice });
+        }
+
+        [HttpGet]
+        public JsonResult GetPurchaseIdByPOReference(string poReference)
+        {
+            int purchaseId = 0;
+            purchaseId = _iPurchaseInvoiceService.GetPurchaseIdByPOReference(poReference);
+            return Json(new { purchaseId = purchaseId });
         }
     }
 }

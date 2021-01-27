@@ -189,6 +189,7 @@ $(function () {
                 e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
+                    PurchaseId: $("#PurchaseId").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
                     StoreId: $("#StoreId").val(),
                     SupplierId: $("#SupplierId").val(),
@@ -550,17 +551,20 @@ function GetFoodMenuLastPrice(foodMenuId) {
 
 
 function GetPurchaseGRNbyPO(poReference) {
-
     poReference = $("#POReference").val();
      $.ajax({
-        url: "/PurchaseGRNFoodMenu/PurchaseGRNFoodMenu",
-        data: { "id": poReference },
+         url: "/PurchaseGRNFoodMenu/GetPurchaseIdByPOReference",
+         data: { "poReference": poReference },
         type: "GET",
         dataType: "text",
-        success: function (data) {
-            $("#UnitPrice").val('');
-            var obj = JSON.parse(data);
-            $("#UnitPrice").val(parseFloat(obj.unitPrice));
+         success: function (data) {
+             var obj = JSON.parse(data);
+             if (obj.purchaseId > 0) {
+                 window.location.href = "/PurchaseGRNFoodMenu/PurchaseGRNFoodMenu?purchaseId=" + obj.purchaseId;
+             }
+             else {
+                 alert("Reference Number Not Found!");
+             }
         },
         error: function (data) {
             alert(data);

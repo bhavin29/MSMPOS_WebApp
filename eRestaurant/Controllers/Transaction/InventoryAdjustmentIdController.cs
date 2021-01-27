@@ -81,6 +81,7 @@ namespace RocketPOS.Controllers.Transaction
                 inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
             }
             inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
+            ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
             inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuList();

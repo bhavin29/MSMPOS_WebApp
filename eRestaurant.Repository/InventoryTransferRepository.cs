@@ -68,7 +68,7 @@ namespace RocketPOS.Repository
             {
                 var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName, IA.ToStoreId ,SS.StoreName AS ToStoreName, " +
                     " IA.ReferenceNumber as ReferenceNo, IA.EntryDate as [Date], IA.EmployeeId, E.LastName + E.FirstName as EmployeeName, " +
-                            "IA.Notes FROM [InventoryTransfer] IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                            "IA.Notes FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                             "INNER JOIN Store S ON S.Id = IA.ToStoreId " +
                             "INNER JOIN Store SS ON SS.Id = IA.FromStoreId " +
                             "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
@@ -101,10 +101,10 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM [InventoryTransfer] IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.FromStoreId " +
                               "INNER JOIN Store SS ON SS.Id = IA.ToStoreId " +
-                              "WHERE IA.IsDeleted = 0 ;";
+                              "WHERE IA.IsDeleted = 0 Order by IA.Id desc;";
                 inventoryTransferModels = con.Query<InventoryTransferViewModel>(query).AsList();
             }
 
@@ -112,16 +112,16 @@ namespace RocketPOS.Repository
             return inventoryTransferModels;
         }
 
-        public List<InventoryTransferViewModel> GetInventoryTransferListByDate(DateTime fromDate, DateTime toDate)
+        public List<InventoryTransferViewModel> GetInventoryTransferListByDate(string fromDate, string toDate)
         {
             List<InventoryTransferViewModel> inventoryTransferModels = new List<InventoryTransferViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM [InventoryTransfer] IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.FromStoreId " +
                               "INNER JOIN Store SS ON SS.Id = IA.ToStoreId " +
-                              "WHERE IA.IsDeleted = 0 And IA.EntryDate between convert(datetime, '" + fromDate + "',103) and convert(datetime, '" + toDate + "',103)";
+                              "WHERE IA.IsDeleted = 0 And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "'  Order by IA.EntryDate DESC";
                 inventoryTransferModels = con.Query<InventoryTransferViewModel>(query).AsList();
             }
 
@@ -216,7 +216,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM InventoryTransfer ;";
+                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM InventoryTransfer where ISDeleted=0 ;";
                 result = con.ExecuteScalar<long>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -236,7 +236,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "Update  InventoryTransfer SET FromStoreId=@FromStoreId,ToStoreId=@ToStoreId, ReferenceNumber=@ReferenceNo,EntryDate=@Date ,EmployeeId=@EmployeeId, Notes=@Notes " +
+                var query = "Update  InventoryTransfer SET FromStoreId=@FromStoreId,ToStoreId=@ToStoreId, ReferenceNumber=@ReferenceNo,EmployeeId=@EmployeeId, Notes=@Notes " +
                              ",[UserIdUpdated] = " + LoginInfo.Userid + " ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryTransferModel.Id + ";";
                 result = con.Execute(query, inventoryTransferModel, sqltrans, 0, System.Data.CommandType.Text);
 

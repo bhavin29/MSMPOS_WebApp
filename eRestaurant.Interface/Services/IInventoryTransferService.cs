@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Services
     public interface IInventoryTransferService
     {
         List<InventoryTransferViewModel> GetInventoryTransferList();
-        List<InventoryTransferViewModel> GetInventoryTransferListByDate(DateTime fromDate, DateTime toDate);
+        List<InventoryTransferViewModel> GetInventoryTransferListByDate(string fromDate, string toDate);
         InventoryTransferModel GetInventoryTransferById(long id);
         int InsertInventoryTransfer(InventoryTransferModel inventoryTransferModel);
         int UpdateInventoryTransfer(InventoryTransferModel inventoryTransferModel);

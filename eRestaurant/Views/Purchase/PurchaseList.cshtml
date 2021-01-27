@@ -68,8 +68,10 @@
                                             </td>
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a asp-action="purchase" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    <a asp-action="purchase" asp-route-Id="@item.Id">Edit</a>
+                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                    <a asp-action="purchaseGRN" asp-route-Id="@item.Id">GRN</a>
+                                                    <a asp-action="purchaseInvoice"  asp-route-Id="@item.Id">Invoice</a>
                                                 </div>
                                             </td>
                                         </tr>

@@ -73,7 +73,7 @@ namespace RocketPOS.Services
             return _inventoryAdjustmentRepository.InsertInventoryAdjustment(inventoryAdjustmentModel);
         }
 
-        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(DateTime fromDate, DateTime toDate)
+        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(string fromDate, string toDate)
         {
             return _inventoryAdjustmentRepository.InventoryAdjustmentListByDate(fromDate, toDate);
         }

@@ -11,7 +11,6 @@ namespace RocketPOS.Models
     {
         public int Id { get; set; }
         public string ReferenceNo { get; set; }
-        [Required(ErrorMessage = "Select Employee")]
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
 
@@ -45,9 +44,15 @@ namespace RocketPOS.Models
         public string IngredientName { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Quantity { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal Price { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal TotalAmount { get; set; }
         [EnumDataType(typeof(TableStatus))]
+
         public ConsumpationStatus? ConsumpationStatus { get; set; }
     }
 }

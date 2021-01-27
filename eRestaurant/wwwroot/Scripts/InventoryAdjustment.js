@@ -20,11 +20,11 @@ $(document).ready(function () {
                 "searchable": false
             },
             {
-                "targets": [3],
-                "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete Record</a>', "autoWidth": true
+                "targets": [5],
+                "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete</a>', "autoWidth": true
             },
             {
-                "targets": [4],
+                "targets": [6],
                 "visible": false,
                 "searchable": false
             }
@@ -54,18 +54,24 @@ $('#addRow').on('click', function (e) {
     }
 
     var Qty = $("#Quantity").val();
+    var Price = 1;//$("#Price").val('0');
+    var TotalAmount = $("#TotalAmount").val('0');
+
     Qty = parseFloat(Qty).toFixed(4);
+    Price = parseFloat(Price).toFixed(2);
+    TotalAmount = parseFloat(Qty * Price).toFixed(2);
+
     if (message == '') {
         InventoryAdjustmentDatatable.row('.active').remove().draw(false);
 
         if (InventoryType == "2") {
             rowNode = InventoryAdjustmentDatatable.row.add([
-                $("#IngredientId").val(),
+                '<td class="text-right">' + $("#IngredientId").val() + ' </td>',
                 $('#IngredientId').children("option:selected").text(),
-                Qty,
-                //$("#ConsumpationStatus").val(),
-                //$('#ConsumpationStatus').children("option:selected").text(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"><i class="fa fa-times"></i></a></div></td > ' +
+                '<td class="text-right">' + Qty + ' </td>',
+                '<td class="text-right">' + Price + ' </td>',
+                '<td class="text-right">' + Total + ' </td>',
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" ">Delete</a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"></a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#IngredientId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -74,12 +80,12 @@ $('#addRow').on('click', function (e) {
         }
         if (InventoryType == "1") {
             rowNode = InventoryAdjustmentDatatable.row.add([
-                $("#FoodMenuId").val(),
+                '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
                 $('#FoodMenuId').children("option:selected").text(),
-                Qty,
-                //$("#ConsumpationStatus").val(),
-                //$('#ConsumpationStatus').children("option:selected").text(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"><i class="fa fa-times"></i></a></div></td > ' +
+                '<td class="text-right">' + Qty + ' </td>',
+                '<td class="text-right">' + Price + ' </td>',
+                '<td class="text-right">' + TotalAmount + ' </td>',
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" ">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"></a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(' + $("#FoodMenuId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -92,6 +98,8 @@ $('#addRow').on('click', function (e) {
             dataArr.push({
                 ingredientId: $("#IngredientId").val(),
                 quantity: $("#Quantity").val(),
+                price: $("#Price").toFixed(2),
+                totalAmount: $("#TotalAmount").toFixed(2),
                 //consumpationStatus: $("#ConsumpationStatus").val(),
                 inventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
                 ingredientName: $('#IngredientId').children("option:selected").text()
@@ -102,14 +110,18 @@ $('#addRow').on('click', function (e) {
             dataArr.push({
                 foodMenuId: $("#FoodMenuId").val(),
                 quantity: $("#Quantity").val(),
+                price: $("#Price").val(),
+                totalAmount: $("#TotalAmount").val(),
                 //consumpationStatus: $("#ConsumpationStatus").val(),
                 inventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
                 foodMenuName: $('#FoodMenuId').children("option:selected").text()
             });
         }
-
+        debugger;
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
+
         clearItem();
         editDataArr = [];
 
@@ -155,7 +167,7 @@ $(function () {
                     EmployeeId: $("#EmployeeId").val(),
                     Date: $("#Date").val(),
                     Notes: $("#Notes").val(),
-                    SupplierList: [],
+                    StoreList: [],
                     EmployeeList: [],
                     IngredientList: [],
                     InventoryAdjustmentDetail: dataArr,
@@ -247,6 +259,8 @@ $(document).on('click', 'a.editItem', function (e) {
                 if (dataArr[i].ingredientId == id) {
                     $("#IngredientId").val(dataArr[i].ingredientId),
                         $("#Quantity").val(dataArr[i].quantity),
+                        $("#Price").val(dataArr[i].price),
+                        $("#TotalAmount").val(dataArr[i].totalAmount),
                         //$("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
                         $("#InventoryAdjustmentId").val(dataArr[i].inventoryAdjustmentId);
                     editDataArr = dataArr.splice(i, 1);
@@ -256,6 +270,8 @@ $(document).on('click', 'a.editItem', function (e) {
                 if (dataArr[i].foodMenuId == id) {
                     $("#FoodMenuId").val(dataArr[i].foodMenuId),
                         $("#Quantity").val(dataArr[i].quantity),
+                        $("#Price").val(dataArr[i].price),
+                        $("#TotalAmount").val(dataArr[i].totalAmount),
                         //$("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
                         $("#InventoryAdjustmentId").val(dataArr[i].inventoryAdjustmentId);
                     editDataArr = dataArr.splice(i, 1);
@@ -273,14 +289,15 @@ function validation(id) {
             var message = 'At least one order should be entered'
             return message;
         }
-        if ($("#Notes").val() == '') {
-            message = "Enter reason"
+        if ($("#StoreId").val() == '') {
+            message = "Select Store"
+            $("#StoreId").focus();
             return message;
         }
     }
 
     if (id == 0) {
-        if (InventoryType == "2")  {
+        if (InventoryType == "2") {
             if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
                 message = "Select ingredient"
             }
@@ -301,10 +318,12 @@ function validation(id) {
 
         if (InventoryType == "1") {
             if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
-                message = "Select food"
+                message = "Select Product"
+                $("#FoodMenuId").focus();
             }
             else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
                 message = "Enter Quantity"
+                $("#Quantity").focus();
             }
             //else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
             //    message = "Select Comsumption Status"
@@ -322,9 +341,11 @@ function validation(id) {
 }
 
 function clearItem() {
-    $("#IngredientId").val(''),
-        $("#FoodMenuId").val(''),
+    $("#IngredientId").val('0'),
+        $("#FoodMenuId").val('0'),
         //$("#ConsumpationStatus").val(''),
-        $("#Quantity").val(''),
+        $("#Quantity").val('1'),
+        $("#Price").val(''),
+        $("#TotalAmount").val(''),
         $("#InventoryAdjustmentId").val('0')
 }

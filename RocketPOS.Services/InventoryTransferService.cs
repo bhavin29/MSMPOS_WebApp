@@ -71,7 +71,7 @@ namespace RocketPOS.Services
             return _inventoryTransferRepository.GetInventoryTransferList();
         }
 
-        public List<InventoryTransferViewModel> GetInventoryTransferListByDate(DateTime fromDate, DateTime toDate)
+        public List<InventoryTransferViewModel> GetInventoryTransferListByDate(string fromDate, string toDate)
         {
             return _inventoryTransferRepository.GetInventoryTransferListByDate(fromDate, toDate);
         }

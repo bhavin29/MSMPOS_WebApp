@@ -51,7 +51,7 @@ namespace RocketPOS.Controllers.Transaction
                 newFromDate = DateTime.Now;
                 newToDate = DateTime.Now;
             }
-            inventoyTransferViewModels = _inventoryTransferService.GetInventoryTransferListByDate(newFromDate, newToDate).ToList();
+            inventoyTransferViewModels = _inventoryTransferService.GetInventoryTransferListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
             return Json(new { InventoryTransfer = inventoyTransferViewModels });
         }
 
@@ -122,6 +122,8 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
+                        inventoryTransferModel.Date = DateTime.Now;
+                        inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
                         int result = _inventoryTransferService.InsertInventoryTransfer(inventoryTransferModel);
                         if (result > 0)
                         {
@@ -176,17 +178,6 @@ namespace RocketPOS.Controllers.Transaction
             if (string.IsNullOrEmpty(inventoryTransferModel.ToStoreId.ToString()) || inventoryTransferModel.ToStoreId == 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidToStore");
-                return ErrorString;
-            }
-            if (string.IsNullOrEmpty(inventoryTransferModel.EmployeeId.ToString()) || inventoryTransferModel.EmployeeId == 0)
-            {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
-                return ErrorString;
-            }
-
-            if (string.IsNullOrEmpty(inventoryTransferModel.Notes.ToString()))
-            {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidTransferNote");
                 return ErrorString;
             }
             

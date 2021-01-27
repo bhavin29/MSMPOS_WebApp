@@ -67,7 +67,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,IA.EntryDate as Date,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM InventoryAdjustment IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                               "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
                 inventoryAdjustmentModels = con.Query<InventoryAdjustmentModel>(query).AsList();
@@ -99,9 +99,9 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM InventoryAdjustment IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
-                              "WHERE IA.IsDeleted = 0 ;";
+                              "WHERE IA.IsDeleted = 0 Order by IA.EntryDate DESC;";
                 inventoryAdjustmentModels = con.Query<InventoryAdjustmentViewModel>(query).AsList();
             }
 
@@ -189,15 +189,15 @@ namespace RocketPOS.Repository
             return detailResult;
         }
 
-        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(DateTime fromDate, DateTime toDate)
+        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(string fromDate, string toDate)
         {
             List<InventoryAdjustmentViewModel> inventoryAdjustmentModels = new List<InventoryAdjustmentViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
-                              "FROM InventoryAdjustment IA INNER JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "FROM InventoryAdjustment IA left JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
-                              "WHERE IA.IsDeleted = 0 And IA.EntryDate between convert(datetime, '" + fromDate + "',103) and convert(datetime, '" + toDate + "',103)";
+                              "WHERE IA.IsDeleted = 0 And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "' order by IA.EntryDate desc;";
                 inventoryAdjustmentModels = con.Query<InventoryAdjustmentViewModel>(query).AsList();
             }
 
@@ -213,7 +213,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM InventoryAdjustment ;";
+                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM InventoryAdjustment where isdeleted=0 ;";
                 result = con.ExecuteScalar<long>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -234,7 +234,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 
-                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, ReferenceNumber=@ReferenceNo,EntryDate=@Date ,EmployeeId=@EmployeeId,Notes = @Notes" +
+                var query = "Update  InventoryAdjustment SET StoreId=@StoreId, ReferenceNumber=@ReferenceNo,EmployeeId=@EmployeeId,Notes = @Notes" +
                              ",[UserIdUpdated] =  " + LoginInfo.Userid + ", [DateUpdated]  = GetUtcDate()  where id= " + inventoryAdjustmentModel.Id + ";";
                 result = con.Execute(query, inventoryAdjustmentModel, sqltrans, 0, System.Data.CommandType.Text);
 

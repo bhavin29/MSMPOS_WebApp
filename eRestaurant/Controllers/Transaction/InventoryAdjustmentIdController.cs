@@ -44,15 +44,16 @@ namespace RocketPOS.Controllers.Transaction
             DateTime newFromDate, newToDate;
             if (fromDate != null)
             {
-                newFromDate = fromDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(fromDate);
-                newToDate = toDate == "01/01/0001 00:00:00" ? DateTime.Now : Convert.ToDateTime(toDate);
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
             }
             else
             {
                 newFromDate = DateTime.Now;
                 newToDate = DateTime.Now;
             }
-            inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate, newToDate).ToList();
+ 
+            inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
             return Json(new { InventoryAdjustment = inventoyAdjustmentViewModels });
         }
 
@@ -79,7 +80,7 @@ namespace RocketPOS.Controllers.Transaction
                 inventoryAdjustmentModel.ReferenceNo = _inventoryAdjustmentService.ReferenceNumber().ToString();
                 inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
             }
-            inventoryAdjustmentModel.StoreList = _iDropDownService.GetSupplierList();
+            inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
             inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
@@ -121,10 +122,11 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
+                        inventoryAdjustmentModel.Date = DateTime.Now;
                         int result = _inventoryAdjustmentService.InsertInventoryAdjustment(inventoryAdjustmentModel);
                         if (result > 0)
                         {
-                            purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Number is: " + result.ToString();
+                            purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess");// + " Number is: " + result.ToString();
                         }
                     }
                 }
@@ -171,11 +173,6 @@ namespace RocketPOS.Controllers.Transaction
             if (string.IsNullOrEmpty(inventoryAdjustmentModel.StoreId.ToString()) || inventoryAdjustmentModel.StoreId == 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidStoreName");
-                return ErrorString;
-            }
-            if (string.IsNullOrEmpty(inventoryAdjustmentModel.EmployeeId.ToString()) || inventoryAdjustmentModel.EmployeeId == 0)
-            {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidSupplier");
                 return ErrorString;
             }
             if (inventoryAdjustmentModel.InventoryAdjustmentDetail == null || inventoryAdjustmentModel.InventoryAdjustmentDetail.Count < 1)

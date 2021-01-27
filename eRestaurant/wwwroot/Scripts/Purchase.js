@@ -75,6 +75,7 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
+
         GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
         $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(4));
         DueAmount();

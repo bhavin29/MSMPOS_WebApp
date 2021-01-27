@@ -82,7 +82,7 @@ namespace RocketPOS.Repository
             List<InventoryTransferDetailModel> inventoryTransferDetailModels = new List<InventoryTransferDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus " +
+                var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus, IAI.CurrentStock " +
                              " FROM InventoryTransferDetail IAI " +
                              " INNER JOIN InventoryTransferDetail IA ON IAI.InventoryTransferId = IA.Id " +
                              " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
@@ -179,13 +179,14 @@ namespace RocketPOS.Repository
                         }
 
                         var queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                              " (InventoryTransferId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted) " +
+                                              " (InventoryTransferId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdUpdated,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + ingredientId + "," +
                                               "" + foodMenuId + "," +
                                               "" + item.Quantity + "," +
                                               "" + 1 + "," +
+                                              "" + item.CurrentStock + "," +
                                                "" + LoginInfo.Userid + ",GetUtcDate(),0); " +
                                               " SELECT CAST(ReferenceNumber as INT) from [InventoryTransfer] where id = " + result + "; ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
@@ -290,6 +291,7 @@ namespace RocketPOS.Repository
                                 " ,FoodMenuId = " + foodMenuId +
                                 " ,Qty = " + item.Quantity +
                                 " ,ConsumptionStatus = " + 1 +
+                                " ,CurrentStock = " + item.CurrentStock +
                                 " ,UserIdUpdated = " + LoginInfo.Userid +
                                 " ,DateUpdated = GetUTCDate()" +
                                 " ,IsDeleted = 0" +
@@ -298,13 +300,14 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted)   " +
+                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStockUserIdUpdated,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryTransferModel.Id + "," +
                                                   "" + ingredientId + "," +
                                                   "" + foodMenuId + "," +
                                                   "" + item.Quantity + "," +
                                                   "" + 1 + "," +
+                                                  "" + item.CurrentStock + ","+
                                                   "" + LoginInfo.Userid + ",GetUTCDate(),0)";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
@@ -327,5 +330,23 @@ namespace RocketPOS.Repository
 
             return result;
         }
+
+        public decimal GetFoodMenuStock(int foodMenuId, int storeId)
+        {
+            decimal result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = " SELECT StockQty from Foodmenu FM inner join Inventory I ON I.FoodMenuId = FM.Id " +
+                            " WHERE FM.Id = " + foodMenuId + "and StoreId = " + storeId + " AND I.ISDeleted = 0";
+                result = con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+            }
+
+            return result;
+        }
+
+
     }
 }

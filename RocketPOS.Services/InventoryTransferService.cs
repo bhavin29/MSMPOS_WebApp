@@ -52,8 +52,9 @@ namespace RocketPOS.Services
                                                      IngredientId = inventoryAdjDetail.IngredientId,
                                                      Quantity = inventoryAdjDetail.Quantity,
                                                      ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
+                                                     CurrentStock = inventoryAdjDetail.CurrentStock,
                                                      IngredientName = inventoryAdjDetail.IngredientName,
-                                                     FoodMenuId= inventoryAdjDetail.FoodMenuId,
+                                                     FoodMenuId = inventoryAdjDetail.FoodMenuId,
                                                      FoodMenuName = inventoryAdjDetail.FoodMenuName
                                                  }).ToList();
             }
@@ -89,6 +90,11 @@ namespace RocketPOS.Services
         public int UpdateInventoryTransfer(InventoryTransferModel inventoryTransferModel)
         {
             return _inventoryTransferRepository.UpdateInventoryTransfer(inventoryTransferModel);
+        }
+
+        public decimal GetFoodMenuStock(int foodMenuId, int storeId)
+        {
+            return _inventoryTransferRepository.GetFoodMenuStock(foodMenuId, storeId);
         }
     }
 }

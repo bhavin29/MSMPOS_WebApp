@@ -71,7 +71,8 @@
                                             <label asp-for="FoodMenuList" class="control-label">Product</label>
                                             <select asp-for="FoodMenuId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))"
+                                                    onchange="GetFoodMenuStock(FoodMenuId,FromStoreId)">
                                             </select>
                                             <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                         </div>
@@ -81,6 +82,7 @@
                                     <div class="form-group">
                                         <label class="control-label">Quantity</label>
                                         <input class="form-control text-right" type="number" value="1" min="1" max="99999" id="Quantity" />
+                                        <input class="form-control" type="hidden" id="StockQty" value="0" />
                                     </div>
                                 </div>
                                 <div class="col-md-1">
@@ -106,12 +108,12 @@
                                                     @if (Model.InventoryType == 1)
                                                     {
                                                         <th style="width:5%">FoodMenuId</th>
-                                                        <th style="width:45%">Product</th>
+                                                        <th style="width:55%">Product</th>
                                                     }
                                                     <th style="width:10%" class="text-right">Current Stock</th>
                                                     <th style="width:10%" class="text-right">Quantity</th>
-                                                    <th style="width:10%" class="text-right">Qty in PC S</th>
-                                                    <th style="width:10%" class="text-center">Actions</th>
+                                                    <th style="width:0%" class="text-right">Qty in PC S</th>
+                                                    <th style="width:10%" class="text-center">Action</th>
                                                     <th style="width:5%" class="text-center">InventoryAdjustmentId</th>
                                                 </tr>
                                             </thead>
@@ -193,11 +195,11 @@
                                                                 <div class="modal-footer">
                                                                     @if (Model.InventoryType == 2)
                                                                     {
-                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal" >Delete</a>
+                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal">Delete</a>
                                                                     }
                                                                     @if (Model.InventoryType == 1)
                                                                     {
-                                                                        <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.FoodMenuId, @rowId)" data-dismiss="modal" >Delete</a>
+                                                                        <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.FoodMenuId, @rowId)" data-dismiss="modal">Delete</a>
                                                                     }
                                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                                 </div>

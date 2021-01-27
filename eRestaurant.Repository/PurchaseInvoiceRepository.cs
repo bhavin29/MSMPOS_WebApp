@@ -624,7 +624,12 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId=" + foodMenuId + " order by id desc";
+                //               var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId=" + foodMenuId + " order by id desc";
+                var query = " select top 1 UnitPrice from " +
+                        " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
+                        " union " +
+                        " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
+                        " order by PDid desc; ";
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }

@@ -82,7 +82,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuListByReadymade();
             return View(inventoryTransferModel);
         }
 
@@ -94,7 +94,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuListByReadymade();
             string purchaseMessage = string.Empty;
 
             if (!ModelState.IsValid)
@@ -190,6 +190,11 @@ namespace RocketPOS.Controllers.Transaction
             return ErrorString;
         }
 
-
+        public ActionResult GetFoodMenuStock(int foodMenuId, int storeId)
+        {
+            decimal stockQty = 0;
+            stockQty = _inventoryTransferService.GetFoodMenuStock(foodMenuId, storeId);
+            return Json(new { StockQty = stockQty });
+        }
     }
 }

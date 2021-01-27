@@ -200,7 +200,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetFoodMenuList()
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByReadymade();
             return Json(new { purchaseModel.FoodMenuList });
         }
 

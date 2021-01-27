@@ -24,7 +24,7 @@ $(document).ready(function () {
                 "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete</a>', "autoWidth": true
             },
             {
-                "targets": [6],
+                "targets": [4,6],
                 "visible": false,
                 "searchable": false
             }
@@ -54,9 +54,10 @@ $('#addRow').on('click', function (e) {
     }
 
     var Qty = $("#Quantity").val();
-    Qty = parseFloat(Qty).toFixed(4);
-    var CurrentStock = $("#CurrentStock").val();
-    CurrentStock = 1;
+    Qty = parseFloat(Qty).toFixed(2);
+    var CurrentStock = $("#StockQty").val();
+    CurrentStock = parseFloat(CurrentStock).toFixed(2);
+
     var ProductUnit = $("#ProductUnit").val();
     ProductUnit = "PC";
     if (message == '') {
@@ -68,9 +69,7 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + CurrentStock + ' </td>',
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + ProductUnit + ' </td>',
-                //$("#ConsumpationStatus").val(),
-                //$('#ConsumpationStatus').children("option:selected").text(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" ">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"></a></div></td > ' +
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"></a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#IngredientId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -80,27 +79,30 @@ $('#addRow').on('click', function (e) {
 
         if (InventoryType == "1") {
             rowNode = InventoryTransferDatatable.row.add([
-                $("#FoodMenuId").val(),
+                '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
                 $('#FoodMenuId').children("option:selected").text(),
                 '<td class="text-right">' + CurrentStock + ' </td>',
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + ProductUnit + ' </td>',
-                //$("#ConsumpationStatus").val(),
-                //$('#ConsumpationStatus').children("option:selected").text(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" ">Delete</a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"></a></div></td > ' +
-                '<div class="modal fade" id=myModal' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"" ></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
+                '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(' + $("#FoodMenuId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
-                $("#InventoryTransferId").val()
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+              $("#InventoryTransferId").val()
             ]).node().id = rowId;
         }
-
+        debugger;
+        $(rowNode).find('td').eq(1).addClass('text-right');
+        $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
+  
         InventoryTransferDatatable.draw(false);
+
         if (InventoryType == "2") {
             dataArr.push({
                 ingredientId: $("#IngredientId").val(),
-                currentStock: $("#CurrentStock").val(),
-                quantity: $("#Quantity").val(),
+                currentStock: $("#StockQty").val().toFixed(2),
+                quantity: $("#Quantity").val().toFixed(2),
                 productUnit: $("#ProductUnit").val(),
                 //consumpationStatus: $("#ConsumpationStatus").val(),
                 InventoryTransferId: $("#InventoryTransferId").val(),
@@ -111,7 +113,7 @@ $('#addRow').on('click', function (e) {
         if (InventoryType == "1") {
             dataArr.push({
                 foodMenuId: $("#FoodMenuId").val(),
-                currentStock: $("#CurrentStock").val(),
+                currentStock: $("#StockQty").val(),
                 quantity: $("#Quantity").val(),
                 productUnit: $("#ProductUnit").val(),
                 //consumpationStatus: $("#ConsumpationStatus").val(),
@@ -119,15 +121,8 @@ $('#addRow').on('click', function (e) {
                 foodMenuName: $('#FoodMenuId').children("option:selected").text()
             });
         }
-        debugger;
-        $(rowNode).closest('td').find('td:eq(0)').addClass('text-right');
-        $(rowNode).closest('td').find('td:eq(1)').addClass('text-right');
-        $(rowNode).closest('td').find('td:eq(2)').addClass('text-right');
 
-
-        //$(rowNode).closest('td').eq(2).addClass('text-right');
-        //$(rowNode).closest('td').eq(3).addClass('text-right');
-
+  
         clearItem();
         editDataArr = [];
 
@@ -378,4 +373,22 @@ function clearItem() {
         $("#InventoryTransferId").val('0')
 
     $("#FoodMenuId").focus()
+}
+
+
+function GetFoodMenuStock(foodMenuId, storeId) {
+    $.ajax({
+        url: "/InventoryTransfer/GetFoodMenuStock",
+        data: { "foodMenuId": foodMenuId.value, "storeId": storeId.value },
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            $("#StockQty").val('');
+            var obj = JSON.parse(data);
+            $("#StockQty").val(parseFloat(obj.stockQty));
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
 }

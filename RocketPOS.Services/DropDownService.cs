@@ -202,5 +202,21 @@ namespace RocketPOS.Services
             }
             return lstFoodMenu;
         }
+        public List<SelectListItem> GetFoodMenuListByReadymade()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuListByReadymade().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
     }
 }

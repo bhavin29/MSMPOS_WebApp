@@ -83,7 +83,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByReadymade();
             return View(inventoryAdjustmentModel);
         }
 
@@ -94,7 +94,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByReadymade();
             string purchaseMessage = string.Empty;
 
             if (!ModelState.IsValid)

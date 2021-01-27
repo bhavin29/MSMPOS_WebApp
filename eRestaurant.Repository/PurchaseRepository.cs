@@ -315,7 +315,7 @@ namespace RocketPOS.Repository
             {
                 var query = "select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
-                    "case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status "+
+                    "case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status " +
                     "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 order by PurchaseDate, Purchase.Id desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
@@ -611,7 +611,13 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId="+ foodMenuId + " order by id desc";
+                // var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId="+ foodMenuId + " order by id desc";
+
+                var query = " select top 1 UnitPrice from " +
+                         " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
+                         " union " +
+                         " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
+                         " order by PDid desc; ";
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }

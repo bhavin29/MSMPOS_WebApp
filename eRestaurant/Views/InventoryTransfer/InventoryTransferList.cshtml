@@ -3,122 +3,120 @@
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Inventory Transfer");
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Stock Transfer");
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("InventoryTransfer");
 }
-<div class="page-inner">
-    <div class="page-header"></div>
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-10">
+                <h5 class="card-title">Stock Transfer</h5>
+            </div>
+            <div class="float-right">
+                <a asp-action="InventoryTransfer" asp-route-inventoryType="1" class="pull-right btn btn-primary">+ Stock Transfer</a>
+                @*<div class="col-md-4"><a asp-action="InventoryTransfer" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>*@
+            </div>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
+            <div class="card-body">
+                <div class="col-md-12">
                     <div class="row">
-                        <div class="col-sm-4">
-                            <label class="control-label">From Date</label>
+                        <div class="col-md-2">
                             <input id="fromDate" type="date" class="form-control" />
                         </div>
-                        <div class="col-sm-4">
-                            <label class="control-label">To Date</label>
+                        <div class="col-md-2">
                             <input id="toDate" type="date" class="form-control" />
                         </div>
-                        <div class="col-sm-2">
-                            <a id="btnLoadData" onclick="return loadTransferList();" class="btn btn-primary" data-dismiss="modal">Load</a>
+                        <div class="col-md-2">
+                            <a id="btnLoadData" onclick="return loadTransferList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="InventoryTransfer" asp-route-inventoryType="1" class="pull-right btn btn-primary">Add Inventory Food Transfer</a></div>
-                    <div class="col-md-4"><a asp-action="InventoryTransfer" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="@SharedLocalizer.GetLocalizedHtmlString("InventoryTransfer")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("InventoryTransfer")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Crated On")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("From Store")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("To Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Crated On")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("From Store")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("To Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                <tr role="row">
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
                                     <tr role="row">
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("FromStore")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ToStore")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                </thead>
-                                @*<tfoot>
-                                        <tr>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("FromStore")</th>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("ToStore")</th>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                            <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            var tm = "#myModal" + item.Id;
-                                            var mid = "myModal" + item.Id;
-                                            <tr role="row">
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FromStoreName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.ToStoreName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayName("Rocket")
-                                                </td>
-                                                <td>
-                                                    <div class="form-button-action">
-                                                        <a asp-action="InventoryTransfer" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FromStoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ToStoreName)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryTransfer" asp-route-Id="@item.Id">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
-                                        }
-                                    </tbody>*@
-                            </table>
-                        </div>
+                                        </div>
+                                    </div>
+                                }
+                            <tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -145,16 +143,16 @@
                     InventoryTransfer = $("#InventoryTransfer").DataTable({
                         "data": data.inventoryTransfer,
                         "columns": [
-                            { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
-                            { "data": "date", "name": "Date", "autoWidth": true },
-                            { "data": "fromStoreName", "name": "FromStoreName", "autoWidth": true },
-                            { "data": "toStoreName", "name": "ToStoreName", "autoWidth": true },
+                            { "data": "referenceNo", "name": "Number", "autoWidth": true },
+                            { "data": "date", "name": "Created By", "autoWidth": true },
                             { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "fromStoreName", "name": "From Store", "autoWidth": true },
+                            { "data": "toStoreName", "name": "To Store", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a class="btn btn-link btn-primary btn-lg" href="/InventoryTransfer/InventoryTransfer/' + row.id + '">Edit</a>' +
-                                        '<a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/InventoryTransfer/' + row.id + '">Edit</a>' +
+                                        ' / <a href="#" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
                                         'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteTransferDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'

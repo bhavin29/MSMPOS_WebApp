@@ -124,7 +124,7 @@ namespace RocketPOS.Controllers.Transaction
                         int result = _inventoryAdjustmentService.InsertInventoryAdjustment(inventoryAdjustmentModel);
                         if (result > 0)
                         {
-                            purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
+                            purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Number is: " + result.ToString();
                         }
                     }
                 }

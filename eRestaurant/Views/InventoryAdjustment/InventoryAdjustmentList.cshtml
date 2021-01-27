@@ -1,5 +1,4 @@
 ﻿@using Microsoft.Extensions.Localization;
-
 @model IEnumerable<RocketPOS.Models.InventoryAdjustmentViewModel>
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
@@ -8,61 +7,110 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("InventoryAdjustment");
 }
 
-<div class="page-inner">
-    <div class="page-header"></div>
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-10">
+                <h5 class="card-title">Stock In</h5>
+            </div>
+            <div class="float-right">
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class="pull-right btn btn-primary">+ Stock In</a>
+                @*<div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>*@
+            </div>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <label class="control-label">From Date</label>
-                            <input id="fromDate" type="date" class="form-control" />
-                        </div>
-                        <div class="col-sm-4">
-                            <label class="control-label">To Date</label>
-                            <input id="toDate" type="date" class="form-control" />
-                        </div>
-                        <div class="col-sm-2">
-                            <a id="btnLoadData" onclick="return loadAdjustmentList();" class="btn btn-primary" data-dismiss="modal">Load</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
+        <div class="card-body">
+            <div class="col-md-12">
                 <div class="row">
-                    <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class="pull-right btn btn-primary">Add Inventory Food Adjustment</a></div>
-                    <div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>
+                    <div class="col-md-2">
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadAdjustmentList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="@SharedLocalizer.GetLocalizedHtmlString("InventoryAdjustment")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("InventoryAdjustment")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
+                                    <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
+                                    <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
                                     <tr role="row">
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                </thead>
-                            </table>
-                        </div>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script>
         var InventoryAdjustment = null;
@@ -74,7 +122,7 @@
             InventoryAdjustment = $('#@dataTableName').DataTable();
             loadAdjustmentList();
         });
-       
+
         function loadAdjustmentList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
@@ -90,15 +138,15 @@
                     InventoryAdjustment = $("#InventoryAdjustment").DataTable({
                         "data": data.inventoryAdjustment,
                         "columns": [
-                            { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
-                            { "data": "date", "name": "Date", "autoWidth": true },
-                            { "data": "storeName", "name": "Store", "autoWidth": true },
+                            { "data": "referenceNo", "name": "Number", "autoWidth": true },
+                            { "data": "date", "name": "Created On", "autoWidth": true },
                             { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "storeName", "name": "Store", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a class="btn btn-link btn-primary btn-lg" href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType +'">Edit</a>' +
-                                        '<a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType +'">Edit</a>' +
+                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
                                         'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAdjustmentDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'

@@ -37,10 +37,7 @@
                                 @Html.DisplayNameFor(model => model.FoodMenuCode)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.IsVegItem)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IsBeverages)
+                                @Html.DisplayNameFor(model => model.Readymade)
                             </th>
                             <th>@Html.DisplayName("Action")</th>
                         </tr>
@@ -57,10 +54,7 @@
                                 @Html.DisplayNameFor(model => model.FoodMenuCode)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.IsVegItem)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.IsBeverages)
+                                @Html.DisplayNameFor(model => model.Readymade)
                             </th>
                             <th>@Html.DisplayName("Action")</th>
                         </tr>
@@ -79,17 +73,14 @@
                                     @Html.DisplayFor(modelItem => item.FoodMenuName)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsVegItem)
+                                    @Html.DisplayFor(modelItem => item.FoodMenuCode)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsBeverages)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                    @Html.DisplayFor(modelItem => item.Readymade)
                                 </td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="FoodMenu"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <a asp-action="FoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
                                         <label> / </label>
                                         <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                     </div>

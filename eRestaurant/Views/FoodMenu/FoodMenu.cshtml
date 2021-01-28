@@ -15,11 +15,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <form asp-action="FoodMenu" method="post" id="foodMenu" role="form">
+                            <form asp-action="FoodMenu" method="post" role="form">
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="FoodCategoryList" class="control-label">Food Menu Category</label>
+                                            <label asp-for="FoodCategoryList" class="control-label">Category</label>
                                             @if (Model != null)
                                             {
                                                 <select asp-for="FoodCategoryId" class="form-control"
@@ -28,59 +28,38 @@
                                             }
                                         </div>
                                         <div class="form-group">
+                                            <label asp-for="FoodMenuCode" class="control-label"></label>
+                                            <input asp-for="FoodMenuCode" class="form-control" />
+                                            <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
                                             <label asp-for="FoodMenuName" class="control-label"></label>
                                             <input asp-for="FoodMenuName" class="form-control" />
                                             <span asp-validation-for="FoodMenuName" class="text-danger"></span>
                                         </div>
-                                        @*<div class="form-group">
-                                                <label asp-for="FoodMenuCode" class="control-label"></label>
-                                                <input asp-for="FoodMenuCode" class="form-control" />
-                                                <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="ColourCode" class="control-label"></label>
-                                                <input asp-for="ColourCode" class="form-control" />
-                                                <span asp-validation-for="ColourCode" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="BigThumb" class="control-label"></label>
-                                                <input asp-for="BigThumb" class="form-control" />
-                                                <span asp-validation-for="BigThumb" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="MediumThumb" class="control-label"></label>
-                                                <input asp-for="MediumThumb" class="form-control" />
-                                                <span asp-validation-for="MediumThumb" class="text-danger"></span>
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="SmallThumb" class="control-label"></label>
-                                                <input asp-for="SmallThumb" class="form-control" />
-                                                <span asp-validation-for="SmallThumb" class="text-danger"></span>
-                                            </div>*@
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="PurchasePrice" class="control-label"></label>
+                                            <input asp-for="PurchasePrice" class="form-control" />
+                                            <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Position" class="control-label"></label>
+                                            <input asp-for="Position" type="number" min="0" max="99999" class="form-control" />
+                                            <span asp-validation-for="Position" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Readymade" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                            <input asp-for="Readymade" class="form-check-input" style="margin: 12Px 0 0 24px" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="Notes" class="control-label"></label>
                                             <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
                                             <span asp-validation-for="Notes" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group">
-                                            <label asp-for="Position" class="control-label"></label>
-                                            <input asp-for="Position" class="form-control" />
-                                            <span asp-validation-for="Position" class="text-danger"></span>
-                                        </div>
-                                        @*<div class="form-group">
-                                                <label asp-for="IsVegItem" class="control-label" style="margin: 10px 0 0 0px"></label>
-                                                <input asp-for="IsVegItem" class="form-check-input" style="margin: 12Px 0 0 24px" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="IsBeverages" class="control-label" style="margin: 10px 0 0 0px"></label>
-                                                <input asp-for="IsBeverages" class="form-check-input" style="margin: 12Px 0 0 24px" />
-                                            </div>
-                                            <div class="form-group">
-                                                <label asp-for="OfferIsAvailable" class="control-label" style="margin: 10px 0 0 0px"></label>
-                                                <input asp-for="OfferIsAvailable" class="form-check-input" style="margin: 12Px 0 0 24px" />
-                                            </div>*@
 
                                         @if (Model != null)
                                         {
@@ -95,133 +74,127 @@
                                         }
                                     </div>
                                 </div>
-                                <hr />
-                                <h5>Food Manu Details</h5>
-                                <div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label asp-for="IngredientList" class="control-label">Ingredient</label>
-                                                                <select asp-for="IngredientId"
-                                                                        class="form-control"
-                                                                        asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
-                                                                </select>
-                                                                <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                <br />
+                                <div class="form-group">
+                                    <div>
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Edit" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Add" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "FoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    </div>
+                                    @*<h5>Food Menu Details</h5>
+                                        <div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="form-group">
+                                                                        <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                                                        <select asp-for="IngredientId"
+                                                                                class="form-control"
+                                                                                asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                                        </select>
+                                                                        <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Consumption</label>
+                                                                        <input class="form-control text-right" type="text" placeholder="0.00" id="Consumption" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label"></label>
+                                                                        <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-2">
+                                                                    <div class="form-group">
+                                                                        <label class="control-label"></label>
+                                                                        <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">Cancel</button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="control-label">Consumption</label>
-                                                                <input class="form-control text-right" type="text" placeholder="0.00" id="Consumption" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="control-label"></label>
-                                                                <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <div class="form-group">
-                                                                <label class="control-label"></label>
-                                                                <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">Cancel</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr />
-                                                    <div class="row">
-                                                        <div class="col-md-10">
-                                                            <table id="FoodManuDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th style="width:5%">IngredientId</th>
-                                                                        <th style="width:35%">Ingredient</th>
-                                                                        <th style="width:15%" class="text-right">Consumption</th>
-                                                                        <th style="width:35%">Actions</th>
-                                                                        <th style="width:10%">FoodMenuId</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                @if (Model.Id > 0)
-                                                                {
-                                                                    @foreach (var item in Model.FoodMenuDetails)
-                                                                    {
-                                                                        var tm = "#myModal" + item.IngredientId;
-                                                                        var mid = "myModal" + item.IngredientId;
-                                                                        var rowId = "rowId" + item.IngredientId;
-                                                                        <tr id="@rowId">
-                                                                            <td>
-                                                                                @item.IngredientId
-                                                                            </td>
-                                                                            <td>
-                                                                                @item.IngredientName
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                @item.Consumption
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="form-button-action">
-                                                                                    <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                            <hr />
+                                                            <div class="row">
+                                                                <div class="col-md-10">
+                                                                    <table id="FoodManuDetails" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th style="width:5%">IngredientId</th>
+                                                                                <th style="width:35%">Ingredient</th>
+                                                                                <th style="width:15%" class="text-right">Consumption</th>
+                                                                                <th style="width:35%">Actions</th>
+                                                                                <th style="width:10%">FoodMenuId</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        @if (Model.Id > 0)
+                                                                        {
+                                                                            @foreach (var item in Model.FoodMenuDetails)
+                                                                            {
+                                                                                var tm = "#myModal" + item.IngredientId;
+                                                                                var mid = "myModal" + item.IngredientId;
+                                                                                var rowId = "rowId" + item.IngredientId;
+                                                                                <tr id="@rowId">
+                                                                                    <td>
+                                                                                        @item.IngredientId
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @item.IngredientName
+                                                                                    </td>
+                                                                                    <td class="text-right">
+                                                                                        @item.Consumption
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="form-button-action">
+                                                                                            <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @item.FoodMenuId
+                                                                                    </td>
+                                                                                </tr>
+                                                                                <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                                    <div class="modal-dialog">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header">
+                                                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                                            </div>
+                                                                                            <div class="modal-body">
+                                                                                                @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                                            </div>
+                                                                                            <div class="modal-footer">
+                                                                                                <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                @item.FoodMenuId
-                                                                            </td>
-                                                                        </tr>
-                                                                        <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                                            <div class="modal-dialog">
-                                                                                <div class="modal-content">
-                                                                                    <div class="modal-header">
-                                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                                    </div>
-                                                                                    <div class="modal-body">
-                                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                                    </div>
-                                                                                    <div class="modal-footer">
-                                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                }
-                                                            </table>
+                                                                            }
+                                                                        }
+                                                                    </table>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <br/>
-                                <div class="form-button-action">
-                                    <div>
-                                        @*@if (Model != null)
-                                            {
-                                                @if (Model.Id > 0)
-                                                {
-                                                    <input id="saveOrder" type="submit" value="Edit" class="btn btn-primary" />
-                                                }
-                                                else
-                                                {
-                                                    <input id="saveOrder" type="submit" value="Add" class="btn btn-primary" />
-                                                }
-                                            }*@
-                                        <input id="saveOrder" type="submit" value="Save" class="btn btn-primary" />
-                                        <a href='@Url.Action("Index", "FoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
-                                    </div>
+                                        </div>*@
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
@@ -242,15 +215,30 @@
         </div>
     </div>
 </div>
-@section scripts{
+
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
     <script>
-    dataArr = []
-    if (@Model.Id > 0) {
-                dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.FoodMenuDetails))');
-        }
-       console.log(dataArr);
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#FoodMenu").prev().focus();
+            $("#vModal").modal('hide');
+        });
     </script>
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/Scripts/FoodManu.js"></script>
+
 }
 

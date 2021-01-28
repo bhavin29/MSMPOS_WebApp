@@ -9,132 +9,111 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
 }
 
-@*Dropdown with Ingredient CAtegory, Ingredient, Food menu, ALter Qty*@ 
-
-<div class="page-inner">
-    <div class="page-header"></div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h2>Inventory</h2>
-                </div>
-                    <div class="table-responsive">
-                        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                            <div class="col-sm-12">
-                                <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                    <thead role="row">
-                                        <tr>
+@*Dropdown with Ingredient CAtegory, Ingredient, Food menu, ALter Qty*@
 
 
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Index)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Id)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IngredientName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IngredientCategoryName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.StockQty)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.StockQtyText)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.AlterQty)
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot role="row">
-                                        <tr>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Index)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.Id)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IngredientName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.IngredientCategoryName)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.StockQty)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.StockQtyText)
-                                            </th>
-                                            <th>
-                                                @Html.DisplayNameFor(model => model.AlterQty)
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        @foreach (var item in Model)
-                                        {
-                                            var tm = "#myModal" + item.Id;
-                                            var mid = "myModal" + item.Id;
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Index)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Id)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IngredientName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.IngredientCategoryName)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.StockQty)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.StockQtyText)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.AlterQty)
-                                                </td>
-                                                <td>
-                                                    <div class="form-button-action">
-                                                        <a asp-action="Inventory" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                        <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    </tbody>
-                                </table>
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">Current Stock</h5>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-2">
+                <input id="Supplier" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <input id="Store" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead role="row">
+                        <tr>
+                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                            <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                            <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                        </tr>
+                    </thead>
+                    <tfoot role="row">
+                        <tr>
+                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                            <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                            <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.StockQty) @Html.DisplayFor(modelItem => item.Unitname)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.PurchasePrice)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.Amount)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.AlterQty)
+                                </td>
+                                @*<td>
+                                        <div class="form-button-action">
+                                            <a asp-action="Inventory" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                        </div>
+                                    </td>*@
+                            </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

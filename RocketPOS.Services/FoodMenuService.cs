@@ -47,7 +47,7 @@ namespace RocketPOS.Services
             model = _iFoodMenuReportsitory.GetFoodMenuById(foodMenuId).ToList().SingleOrDefault();
             if (model != null)
             {
-                model.FoodMenuDetails = _iFoodMenuReportsitory.GetFoodMenuDetails(foodMenuId);
+              //  model.FoodMenuDetails = _iFoodMenuReportsitory.GetFoodMenuDetails(foodMenuId);
             }
             return model;
         }

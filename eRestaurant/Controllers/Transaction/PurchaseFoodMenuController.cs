@@ -205,6 +205,26 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
+        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate)
+        {
+            List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.Now;
+                newToDate = DateTime.Now;
+            }
+
+            purchaseViewModels = _iPurchaseService.PurchaseFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
+            return Json(new { PurchaseFoodMenu = purchaseViewModels });
+        }
+        
+        [HttpGet]
         public ActionResult GetTaxByFoodMenuId(int foodMenuId)
         {
             decimal taxPercentage = 0;

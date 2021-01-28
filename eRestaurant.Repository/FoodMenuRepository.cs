@@ -27,8 +27,8 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
-                            "SalesPrice, FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, "+
+                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, Readymade, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                            "SalesPrice, FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 " +
                             "ORDER BY FoodMenuName ";
                 FoodMenuModel = con.Query<FoodMenuModel>(query).ToList();
@@ -42,7 +42,7 @@ namespace RocketPOS.Repository
             List<FoodMenuModel> foodManuModelList = new List<FoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , Readymade,FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             "SalesPrice, FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 and " +
                             " FM.Id = " + foodMenuId +
@@ -79,29 +79,32 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO FoodMenu "+
-                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb, SalesPrice, Notes, IsVegItem, IsBeverages,"+
-                    " FoodVat, Foodcess, OfferIsAvailable,  Position,  OutletId, IsActive) " +
-                    "Values "+
-                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @ColourCode, @BigThumb, @MediumThumb, @SmallThumb,@SalesPrice, @Notes, " +
-                    "@IsVegItem, @IsBeverages,@FoodVat,@Foodcess, @OfferIsAvailable,  @Position,  @OutletId, @IsActive)" +
+                var query = "INSERT INTO FoodMenu " +
+                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, PurchasePrice, Readymade, Notes," +
+                    // "ColourCode, BigThumb, MediumThumb, SmallThumb, SalesPrice,  IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable,  " +
+                    " Position,  IsActive) " +
+                    "Values " +
+                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @PurchasePrice,@Readymade, @Notes," +
+                  //  "@ColourCode, @BigThumb, @MediumThumb, @SmallThumb,@SalesPrice ,@IsVegItem, @IsBeverages,@FoodVat,@Foodcess, @OfferIsAvailable,  "+
+                  "@Position,  @IsActive);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
-                
-                result = con.ExecuteScalar<int>(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
 
+                // result = con.ExecuteScalar<int>(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
+                result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
+
+                //if (result > 0)
+                //{
+
+                //    foreach (var item in foodMenuModel.FoodMenuDetails)
+                //    {
+                //        var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption) values (" +
+                //            "" + result + "," +
+                //            "" + item.IngredientId + "," +
+                //            "" + item.Consumption + "); SELECT CAST(SCOPE_IDENTITY() as INT);";
+                //        detailsResult = con.Execute(detailsQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                //    }
+                //}
                 if (result > 0)
-                {
-                    
-                    foreach (var item in foodMenuModel.FoodMenuDetails)
-                    {
-                        var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption) values (" +
-                            "" + result + "," +
-                            "" + item.IngredientId + "," +
-                            "" + item.Consumption + "); SELECT CAST(SCOPE_IDENTITY() as INT);";
-                        detailsResult = con.Execute(detailsQuery, null, sqltrans, 0, System.Data.CommandType.Text);
-                    }
-                }
-                if (detailsResult > 0)
                 {
                     sqltrans.Commit();
                 }
@@ -126,6 +129,8 @@ namespace RocketPOS.Repository
                      "FoodCategoryId=@FoodCategoryId, " +
                      "FoodMenuName=@FoodMenuName, " +
                      "FoodMenuCode=@FoodMenuCode, " +
+                     "PurchasePrice=@PurchasePrice, " +
+                     "Readymade=@Readymade, " +
                      "ColourCode=@ColourCode," +
                      "BigThumb=@BigThumb, " +
                      "MediumThumb=@MediumThumb, " +
@@ -154,29 +159,29 @@ namespace RocketPOS.Repository
                             result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
                     }
-                    foreach (var item in foodMenuModel.FoodMenuDetails)
-                    {
-                        var queryDetails = string.Empty;
-                        if (item.FoodMenuId > 0)
-                        {
-                            queryDetails = "Update [dbo].[FoodMenuIngredient] set " +
-                                                 " [FoodMenuId]  = " + item.FoodMenuId + "," +
-                                                 " [IngredientId]   = " + item.IngredientId + "," +
-                                                 " [Consumption]        =  " + item.Consumption + "," +
-                                                 " [UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                                 " [DateUpdated] = GetUTCDate() " +
-                                                 " where id = " + item.FoodMenuId + ";";
-                        }
-                        else
-                        {
-                            var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption,[UserIdUpdated] ) values (" +
-                           "" + foodMenuModel.Id + "," +
-                           "" + item.IngredientId + "," +
-                           "" + item.Consumption + "," +
-                            "" + LoginInfo.Userid + "); ";
-                        }
-                        detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
-                    }
+                    //foreach (var item in foodMenuModel.FoodMenuDetails)
+                    //{
+                    //    var queryDetails = string.Empty;
+                    //    if (item.FoodMenuId > 0)
+                    //    {
+                    //        queryDetails = "Update [dbo].[FoodMenuIngredient] set " +
+                    //                             " [FoodMenuId]  = " + item.FoodMenuId + "," +
+                    //                             " [IngredientId]   = " + item.IngredientId + "," +
+                    //                             " [Consumption]        =  " + item.Consumption + "," +
+                    //                             " [UserIdUpdated] = " + LoginInfo.Userid + "," +
+                    //                             " [DateUpdated] = GetUTCDate() " +
+                    //                             " where id = " + item.FoodMenuId + ";";
+                    //    }
+                    //    else
+                    //    {
+                    //        var detailsQuery = "insert into FoodMenuIngredient (FoodMenuId, IngredientId , Consumption,[UserIdUpdated] ) values (" +
+                    //       "" + foodMenuModel.Id + "," +
+                    //       "" + item.IngredientId + "," +
+                    //       "" + item.Consumption + "," +
+                    //        "" + LoginInfo.Userid + "); ";
+                    //    }
+                    //    detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                    //}
 
                     if (result > 0)
                     {

@@ -16,10 +16,10 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="~/Bank">Bank</a>
-                            <a class="dropdown-item" href="~/Outlet">Outlet</a>
-                            <a class="dropdown-item" href="~/Store">Store</a>
-                            <a class="dropdown-item" href="~/Tables">Table</a>
                             <a class="dropdown-item" href="~/PaymentMethod">Payment Method</a>
+                            <a class="dropdown-item" href="~/Store">Store</a>
+                            <a class="dropdown-item" href="~/Outlet">Outlet</a>
+                            <a class="dropdown-item" href="~/Tables">Table</a>
                             <a class="dropdown-item" href="~/Employee">Employee</a>
                             <a class="dropdown-item" href="~/User">User</a>
                         </div>
@@ -31,11 +31,11 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkFM">
                             <a class="dropdown-item" href="~/FoodMenuCategory">Food Menu Category</a>
                             <a class="dropdown-item" href="~/FoodMenu">Food Menu</a>
-                            <a class="dropdown-item" href="~/IngredientUnit">Ingredient Unit</a>
+                            <a class="dropdown-item" href="~/IngredientUnit">Unit</a>
                             <a class="dropdown-item" href="~/IngredientCategory">Ingredient Category</a>
                             <a class="dropdown-item" href="~/Ingredient">Ingredient</a>
-                            <a class="dropdown-item" href="~/Addons">Addons</a>
-                            <a class="dropdown-item" href="~/Varient">Varient</a>
+                            @*<a class="dropdown-item" href="~/Addons">Addons</a>
+                            <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -64,6 +64,9 @@
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
                                 <span>Stock Transfer</span>
+                            </a>
+                            <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="Inventory">
+                                <span>Stock </span>
                             </a>
                         </div>
                     </li>

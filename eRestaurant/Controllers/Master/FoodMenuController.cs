@@ -43,45 +43,38 @@ namespace RocketPOS.Controllers.Master
                 foodMenuModel = _iFoodMenuService.GetFoodMenueById(foodMenuId);
             }
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            foodMenuModel.IngredientList = _iDropDownService.GetIngredientList();
+            //foodMenuModel.IngredientList = _iDropDownService.GetIngredientList();
 
             return View(foodMenuModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult FoodMenu(FoodMenuModel foodMenuModel)
+        public ActionResult FoodMenu(FoodMenuModel foodMenuModel, string submitButton)
         {
-            foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            string foodMenuMessage = string.Empty;
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationFoodMenu(foodMenuModel);
                 if (!string.IsNullOrEmpty(errorString))
                 {
-                    foodMenuMessage = errorString;
+                    ViewBag.Validate = errorString;
                     return View(foodMenuModel);
                 }
             }
-            if (foodMenuModel.FoodMenuDetails!= null)
+  
+            if (foodMenuModel.Id > 0)
             {
-                if (foodMenuModel.Id > 0)
-                {
-                    var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
-                    foodMenuMessage = _locService.GetLocalizedHtmlString("EditSuccss");
-                }
-                else
-                {
-                    var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
-                    foodMenuMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
-                }
+                var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
+                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
-                foodMenuMessage = _locService.GetLocalizedHtmlString("ValidPurchaseDetails");
-                return Json(new { error = true, message = foodMenuMessage, status = 201 });
+                var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
+                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            return Json(new { error = false, message = foodMenuMessage, status = 200 });
+
+            return RedirectToAction("Index", "Foodmenu");
+
         }
 
         public ActionResult Delete(int id)
@@ -94,11 +87,11 @@ namespace RocketPOS.Controllers.Master
         private string ValidationFoodMenu(FoodMenuModel foodMenuModel)
         {
             string ErrorString = string.Empty;
-            if (string.IsNullOrEmpty(foodMenuModel.FoodMenuName))
-            {
-                ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
-                return ErrorString;
-            }
+            //if (string.IsNullOrEmpty(foodMenuModel.FoodMenuName))
+            //{
+            //    ErrorString = _locService.GetLocalizedHtmlString("ValidAddOnesName");
+            //    return ErrorString;
+            //}
             //if (string.IsNullOrEmpty(foodMenuModel.Price.ToString()) || foodMenuModel.Price == 0)
             //{
             //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");

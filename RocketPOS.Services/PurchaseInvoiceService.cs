@@ -142,6 +142,10 @@ namespace RocketPOS.Services
             return _iPurchaseInvoiceRepository.GetPurchaseInvoiceFoodMenuList();
         }
 
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        {
+            return _iPurchaseInvoiceRepository.PurchaseInvoiceFoodMenuListByDate(fromDate, toDate);
+        }
         public int InsertPurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseModel)
         {
             return _iPurchaseInvoiceRepository.InsertPurchaseInvoiceFoodMenu(purchaseModel);

@@ -150,6 +150,24 @@ namespace RocketPOS.Controllers.Transaction
             //return View();
         }
 
+        public JsonResult PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        {
+            List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.Now;
+                newToDate = DateTime.Now;
+            }
+
+            purchaseViewModels = _iPurchaseInvoiceService.PurchaseInvoiceFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
+            return Json(new { PurchaseGRNFoodMenu = purchaseViewModels });
+        }
         public ActionResult Delete(int id)
         {
             int result = _iPurchaseInvoiceService.DeletePurchaseInvoice(id);

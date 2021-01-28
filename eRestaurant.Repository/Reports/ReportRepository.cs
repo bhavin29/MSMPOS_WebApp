@@ -27,14 +27,24 @@ namespace RocketPOS.Repository.Reports
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
 
-                var query = "SELECT " + //ROW_NUMBER() OVER(ORDER BY ' + @sort + ') AS ''Index''," +
-                            " INV.Id,I.IngredientName + '(' + I.Code + ')' as IngredientName,IG.IngredientCategoryName,INV.StockQty," +
-                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,I.AlterQty" +
-                            " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
-                            " INNER JOIN IngredientCategory IG on IG.Id = I.IngredientCategoryId " +
-                            " LEFT OUTER JOIN FoodMenuIngredient FMG on FMG.IngredientId = I.Id " +
-                            " LEFT OUTER JOIN FoodMenu FM ON FM.Id = FMG.FoodMenuId ";
-                          //  " WHERE I.AlterQty < INV.StockQty  ";
+                //var query = "SELECT " + //ROW_NUMBER() OVER(ORDER BY ' + @sort + ') AS ''Index''," +
+                //            " INV.Id,I.IngredientName + '(' + I.Code + ')' as IngredientName,IG.IngredientCategoryName,INV.StockQty," +
+                //            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,I.AlterQty" +
+                //            " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
+                //            " INNER JOIN IngredientCategory IG on IG.Id = I.IngredientCategoryId " +
+                //            " LEFT OUTER JOIN FoodMenuIngredient FMG on FMG.IngredientId = I.Id " +
+                //            " LEFT OUTER JOIN FoodMenu FM ON FM.Id = FMG.FoodMenuId ";
+                ////  " WHERE I.AlterQty < INV.StockQty  ";
+
+                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                            " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                            " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
+                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
+                            " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
+                            " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
+                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId where INV.StockQty <> 0";
+                ////  " WHERE I.AlterQty < INV.StockQty  ";
+
 
                 //if (inventoryReportParamModel.StoreId.ToString().Length != 0)
                 //    query = query + " AND INV.StoreId = " + inventoryReportParamModel.StoreId.ToString();

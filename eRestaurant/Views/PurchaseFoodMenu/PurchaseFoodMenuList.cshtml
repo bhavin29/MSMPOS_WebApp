@@ -29,7 +29,7 @@
                         <input id="toDate" type="date" class="form-control" />
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadAdjustmentList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -128,10 +128,84 @@
 
 @section Scripts {
     <script>
+        var PurchaseFoodMenu = null;
         $(document).ready(function () {
-            var table = $('#@dataTableName').DataTable({
-                "order": [[1, "desc"],[2, "desc"]]
-            });
+            var myDate = new Date();
+            var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+            $("#fromDate").val(date);
+            $("#toDate").val(date);
+            PurchaseFoodMenu = $('#@dataTableName').DataTable();
+          //  loadPurchaseList();
         });
+
+        function loadPurchaseList() {
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/PurchaseFoodmenu/PurchaseFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val(),
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (PurchaseFoodMenu != null) {
+                        PurchaseFoodMenu.clear();
+                        PurchaseFoodMenu.destroy();
+                    }
+                    debugger;
+                    PurchaseFoodMenu = $("#PurchaseFoodmenu").DataTable({
+                        "data": data.PurchaseFoodMenu,
+                        "columns": [
+                            { "data": "referenceNo", "name": "Number", "autoWidth": true },
+                            { "data": "Date", "name": "Date", "autoWidth": true },
+                            { "data": "SupplierName", "name": "Supplier", "autoWidth": true },
+                            { "data": "GrandTotal", "name": "Amount", "autoWidth": true },
+                            { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "Status", "name": "Status", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id +'">Edit</a>' +
+                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAdjustmentDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+
+                                },
+                            }
+                        ],
+                        columnDefs: [
+                            { targets: [4], orderable: false }
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+        function deleteAdjustmentDetail(id) {
+            $.ajax({
+                url: "/PurchaseFoodmenu/Delete/" + id,
+                data: { },
+                dataType: "json",
+                success: function (data) {
+                    loadAdjustmentList();
+                },
+                error: function (data) {
+                    loadAdjustmentList();
+                }
+            });
+        };
     </script>
 }

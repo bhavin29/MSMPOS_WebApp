@@ -13,7 +13,7 @@ namespace RocketPOS.Models
         public int FoodCategoryId { get; set; }
 
         [DisplayName("Category")]
-        [Required]
+        [Required(ErrorMessage = "Select Category")]
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
 
@@ -21,9 +21,12 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Enter Food Menu")]
         public string FoodMenuName { get; set; }
 
-        [DisplayName("Code")] 
+        [DisplayName("Code")]
+        [Required(ErrorMessage = "Enter Food Menu")]
         public string FoodMenuCode { get; set; }
         public string ColourCode { get; set; }
+        public decimal PurchasePrice {get; set;}
+        public bool Readymade { get; set; }
         public string BigThumb { get; set; }
         public string MediumThumb { get; set; }
         public string SmallThumb { get; set; }
@@ -40,7 +43,7 @@ namespace RocketPOS.Models
         public decimal Consumption { get; set; }
         public int? IngredientId { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
-        public List<FoodManuDetailsModel> FoodMenuDetails { get; set; }
+    //    public List<FoodManuDetailsModel> FoodMenuDetails { get; set; }
         public int[] DeletedId { get; set; }
 
         public FoodMenuModel()

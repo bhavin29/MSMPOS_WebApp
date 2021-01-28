@@ -95,7 +95,7 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
         debugger;
-        var message = validation(1);
+        var message = validation(0);
         if (message == '') {
             $("#foodMenu").on("submit", function (e) {
                 debugger;
@@ -210,17 +210,7 @@ $(document).on('click', 'a.editItem', function (e) {
 function validation(id) {
     var message = '';
 
-    if (id == 1) {
-        if (!FoodManuDetailsDatatable.data().any() || FoodManuDetailsDatatable.data().row == null) {
-            var message = 'At least one order should be entered'
-            return message;
-        }
-        if ($("#Notes").val() == '') {
-            message = "Enter reason"
-            return message;
-        }
-    }
-
+   
     if (id == 0) {
         if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
             message = "Select ingredient"

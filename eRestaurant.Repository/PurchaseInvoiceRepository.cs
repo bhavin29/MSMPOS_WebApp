@@ -372,6 +372,22 @@ namespace RocketPOS.Repository
 
             return purchaseDetails;
         }
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        {
+            List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
+                    "PurchaseInvoice.TotalAMount,PurchaseInvoice.DueAmount as Due " +
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
+                    " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseInvoiceDate, PurchaseId desc";
+ 
+
+                purchaseViewModels = con.Query<PurchaseInvoiceViewModel>(query).AsList();
+            }
+
+            return purchaseViewModels;
+        }
         public int InsertPurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseModel)
         {
             int result = 0;
@@ -669,5 +685,6 @@ namespace RocketPOS.Repository
                 return con.QueryFirstOrDefault<int>(query);
             }
         }
+
     }
 }

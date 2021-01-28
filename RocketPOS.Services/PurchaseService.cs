@@ -124,6 +124,10 @@ namespace RocketPOS.Services
             return _iPurchaseRepository.GetPurchaseFoodMenuList();
         }
 
+        public List<PurchaseViewModel> PurchaseFoodMenuListByDate(string fromDate, string toDate)
+        {
+            return _iPurchaseRepository.PurchaseFoodMenuListByDate(fromDate, toDate);
+        }
         public int InsertPurchaseFoodMenu(PurchaseModel purchaseModel)
         {
             return _iPurchaseRepository.InsertPurchaseFoodMenu(purchaseModel);
@@ -148,5 +152,6 @@ namespace RocketPOS.Services
         {
             return _iPurchaseRepository.GetFoodMenuLastPrice(foodMenuId);
         }
+
     }
 }

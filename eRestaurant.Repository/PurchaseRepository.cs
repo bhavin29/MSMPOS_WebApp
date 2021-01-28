@@ -572,6 +572,22 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public List<PurchaseViewModel> PurchaseFoodMenuListByDate(string fromDate, string toDate)
+        {
+            List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
+                    " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
+                    " case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status " +
+                    " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id " +
+                    " where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 AND Convert(varchar(10), PurchaseDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseDate, Purchase.Id desc";
+                             
+                    purchaseViewModels = con.Query<PurchaseViewModel>(query).AsList();
+            }
+
+            return purchaseViewModels;
+        }
         public string ReferenceNumberFoodMenu()
         {
             string result = string.Empty;

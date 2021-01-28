@@ -73,7 +73,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,StoreName as [Name] from Store where IsActive = 1 AND IsDeleted= 0 Order by StoreName";
+                var query = "select Id,StoreName as [Name],IsMainStore As Optional from Store where IsActive = 1 AND IsDeleted= 0 Order by StoreName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

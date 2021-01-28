@@ -335,14 +335,14 @@ namespace RocketPOS.Repository
             }
             return result;
         }
-        public List<PurchaseGRNModel> GetPurchaseGRNFoodMenuById(long purchaseId)
+        public List<PurchaseGRNModel> GetPurchaseGRNFoodMenuById(long purchaseGRNId)
         {
             List<PurchaseGRNModel> purchaseModelList = new List<PurchaseGRNModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseGRN.Id as Id, PurchaseGRN.StoreId,PurchaseGRN.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseGRNDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "PurchaseGRN.GrossAmount, PurchaseGRN.TaxAmount,PurchaseGRN.TotalAmount,PurchaseGRN.DueAmount as Due,PurchaseGRN.PaidAmount as Paid,PurchaseGRN.DeliveryNoteNumber ,PurchaseGRN.DeliveryDate ,PurchaseGRN.DriverName ,PurchaseGRN.VehicleNumber,PurchaseGRN.Notes " +
-                      "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 and PurchaseGRN.Id = " + purchaseId;
+                      "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 and PurchaseGRN.Id = " + purchaseGRNId;
                 purchaseModelList = con.Query<PurchaseGRNModel>(query).AsList();
             }
             return purchaseModelList;
@@ -359,14 +359,14 @@ namespace RocketPOS.Repository
             }
             return purchaseViewModelList;
         }
-        public List<PurchaseGRNDetailModel> GetPurchaseGRNFoodMenuDetails(long purchaseId)
+        public List<PurchaseGRNDetailModel> GetPurchaseGRNFoodMenuDetails(long purchaseGRNId)
         {
             List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select pin.Id as PurchaseGRNId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
                             " from purchaseGRN as P inner join PurchaseGRNDetail as PIN on P.id = pin.PurchaseGRNId " +
-                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseGRNId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
             }
 
@@ -632,6 +632,42 @@ namespace RocketPOS.Repository
                              " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
                              " order by PDid desc; ";
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+            }
+        }
+
+        public List<PurchaseGRNModel> GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId)
+        {
+            List<PurchaseGRNModel> purchaseModelList = new List<PurchaseGRNModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT 0 as Id,P.Id AS PurchaseId,P.StoreId,P.EmployeeId,P.ReferenceNo,GETDATE() AS PurchaseGRNDate,Supplier.SupplierName, Supplier.Id as SupplierId,P.GrossAmount,P.TaxAmount,P.GrandTotal As TotalAmount, " +
+                            "P.DueAmount,P.PaidAmount,null AS DeliveryNoteNumber,null as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes FROM Purchase P inner join Supplier on P.SupplierId = Supplier.Id " +
+                            "Where P.InventoryType = 1 And P.Isdeleted = 0 And P.Id = " + purchaseId;
+                purchaseModelList = con.Query<PurchaseGRNModel>(query).AsList();
+            }
+            return purchaseModelList;
+        }
+
+        public List<PurchaseGRNDetailModel> GetPurchaseGRNFoodMenuDetailsByPurchaseId(long purchaseId)
+        {
+            List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "Select 0 AS PurchaseGRNId,PD.FoodMenuId,f.FoodMenuName,pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS GRNQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId inner join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                            "Where P.InventoryType = 1 and P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
+            }
+
+            return purchaseDetails;
+        }
+
+        public int GetPurchaseIdByPOReference(string poReference)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "Select Id from Purchase Where ReferenceNo='" + poReference +"'";
+                return  con.QueryFirstOrDefault<int>(query);
             }
         }
     }

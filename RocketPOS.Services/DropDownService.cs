@@ -82,7 +82,15 @@ namespace RocketPOS.Services
             {
                 foreach (var item in lstCategoryResult)
                 {
-                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                    if (Convert.ToInt32(item.Optional) == 1)
+                    {
+                        lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString(), Selected = true });
+                    }
+                    else
+                    {
+                        lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString()});
+                    }
+                    
                 }
             }
 

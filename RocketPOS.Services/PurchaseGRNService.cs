@@ -90,11 +90,11 @@ namespace RocketPOS.Services
             return _iPurchaseGRNRepository.ReferenceNumber();
         }
 
-        public PurchaseGRNModel GetPurchaseGRNFoodMenuById(long purchaseId)
+        public PurchaseGRNModel GetPurchaseGRNFoodMenuById(long purchaseGRNId)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
 
-            var model = (from purchase in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuById(purchaseId).ToList()
+            var model = (from purchase in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuById(purchaseGRNId).ToList()
                          select new PurchaseGRNModel()
                          {
                              Id = purchase.Id,
@@ -116,7 +116,7 @@ namespace RocketPOS.Services
                          }).SingleOrDefault();
             if (model != null)
             {
-                model.PurchaseGRNDetails = (from purchasedetails in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuDetails(purchaseId)
+                model.PurchaseGRNDetails = (from purchasedetails in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuDetails(purchaseGRNId)
                                          select new PurchaseGRNDetailModel()
                                          {
                                              PurchaseGRNId = purchasedetails.PurchaseGRNId,
@@ -163,6 +163,56 @@ namespace RocketPOS.Services
         public decimal GetFoodMenuLastPrice(int foodMenuId)
         {
             return _iPurchaseGRNRepository.GetFoodMenuLastPrice(foodMenuId);
+        }
+
+        public PurchaseGRNModel GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId)
+        {
+            var model = (from purchase in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuByPurchaseId(purchaseId).ToList()
+                         select new PurchaseGRNModel()
+                         {
+                             Id = purchase.Id,
+                             PurchaseId= purchase.PurchaseId,
+                             ReferenceNo = purchase.ReferenceNo,
+                             SupplierId = purchase.SupplierId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             PurchaseGRNDate = purchase.PurchaseGRNDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.PurchaseGRNDetails = (from purchasedetails in _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuDetailsByPurchaseId(purchaseId)
+                                            select new PurchaseGRNDetailModel()
+                                            {
+                                                PurchaseGRNId = purchasedetails.PurchaseGRNId,
+                                                FoodMenuId = purchasedetails.FoodMenuId,
+                                                POQTY = purchasedetails.POQTY,
+                                                GRNQTY = purchasedetails.GRNQTY,
+                                                UnitPrice = purchasedetails.UnitPrice,
+                                                GrossAmount = purchasedetails.GrossAmount,
+                                                DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                DiscountAmount = purchasedetails.DiscountAmount,
+                                                TaxAmount = purchasedetails.TaxAmount,
+                                                TotalAmount = purchasedetails.TotalAmount,
+                                                IngredientName = purchasedetails.IngredientName,
+                                                FoodMenuName = purchasedetails.FoodMenuName
+                                            }).ToList();
+            }
+            return model;
+        }
+
+        public int GetPurchaseIdByPOReference(string poReference)
+        {
+            return _iPurchaseGRNRepository.GetPurchaseIdByPOReference(poReference);
         }
     }
 }

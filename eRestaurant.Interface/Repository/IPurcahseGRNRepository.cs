@@ -23,5 +23,9 @@ namespace RocketPOS.Interface.Repository
         string ReferenceNumberFoodMenu();
         decimal GetTaxByFoodMenuId(int foodMenuId);
         decimal GetFoodMenuLastPrice(int foodMenuId);
+        List<PurchaseGRNModel> GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId);
+        List<PurchaseGRNDetailModel> GetPurchaseGRNFoodMenuDetailsByPurchaseId(long purchaseId);
+
+        int GetPurchaseIdByPOReference(string poReference);
     }
 }

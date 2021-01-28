@@ -130,7 +130,7 @@ $('#addRow').on('click', function (e) {
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
             poQty: POQty,
-            InvoiceQty: InvoiceQty,
+            invoiceQty: InvoiceQty,
             unitPrice: UnitPrice,
             discountAmount: DiscountAmount,
             discountPercentage: DiscountPercentage,
@@ -189,6 +189,7 @@ $(function () {
                 e.preventDefault();
                 var data = ({
                     Id: $("#Id").val(),
+                    purchaseId: $("#PurchaseId").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
                     StoreId: $("#StoreId").val(),
                     SupplierId: $("#SupplierId").val(),
@@ -248,6 +249,7 @@ $(function () {
                 var data = ({
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
+                    purchaseId: $("#PurchaseId").val(),
                     SupplierId: $("#SupplierId").val(),
                     //SupplierEmail: $("#SupplierEmail").val(),
                     //IsSendEmail: $("#IsSendEmail").is(":checked") ? "true" : "false",
@@ -550,17 +552,20 @@ function GetFoodMenuLastPrice(foodMenuId) {
 
 
 function GetPurchaseInvoicebyPO(poReference) {
-
     poReference = $("#POReference").val();
     $.ajax({
-        url: "/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu",
-        data: { "id": poReference },
+        url: "/PurchaseInvoiceFoodMenu/GetPurchaseIdByPOReference",
+        data: { "poReference": poReference },
         type: "GET",
         dataType: "text",
         success: function (data) {
-            $("#UnitPrice").val('');
             var obj = JSON.parse(data);
-            $("#UnitPrice").val(parseFloat(obj.unitPrice));
+            if (obj.purchaseId > 0) {
+                window.location.href = "/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu?purchaseId=" + obj.purchaseId;
+            }
+            else {
+                alert("Reference Number Not Found!");
+            }
         },
         error: function (data) {
             alert(data);

@@ -48,6 +48,7 @@
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                     </thead>
                     <tfoot>
                         <tr>
@@ -58,6 +59,7 @@
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -91,6 +93,13 @@
                                         <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                     </div>
                                 </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                        <label> / </label>
+                                        <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                    </div>
+                                </td>
                             </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
@@ -116,7 +125,7 @@
         </div>
     </div>
 </div>
- 
+
 @section Scripts {
     <script>
         $(document).ready(function () {

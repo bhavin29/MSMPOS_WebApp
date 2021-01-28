@@ -25,10 +25,10 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select ing.id,ing.IngredientName as IngredientName, category.IngredientCategoryName as Category," +
-                             "unit.IngredientUnitName as Unit, ing.IsActive , ing.IngredientCategoryId as CategoryId,ing.IngredientUnitId as UnitId" +
+                             "unit.UnitName as Unit, ing.IsActive , ing.IngredientCategoryId as CategoryId,ing.IngredientUnitId as UnitId" +
                              ",ing.PurchasePrice, ing.SalesPrice, ing.AlterQty,ing.Code" +
                              " from Ingredient as Ing inner join IngredientCategory as category " +
-                             "on ing.IngredientCategoryId = category.id and category.IsDeleted = 0 inner join IngredientUnit as unit " +
+                             "on ing.IngredientCategoryId = category.id and category.IsDeleted = 0 inner join Units as unit " +
                              "on ing.IngredientUnitId = unit.Id and unit.IsDeleted = 0 where ing.IsDeleted = 0 order by ing.IngredientName asc";
                 ingredientModel = con.Query<IngredientModel>(query).ToList();
             }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.Mvc;
 
 namespace RocketPOS.Models
 {
@@ -15,6 +16,8 @@ namespace RocketPOS.Models
         public decimal GrandTotal { get; set; }
         public decimal Due { get; set; }
         public int UserId { get; set; }
+        public int? SupplierId { get; set; }
+        public List<SelectListItem> SupplierList { get; set; }
         public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetailModels { get; set; }
     }
 }

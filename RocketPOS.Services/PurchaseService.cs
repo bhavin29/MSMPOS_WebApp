@@ -153,5 +153,9 @@ namespace RocketPOS.Services
             return _iPurchaseRepository.GetFoodMenuLastPrice(foodMenuId);
         }
 
+        public ClientModel GetClientDetail()
+        {
+            return _iPurchaseRepository.GetClientDetail();
+        }
     }
 }

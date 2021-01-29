@@ -637,5 +637,16 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
+
+        public ClientModel GetClientDetail()
+        {
+            ClientModel clientModel = new ClientModel();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select PurchaseApprovalEmail,WebAppUrl from client";
+                clientModel = con.QueryFirstOrDefault<ClientModel>(query);
+                return clientModel;
+            }
+        }
     }
 }

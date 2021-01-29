@@ -61,6 +61,17 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public decimal GetFoodMenuPurchasePrice(int foodMenuId)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = "select PurchasePrice from FoodMenu where Readymade=1 and IsActive = 1 AND IsDeleted= 0  And Id="+ foodMenuId;
+                return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+            }
+        }
+
         public List<InventoryAdjustmentModel> GetInventoryAdjustmentById(long invAdjId)
         {
             List<InventoryAdjustmentModel> inventoryAdjustmentModels = new List<InventoryAdjustmentModel>();

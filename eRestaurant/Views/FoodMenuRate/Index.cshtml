@@ -1,0 +1,194 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.FoodMenuRateModel;
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate");
+}
+
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">FoodMenuRate</h5>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="FoodCategoryList" class="control-label">Category</label>
+                    @if (Model != null)
+                    {
+                        <select asp-for="FoodCategoryId" class="form-control"
+                                asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+                        </select>
+                    }
+                </div>
+                <div class="float-right">
+                    <a onclick="return loadFoodMenuRateList();" class="btn btn-primary float-sm-left ">Load</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead>
+                        <tr>
+                            <th style="width:10%">Id</th>
+                            <th style="width:35%">OutLet</th>
+                            <th style="width:35%">FoodMenuName</th>
+                            <th style="width:25%">SalePrice</th>
+                            <th style="width:25%">IsActive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.foodMenuRates != null)
+                        {
+                            @foreach (var item in Model.foodMenuRates)
+                            {
+                                <tr role="row">
+                                    <td>
+                                        <input asp-for="@item.Id" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OutletName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                    </td>
+                                    <td class="text-right">
+                                        <input type="text" asp-for="@item.SalesPrice" class="form-control" value="@item.SalesPrice" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.IsActive" type="checkbox" class="form-control" />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            FoodMenuRate = $('#@dataTableName').DataTable();
+        });
+
+        function loadFoodMenuRateList() {
+            window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val();
+            //$.ajaxSetup({ cache: false });
+            //$.ajax({
+            //    url: "/FoodMenuRate/GetFoodMenuRateList?foodCategoryId=" + $("#FoodCategoryId").val(),
+            //    dataType: "json",
+            //    type: "GET",
+            //    success: function (data) {
+                    //if (FoodMenuRate != null) {
+                    //    FoodMenuRate.clear();
+                    //    FoodMenuRate.destroy();
+                    //}
+                    //FoodMenuRate = $("#FoodMenuRate").DataTable({
+                    //    "data": data.foodMenuRate,
+                    //    "columns": [
+                    //        { "data": "id", "name": "Number", "autoWidth": true },
+                    //        { "data": "outletName", "name": "OutletName", "autoWidth": true },
+                    //        { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                    //        {
+                    //            data: null,
+                    //            mRender: function (data, type, row) {
+                    //                return '<input type="textbox" name="txtSalesPrice" value="'+row.salesPrice+ '">';
+                    //            },
+                    //        },
+                    //        {
+                    //            data: null,
+                    //            mRender: function (data, type, row) {
+                    //                return '<input type="checkbox" name="chkIsActive" checked=' + row.isActive  + '>';
+                    //            },
+                    //        }
+                    //    ],
+                    //    columnDefs: [
+                    //        {
+                    //            "targets": [0],
+                    //            "visible": false,
+                    //            "searchable": false
+                    //        }
+                    //    ],
+                    //    "bLengthChange": true,
+                    //    "bInfo": true,
+                    //    "bFilter": true,
+                    //    "ordering": true,
+                    //    "autoWidth": false,
+                    //    "orderCellsTop": true,
+                    //    "stateSave": false,
+                    //    "pageLength": 200,
+                    //    "lengthMenu": [
+                    //        [200, 500, 1000],
+                    //        ['200', '500', '1000']
+                    //    ],
+                    //});
+            //    },
+            //    error: function (err) {
+
+            //    }
+            //});
+        }
+
+
+        function UpdateFoodMenuRateList() {
+
+            var foodMenuRate = new Array();
+
+            $("#FoodMenuRate tbody tr").each(function () {
+                var tds = $(this).find("td");
+
+                var foodMenu = ({
+                    Id: parseInt($(tds[0]).find("#item_Id").val()),
+                    OutletId: 0,
+                    OutletName: "",
+                    FoodMenuId: 0,
+                    FoodMenuName: "",
+                    SalesPrice: $(tds[3]).find("#item_SalesPrice").val(),
+                    IsActive: $(tds[4]).find("#item_IsActive").is(":checked")
+                });
+                foodMenuRate.push(foodMenu);
+            });
+
+            var jsonstr = JSON.stringify(foodMenuRate);
+            //jsonstr = JSON.parse(jsonstr);
+            $.ajax({
+                dataType: "text",
+                type: "post",
+                url: "/FoodMenuRate/UpdateFoodMenuRateList",
+                data:{ 'foodMenuRate': jsonstr},
+                timeout: 0,
+                success: function (response) {
+                    window.location.href = "/FoodMenuRate/Index";
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+    </script>
+}
+
+@*<script src="~/Scripts/FoodMenuRate.js"></script>*@

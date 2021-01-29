@@ -481,6 +481,10 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+
+                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                        string sResult = commonRepository.InventoryPush("GRN", result);
+
                     }
                     else
                     {

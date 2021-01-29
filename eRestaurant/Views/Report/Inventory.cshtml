@@ -40,24 +40,28 @@
                 <table id="InventoryReport" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                            <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
                             <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                             <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                            <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                            <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
                             <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
                             <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                             <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                            <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -66,6 +70,9 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
                             <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StoreName)
+                                </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
                                 </td>
@@ -87,12 +94,11 @@
                                 <td class="text-right">
                                     @Html.DisplayFor(modelItem => item.AlterQty)
                                 </td>
-                                @*<td>
-                                        <div class="form-button-action">
-                                            <a asp-action="Inventory" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                            <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
-                                        </div>
-                                    </td>*@
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="InventoryDetail" asp-route-id="@item.Id" asp-route-name="@item.FoodMenuName @item.Unitname" asp-route-code="@item.FoodMenuCode" asp-route-stock="@item.StockQty @item.Unitname">Search </a>
+                                    </div>
+                                </td>
                             </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">

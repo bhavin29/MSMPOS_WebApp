@@ -34,7 +34,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,IngredientUnitName as [Name] from IngredientUnit where IsActive = 1 AND IsDeleted= 0 Order by IngredientUnitName";
+                var query = "select Id,UnitName as [Name] from Units where IsActive = 1 AND IsDeleted= 0 Order by UnitName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

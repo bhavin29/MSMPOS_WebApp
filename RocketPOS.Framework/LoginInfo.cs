@@ -9,5 +9,6 @@ namespace RocketPOS.Framework
         public static int Userid =1;
         public static int RoleType =1;
         public static string Username = "ROCKET";
+
     }
 }

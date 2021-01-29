@@ -42,7 +42,7 @@ namespace RocketPOS.Repository
             {
                 UserModel.RoleTypeId = (UserModel.RoleTypeId == 0) ? null : UserModel.RoleTypeId;
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                int MaxId = commonRepository.GetMaxId("IngredientUnit");
+                int MaxId = commonRepository.GetMaxId("[User]");
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();

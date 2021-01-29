@@ -29,7 +29,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
 
-                var query = "SELECT Id,IngredientUnitName,Notes,IsActive FROM IngredientUnit WHERE IsDeleted = 0 AND Id = @Id;";
+                var query = "SELECT Id,UnitName as IngredientUnitName,Notes,IsActive FROM Units WHERE IsDeleted = 0 AND Id = @Id;";
 
                 ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList().FirstOrDefault();
             }
@@ -43,8 +43,8 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id,IngredientUnitName,Notes,IsActive " +
-                          "From IngredientUnit where IsDeleted=0;" +
+                var query = "Select Id,UnitName as IngredientUnitName,Notes,IsActive " +
+                          "From Units where IsDeleted=0;" +
                           " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList();
             }
@@ -58,11 +58,11 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                int MaxId = commonRepository.GetMaxId("IngredientUnit");
+                int MaxId = commonRepository.GetMaxId("Units");
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO IngredientUnit (Id,IngredientUnitName," +
+                var query = "INSERT INTO Units (Id,UnitName," +
                             "Notes, " +
                             "IsActive)" +
                             "VALUES (" + MaxId + ",@IngredientUnitName," +
@@ -90,7 +90,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE IngredientUnit SET IngredientUnitName =@IngredientUnitName," +
+                var query = "UPDATE Units SET UnitName =@IngredientUnitName," +
                             "Notes = @Notes, " +
                             "IsActive = @IsActive " +
                             "WHERE Id = @Id;";
@@ -116,7 +116,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE IngredientUnit SET isDeleted= 1 WHERE Id = " + ingredientUnitId + ";";
+                var query = "UPDATE Units SET isDeleted= 1 WHERE Id = " + ingredientUnitId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

@@ -81,7 +81,7 @@ namespace RocketPOS.Controllers
                 var result = _iIngredientService.InsertIngredient(ingredientModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
-            return View(ingredientModel);
+            return RedirectToAction("Index", "Ingredient");
         }
 
         // GET: Ingredient/Delete/5

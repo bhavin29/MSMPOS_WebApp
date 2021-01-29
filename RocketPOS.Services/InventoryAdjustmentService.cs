@@ -28,6 +28,11 @@ namespace RocketPOS.Services
             return _inventoryAdjustmentRepository.DeleteInventoryAdjustmentDetail(invAdjId);
         }
 
+        public decimal GetFoodMenuPurchasePrice(int foodMenuId)
+        {
+            return _inventoryAdjustmentRepository.GetFoodMenuPurchasePrice(foodMenuId);
+        }
+
         public InventoryAdjustmentModel GetInventoryAdjustmentById(long invAdjId)
         {
             var model = (from inventory in _inventoryAdjustmentRepository.GetInventoryAdjustmentById(invAdjId).ToList()

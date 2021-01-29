@@ -185,6 +185,11 @@ namespace RocketPOS.Controllers.Transaction
             return ErrorString;
         }
 
-
+        public JsonResult GetFoodMenuPurchasePrice(int foodMenuId)
+        {
+            decimal purchasePrice = 0;
+            purchasePrice = _inventoryAdjustmentService.GetFoodMenuPurchasePrice(foodMenuId);
+            return Json(new { purchasePrice = purchasePrice });
+        }
     }
 }

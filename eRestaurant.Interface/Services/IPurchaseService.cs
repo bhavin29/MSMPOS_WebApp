@@ -22,5 +22,6 @@ namespace RocketPOS.Interface.Services
         string ReferenceNumberFoodMenu();
         decimal GetTaxByFoodMenuId(int foodMenuId);
         decimal GetFoodMenuLastPrice(int foodMenuId);
+        ClientModel GetClientDetail();
     }
 }

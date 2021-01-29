@@ -28,7 +28,7 @@ namespace RocketPOS.Models
         public string Header { get; set; }
         public string Footer { get; set; }
         public int UserId { get; set; }
-
-
+        public string WebAppUrl { get; set; }
+        public string PurchaseApprovalEmail { get; set; }
     }
 }

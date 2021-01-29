@@ -106,13 +106,17 @@ namespace RocketPOS.Controllers.Transaction
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
-                            if (purchaseModel.IsSendEmail)
-                            {
-                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
-                                {
-                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
-                                }
-                            }
+                            ClientModel clientModel = new ClientModel();
+                            clientModel = _iPurchaseService.GetClientDetail();
+                            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
+
+                            //if (purchaseModel.IsSendEmail)
+                            //{
+                            //    if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                            //    {
+                            //        _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                            //    }
+                            //}
                         }
                     }
                     else
@@ -123,13 +127,16 @@ namespace RocketPOS.Controllers.Transaction
                         if (result > 0)
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
-                            if (purchaseModel.IsSendEmail)
-                            {
-                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
-                                {
-                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
-                                }
-                            }
+                            ClientModel clientModel = new ClientModel();
+                            clientModel = _iPurchaseService.GetClientDetail();
+                            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
+                            //if (purchaseModel.IsSendEmail)
+                            //{
+                            //    if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                            //    {
+                            //        _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -247,6 +254,11 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult PurchaseInvoiceByPurchaseId(int id)
         {
             return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu", new { purchaseId = id });
+        }
+
+        public ActionResult PurchaseApproveSuccess()
+        {
+            return View();
         }
     }
 }

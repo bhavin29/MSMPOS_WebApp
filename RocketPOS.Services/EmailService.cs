@@ -9,7 +9,7 @@ namespace RocketPOS.Services
 {
     public class EmailService : IEmailService
     {
-        public void SendEmailToForFoodMenuPurchase(PurchaseModel purchaseModel,string email)
+        public void SendEmailToForFoodMenuPurchase(PurchaseModel purchaseModel,ClientModel clientModel)
         {
             string messageBody = "<font>The following are the orders: </font><br><br>";
             string htmlTableStart = "<table style=\"border-collapse:collapse; text-align:center;\" >";
@@ -20,6 +20,8 @@ namespace RocketPOS.Services
             string htmlTrEnd = "</tr>";
             string htmlTdStart = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding: 5px;\">";
             string htmlTdEnd = "</td>";
+
+            string htmlApproveButton = "</br></br><a href=" + clientModel.WebAppUrl + ">Approve</a>";
 
             messageBody += htmlTableStart;
             messageBody += htmlHeaderRowStart;
@@ -40,7 +42,8 @@ namespace RocketPOS.Services
             }
             
             messageBody = messageBody + htmlTableEnd;
-            SendEmail.Email(messageBody,email);
+            messageBody = messageBody + htmlApproveButton;
+            SendEmail.Email(messageBody, clientModel.PurchaseApprovalEmail);
         }
     }
 }

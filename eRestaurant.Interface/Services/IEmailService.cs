@@ -4,6 +4,6 @@ namespace RocketPOS.Interface.Services
 {
     public interface IEmailService
     {
-        void SendEmailToForFoodMenuPurchase(PurchaseModel purchaseModel,string email);
+        void SendEmailToForFoodMenuPurchase(PurchaseModel purchaseModel, ClientModel clientModel);
     }
 }

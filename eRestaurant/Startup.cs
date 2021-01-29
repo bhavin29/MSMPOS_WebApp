@@ -164,7 +164,8 @@ namespace RocketPOS
             services.AddScoped<IPurchaseGRNService, PurchaseGRNService>();
             services.AddScoped<IPurchaseInvoiceRepository, PurchaseInvoiceRepository>();
             services.AddScoped<IPurchaseInvoiceService, PurchaseInvoiceService>();
-
+            services.AddScoped<IFoodMenuRateRepository, FoodMenuRateRepository>();
+            services.AddScoped<IFoodMenuRateService, FoodMenuRateService>();
             services.AddHttpClient();
         }
 

@@ -57,6 +57,14 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+
+                    //CREATE ENTRY INTO FOODMENURATE
+                    query = " INSERT INTO FOODMENURATE(Id, OutletId, FoodMenuId, SalesPrice, FoodVatTaxId, IsActive)  "+
+                            " Select(select max(Id) from foodmenurate) + ROW_NUMBER() OVER(ORDER BY fm.id desc) AS Row# , "+
+                             MaxId + ", FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 FROM FoodMenu FM WHERE isdeleted = 0 ";
+
+                    result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
+
                 }
                 else
                 {

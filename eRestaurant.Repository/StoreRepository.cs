@@ -43,10 +43,8 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Store (Id,StoreName," +
-                            "IsMainStore,Notes,IsActive,IsLock) " +
-                            "VALUES (" + MaxId + ",@StoreName," +
-                            "@IsMainStore,@Notes,@IsActive,@IsLock);" +
+                var query = "INSERT INTO Store (Id,StoreName, IsMainStore,Notes,IsActive,IsLock) " +
+                            "VALUES (" + MaxId + ",@StoreName, @IsMainStore,@Notes,@IsActive,@IsLock);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
 
                 result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -54,6 +52,12 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+
+                    //CREATE ENTRY INTO INVENTORY WITH ALL FOODMENU WITH STOCKQTY AS 0.00
+                    query = " INSERT INTO INVENTORY(STOREID, FOODMENUID, STOCKQTY, USERIDINSERTED, ISDELETED) " +
+                            " Select S.Id,FM.Id,0,1,0 from FoodMenu FM Cross join STORE S Where S.Id = "+ MaxId;
+
+                    result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
                 }
                 else
                 {

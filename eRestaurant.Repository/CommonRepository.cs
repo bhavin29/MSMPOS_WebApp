@@ -57,5 +57,17 @@ namespace RocketPOS.Repository
             }
             return Int16.Parse(result);
         }
+
+        public string InventoryPush(string docType,int id)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+
+                var query = "Exec InventoryPush '" + docType + "'," + id;
+                result = con.Query(query).ToString();
+            }
+            return result;
+        }
     }
 }

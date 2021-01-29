@@ -21,6 +21,10 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetInventoryReport(inventoryReportParamModel);
         }
 
+        public List<InventoryDetailReportModel> GetInventoryDetailReport(InventoryReportParamModel inventoryReportParamModel, int id)
+        {
+            return _iReportRepository.GetInventoryDetailReport(inventoryReportParamModel,id);
+        }
         public List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId)
         {
             return _iReportRepository.GetOutletRegisterReport(OutletRegisterId);

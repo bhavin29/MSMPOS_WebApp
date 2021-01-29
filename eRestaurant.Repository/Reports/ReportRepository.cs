@@ -63,6 +63,39 @@ namespace RocketPOS.Repository.Reports
 
             return inventoryReportModel;
         }
+        public List<InventoryDetailReportModel> GetInventoryDetailReport(InventoryReportParamModel inventoryReportParamModel, int id)
+        {
+            List<InventoryDetailReportModel> inventoryReportModel = new List<InventoryDetailReportModel>();
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " SELECT Convert(varchar(10), ID.DocDate, 103)as DocDate,ID.StoreId,DocType,DocTable,DocNumber,DocNumberId,DocNumberDetailId,SupplierId, " +
+                            " StoreName,SupplierName,ID.FoodMenuId,ID.IngredientId,Reamrks,StockInQty,StockOutQty,BalanceQty " +
+                            " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and I.FoodmenuId = ID.FoodMenuid " +
+                            " inner join Store S ON S.ID = ID.StoreID " +
+                            " left join SUPPLIER SP on SP.Id = ID.SupplierId " +
+                            " WHERE I.ID=" + id;
+                          //  " where Convert(varchar(10), ID.DocDate, 103) between '01/01/2021' and '01/01/2022'"
+                            
+                ////  " WHERE I.AlterQty < INV.StockQty  ";
+
+                //if (inventoryReportParamModel.StoreId.ToString().Length != 0)
+                //    query = query + " AND INV.StoreId = " + inventoryReportParamModel.StoreId.ToString();
+
+                //if (inventoryReportParamModel.FoodMenuId.ToString().Length != 0)
+                //    query = query + " AND FM.Id =" + inventoryReportParamModel.FoodMenuId.ToString();
+
+                //if (inventoryReportParamModel.IngredientCategoryId.ToString().Length != 0)
+                //    query = query + " AND I.IngredientCategoryId =" + inventoryReportParamModel.IngredientCategoryId.ToString();
+
+                //if (inventoryReportParamModel.IngredientId.ToString().Length != 0)
+                //    query = query + " AND INV.IngredientId = " + inventoryReportParamModel.IngredientId.ToString();
+
+                inventoryReportModel = con.Query<InventoryDetailReportModel>(query).ToList();
+            }
+
+            return inventoryReportModel;
+        }
         public List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate)
         {
             List<PurchaseReportModel> purchaseReportModel = new List<PurchaseReportModel>();

@@ -130,17 +130,6 @@ namespace RocketPOS.Repository
 
                     foreach (var item in inventoryAdjustmentModel.InventoryAdjustmentDetail)
                     {
-                        /*int consumptionId = 0;
-                        if (item.ConsumpationStatus.Value.ToString() == "StockIN")
-                        {
-                            consumptionId = 1;
-                        }
-                        else
-                        {
-                            consumptionId = 2;
-                        }*/
-
-                       
                         if (item.IngredientId==0)
                         {
                             ingredientId = "NULL";
@@ -175,6 +164,9 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+  
+                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                        string sResult = commonRepository.InventoryPush("IA", result);
                     }
                     else
                     {

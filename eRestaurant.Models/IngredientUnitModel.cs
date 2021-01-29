@@ -11,7 +11,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Enter Unit name")]
-        [DisplayName("Ingredient Unit")]
+        [DisplayName("Unit")]
         public string IngredientUnitName { get; set; }
 
         public string Notes { get; set; }

@@ -20,39 +20,28 @@
                                             <span asp-validation-for="SupplierName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="TaxType" class="control-label"></label>
-                                            <input asp-for="TaxType" class="form-control" />
-                                            <span asp-validation-for="TaxType" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="SupplierAddress1" class="control-label"></label>
+                                            <label asp-for="SupplierAddress1" class="control-label">Address 1</label>
                                             <input asp-for="SupplierAddress1" class="form-control" />
                                             <span asp-validation-for="SupplierAddress1" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="SupplierAddress2" class="control-label"></label>
+                                            <label asp-for="SupplierAddress2" class="control-label">Address 2</label>
                                             <input asp-for="SupplierAddress2" class="form-control" />
                                             <span asp-validation-for="SupplierAddress2" class="text-danger"></span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="SupplierPhone" class="control-label"></label>
                                             <input asp-for="SupplierPhone" class="form-control" />
                                             <span asp-validation-for="SupplierPhone" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="SupplierPicture" class="control-label"></label>
-                                            <input asp-for="SupplierPicture" class="form-control" />
-                                            <span asp-validation-for="SupplierPicture" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group">
                                             <label asp-for="SupplierEmail" class="control-label"></label>
                                             <input asp-for="SupplierEmail" class="form-control" />
                                             <span asp-validation-for="SupplierEmail" class="text-danger"></span>
                                         </div>
+                                    </div>
                                         @if (Model.Id > 0)
                                         {
                                             <div class="form-group">
@@ -61,7 +50,6 @@
                                                 <span class="alert-danger" asp-validation-for="IsActive"></span>
                                             </div>
                                         }
-                                    </div>
                                 </div>
                                 <div class="form-group">
                                     @if (Model != null)

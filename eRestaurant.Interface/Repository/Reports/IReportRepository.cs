@@ -8,6 +8,7 @@ namespace RocketPOS.Interface.Repository.Reports
     public interface IReportRepository
     {
         List<InventoryReportModel> GetInventoryReport(InventoryReportParamModel inventoryReportParamModel);
+        List<InventoryDetailReportModel> GetInventoryDetailReport(InventoryReportParamModel inventoryReportParamModel, int id);
         List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate);
         List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId);
 

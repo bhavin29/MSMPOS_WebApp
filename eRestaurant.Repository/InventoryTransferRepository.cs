@@ -18,7 +18,6 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-
         public int DeleteInventoryTransfer(long invAdjId)
         {
             int result = 0;
@@ -38,7 +37,6 @@ namespace RocketPOS.Repository
                 { sqltrans.Rollback(); }
             }
             return result;
-
         }
 
         public int DeleteInventoryTransferDetail(long invAdjDetailId)
@@ -195,6 +193,10 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+
+                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                        string sResult = commonRepository.InventoryPush("IT", result);
+
                     }
                     else
                     {

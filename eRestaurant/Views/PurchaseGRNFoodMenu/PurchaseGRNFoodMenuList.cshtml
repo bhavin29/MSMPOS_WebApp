@@ -19,18 +19,16 @@
         </div>
     </div>
     <div class="row">
-        <div class="card-body">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-2">
-                        <input id="fromDate" type="date" class="form-control" />
-                    </div>
-                    <div class="col-md-2">
-                        <input id="toDate" type="date" class="form-control" />
-                    </div>
-                    <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadPurchaseGRNList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
-                    </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-2">
+                    <input id="fromDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <input id="toDate" type="date" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <a id="btnLoadData" onclick="return loadPurchaseGRNList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                 </div>
             </div>
         </div>
@@ -38,7 +36,7 @@
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
-                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseGRNFoodMenu")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseGRNFoodMenu")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead>
                         <tr role="row">
                             <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Number")</th>

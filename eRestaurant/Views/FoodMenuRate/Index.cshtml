@@ -4,20 +4,26 @@
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate");
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("FoodMenu Rate");
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate");
 }
-
 
 <div class="card">
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-6">
-                <h5 class="card-title">FoodMenuRate</h5>
+                <h5 class="card-title">FoodMenu Rate</h5>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="FoodCategoryList" class="control-label">Category</label>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-1">
+                    <label asp-for="FoodCategoryList" class="control-label pl-2">Category</label>
+                </div>
+                <div class="col-md-4">
                     @if (Model != null)
                     {
                         <select asp-for="FoodCategoryId" class="form-control"
@@ -25,8 +31,13 @@
                         </select>
                     }
                 </div>
-                <div class="float-right">
-                    <a onclick="return loadFoodMenuRateList();" class="btn btn-primary float-sm-left ">Load</a>
+                <div class="col-md-2">
+                    <input id="load" onclick="return loadFoodMenuRateList();" type="submit" class="btn btn-outline-dark" value="Load" />
+                </div>
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-2">
+                    <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save Changes" />
                 </div>
             </div>
         </div>
@@ -35,14 +46,14 @@
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
-                <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate")" class="display table table-striped table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString(" FoodMenuRate")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead>
                         <tr>
-                            <th style="width:10%">Id</th>
-                            <th style="width:35%">OutLet</th>
-                            <th style="width:35%">FoodMenuName</th>
-                            <th style="width:25%">SalePrice</th>
-                            <th style="width:25%">IsActive</th>
+                            <th style="width:10%"></th>
+                            <th style="width:40%">FoodMenu Name</th>
+                            <th style="width:25%">Outlet</th>
+                            <th style="width:15%">Sales Price</th>
+                            <th style="width:15%">IsActive</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,16 +66,16 @@
                                         <input asp-for="@item.Id" class="form-control" type="hidden" />
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.OutletName)
-                                    </td>
-                                    <td>
                                         @Html.DisplayFor(modelItem => item.FoodMenuName)
                                     </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.OutletName)
+                                    </td>
                                     <td class="text-right">
-                                        <input type="text" asp-for="@item.SalesPrice" class="form-control" value="@item.SalesPrice" />
+                                        <input type="number" asp-for="@item.SalesPrice" class="form-control col-sm-6" min="0" max="99999" value="@item.SalesPrice" />
                                     </td>
                                     <td>
-                                        <input asp-for="@item.IsActive" type="checkbox" class="form-control" />
+                                        <input asp-for="@item.IsActive" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px"/>
                                     </td>
                                 </tr>
                             }
@@ -74,17 +85,7 @@
             </div>
         </div>
     </div>
-    <div class="card-footer container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save" />
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-<br />
 <br />
 
 @section Scripts {
@@ -191,4 +192,4 @@
     </script>
 }
 
-@*<script src="~/Scripts/FoodMenuRate.js"></script>*@
+<script src="~/Scripts/FoodMenuRate.js"></script>

@@ -74,6 +74,7 @@ $('#addRow').on('click', function (e) {
     Qty = parseFloat(Qty).toFixed(4);
     Price = parseFloat(Price).toFixed(2);
     TotalAmount = parseFloat(Qty * Price).toFixed(2);
+    $("#TotalAmount").val(TotalAmount);
 
     if (message == '') {
         InventoryAdjustmentDatatable.row('.active').remove().draw(false);

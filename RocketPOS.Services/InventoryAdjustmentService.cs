@@ -54,6 +54,8 @@ namespace RocketPOS.Services
                                              InventoryAdjustmentId = inventoryAdjDetail.InventoryAdjustmentId,
                                              IngredientId = inventoryAdjDetail.IngredientId,
                                              Quantity = inventoryAdjDetail.Quantity,
+                                             Price = inventoryAdjDetail.Price,
+                                             TotalAmount = inventoryAdjDetail.TotalAmount,
                                              ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
                                              IngredientName = inventoryAdjDetail.IngredientName,
                                              FoodMenuId = inventoryAdjDetail.FoodMenuId,

@@ -91,7 +91,20 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            FoodMenuRate = $('#@dataTableName').DataTable();
+            FoodMenuRate = $('#@dataTableName').DataTable({
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 250,
+                        "lengthMenu": [
+                            [250, 500, 1000, 2000],
+                            ['250', '500', '1000', '2000']
+                        ],
+            });
         });
 
         function loadFoodMenuRateList() {

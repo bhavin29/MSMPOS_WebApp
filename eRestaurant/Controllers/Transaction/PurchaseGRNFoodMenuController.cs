@@ -30,10 +30,10 @@ namespace RocketPOS.Controllers.Transaction
         {
             _iPurchaseGRNService = purchaseService;
             _iDropDownService = idropDownService;
-            _sharedLocalizer = sharedLocalizer;
-            _locService = locService;
             _iSupplierService = supplierService;
             _iEmailService = emailService;
+            _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         // GET: PurchaseGRNFoodMenu
@@ -159,7 +159,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate)
+        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate,int supplierId)
         {
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             DateTime newFromDate, newToDate;
@@ -174,7 +174,7 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.Now;
             }
 
-            purchaseViewModels = _iPurchaseGRNService.PurchaseGRNFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
+            purchaseViewModels = _iPurchaseGRNService.PurchaseGRNFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
             return Json(new { PurchaseGRNFoodMenu = purchaseViewModels });
         }
         public ActionResult Delete(int id)

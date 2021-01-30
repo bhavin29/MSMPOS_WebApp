@@ -4,7 +4,7 @@
 @inject LocService SharedLocalizer
 @{
     ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Food Menu Purchase");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseFood");
 }
 
 <div class="card">
@@ -29,98 +29,110 @@
                         <input id="toDate" type="date" class="form-control" />
                     </div>
                     <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Supplier</label>
+                            <select Id="SupplierId"
+                                    class="form-control">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-            <div class="col-sm-12">
-                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseFoodMenu")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                    <thead>
-                        <tr role="row">
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            var tm = "#myModal" + item.Id;
-                            var mid = "myModal" + item.Id;
-                            <tr role="row">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SupplierName)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.GrandTotal)
-                                </td>
-                                <td>
-                                    @Html.DisplayName("Rocket")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
-                                        <label> / </label>
-                                        <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseFood")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td hidden="hidden">
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                                <label> / </label>
+                                                <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                                <label> / </label>
+                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        }
-                    </tbody>
-                </table>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -128,37 +140,37 @@
 
 @section Scripts {
     <script>
-        var PurchaseFoodMenu = null;
+        var PurchaseFood = null;
         $(document).ready(function () {
             var myDate = new Date();
             var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
             $("#fromDate").val(date);
             $("#toDate").val(date);
-            PurchaseFoodMenu = $('#@dataTableName').DataTable();
+            GetSupplierList();
+            PurchaseFood = $('#@dataTableName').DataTable();
           //  loadPurchaseList();
         });
 
         function loadPurchaseList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/PurchaseFoodmenu/PurchaseFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val(),
+                url: "/PurchaseFoodmenu/PurchaseFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&supplierId=" + $("#SupplierId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
-                    if (PurchaseFoodMenu != null) {
-                        PurchaseFoodMenu.clear();
-                        PurchaseFoodMenu.destroy();
+                    if (PurchaseFood != null) {
+                        PurchaseFood.clear();
+                        PurchaseFood.destroy();
                     }
-                    debugger;
-                    PurchaseFoodMenu = $("#PurchaseFoodmenu").DataTable({
-                        "data": data.PurchaseFoodMenu,
+                    PurchaseFood = $("#PurchaseFood").DataTable({
+                        "data": data.purchaseFoodMenu,
                         "columns": [
                             { "data": "referenceNo", "name": "Number", "autoWidth": true },
-                            { "data": "Date", "name": "Date", "autoWidth": true },
-                            { "data": "SupplierName", "name": "Supplier", "autoWidth": true },
-                            { "data": "GrandTotal", "name": "Amount", "autoWidth": true },
+                            { "data": "date", "name": "Date", "autoWidth": true },
+                            { "data": "supplierName", "name": "Supplier", "autoWidth": true },
+                            { "data": "grandTotal", "name": "Amount", "autoWidth": true },
                             { "defaultContent": "Rocket", "autoWidth": true },
-                            { "data": "Status", "name": "Status", "autoWidth": true },
+                            { "data": "status", "name": "Status", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
@@ -166,13 +178,19 @@
                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAdjustmentDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
-
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
+                                        ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
                                 },
                             }
                         ],
                         columnDefs: [
-                            { targets: [4], orderable: false }
+                            { targets: [6], orderable: false, visible: false, }
                         ],
                         "bLengthChange": true,
                         "bInfo": true,
@@ -194,18 +212,37 @@
             });
         }
 
-        function deleteAdjustmentDetail(id) {
+        function deletePurchaseDetail(id) {
             $.ajax({
                 url: "/PurchaseFoodmenu/Delete/" + id,
                 data: { },
                 dataType: "json",
                 success: function (data) {
-                    loadAdjustmentList();
+                    loadPurchaseList();
                 },
                 error: function (data) {
-                    loadAdjustmentList();
+                    loadPurchaseList();
                 }
             });
         };
+
+        function GetSupplierList() {
+            $.ajax({
+                url: "/PurchaseInvoiceFoodMenu/GetSupplierList",
+                data: {},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#SupplierId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.supplierList.length; ++i) {
+                        $("#SupplierId").append('<option value="' + obj.supplierList[i].value + '">' + obj.supplierList[i].text + '</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
     </script>
 }

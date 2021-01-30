@@ -29,10 +29,10 @@ namespace RocketPOS.Controllers.Transaction
         {
             _iPurchaseInvoiceService = purchaseService;
             _iDropDownService = idropDownService;
-            _sharedLocalizer = sharedLocalizer;
-            _locService = locService;
             _iSupplierService = supplierService;
             _iEmailService = emailService;
+            _sharedLocalizer = sharedLocalizer;
+            _locService = locService;
         }
 
         // GET: PurchaseInvoiceFoodMenu
@@ -150,7 +150,8 @@ namespace RocketPOS.Controllers.Transaction
             //return View();
         }
 
-        public JsonResult PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        [HttpGet]
+        public JsonResult PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate,int supplierId)
         {
             List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
             DateTime newFromDate, newToDate;
@@ -165,8 +166,8 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.Now;
             }
 
-            purchaseViewModels = _iPurchaseInvoiceService.PurchaseInvoiceFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
-            return Json(new { PurchaseGRNFoodMenu = purchaseViewModels });
+            purchaseViewModels = _iPurchaseInvoiceService.PurchaseInvoiceFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"),supplierId).ToList();
+            return Json(new { PurchaseInvoiceFoodMenu = purchaseViewModels });
         }
         public ActionResult Delete(int id)
         {
@@ -244,6 +245,13 @@ namespace RocketPOS.Controllers.Transaction
             int purchaseId = 0;
             purchaseId = _iPurchaseInvoiceService.GetPurchaseIdByPOReference(poReference);
             return Json(new { purchaseId = purchaseId });
+        }
+        [HttpGet]
+        public JsonResult GetSupplierList()
+        {
+            PurchaseInvoiceViewModel purchaseInvoiceViewModel = new PurchaseInvoiceViewModel();
+            purchaseInvoiceViewModel.SupplierList = _iDropDownService.GetSupplierList().ToList();
+            return Json(new { SupplierList = purchaseInvoiceViewModel.SupplierList });
         }
     }
 }

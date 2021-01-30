@@ -122,6 +122,7 @@ namespace RocketPOS.Services
                                          {
                                              PurchaseInvoiceId = purchasedetails.PurchaseInvoiceId,
                                              IngredientId = purchasedetails.IngredientId,
+                                             FoodMenuId = purchasedetails.FoodMenuId,
                                              POQTY = purchasedetails.POQTY,
                                              InvoiceQty = purchasedetails.InvoiceQty,
                                              UnitPrice = purchasedetails.UnitPrice,
@@ -142,9 +143,9 @@ namespace RocketPOS.Services
             return _iPurchaseInvoiceRepository.GetPurchaseInvoiceFoodMenuList();
         }
 
-        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
-            return _iPurchaseInvoiceRepository.PurchaseInvoiceFoodMenuListByDate(fromDate, toDate);
+            return _iPurchaseInvoiceRepository.PurchaseInvoiceFoodMenuListByDate(fromDate, toDate, supplierId);
         }
         public int InsertPurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseModel)
         {

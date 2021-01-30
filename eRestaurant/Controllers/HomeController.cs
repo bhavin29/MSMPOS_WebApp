@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
-
+using RocketPOS.Framework;
 namespace RocketPOS.Controllers
 {
     public class HomeController : Controller
@@ -24,7 +24,14 @@ namespace RocketPOS.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            if (LoginInfo.Userid == 0)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Privacy()

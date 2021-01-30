@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
-
+using RocketPOS.Framework;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +31,7 @@ namespace RocketPOS.Controllers
                 int result = _iLoginService.GetLogin(userName, password);
                 if (result > 0)
                 {
+                    LoginInfo.Userid = result;
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -42,11 +43,11 @@ namespace RocketPOS.Controllers
             return View();
         }
 
-        public ActionResult Login(string message)
-        {
-            ViewBag.Message = message ?? "";
-            return RedirectToAction("~/Views/Home/Index.cshtml");
-        }
+        //public ActionResult Login(string message)
+        //{
+        //    ViewBag.Message = message ?? "";
+        //    return RedirectToAction("~/Views/Home/Index.cshtml");
+        //}
 
     }
 }

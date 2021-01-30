@@ -28,9 +28,9 @@
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("User")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.OutletId)
-                            </th>
+                            </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.EmployeeName)
                             </th>
@@ -63,9 +63,9 @@
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th>
+                            @*<th>
                                 @Html.DisplayNameFor(model => model.OutletName)
-                            </th>
+                            </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.EmployeeName)
                             </th>
@@ -103,9 +103,9 @@
                             var mid = "myModal" + item.Id;
 
                         <tr>
-                            <td>
+                            @*<td>
                                 @Html.DisplayFor(modelItem => item.OutletName)
-                            </td>
+                            </td>*@
                             <td>
                                 @Html.DisplayFor(modelItem => item.EmployeeName)
                             </td>

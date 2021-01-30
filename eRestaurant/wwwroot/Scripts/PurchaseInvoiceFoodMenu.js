@@ -40,7 +40,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [6, 8,11],
+                "targets": [6, 7,8,11],
                 "visible": false,
                 "searchable": false
             }

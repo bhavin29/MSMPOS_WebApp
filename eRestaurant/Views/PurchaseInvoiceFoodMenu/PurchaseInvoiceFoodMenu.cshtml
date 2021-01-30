@@ -111,22 +111,22 @@
                                     <div class="table-wrap">
                                         <table id="purchaseOrderDetails" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                             <thead>
-                                            <tbody>
                                                 <tr>
                                                     <th style="width:0%">FoodMenuId</th>
                                                     <th style="width:35%">Product</th>
-                                                    <th style="width:5%" class="text-right">PO Qty</th>
+                                                    <th style="width:10%" class="text-right">PO Qty</th>
                                                     <th style="width:10%" class="text-right">Received Qty</th>
                                                     <th style="width:10%" class="text-right">Price</th>
-                                                    <th style="width:10%" class="text-right">Dis%</th>
-                                                    <th style="width:0%" class="text-right">Dis Amt</th>
+                                                    <th style="width:10%" class="text-right">Disc%</th>
+                                                    <th style="width:0%" class="text-right">Disc Amt</th>
                                                     <th style="width:0%" class="text-right">Tax%</th>
                                                     <th style="width:0%" class="text-right">Tax Amt</th>
-                                                    <th style="width:0" class="text-right">Total</th>
-                                                    <th style="width:10%" class="text-center">Action</th>
+                                                    <th style="width:10%" class="text-right">Total</th>
+                                                    <th style="width:10%" class="text-right">Action</th>
                                                     <th style="width:0%" class="text-center">Id</th>
                                                 </tr>
-                                                </thead>
+                                            </thead>
+                                            <tbody>
                                                 @if (Model.Id > 0 || Model.PurchaseId > 0)
                                                 {
                                                     @foreach (var item in Model.purchaseInvoiceDetails)

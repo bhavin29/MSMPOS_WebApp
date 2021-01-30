@@ -27,7 +27,7 @@ namespace RocketPOS.Framework
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.Send(message);
             }
-            catch (Exception) 
+            catch (Exception ex) 
             {
             }
         }

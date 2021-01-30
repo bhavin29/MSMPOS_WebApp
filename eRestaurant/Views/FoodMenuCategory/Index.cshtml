@@ -4,7 +4,7 @@
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @{
-    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuCategory");
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("FoodMenu Category");
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("FoodMenuCategory");
 }
 
@@ -12,7 +12,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-11">
-                <h5 class="card-title">FoodMenuCategory</h5>
+                <h5 class="card-title">FoodMenu Category</h5>
             </div>
             <div class="float-right">
                 <a asp-action="FoodMenuCategory" class="btn btn-primary float-sm-left ">Add</a>

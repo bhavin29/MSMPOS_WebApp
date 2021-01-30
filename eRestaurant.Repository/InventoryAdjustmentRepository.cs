@@ -91,7 +91,7 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentDetailModel> inventoryAdjustmentDetailModels = new List<InventoryAdjustmentDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity, IAI.ConsumptionStatus as ConsumpationStatus " +
+                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.Price,IAI.Total AS TotalAmount, IAI.ConsumptionStatus as ConsumpationStatus " +
                              " FROM InventoryAdjustmentDetail IAI " +
                              " INNER JOIN InventoryAdjustment IA ON IAI.InventoryAdjustmentId = IA.Id " +
                              " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
@@ -130,9 +130,9 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO InventoryAdjustment " +
-                             "  ( StoreId, ReferenceNumber,InventoryType,EntryDate ,EmployeeId,Notes,UserIdUpdated,DateInserted,IsDeleted ) " +
+                             "  ( StoreId, ReferenceNumber,InventoryType,EntryDate,EmployeeId,Notes,UserIdUpdated,DateInserted,IsDeleted ) " +
                              "   VALUES           " +
-                             "  ( @StoreId, @ReferenceNo,@InventoryType, @Date ,@EmployeeId,@Notes," + LoginInfo.Userid +",GetUTCDate(),0); " +
+                             "  ( @StoreId, @ReferenceNo,@InventoryType, @Date,@EmployeeId,@Notes," + LoginInfo.Userid +",GetUTCDate(),0); " +
                              "   SELECT CAST(Scope_Identity()  as int); ";
                 result = con.ExecuteScalar<int>(query, inventoryAdjustmentModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -160,12 +160,14 @@ namespace RocketPOS.Repository
                         }
                         
                         var queryDetails = "INSERT INTO InventoryAdjustmentDetail" +
-                                              " (InventoryAdjustmentId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted) " +
+                                              " (InventoryAdjustmentId,IngredientId,FoodMenuId,Qty,Price,Total ,ConsumptionStatus,UserIdUpdated,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + ingredientId + "," +
                                               "" + foodMenuId + "," +
                                               "" + item.Quantity + "," +
+                                              "" + item.Price + "," +
+                                              "" + item.TotalAmount + "," +
                                               "" + 1 + "," +
                                               "" + LoginInfo.Userid +",GetUtcDate(),0); " +
                                               " SELECT CAST(ReferenceNumber as INT) from InventoryAdjustment where id = " + result + "; ";
@@ -293,6 +295,8 @@ namespace RocketPOS.Repository
                                                  " IngredientId = " + ingredientId +
                                                  " ,FoodMenuId = " + foodMenuId +
                                                  " ,Qty   = " + item.Quantity +
+                                                 " ,Price   = " + item.Price +
+                                                 " ,Total   = " + item.TotalAmount +
                                                  ",ConsumptionStatus=  " + 1 +
                                                  ",UserIdUpdated = " + LoginInfo.Userid +
                                                  ", DateUpdated  = GetUtcDate()"+
@@ -301,12 +305,14 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryAdjustmentDetail" +
-                                                  " (InventoryAdjustmentId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,UserIdUpdated,DateUpdated,IsDeleted)   " +
+                                                  " (InventoryAdjustmentId, IngredientId,FoodMenuId,Qty,Price,Total,ConsumptionStatus,UserIdUpdated,DateUpdated,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryAdjustmentModel.Id + "," +
                                                   "" + ingredientId + "," +
                                                   "" + foodMenuId + "," +
                                                   "" + item.Quantity + "," +
+                                                  "" + item.Price + "," +
+                                                  "" + item.TotalAmount + "," +
                                                   "" + 1 + "," + LoginInfo.Userid + ",GetUTCDate(),0)";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);

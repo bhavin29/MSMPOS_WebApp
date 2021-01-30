@@ -37,7 +37,7 @@ namespace RocketPOS.Repository
 
         public int InsertOutlet(OutletModel outletModel)
         {
-            int result = 0;
+            int result = 0, storeCount = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
@@ -45,30 +45,40 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Outlet"+
-                             "(Id,StoreId, OutletName, OutletAddress1, OutletAddress2, OutletPhone, OutletEmail," +
-                             " InvoiceHeader, InvoiceFooter, IsCollectTax, IsPreorPostPayment, IsActive, IsLock)" +
-                            "VALUES " +
-                            "(" + MaxId + ", @StoreId, @OutletName, @OutletAddress1, @OutletAddress2, @OutletPhone, @OutletEmail, " +
-                            "@InvoiceHeader, @InvoiceFooter, @IsCollectTax, @IsPreorPostPayment, @IsActive, @IsLock); "+
-                            " SELECT CAST(SCOPE_IDENTITY() as INT);";
-                result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
 
-                if (result > 0)
+                var queryStoreCount = "select count(storeId) from Outlet where IsActive=1 And IsDeleted=0 And storeId=" + outletModel.StoreId;
+                storeCount = con.QueryFirstOrDefault<int>(queryStoreCount, null, sqltrans);
+
+                if (storeCount == 0)
                 {
-                    sqltrans.Commit();
-
-                    //CREATE ENTRY INTO FOODMENURATE
-                    query = " INSERT INTO FOODMENURATE(Id, OutletId, FoodMenuId, SalesPrice, FoodVatTaxId, IsActive)  "+
-                            " Select(select max(Id) from foodmenurate) + ROW_NUMBER() OVER(ORDER BY fm.id desc) AS Row# , "+
-                             MaxId + ", FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 FROM FoodMenu FM WHERE isdeleted = 0 ";
-
+                    var query = "INSERT INTO Outlet" +
+                            "(Id,StoreId, OutletName, OutletAddress1, OutletAddress2, OutletPhone, OutletEmail," +
+                            " InvoiceHeader, InvoiceFooter, IsCollectTax, IsPreorPostPayment, IsActive, IsLock)" +
+                           "VALUES " +
+                           "(" + MaxId + ", @StoreId, @OutletName, @OutletAddress1, @OutletAddress2, @OutletPhone, @OutletEmail, " +
+                           "@InvoiceHeader, @InvoiceFooter, @IsCollectTax, @IsPreorPostPayment, @IsActive, @IsLock); " +
+                           " SELECT CAST(SCOPE_IDENTITY() as INT);";
                     result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
 
+                    if (result > 0)
+                    {
+                        sqltrans.Commit();
+
+                        //CREATE ENTRY INTO FOODMENURATE
+                        query = " INSERT INTO FOODMENURATE(Id, OutletId, FoodMenuId, SalesPrice, FoodVatTaxId, IsActive)  " +
+                                " Select(select max(Id) from foodmenurate) + ROW_NUMBER() OVER(ORDER BY fm.id desc) AS Row# , " +
+                                 MaxId + ", FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 FROM FoodMenu FM WHERE isdeleted = 0 ";
+
+                        result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
+                    }
+                    else
+                    {
+                        sqltrans.Rollback();
+                    }
                 }
                 else
                 {
-                    sqltrans.Rollback();
+                    result = -1;
                 }
             }
 
@@ -77,31 +87,45 @@ namespace RocketPOS.Repository
 
         public int UpdateOutlet(OutletModel outletModel)
         {
-            int result = 0;
+            int result = 0, storeCount = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE Outlet SET " +
+
+                if (outletModel.OriginalStoreId != outletModel.StoreId)
+                {
+                    var queryStoreCount = "select count(storeId) from Outlet where IsActive=1 And IsDeleted=0 And storeId=" + outletModel.StoreId;
+                    storeCount = con.QueryFirstOrDefault<int>(queryStoreCount, null, sqltrans);
+                }
+
+                if (storeCount == 0)
+                {
+                    var query = "UPDATE Outlet SET " +
                    "StoreId=@StoreId, OutletName=@OutletName, OutletAddress1=@OutletAddress1, OutletAddress2=@OutletAddress2, " +
                    "OutletPhone=@OutletPhone, OutletEmail=@OutletEmail, InvoiceHeader=@InvoiceHeader, InvoiceFooter=@InvoiceFooter, " +
                    "IsCollectTax=@IsCollectTax, IsPreorPostPayment=@IsPreorPostPayment, IsActive=@IsActive, IsLock=@IsLock " +
                     "WHERE Id = @Id;";
-                result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
+                    result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
 
-                if (result > 0)
-                {
-                    sqltrans.Commit();
+                    if (result > 0)
+                    {
+                        sqltrans.Commit();
+                    }
+                    else
+                    {
+                        sqltrans.Rollback();
+                    }
                 }
                 else
                 {
-                    sqltrans.Rollback();
+                    result = -1;
                 }
             }
             return result;
         }
 
-        public int DeleteOutlet (int addonsId)
+        public int DeleteOutlet(int addonsId)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))

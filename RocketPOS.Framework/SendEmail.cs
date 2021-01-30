@@ -8,26 +8,36 @@ namespace RocketPOS.Framework
 {
     public static class SendEmail
     {
-        public static void Email(string htmlString,string email)
+        public static void Email(string htmlString, string email)
         {
             try
             {
-                MailMessage message = new MailMessage();
-                SmtpClient smtp = new SmtpClient();
-                message.From = new MailAddress("BHAVINKCS@GMAIL.COM");
-                message.To.Add(new MailAddress(email));
-                message.Subject = "Test";
-                message.IsBodyHtml = true; //to make message body as html  
-                message.Body = htmlString;
-                smtp.Port = 587;
-                smtp.Host = "smtp.gmail.com"; //for gmail host  
-                smtp.UseDefaultCredentials = false;
-                smtp.EnableSsl = true;
-                smtp.Credentials = new NetworkCredential("bhavinkcs@gmail.com", "Sahaj#123");
-                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtp.Send(message);
+                var fromAddress = new MailAddress("bhavinkcs@gmail.com", "RocketPOS");
+                var toAddress = new MailAddress(email, "");
+                const string fromPassword = "RocketPOS007";
+                const string subject = "RocketPOS - Purchase Approval Request";
+                string body = htmlString;
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+                using (var message = new MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+                }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
             }
         }

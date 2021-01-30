@@ -79,10 +79,8 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel, string Cancel)
         {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-
 
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)

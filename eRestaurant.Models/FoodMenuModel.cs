@@ -35,6 +35,12 @@ namespace RocketPOS.Models
         public bool IsVegItem { get; set; }
         public bool IsBeverages { get; set; }
         public decimal FoodVat { get; set; }
+        public int FoodVatTaxId { get; set; }
+        public string FoodVatTaxName { get; set; }
+        public List<SelectListItem> FoodVatTaxList { get; set; }
+        public List<SelectListItem> UnitsList { get; set; }
+        public int UnitsId { get; set; }
+        public string UnitName { get; set; }
         public decimal Foodcess { get; set; }
         public bool OfferIsAvailable { get; set; }
         public int Position { get; set; }

@@ -43,8 +43,8 @@ namespace RocketPOS.Controllers.Master
                 foodMenuModel = _iFoodMenuService.GetFoodMenueById(foodMenuId);
             }
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            //foodMenuModel.IngredientList = _iDropDownService.GetIngredientList();
-
+            foodMenuModel.FoodVatTaxList = _iDropDownService.GetTaxList();
+            foodMenuModel.UnitsList = _iDropDownService.GetUnitList();
             return View(foodMenuModel);
         }
 

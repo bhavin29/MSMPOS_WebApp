@@ -264,14 +264,18 @@
                     </div>
                     <br />
                     <div class="form-button-action">
-                        @if ((Model.Status == 0 || Model.Status == 1) && (Model.Id > 0 || Model.Id == 0))
+                        @if (Model.Id == 0)
                         {
                             <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
                         }
-                        @if (Model.Status == 1 && Model.Id > 0)
-                        {
-                            <input id="saveAndApprovedOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save & Approved" />
-                        }
+                        @*@if ((Model.Status == 0 || Model.Status == 1) && (Model.Id > 0 || Model.Id == 0))
+        {
+            <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+        }
+        @if (Model.Status == 1 && Model.Id > 0)
+        {
+            <input id="saveAndApprovedOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save & Approved" />
+        }*@
 
                         <a href='@Url.Action("PurchaseFoodMenuList", "PurchaseFoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                     </div>

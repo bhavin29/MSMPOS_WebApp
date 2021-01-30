@@ -17,73 +17,73 @@
                 <form asp-action="Purchase" method="post" id="purchase" role="form">
                     <div class="row">
                         <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-1 pr-2 pl-2">
+                            <div class="row">
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="ReferenceNo" class="control-label">Order No.</label>
+                                        <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
+                                        <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="StoreList" class="control-label">Store</label>
+                                        <select asp-for="StoreId"
+                                                class="form-control"
+                                                asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                                        </select>
+                                        <span asp-validation-for="StoreId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="SupplierList" class="control-label">Supplier</label>
+                                        <select asp-for="SupplierId"
+                                                class="form-control"
+                                                asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))"
+                                                onchange="GetSupplierDetails(SupplierId)">
+                                        </select>
+                                        <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
+                                        <div class="col-md-12 p-0 ">
+                                            <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-1 pl-1">
+                                    <div class="form-group" style="margin-top:27px">
+                                        <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="row">
+                                    <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="ReferenceNo" class="control-label">Order No.</label>
-                                            <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
-                                            <span asp-validation-for="ReferenceNo" class="text-danger"></span>
+                                            <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
+                                            <select asp-for="EmployeeId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                            </select>
+                                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="StoreList" class="control-label">Store</label>
-                                            <select asp-for="StoreId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
-                                            </select>
-                                            <span asp-validation-for="StoreId" class="text-danger"></span>
+                                            <label asp-for="Date" class="control-label"></label>
+                                            <input asp-for="Date" type="date" class="form-control" />
+                                            <span asp-validation-for="Date" class="text-danger"></span>
                                         </div>
                                     </div>
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="SupplierList" class="control-label">Supplier</label>
-                                            <select asp-for="SupplierId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.SupplierList, "Value", "Text"))"
-                                                    onchange="GetSupplierDetails(SupplierId)">
-                                            </select>
-                                            <span asp-validation-for="SupplierId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="SupplierEmail" class="control-label">Supplier Email</label>
-                                            <div class="col-md-12 p-0 ">
-                                                <input type="text" asp-for="SupplierEmail" class="form-control input-full text-left">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-1 pl-1">
-                                        <div class="form-group" style="margin-top:27px">
-                                            <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            <div class="row">
-                                <div class="col-md-2 pr-2 pl-2">
-                                    <div class="form-group">
-                                        <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
-                                        <select asp-for="EmployeeId"
-                                                class="form-control"
-                                                asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                        </select>
-                                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 pr-2 pl-2">
-                                    <div class="form-group">
-                                        <label asp-for="Date" class="control-label"></label>
-                                        <input asp-for="Date" type="date" class="form-control" />
-                                        <span asp-validation-for="Date" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
+                                </div>*@
                         </div>
                     </div>
                     @*<hr />
@@ -154,69 +154,71 @@
                                             <th style="width:5%" class="text-left">Action</th>
                                         </tr>
                                     </thead>
-                                    @if (Model.Id > 0)
-                                    {
-                                        @foreach (var item in Model.PurchaseDetails)
+                                    <tbody>
+                                        @if (Model.Id > 0)
                                         {
-                                            var tm = "#myModal" + item.PurchaseId;
-                                            var mid = "myModal" + item.PurchaseId;
-                                            var rowId = "rowId" + item.PurchaseId;
-                                            <tr id="@rowId">
-                                                <td>
-                                                    @item.FoodMenuId
-                                                </td>
-                                                <td>
-                                                    @item.FoodMenuName
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.Quantity.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.UnitPrice.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.DiscountPercentage.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.DiscountAmount.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.TaxPercentage.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.TaxAmount.ToString("N")
-                                                </td>
-                                                <td class="text-right">
-                                                    @item.Total.ToString("N")
-                                                </td>
-                                                <td class="text-left">
-                                                    <div class="form-button-action">
-                                                        <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    @item.PurchaseId
-                                                </td>
-                                            </tr>
-                                            <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                            @foreach (var item in Model.PurchaseDetails)
+                                            {
+                                                var tm = "#myModal" + item.PurchaseId;
+                                                var mid = "myModal" + item.PurchaseId;
+                                                var rowId = "rowId" + item.PurchaseId;
+                                                <tr id="@rowId">
+                                                    <td>
+                                                        @item.FoodMenuId
+                                                    </td>
+                                                    <td>
+                                                        @item.FoodMenuName
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.Quantity.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.UnitPrice.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.DiscountPercentage.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.DiscountAmount.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.TaxPercentage.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.TaxAmount.ToString("N")
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.Total.ToString("N")
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <div class="form-button-action">
+                                                            <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
                                                         </div>
-                                                        <div class="modal-body">
-                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.PurchaseId, @item.FoodMenuId,@rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                    </td>
+                                                    <td>
+                                                        @item.PurchaseId
+                                                    </td>
+                                                </tr>
+                                                <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.PurchaseId, @item.FoodMenuId,@rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         }
-                                    }
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

@@ -82,8 +82,8 @@ namespace RocketPOS.Controllers.Transaction
             //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
- 
-            
+
+
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)
             {
@@ -101,7 +101,6 @@ namespace RocketPOS.Controllers.Transaction
                     purchaseModel.InventoryType = 1;
                     if (purchaseModel.Id > 0)
                     {
-
                         int result = _iPurchaseService.UpdatePurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {
@@ -110,19 +109,20 @@ namespace RocketPOS.Controllers.Transaction
                             clientModel = _iPurchaseService.GetClientDetail();
                             _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
 
-                            //if (purchaseModel.IsSendEmail)
-                            //{
-                            //    if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                            //    if (purchaseModel.IsSendEmail)
                             //    {
-                            //        _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                            //        if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                            //        {
+                            //            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
+                            //        }
                             //    }
-                            //}
                         }
                     }
                     else
                     {
+                        purchaseModel.Date = DateTime.Now;
                         purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
-                        
+
                         int result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
                         if (result > 0)
                         {
@@ -130,13 +130,13 @@ namespace RocketPOS.Controllers.Transaction
                             ClientModel clientModel = new ClientModel();
                             clientModel = _iPurchaseService.GetClientDetail();
                             _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
-                            //if (purchaseModel.IsSendEmail)
-                            //{
-                            //    if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
-                            //    {
-                            //        _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, purchaseModel.SupplierEmail);
-                            //    }
-                            //}
+                            if (purchaseModel.IsSendEmail)
+                            {
+                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                                {
+                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
+                                }
+                            }
                         }
                     }
                 }
@@ -200,7 +200,7 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseModel purchaseModel = new PurchaseModel();
             purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListBySupplier(supplierId);
             supplierModel = _iSupplierService.GetSupplierById(supplierId);
-                        return Json(new { email = supplierModel.SupplierEmail, purchaseModel.FoodMenuList });
+            return Json(new { email = supplierModel.SupplierEmail, purchaseModel.FoodMenuList });
         }
 
         [HttpGet]
@@ -230,7 +230,7 @@ namespace RocketPOS.Controllers.Transaction
             purchaseViewModels = _iPurchaseService.PurchaseFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
             return Json(new { PurchaseFoodMenu = purchaseViewModels });
         }
-        
+
         [HttpGet]
         public ActionResult GetTaxByFoodMenuId(int foodMenuId)
         {

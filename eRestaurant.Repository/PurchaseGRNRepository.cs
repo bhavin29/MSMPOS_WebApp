@@ -688,7 +688,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id from Purchase Where ReferenceNo='" + poReference +"'";
+                var query = "Select Id from Purchase Where ReferenceNo='" + poReference +"' and isDeleted=0";
                 return  con.QueryFirstOrDefault<int>(query);
             }
         }

@@ -6,7 +6,7 @@
 @inject LocService SharedLocalizer
 @{
     ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("InventoryReport");
 }
 
 @*Dropdown with Ingredient CAtegory, Ingredient, Food menu, ALter Qty*@
@@ -24,118 +24,234 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-2">
-                <input id="Supplier" class="form-control" />
+                <div class="form-group">
+                    <label class="control-label">Supplier</label>
+                    <select Id="SupplierId"
+                            class="form-control">
+                        <option value="">Select</option>
+                    </select>
+                </div>
             </div>
             <div class="col-md-2">
-                <input id="Store" class="form-control" />
+                <div class="form-group">
+                    <label class="control-label">Store</label>
+                    <select Id="StoreId"
+                            class="form-control">
+                        <option value="">Select</option>
+                    </select>
+                </div>
             </div>
             <div class="col-md-2">
-                <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                <a id="btnLoadData" onclick="return loadInventoryStockList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-            <div class="col-sm-12">
-                <table id="InventoryReport" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                    <thead role="row">
-                        <tr>
-                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
-                            <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
-                            <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                        </tr>
-                    </thead>
-                    <tfoot role="row">
-                        <tr>
-                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                            <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                            <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
-                            <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
-                            <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            var tm = "#myModal" + item.Id;
-                            var mid = "myModal" + item.Id;
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.StoreName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.StockQty) @Html.DisplayFor(modelItem => item.Unitname)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.PurchasePrice)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.Amount)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.AlterQty)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="InventoryDetail" asp-route-id="@item.Id" asp-route-name="@item.FoodMenuName @item.Unitname" asp-route-code="@item.FoodMenuCode" asp-route-stock="@item.StockQty @item.Unitname">Search </a>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="InventoryReport" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                                    <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                                    <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                </tr>
+                            </thead>
+                            <tfoot >
+                                <tr role="row">
+                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                                    <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
+                                    <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.StockQty) @Html.DisplayFor(modelItem => item.Unitname)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.PurchasePrice)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.AlterQty)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryDetail" asp-route-id="@item.Id" asp-route-name="@item.FoodMenuName @item.Unitname" asp-route-code="@item.FoodMenuCode" asp-route-stock="@item.StockQty @item.Unitname">Search </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </tbody>
-                </table>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('#InventoryReport').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'csvHtml5',
-                    'pdfHtml5'
-                ]
-            });
-        });
-    </script>
-}
+        @section Scripts {
+            <script>
+                var InventoryReport = null;
+                $(document).ready(function () {
+                    InventoryReport
+                    GetSupplierList();
+                    GetStoreList();
+                    InventoryReport = $('#@dataTableName').DataTable();
+                    //$('#InventoryReport').DataTable({
+                    //    dom: 'Bfrtip',
+                    //    buttons: [
+                    //        'copyHtml5',
+                    //        'excelHtml5',
+                    //        'csvHtml5',
+                    //        'pdfHtml5'
+                    //    ]
+                    //});
+                });
+
+                function loadInventoryStockList() {
+                    $.ajaxSetup({ cache: false });
+                    $.ajax({
+                        url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
+                        dataType: "json",
+                        type: "GET",
+                        success: function (data) {
+                            if (InventoryReport != null) {
+                                InventoryReport.clear();
+                                InventoryReport.destroy();
+                            }
+                            InventoryReport = $("#InventoryReport").DataTable({
+                                "data": data.inventoryStockList,
+                                "columns": [
+                                    { "data": "storeName", "name": "StoreName", "autoWidth": true },
+                                    { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
+                                    { "data": "foodMenuCode", "name": "FoodMenuCode", "autoWidth": true },
+                                    { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                                    {
+                                        data: null,
+                                        mRender: function (data, type, row) {
+                                            return row.stockQty + ' ' + row.unitname
+                                        },
+                                    },
+                                    { "data": "purchasePrice", "name": "PurchasePrice", "autoWidth": true },
+                                    { "data": "amount", "name": "Amount", "autoWidth": true },
+                                    { "data": "alterQty", "name": "AlterQty", "autoWidth": true },
+                                    {
+                                        data: null,
+                                        mRender: function (data, type, row) {
+                                            return '<div class="form-button-action"><a href="/Report/InventoryDetail/' + row.id + '?name=' + row.foodMenuName + ' ' + row.unitname + '&code=' + row.foodMenuCode + '&stock=' + row.stockQty + ' ' + row.unitname+'">Search</a></div>'
+                                        },
+                                    }
+                                ],
+                                columnDefs: [
+                                    { targets: [4], orderable: false }
+                                ],
+                                "bLengthChange": true,
+                                "bInfo": true,
+                                "bFilter": true,
+                                "ordering": true,
+                                "autoWidth": false,
+                                "orderCellsTop": true,
+                                "stateSave": false,
+                                "pageLength": 200,
+                                "lengthMenu": [
+                                    [200, 500, 1000],
+                                    ['200', '500', '1000']
+                                ],
+                            });
+                        },
+                        error: function (err) {
+
+                        }
+                    });
+                }
+
+                function GetSupplierList() {
+                    $.ajax({
+                        url: "/PurchaseInvoiceFoodMenu/GetSupplierList",
+                        data: {},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            $("#SupplierId").empty();
+                            var obj = JSON.parse(data);
+                            for (var i = 0; i < obj.supplierList.length; ++i) {
+                                $("#SupplierId").append('<option value="' + obj.supplierList[i].value + '">' + obj.supplierList[i].text + '</option>');
+                            }
+                        },
+                        error: function (data) {
+                            alert(data);
+                        }
+                    });
+                }
+
+                function GetStoreList() {
+                    $.ajax({
+                        url: "/Report/GetStoreList",
+                        data: {},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            $("#StoreId").empty();
+                            var obj = JSON.parse(data);
+                            for (var i = 0; i < obj.storeList.length; ++i) {
+                                $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
+                            }
+                        },
+                        error: function (data) {
+                            alert(data);
+                        }
+                    });
+                }
+            </script>
+        }

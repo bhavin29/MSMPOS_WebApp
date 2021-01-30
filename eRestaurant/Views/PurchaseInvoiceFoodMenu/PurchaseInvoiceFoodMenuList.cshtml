@@ -4,7 +4,7 @@
 @inject LocService SharedLocalizer
 @{
     ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Food Menu Purchase Invoice");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseInvoiceFoodMenu");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("PurchaseInvoiceFood");
 }
 
 <div class="card">
@@ -29,143 +29,153 @@
                         <input id="toDate" type="date" class="form-control" />
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadPurchaseInvoiceList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <div class="form-group">
+                            <label class="control-label">Supplier</label>
+                            <select Id="SupplierId"
+                                    class="form-control">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadPurchaseInvoiceFoodList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-            <div class="col-sm-12">
-                <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseInvoiceFoodMenu")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                    <thead>
-                        <tr role="row">
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                    </thead>
-                    <tfoot>
-                        <tr>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                            <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                            <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-
-                        </tr>
-                    </tfoot>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            var tm = "#myModal" + item.Id;
-                            var mid = "myModal" + item.Id;
-                            <tr role="row">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.POReferenceNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.SupplierName)
-                                </td>
-                                <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.GrandTotal)
-                                </td>
-                                <td>
-                                    @Html.DisplayName("Rocket")
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("PurchaseInvoiceFood")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.POReferenceNo)
+                                            </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td hidden="hidden">
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        </div>
-                                        <div class="modal-body">
-                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                        </div>
-                                        <div class="modal-footer">
-                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </tbody>
-                </table>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts 
-{
+@section Scripts {
     <script>
-        var PurchaseInvoiceFoodMenu = null;
+        var PurchaseInvoiceFood = null;
         $(document).ready(function () {
             var myDate = new Date();
             var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
             $("#fromDate").val(date);
             $("#toDate").val(date);
-            PurchaseInvoiceFoodMenu = $('#@dataTableName').DataTable();
-          //  loadPurchaseInvoiceList();
+            GetSupplierList();
+            PurchaseInvoiceFood = $('#@dataTableName').DataTable();
+            //loadPurchaseInvoiceFoodList();
         });
 
-        function loadPurchaseInvoiceList() {
+        function loadPurchaseInvoiceFoodList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/PurchaseInvoiceFoodmenu/PurchaseInvoiceFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val(),
+                url: "/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&supplierId=" + $("#SupplierId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
-                    if (PurchaseInvoiceFoodMenu != null) {
-                        PurchaseInvoiceFoodMenu.clear();
-                        PurchaseInvoiceFoodMenu.destroy();
+                    if (PurchaseInvoiceFood != null) {
+                        PurchaseInvoiceFood.clear();
+                        PurchaseInvoiceFood.destroy();
                     }
-                    debugger;
-                    PurchaseInvoiceFoodMenu = $("#PurchaseInvoiceFoodmenu").DataTable({
-                        "data": data.PurchaseInvoiceFoodMenu,
+
+                    PurchaseInvoiceFood = $("#PurchaseInvoiceFood").DataTable({
+                        "data": data.purchaseInvoiceFoodMenu,
                         "columns": [
                             { "data": "referenceNo", "name": "Number", "autoWidth": true },
-                            { "data": "Date", "name": "Date", "autoWidth": true },
-                            { "data": "SupplierName", "name": "Supplier", "autoWidth": true },
-                            { "data": "GrandTotal", "name": "Amount", "autoWidth": true },
+                            //{ "data": "poReferenceNo", "name": "POReferenceNo", "autoWidth": true },
+                            { "data": "date", "name": "Created On", "autoWidth": true },
+                            { "data": "supplierName", "name": "Store", "autoWidth": true },
+                            { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true },
                             { "defaultContent": "Rocket", "autoWidth": true },
-                            { "data": "Status", "name": "Status", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseInvoiceFoodmenu/PurchaseInvoiceFoodmenu/' + row.id +'">Edit</a>' +
+                                    return '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu/' + row.id + '">Edit</a>' +
                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAdjustmentDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
-
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseInvoiceFoodMenu('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
                                 },
                             }
                         ],
                         columnDefs: [
-                            { targets: [4], orderable: false }
+                            { targets: [5], orderable: false, visible: false, }
                         ],
                         "bLengthChange": true,
                         "bInfo": true,
@@ -187,18 +197,38 @@
             });
         }
 
-        function deleteAdjustmentDetail(id) {
+        function deletePurchaseInvoiceFoodMenu(id) {
             $.ajax({
-                url: "/PurchaseInvoiceFoodmenu/Delete/" + id,
+                url: "/PurchaseInvoiceFoodMenu/Delete/" + id,
                 data: { },
                 dataType: "json",
                 success: function (data) {
-                    loadAdjustmentList();
+                    loadPurchaseInvoiceFoodList();
                 },
                 error: function (data) {
-                    loadAdjustmentList();
+                    loadPurchaseInvoiceFoodList();
                 }
             });
         };
+
+        function GetSupplierList() {
+            $.ajax({
+                url: "/PurchaseInvoiceFoodMenu/GetSupplierList",
+                data: { },
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#SupplierId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.supplierList.length; ++i) {
+                        $("#SupplierId").append('<option value="' + obj.supplierList[i].value + '">' + obj.supplierList[i].text + '</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
     </script>
 }

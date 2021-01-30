@@ -353,7 +353,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount,PurchaseInvoice.DueAmount as Due " +
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due " +
                     "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
@@ -372,14 +372,14 @@ namespace RocketPOS.Repository
 
             return purchaseDetails;
         }
-        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate)
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate,int supplierId)
         {
             List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount,PurchaseInvoice.DueAmount as Due " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due " +
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 And PurchaseInvoice.SupplierId= "+ supplierId +
                     " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseInvoiceDate, PurchaseId desc";
  
 

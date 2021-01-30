@@ -572,7 +572,7 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public List<PurchaseViewModel> PurchaseFoodMenuListByDate(string fromDate, string toDate)
+        public List<PurchaseViewModel> PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -581,7 +581,7 @@ namespace RocketPOS.Repository
                     " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
                     " case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status " +
                     " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id " +
-                    " where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 AND Convert(varchar(10), PurchaseDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseDate, Purchase.Id desc";
+                    " where Purchase.SupplierId ="+ supplierId + " And Purchase.InventoryType=1 And Purchase.Isdeleted = 0 AND Convert(varchar(10), PurchaseDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseDate, Purchase.Id desc";
                              
                     purchaseViewModels = con.Query<PurchaseViewModel>(query).AsList();
             }

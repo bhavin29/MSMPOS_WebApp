@@ -31,7 +31,7 @@ namespace RocketPOS.Controllers.Master
         {
             List<OutletModel> outletModels = new List<OutletModel>();
             outletModels = _iOutletService.GetOutletList().ToList();
-  
+
             return View(outletModels);
         }
 
@@ -42,6 +42,7 @@ namespace RocketPOS.Controllers.Master
             {
                 int outletId = Convert.ToInt32(id);
                 outletModel = _iOutletService.GetOutletById(outletId);
+                outletModel.OriginalStoreId = outletModel.StoreId;
             }
             outletModel.StoreList = _iDropDownService.GetStoreList();
 
@@ -52,6 +53,7 @@ namespace RocketPOS.Controllers.Master
         [ValidateAntiForgeryToken]
         public ActionResult Outlet(OutletModel outletModel, string submitButton)
         {
+            int result = 0;
             outletModel.StoreList = _iDropDownService.GetStoreList();
 
             if (!ModelState.IsValid)
@@ -66,18 +68,36 @@ namespace RocketPOS.Controllers.Master
 
             if (outletModel.Id > 0)
             {
-                var result = _iOutletService.UpdateOutlet(outletModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                result = _iOutletService.UpdateOutlet(outletModel);
+                if (result == -1)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Store is already allocated to other outlet!");
+                    ViewBag.UpdateError= _locService.GetLocalizedHtmlString("UpdateError");
+                    return View(outletModel);
+                }
+                else
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
+                }
             }
             else
             {
-                var result = _iOutletService.InsertOutlet(outletModel);
-                ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                result = _iOutletService.InsertOutlet(outletModel);
+                if (result == -1)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Store is already allocated to other outlet!");
+                    ViewBag.SaveError = _locService.GetLocalizedHtmlString("SaveError");
+                    return View(outletModel);
+                }
+                else
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
+                }
             }
             return RedirectToAction("Index", "Outlet");
         }
 
-            public ActionResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             var deletedid = _iOutletService.DeleteOutlet(id);
 

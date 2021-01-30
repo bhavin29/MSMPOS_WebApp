@@ -49,6 +49,14 @@ namespace RocketPOS.Controllers.Reports
             inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
         }
+        [HttpGet]
+        public JsonResult GetInventoryStockList(int supplierId, int storeId)
+        {
+            List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
+            InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
+            inventoryReportModel = _iReportService.GetInventoryStockList(supplierId, storeId);
+            return Json(new { InventoryStockList = inventoryReportModel });
+        }
 
         [HttpPost]
         public ViewResult Inventory(InventoryReportParamModel inventoryReportParamModel)
@@ -224,6 +232,14 @@ namespace RocketPOS.Controllers.Reports
             {
                 FileDownloadName = "Document.pdf"
             };
+        }
+
+        [HttpGet]
+        public JsonResult GetStoreList()
+        {
+            InventoryReportModel inventoryReportModel = new InventoryReportModel();
+            inventoryReportModel.StoreList = _iDropDownService.GetStoreList().ToList();
+            return Json(new { StoreList = inventoryReportModel.StoreList });
         }
     }
 }

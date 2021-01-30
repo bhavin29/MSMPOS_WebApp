@@ -16,6 +16,7 @@
                                 <div class="row">
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
+                                            <input asp-for="OriginalStoreId" class="form-control" hidden="hidden" />
                                             <label asp-for="StoreList" class="control-label">Store</label>
                                             <select asp-for="StoreId"
                                                     class="form-control"
@@ -47,7 +48,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="OutletEmail" class="control-label">Email</label>
-                                            <input type="email" asp-for="OutletEmail" class="form-control" aria-describedby="emailHelp" placeholder="Enter email"/>
+                                            <input type="email" asp-for="OutletEmail" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" />
                                             <span asp-validation-for="OutletEmail" class="text-danger"></span>
                                             <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                                         </div>
@@ -119,16 +120,14 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script type="text/javascript">
-            $(function () {
-                $("#aModal").modal('show');
-            });
+            $("#aModal").modal('show');
         </script>
     }
 }
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "Index";
+                window.location.href = "Index";
         });
         $('#OK').click(function () {
             $("#Outlet").prev().focus();

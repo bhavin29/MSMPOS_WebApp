@@ -36,6 +36,7 @@ namespace RocketPOS.Repository.Reports
                 //            " LEFT OUTER JOIN FoodMenu FM ON FM.Id = FMG.FoodMenuId ";
                 ////  " WHERE I.AlterQty < INV.StockQty  ";
 
+               
                 var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                             " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                             " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
@@ -43,6 +44,7 @@ namespace RocketPOS.Repository.Reports
                             " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
                             " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
                             " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId where INV.StockQty <> 0";
+               
                 ////  " WHERE I.AlterQty < INV.StockQty  ";
 
 
@@ -165,6 +167,24 @@ namespace RocketPOS.Repository.Reports
 
                 return printReceiptA4;
             }
+        }
+
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId)
+        {
+            List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                            " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                            " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
+                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
+                            " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
+                            " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
+                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId where INV.StockQty <> 0 And INV.StoreId= " + storeId;
+                            //" And INV.SupplierId = " + supplierId;
+                inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
+            }
+            return inventoryReportModel;
         }
     }
 }

@@ -49,7 +49,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("From Store")</th>
                                     <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("To Store")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
@@ -58,7 +58,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("From Store")</th>
                                     <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("To Store")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                                 <tr role="row">
                             </tfoot>
                             <tbody>
@@ -82,7 +82,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.ToStoreName)
                                         </td>
-                                        <td>
+                                        <td hidden="hidden">
                                             <div class="form-button-action">
                                                 <a asp-action="InventoryTransfer" asp-route-Id="@item.Id">Edit</a>
                                                 <label> / </label>
@@ -160,7 +160,7 @@
                             }
                         ],
                         columnDefs: [
-                            { targets: [5], orderable: false }
+                            { targets: [5], orderable: false, visible: false, }
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

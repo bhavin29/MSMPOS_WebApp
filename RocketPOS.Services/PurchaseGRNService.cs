@@ -141,9 +141,9 @@ namespace RocketPOS.Services
             return _iPurchaseGRNRepository.GetPurchaseGRNFoodMenuList();
         }
 
-        public List<PurchaseGRNViewModel> PurchaseGRNFoodMenuListByDate(string fromDate, string toDate)
+        public List<PurchaseGRNViewModel> PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
-            return _iPurchaseGRNRepository.PurchaseGRNFoodMenuListByDate(fromDate, toDate);
+            return _iPurchaseGRNRepository.PurchaseGRNFoodMenuListByDate(fromDate, toDate, supplierId);
         }
         public int InsertPurchaseGRNFoodMenu(PurchaseGRNModel purchaseModel)
         {

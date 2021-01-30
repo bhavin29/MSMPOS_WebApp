@@ -48,7 +48,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
                                     <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
@@ -56,7 +56,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
                                     <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -76,7 +76,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.StoreName)
                                         </td>
-                                        <td>
+                                        <td hidden="hidden">
                                             <div class="form-button-action">
                                                 <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id">Edit</a>
                                                 <label> / </label>
@@ -154,7 +154,7 @@
                             }
                         ],
                         columnDefs: [
-                            { targets: [4], orderable: false }
+                            { targets: [4], orderable: false, visible: false,}
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

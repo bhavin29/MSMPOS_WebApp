@@ -10,6 +10,7 @@ namespace RocketPOS.Models
    public  class OutletModel
     {
         public  int Id { get; set;  }
+        public int OriginalStoreId { get; set; }
         public int StoreId { get; set; }
 
         [DisplayName("Store Name")]

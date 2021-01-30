@@ -60,7 +60,8 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                     <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                            </thead>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+</thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -71,46 +72,52 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                     <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                            </tfoot>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+</tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SupplierName)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.GrandTotal)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayName("Rocket")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Status)
-                                        </td>
-                                        <td hidden="hidden">
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                                <label> / </label>
-                                                <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
-                                                <label> / </label>
-                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <tr role="row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupplierName)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.GrandTotal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayName("Rocket")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td hidden="hidden">
+                                        <div class="form-button-action">
+                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                            <label> / </label>
+                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                            <label> / </label>
+                                            <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">View</a>
+                                        </div>
+                                    </td>
+                                </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -168,7 +175,7 @@
                             { "data": "referenceNo", "name": "Number", "autoWidth": true },
                             { "data": "date", "name": "Date", "autoWidth": true },
                             { "data": "supplierName", "name": "Supplier", "autoWidth": true },
-                            { "data": "grandTotal", "name": "Amount", "autoWidth": true },
+                            { "data": "grandTotal", "name": "Amount", "autoWidth": true, className: "text-right" },
                             { "defaultContent": "Rocket", "autoWidth": true },
                             { "data": "status", "name": "Status", "autoWidth": true },
                             {
@@ -187,7 +194,13 @@
                                     return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
                                         ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
                                 },
-                            }
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '">View</a></div>' 
+                                },
+                            },
                         ],
                         columnDefs: [
                             { targets: [6], orderable: false, visible: false, }

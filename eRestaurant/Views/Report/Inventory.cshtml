@@ -179,13 +179,14 @@
                                     { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
                                     {
                                         data: null,
+                                        className: "text-right" ,
                                         mRender: function (data, type, row) {
                                             return row.stockQty + ' ' + row.unitname
                                         },
                                     },
-                                    { "data": "purchasePrice", "name": "PurchasePrice", "autoWidth": true },
-                                    { "data": "amount", "name": "Amount", "autoWidth": true },
-                                    { "data": "alterQty", "name": "AlterQty", "autoWidth": true },
+                                    { "data": "purchasePrice", "name": "PurchasePrice", "autoWidth": true, className: "text-right" },
+                                    { "data": "amount", "name": "Amount", "autoWidth": true, className: "text-right"  },
+                                    { "data": "alterQty", "name": "AlterQty", "autoWidth": true, className: "text-right"  },
                                     {
                                         data: null,
                                         mRender: function (data, type, row) {

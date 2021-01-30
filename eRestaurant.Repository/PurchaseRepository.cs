@@ -581,9 +581,13 @@ namespace RocketPOS.Repository
                     " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
                     " case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status " +
                     " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id " +
-                    " where Purchase.SupplierId ="+ supplierId + " And Purchase.InventoryType=1 And Purchase.Isdeleted = 0 AND Convert(varchar(10), PurchaseDate, 103)  between '" + fromDate + "' and '" + toDate + "' order by PurchaseDate, Purchase.Id desc";
-                             
-                    purchaseViewModels = con.Query<PurchaseViewModel>(query).AsList();
+                    " where  Purchase.InventoryType=1 And Purchase.Isdeleted = 0 AND Convert(varchar(10), PurchaseDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
+                if (supplierId != 0)
+                {
+                    query += " And Purchase.SupplierId =" + supplierId;
+                }
+                query += " order by PurchaseDate, Purchase.Id desc";
+                purchaseViewModels = con.Query<PurchaseViewModel>(query).AsList();
             }
 
             return purchaseViewModels;

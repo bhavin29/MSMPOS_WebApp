@@ -260,7 +260,10 @@
                             </div>
                             <br />
                             <div class="form-button-action">
-                                <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                                @if (Model.Id == 0)
+                                {
+                                    <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                                }
                                 <a href='@Url.Action("PurchaseInvoiceFoodMenuList", "PurchaseInvoiceFoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                             </div>
                         </form>

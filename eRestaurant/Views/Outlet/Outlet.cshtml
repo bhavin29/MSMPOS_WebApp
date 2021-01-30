@@ -114,20 +114,53 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="bModal" tabindex="-1" role="dialog" aria-labelledby="bModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="bModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="bsave" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 @{
     if (ViewBag.Result != null)
     {
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script type="text/javascript">
-            $("#aModal").modal('show');
-        </script>
+        if (ViewBag.UpdateError != null)
+        {
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+            <script type="text/javascript">
+                $("#bModal").modal('show');
+            </script>
+        }
+        else
+        {
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+            <script type="text/javascript">
+                $("#aModal").modal('show');
+            </script>
+        }
+
     }
 }
 @section Scripts{
     <script>
         $('#save').click(function () {
-                window.location.href = "Index";
+            window.location.href = "";
+            //window.location.href = "Index";
+        });
+        $('#bsave').click(function () {
+            window.location.href = "";
         });
         $('#OK').click(function () {
             $("#Outlet").prev().focus();

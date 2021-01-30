@@ -181,7 +181,12 @@ namespace RocketPOS.Repository.Reports
                             " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
                             " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
                             " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId where INV.StockQty <> 0 And INV.StoreId= " + storeId;
-                            //" And INV.SupplierId = " + supplierId;
+
+                //if (supplierId != 0)
+                //{
+                //    query += "  And INV.SupplierId = " + supplierId;
+                //}
+
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }
             return inventoryReportModel;

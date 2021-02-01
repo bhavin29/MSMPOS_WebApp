@@ -57,9 +57,9 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
 </thead>
                             <tfoot>
                                 <tr role="row">
@@ -69,9 +69,9 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
 </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -97,9 +97,9 @@
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Status)
                                     </td>
-                                    <td hidden="hidden">
+                                    <td>
                                         <div class="form-button-action">
-                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
                                             <label> / </label>
                                             <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                         </div>
@@ -113,7 +113,7 @@
                                     </td>
                                     <td>
                                         <div class="form-button-action">
-                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id">View</a>
+                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="View">View</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -180,7 +180,7 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id +'">Edit</a>' +
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id +'?type=Edit">Edit</a>' +
                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -197,12 +197,12 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '">View</a></div>' 
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=View">View</a></div>' 
                                 },
                             },
                         ],
                         columnDefs: [
-                            { targets: [6], orderable: false, visible: false, }
+                            { targets: [6], orderable: false}
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

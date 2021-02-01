@@ -62,6 +62,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-2 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="PurchaseInvoiceDate" class="control-label"></label>
+                                            <input asp-for="PurchaseInvoiceDate" type="date" class="form-control" />
+                                            <span asp-validation-for="PurchaseInvoiceDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
@@ -260,7 +269,7 @@
                             </div>
                             <br />
                             <div class="form-button-action">
-                                @if (Model.Id == 0)
+                                @if (ViewBag.ActionType != "View")
                                 {
                                     <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
                                 }

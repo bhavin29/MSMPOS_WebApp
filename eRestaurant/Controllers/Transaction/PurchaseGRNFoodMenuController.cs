@@ -53,11 +53,12 @@ namespace RocketPOS.Controllers.Transaction
             return View(purchaseModel);
         }
 
-        public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId)
+        public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId,string type)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
             if (purchaseId > 0)
             {
+                
                 purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
                 if (purchaseModel != null)
                 {
@@ -69,6 +70,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 if (id > 0)
                 {
+                    ViewBag.ActionType = type;
                     long purchaseGRNId = Convert.ToInt64(id);
                     purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuById(purchaseGRNId);
                 }
@@ -94,7 +96,7 @@ namespace RocketPOS.Controllers.Transaction
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
             purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
-            purchaseModel.PurchaseGRNDate = DateTime.Now;
+            //purchaseModel.PurchaseGRNDate = DateTime.Now;
 
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)

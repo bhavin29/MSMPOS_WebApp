@@ -239,7 +239,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "Update  InventoryTransfer SET FromStoreId=@FromStoreId,ToStoreId=@ToStoreId, ReferenceNumber=@ReferenceNo,EmployeeId=@EmployeeId, Notes=@Notes " +
+                var query = "Update  InventoryTransfer SET FromStoreId=@FromStoreId,EntryDate=@Date,ToStoreId=@ToStoreId, ReferenceNumber=@ReferenceNo,EmployeeId=@EmployeeId, Notes=@Notes " +
                              ",[UserIdUpdated] = " + LoginInfo.Userid + " ,[DateUpdated]  = GetUtcDate()  where id= " + inventoryTransferModel.Id + ";";
                 result = con.Execute(query, inventoryTransferModel, sqltrans, 0, System.Data.CommandType.Text);
 

@@ -54,6 +54,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                @*<div class="col-md-3 pr-1 pl-1">
+                                    <div class="form-group">
+                                        <label asp-for="Date" class="control-label"></label>
+                                        <input asp-for="Date" type="date" class="form-control" />
+                                        <span asp-validation-for="Date" class="text-danger"></span>
+                                    </div>
+                                </div>*@
                                 <div class="col-md-1 pr-1 pl-1">
                                     <div class="form-group" style="margin-top:27px">
                                         <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
@@ -65,8 +72,8 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
+                            <div class="row">
+                                    @*<div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
                                             <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
                                             <select asp-for="EmployeeId"
@@ -75,7 +82,7 @@
                                             </select>
                                             <span asp-validation-for="EmployeeId" class="text-danger"></span>
                                         </div>
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
                                             <label asp-for="Date" class="control-label"></label>
@@ -83,7 +90,7 @@
                                             <span asp-validation-for="Date" class="text-danger"></span>
                                         </div>
                                     </div>
-                                </div>*@
+                                </div>
                         </div>
                     </div>
                     @*<hr />
@@ -264,7 +271,7 @@
                     </div>
                     <br />
                     <div class="form-button-action">
-                        @if (Model.Id == 0)
+                        @if (ViewBag.ActionType!="View")
                         {
                             <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
                         }

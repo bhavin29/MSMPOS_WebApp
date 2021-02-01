@@ -518,6 +518,7 @@ namespace RocketPOS.Repository
                              "  ,[TaxAmount]  = @TaxAmount   " +
                              "  ,[TotalAmount]  = @TotalAmount   " +
                               " ,[DeliveryNoteNumber] =@DeliveryNoteNumber " +
+                              " ,[PurchaseInvoiceDate] =@PurchaseInvoiceDate " +
                              "  ,[DeliveryDate]=@DeliveryDate  " +
                              "  ,[DriverName] =@DriverName  " +
                              "  ,[VehicleNumber] =@VehicleNumber  " +

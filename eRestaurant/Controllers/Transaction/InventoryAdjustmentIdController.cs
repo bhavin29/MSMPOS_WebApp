@@ -65,11 +65,12 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryAdjustmentModel);
         }
 
-        public ActionResult InventoryAdjustment(long? id, int? inventoryType)
+        public ActionResult InventoryAdjustment(long? id, int? inventoryType,string type)
         {
             InventoryAdjustmentModel inventoryAdjustmentModel = new InventoryAdjustmentModel();
             if (id > 0)
             {
+                ViewBag.ActionType = type;
                 long purchaseId = Convert.ToInt64(id);
                 inventoryAdjustmentModel = _inventoryAdjustmentService.GetInventoryAdjustmentById(purchaseId);
 
@@ -123,7 +124,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        inventoryAdjustmentModel.Date = DateTime.Now;
+                        //inventoryAdjustmentModel.Date = DateTime.Now;
                         int result = _inventoryAdjustmentService.InsertInventoryAdjustment(inventoryAdjustmentModel);
                         if (result > 0)
                         {

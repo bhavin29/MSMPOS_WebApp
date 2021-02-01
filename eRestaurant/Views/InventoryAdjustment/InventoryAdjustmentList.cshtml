@@ -48,49 +48,49 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
                                     <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-</thead>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
+                            </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created On")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Created By")</th>
                                     <th style="width:60%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                    <th hidden="hidden" style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-</tfoot>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
+                            </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                <tr role="row">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayName("Rocket")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.StoreName)
-                                    </td>
-                                    <td hidden="hidden">
-                                        <div class="form-button-action">
-                                            <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id">Edit</a>
-                                            <label> / </label>
-                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                        </div>
-                                    </td>
-                                    <td >
-                                        <div class="form-button-action">
-                                            <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id">View</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayName("Rocket")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id" asp-route-type="View">View</a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -127,7 +127,7 @@
             $("#fromDate").val(date);
             $("#toDate").val(date);
             InventoryAdjustment = $('#@dataTableName').DataTable();
-            loadAdjustmentList();
+            //loadAdjustmentList();
         });
 
         function loadAdjustmentList() {
@@ -152,7 +152,7 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType +'">Edit</a>' +
+                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType +'&type=Edit">Edit</a>' +
                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -162,12 +162,12 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType + '">Edit</a></div>'
+                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/InventoryAdjustment/' + row.id + '?inventoryType=' + row.inventoryType + '&type=View">View</a></div>'
                                 },
                             }
                         ],
                         columnDefs: [
-                            { targets: [4], orderable: false, visible: false,}
+                            { targets: [4], orderable: false}
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

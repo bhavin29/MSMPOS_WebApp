@@ -63,11 +63,12 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryTransferModel);
         }
 
-        public ActionResult InventoryTransfer(long? id, int? inventoryType)
+        public ActionResult InventoryTransfer(long? id, int? inventoryType, string type)
         {
             InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
             if (id > 0)
             {
+                ViewBag.ActionType = type;
                 long purchaseId = Convert.ToInt64(id);
                 inventoryTransferModel = _inventoryTransferService.GetInventoryTransferById(purchaseId);
 
@@ -122,7 +123,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        inventoryTransferModel.Date = DateTime.Now;
+                        //inventoryTransferModel.Date = DateTime.Now;
                         inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
                         int result = _inventoryTransferService.InsertInventoryTransfer(inventoryTransferModel);
                         if (result > 0)

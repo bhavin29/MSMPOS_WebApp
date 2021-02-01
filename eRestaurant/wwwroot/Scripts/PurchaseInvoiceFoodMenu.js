@@ -200,6 +200,7 @@ $(function () {
                     TotalAmount: $("#TotalAmount").val(),
                     DeliveryNoteNumber: $("#DeliveryNoteNumber").val(),
                     DeliveryDate: $("#DeliveryDate").val(),
+                    PurchaseInvoiceDate: $("#PurchaseInvoiceDate").val(),
                     DriverName: $("#DriverName").val(),
                     VehicleNumber: $("#VehicleNumber").val(),
                     Notes: $("#Notes").val(),

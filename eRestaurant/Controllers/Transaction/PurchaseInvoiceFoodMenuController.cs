@@ -53,7 +53,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: PurchaseInvoice/Create
-        public ActionResult PurchaseInvoiceFoodMenu(long? id, long? purchaseId)
+        public ActionResult PurchaseInvoiceFoodMenu(long? id, long? purchaseId, string type)
         {
             PurchaseInvoiceModel purchaseModel = new PurchaseInvoiceModel();
             if (purchaseId > 0)
@@ -66,6 +66,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 if (id > 0)
                 {
+                    ViewBag.ActionType = type;
                     long purchaseInvoiceId = Convert.ToInt64(id);
                     purchaseModel = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuById(purchaseInvoiceId);
                 }
@@ -118,7 +119,7 @@ namespace RocketPOS.Controllers.Transaction
                     else
                     {
                         purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
-                        purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+                        //purchaseModel.PurchaseInvoiceDate = DateTime.Now;
 
                         int result = _iPurchaseInvoiceService.InsertPurchaseInvoiceFoodMenu(purchaseModel);
                         if (result > 0)

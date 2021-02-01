@@ -202,7 +202,12 @@ namespace RocketPOS.Repository
                 var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
                               "FROM InventoryAdjustment IA left JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
-                              "WHERE IA.IsDeleted = 0 And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "' order by IA.EntryDate desc;";
+                              "WHERE IA.IsDeleted = 0 " + 
+                              //"And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "' order by IA.EntryDate desc;";
+                                " AND Convert(Date, IA.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
+                
+                query += " order by IA.EntryDate,IA.DateInserted;";
+          
                 inventoryAdjustmentModels = con.Query<InventoryAdjustmentViewModel>(query).AsList();
             }
 

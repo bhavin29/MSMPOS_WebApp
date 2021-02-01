@@ -119,7 +119,13 @@ namespace RocketPOS.Repository
                               "FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.FromStoreId " +
                               "INNER JOIN Store SS ON SS.Id = IA.ToStoreId " +
-                              "WHERE IA.IsDeleted = 0 And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "'  Order by IA.EntryDate DESC";
+                              "WHERE IA.IsDeleted = 0 " +
+                            //"And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "'  Order by IA.EntryDate DESC";
+                            " AND Convert(Date, IA.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
+
+                query += " order by IA.EntryDate,IA.DateInserted;";
+
+
                 inventoryTransferModels = con.Query<InventoryTransferViewModel>(query).AsList();
             }
 
@@ -309,7 +315,7 @@ namespace RocketPOS.Repository
                                                   "" + foodMenuId + "," +
                                                   "" + item.Quantity + "," +
                                                   "" + 1 + "," +
-                                                  "" + item.CurrentStock + ","+
+                                                  "" + item.CurrentStock + "," +
                                                   "" + LoginInfo.Userid + ",GetUTCDate(),0)";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);

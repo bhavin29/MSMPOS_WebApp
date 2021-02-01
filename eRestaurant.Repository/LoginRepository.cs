@@ -8,7 +8,7 @@ using RocketPOS.Interface.Repository;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-
+using RocketPOS.Framework;
 namespace RocketPOS.Repository
 {
     public class LoginRepository : ILoginRepository
@@ -32,6 +32,7 @@ namespace RocketPOS.Repository
                 result = con.ExecuteScalar<int>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
+                    LoginInfo.Userid = result;
                     sqltrans.Commit();
                 }
                 else

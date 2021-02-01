@@ -149,12 +149,16 @@
         var PurchaseFood = null;
         $(document).ready(function () {
             var myDate = new Date();
-            var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
-            $("#fromDate").val(date);
-            $("#toDate").val(date);
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(fdate);
+            $("#toDate").val(tdate);
+
             GetSupplierList();
             PurchaseFood = $('#@dataTableName').DataTable();
-          //  loadPurchaseList();
+            loadPurchaseList();
+
         });
 
         function loadPurchaseList() {
@@ -202,7 +206,11 @@
                             },
                         ],
                         columnDefs: [
-                            { targets: [6], orderable: false}
+                            {
+                                targets: [3],
+                                render: $.fn.dataTable.render.number(',', '.', 2)
+                            },
+                              { targets: [6], orderable: false}
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

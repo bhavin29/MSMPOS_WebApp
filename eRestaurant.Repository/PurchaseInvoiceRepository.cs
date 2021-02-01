@@ -380,13 +380,14 @@ namespace RocketPOS.Repository
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
                     "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due " +
                     "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
-                    " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
+                    // " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
+                    " AND Convert(Date, PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 
                 if (supplierId != 0)
                 {
                     query += " And PurchaseInvoice.SupplierId= " + supplierId;
                 }
-                query += "   order by PurchaseInvoiceDate, PurchaseId desc";
+                query += "   order by PurchaseInvoiceDate, PurchaseInvoice.DateInserted desc";
 
                 purchaseViewModels = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }

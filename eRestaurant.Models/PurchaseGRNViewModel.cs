@@ -12,7 +12,9 @@ namespace RocketPOS.Models
      
         public string Date { get; set; }
         public string SupplierName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount   { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Due { get; set; }
         public int UserId { get; set; }
         public List<PurchaseGRNDetailModel> purchaseGRNDetails { get; set; }

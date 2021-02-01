@@ -21,28 +21,29 @@
     <br/>
     <div class="row">
         <div class="card-body">
-
-            <div class="row">
-                <div class="col-md-2">
-                    <input id="fromDate" type="date" class="form-control" />
-                </div>
-                <div class="col-md-2">
-                    <input id="toDate" type="date" class="form-control" />
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select Id="SupplierId"
-                                class="form-control">
-                            <option value="">Select Supplier</option>
-                        </select>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select Id="SupplierId"
+                                    class="form-control">
+                                <option value="">Select Supplier</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadPurchaseGRNList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <a id="btnLoadData" onclick="return loadPurchaseGRNList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
-                </div>
+            </div>
             </div>
         </div>
-    </div>
     <div class="row">
         <div class="card-body">
             <div class="table-responsive">
@@ -136,12 +137,14 @@
         var PurchaseGRNFood = null;
         $(document).ready(function () {
             var myDate = new Date();
-            var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
-            $("#fromDate").val(date);
-            $("#toDate").val(date);
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(fdate);
+            $("#toDate").val(tdate);
             GetSupplierList();
             PurchaseGRNFood = $('#@dataTableName').DataTable();
-          //  loadPurchaseGRNList();
+            loadPurchaseGRNList();
         });
 
         function loadPurchaseGRNList() {
@@ -181,7 +184,11 @@
                             }
                         ],
                         columnDefs: [
-                            { targets: [5], orderable: false }
+                            {
+                                targets: [3],
+                                render: $.fn.dataTable.render.number(',', '.', 2)
+                            },
+                             { targets: [5], orderable: false }
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

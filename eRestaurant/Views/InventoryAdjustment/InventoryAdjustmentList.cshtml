@@ -123,11 +123,13 @@
         var InventoryAdjustment = null;
         $(document).ready(function () {
             var myDate = new Date();
-            var date = myDate.getFullYear() + '-' + ('0' + myDate.getMonth() + 1).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
-            $("#fromDate").val(date);
-            $("#toDate").val(date);
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(fdate);
+            $("#toDate").val(tdate);
             InventoryAdjustment = $('#@dataTableName').DataTable();
-            //loadAdjustmentList();
+            loadAdjustmentList();
         });
 
         function loadAdjustmentList() {

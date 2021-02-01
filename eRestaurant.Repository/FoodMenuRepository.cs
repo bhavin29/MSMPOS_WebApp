@@ -80,7 +80,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO FoodMenu " +
-                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, PurchasePrice,SalesPrice Readymade, Notes, UnitsId,FoodVatTaxId," +
+                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, PurchasePrice,SalesPrice ,Readymade, Notes, UnitsId,FoodVatTaxId," +
                     " Position,  IsActive) " +
                     "Values " +
                     "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @PurchasePrice,@SalesPrice,@Readymade, @Notes,@UnitsId,@FoodVatTaxId," +

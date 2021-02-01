@@ -44,5 +44,11 @@ namespace RocketPOS.Services.Reports
         {
             return _iReportRepository.GetInventoryStockList(supplierId, storeId);
         }
+
+        public List<DataHistorySyncReportModel> GetDataSyncHistoryReport()
+        {
+            return _iReportRepository.GetDataSyncHistoryReport();
+        }
+
     }
 }

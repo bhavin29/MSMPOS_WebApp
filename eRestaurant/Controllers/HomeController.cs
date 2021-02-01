@@ -9,17 +9,22 @@ using Microsoft.Extensions.Logging;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Framework;
+using RocketPOS.Models.Reports;
+using RocketPOS.Interface.Services.Reports;
+
 namespace RocketPOS.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ICommonService _iCommonService;
+        private readonly IReportService _iReportService;
 
-        public HomeController(ILogger<HomeController> logger, ICommonService commonService)
+        public HomeController(ILogger<HomeController> logger, ICommonService commonService, IReportService iReportService)
         {
             _logger = logger;
             _iCommonService = commonService;
+            _iReportService = iReportService;
         }
 
         public IActionResult Index()
@@ -30,6 +35,17 @@ namespace RocketPOS.Controllers
             }
             else
             {
+                List<DataHistorySyncReportModel> dataHistorySyncReportModels = new List<DataHistorySyncReportModel>();
+
+                dataHistorySyncReportModels = _iReportService.GetDataSyncHistoryReport();
+
+                var result = dataHistorySyncReportModels
+                            .GroupBy(x => x.Outlet)
+                            .Select(x => x.FirstOrDefault()).Where(x => x.ProcessStatus == "Completed").ToList();
+
+    
+                ViewData["DataHistorySync"] = result;
+
                 return View();
             }
         }

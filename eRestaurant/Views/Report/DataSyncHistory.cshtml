@@ -1,0 +1,82 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.Reports.DataHistorySyncReportModel>
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("DataSyncHistory");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("DataSyncHistory");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">Sync History</h5>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <table id="DataSyncHistory" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                <thead>
+                    <tr role="row">
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Outlet")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process Date")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process Status")</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr role="row">
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Outlet")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process Date")</th>
+                        <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Process Status")</th>
+                </tfoot>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Outlet)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Process)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProcessDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProcessStatus)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var buttonCommon = {
+                exportOptions: {
+                    format: {
+                        body: function (data, row, column, node) {
+                            // Strip $ from salary column to make it numeric
+                            return column === 5 ?
+                                data.replace(/[$,]/g, '') :
+                                data;
+                        }
+                    }
+                }
+            };
+    </script>
+}

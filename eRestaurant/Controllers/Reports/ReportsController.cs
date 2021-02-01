@@ -241,5 +241,14 @@ namespace RocketPOS.Controllers.Reports
             inventoryReportModel.StoreList = _iDropDownService.GetStoreList().ToList();
             return Json(new { StoreList = inventoryReportModel.StoreList });
         }
+
+        public ViewResult DataSyncHistory()
+        {
+            List<DataHistorySyncReportModel> dataHistorySyncReportModels = new List<DataHistorySyncReportModel>();
+
+            dataHistorySyncReportModels = _iReportService.GetDataSyncHistoryReport();
+            return View(dataHistorySyncReportModels);
+        }
+
     }
 }

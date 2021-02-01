@@ -191,5 +191,19 @@ namespace RocketPOS.Repository.Reports
             }
             return inventoryReportModel;
         }
+        public List<DataHistorySyncReportModel> GetDataSyncHistoryReport()
+        {
+            List<DataHistorySyncReportModel> dataHistorySyncReportModels = new List<DataHistorySyncReportModel>();
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " SELECT  [Outlet],[Process],[ProcessDate] ,[ProcessStatus] " +
+                            " FROM SyncHistory order by ProcessDate desc";
+  
+                dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
+            }
+
+            return dataHistorySyncReportModels;
+        }
     }
 }

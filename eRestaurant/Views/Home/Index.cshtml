@@ -1,10 +1,28 @@
 ﻿@model RocketPOS.Models.CountryModel
+@using RocketPOS.Models.Reports;
 @using RocketPOS.Framework
 <!DOCTYPE html>
 
-    <div class="page-inner">
-        <div class="page-header">
-            <h4 class="page-title">Welcome to RocketPOS</h4>
-            @*<select asp-for="CountryDropdown" asp-items="Html.GetEnumSelectList<Country>()"></select>*@
-        </div>
+<div class="page-inner">
+    <div class="page-header">
+        <h4 class="page-title">Welcome to RocketPOS</h4>
+        @*<select asp-for="CountryDropdown" asp-items="Html.GetEnumSelectList<Country>()"></select>*@
     </div>
+    <div>
+        Last Sync:
+        <table>
+            <tr>
+                @foreach (var item in @ViewData["DataHistorySync"] as List<DataHistorySyncReportModel>)
+                {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Outlet)
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProcessDate)
+                </td>
+                }
+            </tr>
+        </table>
+    </div>
+</div>

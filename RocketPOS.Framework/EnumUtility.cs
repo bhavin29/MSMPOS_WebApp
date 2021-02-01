@@ -38,6 +38,8 @@ namespace RocketPOS.Framework
         POS = 3,
         [Display(Name = "Waiter")]
         Waiter = 4,
+        [Display(Name = "Kitchen")]
+        Kitchen = 5,
     }
     public enum RawMaterialType
     {

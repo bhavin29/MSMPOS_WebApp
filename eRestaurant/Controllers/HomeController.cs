@@ -40,10 +40,10 @@ namespace RocketPOS.Controllers
                 dataHistorySyncReportModels = _iReportService.GetDataSyncHistoryReport();
 
                 var result = dataHistorySyncReportModels
-                            .GroupBy(x => x.Outlet)
-                            .Select(x => x.FirstOrDefault()).Where(x => x.ProcessStatus == "Completed").ToList();
+                               .Where(x => x.ProcessStatus == "Completed")
+                               .GroupBy(x => x.Outlet)
+                               .Select(x => x.FirstOrDefault()).ToList();
 
-    
                 ViewData["DataHistorySync"] = result;
 
                 return View();

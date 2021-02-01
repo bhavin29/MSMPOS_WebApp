@@ -28,7 +28,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"select Id from [User] where [Username] = '"+ userName +"' and [Password] = '"+ Password + "';";
+                var query = $"select Id from [User] where [Username] = '"+ userName +"' and [Password] = '"+ Password + "' and RoleTypeId in (1,2);";
                 result = con.ExecuteScalar<int>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {

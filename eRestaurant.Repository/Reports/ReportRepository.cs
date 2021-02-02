@@ -174,7 +174,7 @@ namespace RocketPOS.Repository.Reports
             {
                 var query = " SELECT  [Outlet],[Process],[ProcessDate] ,[ProcessStatus] " +
                             " FROM SyncHistory order by ProcessDate desc";
-  
+
                 dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
             }
 

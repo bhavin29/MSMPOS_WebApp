@@ -1,0 +1,242 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.InventoryModel;
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Inventory Stock");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Inventory");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">Inventory</h5>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="StoreList" class="control-label">Store</label>
+                        @if (Model != null)
+                        {
+                            <select asp-for="StoreId" class="form-control"
+                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                            </select>
+                        }
+                        <span asp-validation-for="StoreId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="FoodCategoryList" class="control-label">Category</label>
+                    @if (Model != null)
+                    {
+                        <select asp-for="FoodCategoryId" class="form-control"
+                                asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+                        </select>
+                    }
+                </div>
+                <div class="col-md-2">
+                    <input id="load" onclick="return loadInventoryDetailList();" type="submit" class="btn btn-outline-dark" value="Load" />
+                </div>
+                <div class="col-md-2">
+                    <input id="saveInventoryDetai" onclick="return UpdateInventoryDetailList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("Inventory")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead>
+                        <tr>
+                            <th style="width:10%"></th>
+                            <th style="width:20%">Category</th>
+                            <th style="width:20%">FoodMenuName</th>
+                            <th style="width:35%">PhysicalStockDate</th>
+                            <th style="width:15%">PhysicalStockQty</th>
+                            <th style="width:10%">PhysicalIsLock</th>
+                            <th style="width:5%">PhysicalStockINQty</th>
+                            <th style="width:5%">PhysicalStockOutQty</th>
+                            <th style="width:5%">OpeningQty</th>
+                            <th style="width:10%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.InventoryDetailList != null)
+                        {
+                            @foreach (var item in Model.InventoryDetailList)
+                            {
+                                <tr role="row">
+                                    <td>
+                                        <input asp-for="@item.Id" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="form-group">
+                                            <input type="date" asp-for="@item.PhysicalDatetime" class="form-control" />
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <input type="number" asp-for="@item.PhysicalStockQty" class="form-control col-sm-6" value="@item.PhysicalStockQty" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.PhysicalIsLock" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px" />
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.PhysicalStockINQty)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.PhysicalStockOutQty)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.OpeningQty)
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <input type="button" value="Save" class="btn btn-primary" onclick="return SaveInventoryDetailById(this,@item.Id);" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            Inventory = $('#@dataTableName').DataTable({
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 250,
+                        "lengthMenu": [
+                            [250, 500, 1000, 2000],
+                            ['250', '500', '1000', '2000']
+                        ],
+            });
+        });
+
+        function loadInventoryDetailList() {
+            if ($("#StoreId").val()==0) {
+                $(".modal-body").text("Select Store");
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
+            window.location.href = "/Inventory/Index?storeId=" + $("#StoreId").val()+"&foodCategoryId=" + $("#FoodCategoryId").val();
+        }
+
+
+        function UpdateInventoryDetailList() {
+
+            if (!Inventory.data().any() || Inventory.data().row == null) {
+                var message = 'At least one stock entry should be entered.'
+                $(".modal-body").text(message);
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
+
+            var inventoryDetail = new Array();
+            $("#Inventory tbody tr").each(function () {
+                var tds = $(this).find("td");
+                var inventory = ({
+                    Id: parseInt($(tds[0]).find("#item_Id").val()),
+                    PhysicalDatetime: $(tds[3]).find("#item_PhysicalDatetime").val(),
+                    PhysicalStockQty: $(tds[4]).find("#item_PhysicalStockQty").val(),
+                    PhysicalIsLock: $(tds[5]).find("#item_PhysicalIsLock").is(":checked")
+                });
+                inventoryDetail.push(inventory);
+            });
+
+            var jsonstr = JSON.stringify(inventoryDetail);
+            $.ajax({
+                dataType: "text",
+                type: "post",
+                url: "/Inventory/UpdateInventoryDetailList",
+                data: { 'inventoryDetail': jsonstr},
+                timeout: 0,
+                success: function (response) {
+                    window.location.href = "/Inventory/Index";
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+
+        function SaveInventoryDetailById(row,id) {
+
+                var inventoryDetail = new Array();
+                var tds = $(row).closest('tr');
+                var inventory = ({
+                    Id: parseInt(tds.find("#item_Id").val()),
+                    PhysicalDatetime: tds.find("#item_PhysicalDatetime").val(),
+                    PhysicalStockQty: tds.find("#item_PhysicalStockQty").val(),
+                    PhysicalIsLock: tds.find("#item_PhysicalIsLock").is(":checked")
+                });
+                inventoryDetail.push(inventory);
+
+            var jsonstr = JSON.stringify(inventoryDetail);
+            $.ajax({
+                dataType: "text",
+                type: "post",
+                url: "/Inventory/SaveInventoryDetailById",
+                data: { 'inventoryDetail': jsonstr },
+                timeout: 0,
+                success: function (response) {
+                    var message = 'Record Saved Successfully.'
+                    $(".modal-body").text(message);
+                    $("#save").hide();
+                    jQuery.noConflict();
+                    $("#aModal").modal('show');
+                    return true;
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+    </script>
+}

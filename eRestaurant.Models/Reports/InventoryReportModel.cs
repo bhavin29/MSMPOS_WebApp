@@ -24,6 +24,8 @@ namespace RocketPOS.Models.Reports
         public string StockQtyText { get; set; }
         public float AlterQty { get; set; }
 
+        public decimal OpeningQty { get; set; }
+
        public string Unitname { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]

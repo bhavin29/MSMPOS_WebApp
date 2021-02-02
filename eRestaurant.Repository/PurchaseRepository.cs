@@ -406,6 +406,9 @@ namespace RocketPOS.Repository
                                                 "END";
                         con.Execute(supplierItemQuery, null, sqltrans, 0, System.Data.CommandType.Text);
 
+                        var FoodmenuPurchaePriceUpdate = ""+
+                         " update foodmenu set PurchasePrice = " + item.UnitPrice +" Where id = " + item.FoodMenuId;
+                        con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
 
                         var queryDetails = "INSERT INTO [dbo].[PurchaseDetail]" +
                                               " ([PurchaseId]   " +

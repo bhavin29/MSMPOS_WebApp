@@ -75,9 +75,9 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE Store SET StoreName =@StoreName," +
-                            "IsMainStore=@IsMainStore,Notes=@Notes,IsActive=@IsActive,IsLock=@IsLock " +
-                            "WHERE Id = @Id;";
+                var query = " UPDATE Store SET StoreName =@StoreName," +
+                            " Notes=@Notes,IsActive=@IsActive,IsLock=@IsLock " +
+                            " WHERE Id = @Id;";
                 result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)

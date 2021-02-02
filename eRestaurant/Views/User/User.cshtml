@@ -26,8 +26,6 @@
                                             <select asp-for="OutletId" class="form-control"
                                                     asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
                                             </select>
-
-                                            <select multiple="multiple" class="multi-select" id="my_multi_select1" asp-for="@Model.OutletList" asp-items="(List<SelectListItem>)ViewBag.OutletList"></select>
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">

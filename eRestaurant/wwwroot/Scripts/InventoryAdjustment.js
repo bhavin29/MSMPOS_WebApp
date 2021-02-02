@@ -72,7 +72,7 @@ $('#addRow').on('click', function (e) {
     //var Price = 1;//$("#Price").val('0');
     var TotalAmount = $("#TotalAmount").val('0');
     $("#Price").val(Price);
-    Qty = parseFloat(Qty).toFixed(4);
+    Qty = parseFloat(Qty).toFixed(2);
     Price = parseFloat(Price).toFixed(2);
     TotalAmount = parseFloat(Qty * Price).toFixed(2);
     $("#TotalAmount").val(TotalAmount);

@@ -20,20 +20,21 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label asp-for="StoreList" class="control-label">Store</label>
-                        @if (Model != null)
-                        {
-                            <select asp-for="StoreId" class="form-control"
-                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
-                            </select>
-                        }
-                        <span asp-validation-for="StoreId" class="text-danger"></span>
-                    </div>
+                <div class="col-md-1">
+                    <label asp-for="StoreList" class="control-label">Store</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    @if (Model != null)
+                    {
+                        <select asp-for="StoreId" class="form-control"
+                                asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                        </select>
+                    }
+                </div>
+                <div class="col-md-1">
                     <label asp-for="FoodCategoryList" class="control-label">Category</label>
+                </div>
+                <div class="col-md-3">
                     @if (Model != null)
                     {
                         <select asp-for="FoodCategoryId" class="form-control"
@@ -41,11 +42,14 @@
                         </select>
                     }
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <input id="load" onclick="return loadInventoryDetailList();" type="submit" class="btn btn-outline-dark" value="Load" />
                 </div>
                 <div class="col-md-2">
-                    <input id="saveInventoryDetai" onclick="return UpdateInventoryDetailList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                </div>
+                <div class="col-md-2">
+                    <input id="StockUpdate" onclick="return StockUpdate();" type="submit" class="btn btn-primary" value="Stock Update" />
+                    @*<input id="saveInventoryDetai" onclick="return UpdateInventoryDetailList();" type="submit" class="btn btn-primary" value="Save Changes" />*@
                 </div>
             </div>
         </div>
@@ -57,16 +61,16 @@
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("Inventory")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead>
                         <tr>
-                            <th style="width:10%"></th>
-                            <th style="width:20%">Category</th>
-                            <th style="width:20%">FoodMenuName</th>
-                            <th style="width:35%">PhysicalStockDate</th>
-                            <th style="width:15%">PhysicalStockQty</th>
-                            <th style="width:10%">PhysicalIsLock</th>
-                            <th style="width:5%">PhysicalStockINQty</th>
-                            <th style="width:5%">PhysicalStockOutQty</th>
-                            <th style="width:5%">OpeningQty</th>
-                            <th style="width:10%">Actions</th>
+                            <th style="width:5%"></th>
+                            <th style="width:10%">Category</th>
+                            <th style="width:30%">FoodMenu Name</th>
+                            <th style="width:5%">Opening</th>
+                            <th style="width:20%">Phy Stock Date</th>
+                            <th style="width:15%">Phy Stock Qty</th>
+                            <th style="width:8%">Phy Lock?</th>
+                            <th style="width:8%">Stock IN</th>
+                            <th style="width:8%">Stock OUT</th>
+                            <th style="width:8%">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,12 +89,15 @@
                                         @Html.DisplayFor(modelItem => item.FoodMenuName)
                                     </td>
                                     <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.OpeningQty)
+                                    </td>
+                                    <td class="text-right">
                                         <div class="form-group">
                                             <input type="date" asp-for="@item.PhysicalDatetime" class="form-control" />
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <input type="number" asp-for="@item.PhysicalStockQty" class="form-control col-sm-6" value="@item.PhysicalStockQty" />
+                                        <input type="number" asp-for="@item.PhysicalStockQty" class="form-control col-sm-6" min="-99999" max="99999" value="@item.PhysicalStockQty" />
                                     </td>
                                     <td>
                                         <input asp-for="@item.PhysicalIsLock" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px" />
@@ -101,12 +108,9 @@
                                     <td class="text-right">
                                         @Html.DisplayFor(modelItem => item.PhysicalStockOutQty)
                                     </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.OpeningQty)
-                                    </td>
                                     <td>
                                         <div class="form-button-action">
-                                            <input type="button" value="Save" class="btn btn-primary" onclick="return SaveInventoryDetailById(this,@item.Id);" />
+                                            <input type="button" value="Save" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id);" />
                                         </div>
                                     </td>
                                 </tr>
@@ -205,17 +209,17 @@
         }
 
 
-        function SaveInventoryDetailById(row,id) {
+        function SaveInventoryDetailById(row, id) {
 
-                var inventoryDetail = new Array();
-                var tds = $(row).closest('tr');
-                var inventory = ({
-                    Id: parseInt(tds.find("#item_Id").val()),
-                    PhysicalDatetime: tds.find("#item_PhysicalDatetime").val(),
-                    PhysicalStockQty: tds.find("#item_PhysicalStockQty").val(),
-                    PhysicalIsLock: tds.find("#item_PhysicalIsLock").is(":checked")
-                });
-                inventoryDetail.push(inventory);
+            var inventoryDetail = new Array();
+            var tds = $(row).closest('tr');
+            var inventory = ({
+                Id: parseInt(tds.find("#item_Id").val()),
+                PhysicalDatetime: tds.find("#item_PhysicalDatetime").val(),
+                PhysicalStockQty: tds.find("#item_PhysicalStockQty").val(),
+                PhysicalIsLock: tds.find("#item_PhysicalIsLock").is(":checked")
+            });
+            inventoryDetail.push(inventory);
 
             var jsonstr = JSON.stringify(inventoryDetail);
             $.ajax({
@@ -237,6 +241,27 @@
                 }
             });
         }
+            function StockUpdate() {
+                debugger;
+                $.ajax({
+                    dataType: "text",
+                    type: "post",
+                    url: "/Inventory/StockUpdate",
+                    data: { },
+                    timeout: 0,
+                    success: function (response) {
+                        var message = 'Stock Process Completed Successfully.'
+                        $(".modal-body").text(message);
+                        $("#save").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                        return true;
+                    },
+                    error: function (data) {
+                        alert(data);
+                    }
+                });
+            }
 
     </script>
 }

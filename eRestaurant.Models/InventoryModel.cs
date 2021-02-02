@@ -30,7 +30,7 @@ namespace RocketPOS.Models
         public decimal PhysicalStockINQty { get; set; }
         public decimal PhysicalStockOutQty { get; set; }
         public decimal PhysicalStockQty { get; set; }
-        public DateTime PhysicalDatetime { get; set; }
+        public DateTime? PhysicalDatetime { get; set; }
         public bool PhysicalIsLock { get; set; }
     }
 }

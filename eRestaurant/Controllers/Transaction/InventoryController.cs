@@ -56,5 +56,13 @@ namespace RocketPOS.Controllers.Transaction
             result = _iInventoryService.UpdateInventoryDetailList(inventoryDetails);
             return Json(new { result = result });
         }
+
+        [HttpPost]
+        public JsonResult StockUpdate()
+        {
+            string result = "";
+            result =  _iInventoryService.StockUpdate();
+            return Json(new { result = result });
+        }
     }
 }

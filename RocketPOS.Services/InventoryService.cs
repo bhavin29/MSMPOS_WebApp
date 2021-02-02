@@ -23,5 +23,10 @@ namespace RocketPOS.Services
         {
             return _iInventoryRepository.UpdateInventoryDetailList(inventoryDetails);
         }
+
+        public string StockUpdate()
+        {
+            return _iInventoryRepository.StockUpdate();
+        }
     }
 }

@@ -337,10 +337,12 @@ namespace RocketPOS.Repository
             return purchaseDetails;
         }
 
-        public int InsertPurchaseFoodMenu(PurchaseModel purchaseModel)
+        public string InsertPurchaseFoodMenu(PurchaseModel purchaseModel)
         {
             int result = 0;
             int detailResult = 0;
+            string referenceNo = "";
+
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -438,6 +440,9 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+
+                        query = "select  ReferenceNo from Purchase where ID=" + result;
+                        referenceNo = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
                     else
                     {
@@ -450,7 +455,7 @@ namespace RocketPOS.Repository
                 }
             }
 
-            return detailResult;
+            return referenceNo;
         }
 
         public int UpdatePurchaseFoodMenu(PurchaseModel purchaseModel)
@@ -581,8 +586,8 @@ namespace RocketPOS.Repository
                     " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
                     " case when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status " +
                     " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id " +
-                    " where  Purchase.InventoryType=1 And Purchase.Isdeleted = 0 " + 
-                    " AND Convert(Date, PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate  + "' , 103)  ";
+                    " where  Purchase.InventoryType=1 And Purchase.Isdeleted = 0 " +
+                    " AND Convert(Date, PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
                 if (supplierId != 0)
                 {
                     query += " And Purchase.SupplierId =" + supplierId;

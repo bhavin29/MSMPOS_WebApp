@@ -122,8 +122,8 @@ namespace RocketPOS.Controllers.Transaction
                         //purchaseModel.Date = DateTime.Now;
                         purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
 
-                        int result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
-                        if (result > 0)
+                        string result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
+                        if (result !="")
                         {
                             purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
                             ClientModel clientModel = new ClientModel();

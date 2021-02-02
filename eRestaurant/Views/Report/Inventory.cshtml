@@ -20,29 +20,32 @@
             </div>
         </div>
     </div>
-    <br />
-    <div class="col-md-12">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="control-label">Supplier</label>
-                    <select Id="SupplierId"
-                            class="form-control">
-                        <option value="">Select</option>
-                    </select>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Supplier</label>
+                            <select Id="SupplierId"
+                                    class="form-control">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Store</label>
+                            <select Id="StoreId"
+                                    class="form-control">
+                                <option value="">Select</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadInventoryStockList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label class="control-label">Store</label>
-                    <select Id="StoreId"
-                            class="form-control">
-                        <option value="">Select</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <a id="btnLoadData" onclick="return loadInventoryStockList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
             </div>
         </div>
     </div>
@@ -54,10 +57,10 @@
                         <table id="InventoryReport" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                             <thead>
                                 <tr role="row">
-                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                                    <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
                                     <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
@@ -65,18 +68,17 @@
                                     <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                                 </tr>
                             </thead>
-                            <tfoot >
+                            <tfoot>
                                 <tr role="row">
-                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
+                                    <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
                                     <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
                                     <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                                
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -140,8 +142,8 @@
         </div>
     </div>
 </div>
-        @section Scripts {
-            <script>
+@section Scripts {
+    <script>
                 var InventoryReport = null;
                 $(document).ready(function () {
                     InventoryReport
@@ -254,5 +256,5 @@
                         }
                     });
                 }
-            </script>
-        }
+    </script>
+}

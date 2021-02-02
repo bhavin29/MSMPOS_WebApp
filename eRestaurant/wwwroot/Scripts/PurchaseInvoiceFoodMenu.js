@@ -40,12 +40,15 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [6, 7,8,11],
+                "targets": [6, 7,11],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
+
+    $("#StoreId").focus();
+
 });
 
 $('#cancel').on('click', function (e) {

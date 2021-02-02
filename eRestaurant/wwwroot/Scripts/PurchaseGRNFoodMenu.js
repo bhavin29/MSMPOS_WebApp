@@ -40,12 +40,15 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [ 6,7,8,9, 11],
+                "targets": [ 6,7, 11],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
+
+    $("#StoreId").focus();
+
 });
 
 $('#cancel').on('click', function (e) {
@@ -148,7 +151,7 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(6).addClass('text-right');
 
         DisAmtTotal = calculateColumn(4);
-        TaxAmountTotal = calculateColumn(5);
+        TaxAmountTotal = calculateColumn(6);
         GrossAmount = calculateGross();
         TotalAmount = GrossAmount - DisAmtTotal;
 

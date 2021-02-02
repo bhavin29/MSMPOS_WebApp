@@ -31,6 +31,7 @@ $(document).ready(function () {
 
         ]
     });
+    $("#FoodMenuId").focus();
 });
 
 $('#cancel').on('click', function (e) {

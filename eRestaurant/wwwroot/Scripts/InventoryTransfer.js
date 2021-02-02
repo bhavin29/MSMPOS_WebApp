@@ -31,6 +31,7 @@ $(document).ready(function () {
 
         ]
     });
+    $("#FromStoreId").focus();
 });
 
 $('#cancel').on('click', function (e) {

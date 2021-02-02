@@ -41,6 +41,7 @@ $(document).ready(function () {
             }
         ]
     });
+    $("#StoreId").focus();
 });
 
 $('#cancel').on('click', function (e) {
@@ -93,7 +94,7 @@ $('#addRow').on('click', function (e) {
     }
     if (TaxPercentage > 0) {
         TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
-        Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+      //  Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
     }
 
     if (message == '') {

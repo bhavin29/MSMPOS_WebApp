@@ -41,17 +41,19 @@
         <partial name="_MenuBar" />
     </div>
 
+    <div class="loading" align="center">
+        Loading. Please wait.<br />
+        <br />
+        <img src="~/img/ajax-loader.gif" alt="" />
+    </div>
+
+
     <div class="container-fluid">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <div class="loading" align="center">
-        Loading. Please wait.<br />
-        <br />
-        <img src="~/img/ajax-loader.gif" alt="" />
-    </div>
 
     <br />
     <br />
@@ -105,7 +107,7 @@
             setTimeout(function () {
                 document.body.removeChild(modal);
                 loading.style.display = "none";
-            }, 2000); //Delay just used for example and must be set to 0.
+            }, 0); //Delay just used for example and must be set to 0.
         };
     </script>
 

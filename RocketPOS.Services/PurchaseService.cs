@@ -97,7 +97,9 @@ namespace RocketPOS.Services
                              Due = purchase.Due,
                              Paid = purchase.Paid,
                              Notes = purchase.Notes,
-                             Status = purchase.Status
+                             Status = purchase.Status,
+                             DateInserted = purchase.DateInserted,
+                             SupplierName= purchase.SupplierName
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -156,6 +158,16 @@ namespace RocketPOS.Services
         public ClientModel GetClientDetail()
         {
             return _iPurchaseRepository.GetClientDetail();
+        }
+
+        public int GetPurchaseIdByReferenceNo(string referenceNo)
+        {
+            return _iPurchaseRepository.GetPurchaseIdByReferenceNo(referenceNo);
+        }
+
+        public int ApprovePurchaseOrder(int id)
+        {
+            return _iPurchaseRepository.ApprovePurchaseOrder(id);
         }
     }
 }

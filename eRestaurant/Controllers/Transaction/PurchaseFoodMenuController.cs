@@ -53,7 +53,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: Purchase/Create
-        public ActionResult PurchaseFoodMenu(long? id,string type)
+        public ActionResult PurchaseFoodMenu(long? id, string type)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
             if (id > 0)
@@ -106,7 +106,7 @@ namespace RocketPOS.Controllers.Transaction
                             purchaseMessage = _locService.GetLocalizedHtmlString("EditSuccss");
                             ClientModel clientModel = new ClientModel();
                             clientModel = _iPurchaseService.GetClientDetail();
-                            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
+                            _iEmailService.SendEmailToForFoodMenuPurchase(Convert.ToInt32(purchaseModel.Id), clientModel);
 
                             //    if (purchaseModel.IsSendEmail)
                             //    {
@@ -123,19 +123,21 @@ namespace RocketPOS.Controllers.Transaction
                         purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
 
                         string result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
-                        if (result !="")
+                        if (result != "")
                         {
+                            int purchaseId = 0;
                             purchaseMessage = _locService.GetLocalizedHtmlString("SaveSuccess") + " Reference No is: " + result.ToString();
                             ClientModel clientModel = new ClientModel();
                             clientModel = _iPurchaseService.GetClientDetail();
-                            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
-                            if (purchaseModel.IsSendEmail)
-                            {
-                                if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
-                                {
-                                    _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
-                                }
-                            }
+                            purchaseId = _iPurchaseService.GetPurchaseIdByReferenceNo(result);
+                            _iEmailService.SendEmailToForFoodMenuPurchase(purchaseId, clientModel);
+                            //if (purchaseModel.IsSendEmail)
+                            //{
+                            //    if (!string.IsNullOrEmpty(purchaseModel.SupplierEmail))
+                            //    {
+                            //        _iEmailService.SendEmailToForFoodMenuPurchase(purchaseModel, clientModel);
+                            //    }
+                            //}
                         }
                     }
                 }
@@ -211,7 +213,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate,int supplierId)
+        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
             DateTime newFromDate, newToDate;
@@ -255,9 +257,30 @@ namespace RocketPOS.Controllers.Transaction
             return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu", new { purchaseId = id });
         }
 
-        public ActionResult PurchaseApproveSuccess()
+        public ActionResult PurchaseApproveSuccess(int id)
         {
-            return View();
+            int expiredDays = 0;
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel = _iPurchaseService.GetPurchaseFoodMenuById(id);
+            ViewBag.PurchaseStatus = "Pending";
+            
+            expiredDays = (DateTime.Now - purchaseModel.DateInserted).Days;
+            if (expiredDays > LoginInfo.ExpiryDays)
+            {
+                ViewBag.PurchaseStatus = "Expired";
+            }
+            if (purchaseModel.Status == 2)
+            {
+                ViewBag.PurchaseStatus = "Approved";
+            }
+            return View(purchaseModel);
+        }
+
+        public JsonResult ApprovePurchaseOrder(int id)
+        {
+            int result = 0;
+            result = _iPurchaseService.ApprovePurchaseOrder(id);
+            return Json(new { result = result });
         }
     }
 }

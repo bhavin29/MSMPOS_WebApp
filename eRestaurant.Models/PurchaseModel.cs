@@ -42,6 +42,8 @@ namespace RocketPOS.Models
         public string SupplierEmail { get; set; }
         public int InventoryType { get; set; }
         public int Status { get; set; }
+        public DateTime DateInserted { get; set; }
+        public string SupplierName { get; set; }
         public bool IsSendEmail { get; set; }        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }

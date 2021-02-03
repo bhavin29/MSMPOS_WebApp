@@ -301,7 +301,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      "Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status " +
+                      "Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
             }
@@ -659,6 +659,24 @@ namespace RocketPOS.Repository
                 var query = " select PurchaseApprovalEmail,WebAppUrl from client";
                 clientModel = con.QueryFirstOrDefault<ClientModel>(query);
                 return clientModel;
+            }
+        }
+
+        public int GetPurchaseIdByReferenceNo(string referenceNo)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id from Purchase where ReferenceNo='"+ referenceNo+"'";
+                return con.QueryFirstOrDefault<int>(query);
+            }
+        }
+
+        public int ApprovePurchaseOrder(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "update Purchase set status=2 where id="+id;
+                return con.Execute(query, null, null, 0, System.Data.CommandType.Text);
             }
         }
     }

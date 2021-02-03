@@ -23,5 +23,8 @@ namespace RocketPOS.Interface.Services
         decimal GetTaxByFoodMenuId(int foodMenuId);
         decimal GetFoodMenuLastPrice(int foodMenuId);
         ClientModel GetClientDetail();
+        int GetPurchaseIdByReferenceNo(string referenceNo);
+
+        int ApprovePurchaseOrder(int id);
     }
 }

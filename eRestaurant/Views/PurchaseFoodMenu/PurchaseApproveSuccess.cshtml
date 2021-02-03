@@ -1,6 +1,174 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.PurchaseModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="card-title">Purchase Order Approval</h5>
+                    </div>
+                </div>
+            </div>
+
+            @if (ViewBag.PurchaseStatus == "Expired")
+            {
+                <h1> Link Is Expired </h1>
+            }
+            @if (ViewBag.PurchaseStatus == "Approved")
+            {
+                <h1> Purchase Order Already Approved </h1>
+            }
+            @if (ViewBag.PurchaseStatus == "Pending")
+            {
+                <div class="card-body">
+
+                    <div class="row mb-4">
+                        <div class="col-sm-6">
+                            <div><strong>Supplier :</strong> @Model.SupplierName</div>
+                            <div><strong>Order# : </strong>@Model.ReferenceNo</div>
+                            <div><strong>Purchase Date :</strong> @Model.Date.ToShortDateString()</div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive-sm">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="center">Food Menu</th>
+                                    <th class="text-right">Qty</th>
+                                    <th class="text-right">Price</th>
+                                    <th class="text-right">Dis%</th>
+                                    <th class="text-right">Dis Amt</th>
+                                    <th class="text-right">Tax%</th>
+                                    <th class="text-right">Tax Amt</th>
+                                    <th class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Id > 0)
+                                {
+                                    @foreach (var item in Model.PurchaseDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.FoodMenuName
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Quantity.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.UnitPrice.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountPercentage.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountAmount.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxPercentage.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxAmount.ToString("N")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Total.ToString("N")
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                            <div><strong>Notes :</strong> @Model.Notes</div>
+                        </div>
+                        <div class="col-lg-4 col-sm-5 ml-auto">
+                            <table class="table table-clear">
+                                <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Discount</strong>
+                                        </td>
+                                        <td class="right">@Model.DiscountAmount</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Tax</strong>
+                                        </td>
+                                        <td class="right">@Model.TaxAmount</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td class="right">
+                                            <strong>@Model.GrandTotal</strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+</br>
+@if (ViewBag.PurchaseStatus == "Pending")
+{
+    <div class="form-button-action" align="center">
+        <input id="saveApproveOrder" type="submit" onclick="return ApprovePurchaseOrder(@Model.Id);" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Approve" />
+    </div>
 }
-<h1>Success</h1>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function ApprovePurchaseOrder(id) {
+            $.ajax({
+                url: "/PurchaseFoodmenu/ApprovePurchaseOrder/" + id,
+                data: {},
+                type: "POST",
+                dataType: "text",
+                success: function (data) {
+                    var message;
+                    var obj = JSON.parse(data);
+                    if (parseInt(obj.result) > 0) {
+                        message = 'Order Approved Successfully.'
+                    }
+                    else {
+                        message = 'Order Approved Failed.'
+                    }
+                    $(".modal-body").text(message);
+                    $("#save").hide();
+                    jQuery.noConflict();
+                    $("#aModal").modal('show');
+                    return true;
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

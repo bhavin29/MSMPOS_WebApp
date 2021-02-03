@@ -9,6 +9,6 @@ namespace RocketPOS.Framework
         public static int Userid =0;
         public static int RoleType =1;
         public static string Username = "ROCKET";
-
+        public static int ExpiryDays = 30;
     }
 }

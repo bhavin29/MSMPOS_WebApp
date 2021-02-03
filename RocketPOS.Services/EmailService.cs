@@ -9,40 +9,11 @@ namespace RocketPOS.Services
 {
     public class EmailService : IEmailService
     {
-        public void SendEmailToForFoodMenuPurchase(PurchaseModel purchaseModel,ClientModel clientModel)
+        public void SendEmailToForFoodMenuPurchase(int purchaseId, ClientModel clientModel)
         {
-            string messageBody = "<font>The following are the orders: </font><br><br>";
-            string htmlTableStart = "<table style=\"border-collapse:collapse; text-align:center;\" >";
-            string htmlTableEnd = "</table>";
-            string htmlHeaderRowStart = "<tr style=\"background-color:#6FA1D2; color:#ffffff;\">";
-            string htmlHeaderRowEnd = "</tr>";
-            string htmlTrStart = "<tr style=\"color:#555555;\">";
-            string htmlTrEnd = "</tr>";
-            string htmlTdStart = "<td style=\" border-color:#5c87b2; border-style:solid; border-width:thin; padding: 5px;\">";
-            string htmlTdEnd = "</td>";
-
-            string htmlApproveButton = "</br></br><a href=" + clientModel.WebAppUrl + ">Approve</a>";
-
-            messageBody += htmlTableStart;
-            messageBody += htmlHeaderRowStart;
-            messageBody += htmlTdStart + "Food Menu" + htmlTdEnd;
-            messageBody += htmlTdStart + "Price" + htmlTdEnd;
-            messageBody += htmlTdStart + "Qty" + htmlTdEnd;
-            messageBody += htmlTdStart + "Total" + htmlTdEnd;
-            messageBody += htmlHeaderRowEnd;
-
-            foreach (var foodItem in purchaseModel.PurchaseDetails)
-            {
-                messageBody = messageBody + htmlTrStart;
-                messageBody = messageBody + htmlTdStart + foodItem.FoodMenuName + htmlTdEnd;
-                messageBody = messageBody + htmlTdStart + foodItem.UnitPrice + htmlTdEnd; 
-                messageBody = messageBody + htmlTdStart + foodItem.Quantity + htmlTdEnd; 
-                messageBody = messageBody + htmlTdStart + foodItem.Total + htmlTdEnd; 
-                messageBody = messageBody + htmlTrEnd;
-            }
-            
-            messageBody = messageBody + htmlTableEnd;
-            messageBody = messageBody + htmlApproveButton;
+            string messageBody = "<html><body><p>Hello</p><p>You have a purchase order for your approval.</p>";
+            messageBody += "<p>Kindly review - <a href=" + clientModel.WebAppUrl + "/"+purchaseId+">click here</a></p>";
+            messageBody += "<p>Thanks</p><p>RocketPOS Team</p><p>PS: This is auto-generated mail from the system. Please do not reply to it.</p></body></html>";
             SendEmail.Email(messageBody, clientModel.PurchaseApprovalEmail);
         }
     }

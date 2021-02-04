@@ -12,6 +12,9 @@ namespace RocketPOS.Models
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
         public List<FoodMenuRate> foodMenuRates { get; set; }
+        public int OutletListId { get; set; }
+        public string OutletListName { get; set; }
+        public List<SelectListItem> OutletList { get; set; }
 
     }
     public class FoodMenuRate

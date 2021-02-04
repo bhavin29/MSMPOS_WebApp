@@ -25,23 +25,30 @@ namespace RocketPOS.Controllers.Master
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
-        public IActionResult Index(int? foodCategoryId)
+        public IActionResult Index(int? outletListId, int? foodCategoryId)
         {
             FoodMenuRateModel foodMenuRateModel = new FoodMenuRateModel();
             foodMenuRateModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            if (Convert.ToInt32(foodCategoryId) > 0)
+            foodMenuRateModel.OutletList = _iDropDownService.GetOutletList();
+            // if (Convert.ToInt32(foodCategoryId) > 0)
             {
-                foodMenuRateModel.foodMenuRates= _iFoodMenuRateService.GetFoodMenuRateList(Convert.ToInt32(foodCategoryId));
-                
+                foodMenuRateModel.foodMenuRates = _iFoodMenuRateService.GetFoodMenuRateList(Convert.ToInt32(foodCategoryId), Convert.ToInt32(outletListId));
+
             }
             return View(foodMenuRateModel);
         }
-        [HttpGet]
-        public IActionResult GetFoodMenuRateList(int foodCategoryId)
+
+
+        public ActionResult GetFoodMenuRateList(int foodCategoryId, int outletListId)
         {
+            FoodMenuRateModel foodMenuRateModel = new FoodMenuRateModel();
             List<FoodMenuRate> foodMenuRate = new List<FoodMenuRate>();
-            foodMenuRate = _iFoodMenuRateService.GetFoodMenuRateList(foodCategoryId);
-            return Json(new { FoodMenuRate = foodMenuRate });
+            foodMenuRateModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            foodMenuRateModel.OutletList = _iDropDownService.GetOutletList();
+
+            foodMenuRateModel.foodMenuRates = _iFoodMenuRateService.GetFoodMenuRateList(Convert.ToInt32(foodCategoryId), Convert.ToInt32(outletListId));
+
+            return View(foodMenuRateModel);
         }
 
         [HttpPost]
@@ -53,5 +60,12 @@ namespace RocketPOS.Controllers.Master
             result = _iFoodMenuRateService.UpdateFoodMenuRateList(foodMenuRates);
             return Json(new { result = result });
         }
+
+        public ActionResult FoodMenubyId(int id)
+        {
+            return RedirectToAction("FoodMenu", "FoodMenu", new { id = id });
+        }
+
+
     }
 }

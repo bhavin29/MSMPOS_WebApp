@@ -189,7 +189,10 @@ namespace RocketPOS.Repository
 
                     if (result > 0)
                     {
-                        sqltrans.Commit();
+                        sqltrans.Commit(); 
+                       //  query = $"UPDATE FoodMenuRate SET FoodVatTaxId = " + foodMenuModel.FoodVatTaxId + " WHERE FoodmenuId = {foodMenuId};";
+                      //  result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+
                     }
                     else
                     {
@@ -213,6 +216,9 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    
+                    query = $"UPDATE FoodMenuRate SET IsDeleted = 1 WHERE FoodmenuId = {foodMenuId};";
+                    result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 }
                 else
                 {

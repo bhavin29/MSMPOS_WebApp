@@ -22,7 +22,6 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
 
         [DisplayName("Code")]
-        [Required(ErrorMessage = "Enter Food Menu")]
         public string FoodMenuCode { get; set; }
         public string ColourCode { get; set; }
         public decimal PurchasePrice {get; set;}

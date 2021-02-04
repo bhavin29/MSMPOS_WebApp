@@ -14,9 +14,9 @@ namespace RocketPOS.Services
         {
             _iFoodMenuRateRepository = foodMenuRateRepository;
         }
-        public List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId)
+        public List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId,int outletId)
         {
-            return _iFoodMenuRateRepository.GetFoodMenuRateList(foodCategoryId);
+            return _iFoodMenuRateRepository.GetFoodMenuRateList(foodCategoryId, outletId);
         }
 
         public int UpdateFoodMenuRateList(List<FoodMenuRate> foodMenuRates)

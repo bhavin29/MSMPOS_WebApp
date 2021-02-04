@@ -19,13 +19,24 @@ namespace RocketPOS.Repository
         {
             _ConnectionString = ConnectionString;
         }
-        public List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId)
+        public List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId, int outletId)
         {
             List<FoodMenuRate> foodMenuRate = new List<FoodMenuRate>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select FMR.Id,FMR.OutletId,O.OutletName,F.FoodMenuName,FMR.FoodMenuId,FMR.SalesPrice,FMR.IsActive from FoodMenuRate FMR "+
-                            "Inner Join FoodMenu F On F.Id = FoodMenuId Left Join Outlet O On O.Id = FMR.OutletId Where F.FoodCategoryId = "+ foodCategoryId;
+                var query = "select FMR.Id,FMR.OutletId,O.OutletName,F.FoodMenuName,FMR.FoodMenuId,FMR.SalesPrice,FMR.IsActive from FoodMenuRate FMR " +
+                            "Inner Join FoodMenu F On F.Id = FoodMenuId Left Join Outlet O On O.Id = FMR.OutletId  Where F.ISdeleted=0 ";
+
+                if (foodCategoryId != 0)
+                {
+                    query = query + " and F.FoodCategoryId = " + foodCategoryId +" ";
+                }
+
+                if (outletId != 0)
+                {
+                    query = query + " and FMR.outletId=" + outletId + " ";
+                }
+
                 foodMenuRate = con.Query<FoodMenuRate>(query).ToList();
             }
             return foodMenuRate;
@@ -41,7 +52,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 foreach (var item in foodMenuRates)
                 {
-                    var query = $"Update FoodMenuRate set SalesPrice=@SalesPrice,IsActive=@IsActive,UserIdUpdated="+ LoginInfo.Userid+", DateUpdated=GetutcDate() where id=@Id";
+                    var query = $"Update FoodMenuRate set SalesPrice=@SalesPrice,IsActive=@IsActive,UserIdUpdated=" + LoginInfo.Userid + ", DateUpdated=GetutcDate() where id=@Id";
                     result = con.Execute(query, item, sqltrans, 0, System.Data.CommandType.Text);
                 }
                 if (result > 0)

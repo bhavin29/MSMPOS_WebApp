@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Services
 {
     public interface IFoodMenuRateService
     {
-        List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId);
+        List<FoodMenuRate> GetFoodMenuRateList(int foodCategoryId, int outletId);
         int UpdateFoodMenuRateList(List<FoodMenuRate> foodMenuRates);
     }
 }

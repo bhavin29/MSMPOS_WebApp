@@ -23,7 +23,7 @@
                 <div class="col-md-1">
                     <label asp-for="FoodCategoryList" class="control-label pl-2">Category</label>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @if (Model != null)
                     {
                         <select asp-for="FoodCategoryId" class="form-control"
@@ -31,10 +31,19 @@
                         </select>
                     }
                 </div>
-                <div class="col-md-2">
-                    <input id="load" onclick="return loadFoodMenuRateList();" type="submit" class="btn btn-outline-dark" value="Load" />
+                <div class="col-md-1">
+                    <label asp-for="OutletList" class="control-label pl-2">Outlet</label>
                 </div>
                 <div class="col-md-3">
+                    @if (Model != null)
+                    {
+                        <select asp-for="OutletListId" class="form-control"
+                                asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
+                        </select>
+                    }
+                </div>
+                <div class="col-md-2">
+                    <input id="load" onclick="return loadFoodMenuRateList();" type="submit" class="btn btn-outline-dark" value="Load" />
                 </div>
                 <div class="col-md-2">
                     <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save Changes" />
@@ -66,7 +75,7 @@
                                         <input asp-for="@item.Id" class="form-control" type="hidden" />
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                        <a target="_blank" asp-action="FoodMenubyId" asp-route-Id="@item.FoodMenuId">@Html.DisplayFor(modelItem => item.FoodMenuName)</a>
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.OutletName)
@@ -108,7 +117,8 @@
         });
 
         function loadFoodMenuRateList() {
-            window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val();
+            debugger;
+            window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val() + "&outletListId=" + $("#OutletListId").val();
             //$.ajaxSetup({ cache: false });
             //$.ajax({
             //    url: "/FoodMenuRate/GetFoodMenuRateList?foodCategoryId=" + $("#FoodCategoryId").val(),
@@ -205,4 +215,3 @@
     </script>
 }
 
-<script src="~/Scripts/FoodMenuRate.js"></script>

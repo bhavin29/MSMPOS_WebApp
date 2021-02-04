@@ -269,8 +269,8 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update PurchaseInvoice set IsDeleted = 1 where id = " + purchaseInvoiceId + ";" +
-                    " Update PurchaseInvoiceDetail set IsDeleted = 1 where PurchaseInvoiceId = " + purchaseInvoiceId + ";";
+                var query = $"update PurchaseInvoice set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + purchaseInvoiceId + ";" +
+                    " Update PurchaseInvoiceDetail set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where PurchaseInvoiceId = " + purchaseInvoiceId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -420,7 +420,7 @@ namespace RocketPOS.Repository
                              "  ,[PaidAmount]     " +
                              "  ,[DueAmount]      " +
                              "  ,[Notes]          " +
-                             "  ,[UserIdUpdated]  " +
+                             "  ,[UserIdInserted]  " +
                              "  ,[DateInserted]   " +
                              "  ,[IsDeleted] )     " +
                              "   VALUES           " +
@@ -463,7 +463,8 @@ namespace RocketPOS.Repository
                                              " ,[DiscountAmount] " +
                                              " ,[TaxAmount] " +
                                             " ,[TotalAmount]  " +
-                                             " ,[UserIdUpdated]" +
+                                             " ,[UserIdInserted]" +
+                                              " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
                                               "VALUES           " +
                                               "(" + result + "," +
@@ -477,7 +478,7 @@ namespace RocketPOS.Repository
                                               item.DiscountAmount + "," +
                                               item.TaxAmount + "," +
                                               item.TotalAmount + "," +
-                                    LoginInfo.Userid + ",0); SELECT CAST(ReferenceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
+                                    LoginInfo.Userid + ",GetUtcDate(),0); SELECT CAST(ReferenceNumber as INT) from PurchaseInvoice where id = " + result + "; ";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -575,7 +576,8 @@ namespace RocketPOS.Repository
                                               " ,[DiscountAmount] " +
                                               " ,[TaxAmount] " +
                                               " ,[TotalAmount]  " +
-                                              " ,[UserIdUpdated]" +
+                                              " ,[UserIdInserted]" +
+                                               " ,[DateInserted]" +
                                                " ,[IsDeleted])   " +
                                                "VALUES           " +
                                                "(" + purchaseModel.Id + "," +
@@ -589,7 +591,7 @@ namespace RocketPOS.Repository
                                                item.DiscountAmount + "," +
                                                item.TaxAmount + "," +
                                                item.TotalAmount + "," +
-                                     LoginInfo.Userid + ",0); SELECT SCOPE_IDENTITY() ";
+                                     LoginInfo.Userid + ",GetUTCDate(),0); SELECT SCOPE_IDENTITY() ";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }

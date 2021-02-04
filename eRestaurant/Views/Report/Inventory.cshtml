@@ -147,6 +147,21 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts {
     <script>
                 var InventoryReport = null;
@@ -166,7 +181,14 @@
                     //});
                 });
 
-                function loadInventoryStockList() {
+        function loadInventoryStockList() {
+            if ($("#StoreId").val() == 0) {
+                $(".modal-body").text("Select Store");
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
                     $.ajaxSetup({ cache: false });
                     $.ajax({
                         url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
@@ -180,20 +202,22 @@
                             InventoryReport = $("#InventoryReport").DataTable({
                                 "data": data.inventoryStockList,
                                 "columns": [
-                                    { "data": "storeName", "name": "StoreName", "autoWidth": true },
-                                    { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
-                                    { "data": "foodMenuCode", "name": "FoodMenuCode", "autoWidth": true },
-                                    { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                                    { "data": "storeName", "name": "Store", "autoWidth": true },
+                                    { "data": "foodMenuCategoryName", "name": "Category", "autoWidth": true },
+                                    { "data": "foodMenuCode", "name": "Code", "autoWidth": true },
+                                    { "data": "foodMenuName", "name": "Product", "autoWidth": true },
+                                    { "data": "openingQty", "name": "Opening", "autoWidth": true },
                                     {
                                         data: null,
-                                        className: "text-right" ,
+                                        "className": "text-right",
+                                        "name": "Qty",
                                         mRender: function (data, type, row) {
                                             return row.stockQty + ' ' + row.unitname
                                         },
                                     },
-                                    { "data": "purchasePrice", "name": "PurchasePrice", "autoWidth": true, className: "text-right" },
-                                    { "data": "amount", "name": "Amount", "autoWidth": true, className: "text-right"  },
-                                    { "data": "alterQty", "name": "AlterQty", "autoWidth": true, className: "text-right"  },
+                                    { "data": "purchasePrice", "name": "Net Purchase", "autoWidth": true, "className": "text-right" },
+                                    { "data": "amount", "name": "Amount", "autoWidth": true, "className": "text-right"  },
+                                    { "data": "alterQty", "name": "Alert Qty", "autoWidth": true, "className": "text-right"  },
                                     {
                                         data: null,
                                         mRender: function (data, type, row) {

@@ -36,6 +36,8 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Due { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal GrossAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Paid { get; set; }
         public string Message { get; set; }
         public string Notes { get; set; }
@@ -44,6 +46,9 @@ namespace RocketPOS.Models
         public int Status { get; set; }
         public DateTime DateInserted { get; set; }
         public string SupplierName { get; set; }
+        public string SupplierAddress1 { get; set; }
+        public string SupplierAddress2 { get; set; }
+        public string SupplierPhone { get; set; }
         public bool IsSendEmail { get; set; }        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }

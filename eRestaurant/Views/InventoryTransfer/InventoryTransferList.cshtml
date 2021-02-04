@@ -160,7 +160,7 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/InventoryTransfer/' + row.id + '?type=Edit">Edit</a>' +
+                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/InventoryTransfer/' + row.id + '?inventoryType=' + row.inventoryType +'&type=Edit">Edit</a>' +
                                         ' / <a href="#" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                         '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -170,7 +170,7 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/InventoryTransfer/' + row.id + '?type=View">View</a></div>'
+                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/InventoryTransfer/' + row.id + '?inventoryType=' + row.inventoryType +'&type=View">View</a></div>'
                                 },
                             }
                         ],

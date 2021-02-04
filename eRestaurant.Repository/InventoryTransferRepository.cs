@@ -26,8 +26,8 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update InventoryTransfer set IsDeleted = 1 where id = " + invAdjId + ";" +
-                    " Update [InventoryTransferDetail] set IsDeleted = 1 where [InventoryTransferId] = " + invAdjId + ";";
+                var query = $"update InventoryTransfer set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + invAdjId + ";" +
+                    " Update [InventoryTransferDetail] set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where [InventoryTransferId] = " + invAdjId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -47,7 +47,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update [InventoryTransferDetail] set IsDeleted = 1 where id = " + invAdjDetailId + ";";
+                var query = $"update [InventoryTransferDetail] set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + invAdjDetailId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -143,7 +143,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [InventoryTransfer] " +
-                             "  ( FromStoreId, ToStoreId,ReferenceNumber,InventoryType,EntryDate ,EmployeeId,Notes,UserIdUpdated,DateInserted,IsDeleted  ) " +
+                             "  ( FromStoreId, ToStoreId,ReferenceNumber,InventoryType,EntryDate ,EmployeeId,Notes,UserIdInserted,DateInserted,IsDeleted  ) " +
                              "   VALUES           " +
                              "  ( @FromStoreId, @ToStoreId,@ReferenceNo,@InventoryType,@Date ,@EmployeeId,@Notes," + LoginInfo.Userid + ",GetUTCDate(),0); " +
                              "   SELECT CAST(Scope_Identity()  as int); ";
@@ -183,7 +183,7 @@ namespace RocketPOS.Repository
                         }
 
                         var queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                              " (InventoryTransferId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdUpdated,DateInserted,IsDeleted) " +
+                                              " (InventoryTransferId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdInserted,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + ingredientId + "," +
@@ -308,7 +308,7 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStockUserIdUpdated,DateInserted,IsDeleted)   " +
+                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdInserted,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryTransferModel.Id + "," +
                                                   "" + ingredientId + "," +

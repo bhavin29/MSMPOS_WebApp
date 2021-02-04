@@ -64,12 +64,12 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public string StockUpdate()
+        public string StockUpdate(int storeId, int foodmenuId)
         {
             string result = "";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Exec InventoryPhysicalStock ";
+                var query = "Exec InventoryPhysicalStock "+ storeId + ", " + foodmenuId;
                 result = con.Query(query).ToString();
             }
             return result;

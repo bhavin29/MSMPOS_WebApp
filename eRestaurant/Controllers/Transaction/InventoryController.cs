@@ -58,10 +58,13 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpPost]
-        public JsonResult StockUpdate()
+        public JsonResult StockUpdate(int? storeId, int? foodmenuId)
         {
             string result = "";
-            result =  _iInventoryService.StockUpdate();
+            if (Convert.ToInt32(storeId) > 0)
+            {
+                result = _iInventoryService.StockUpdate(Convert.ToInt32(storeId), Convert.ToInt32(foodmenuId));
+            }
             return Json(new { result = result });
         }
     }

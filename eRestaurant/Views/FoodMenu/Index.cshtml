@@ -21,6 +21,7 @@
         </div>
     </div>
     <br />
+    <input type="checkbox" name="chkReadymade" onchange="return loadReadymadeData();" />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
@@ -147,7 +148,11 @@
             });
         });
 
- 
+        function loadReadymadeData() {
+            debugger;
+            window.location.href = "/FoodMenu/Index?readymade=" + $("#chkReadymade").val();
+        }
+
     </script>
 
 

@@ -9,6 +9,6 @@ namespace RocketPOS.Interface.Services
     {
         List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId);
         int UpdateInventoryDetailList(List<InventoryDetail> inventoryDetails);
-        string StockUpdate();
+        string StockUpdate(int storeId, int foodmenuId);
     }
 }

@@ -27,8 +27,9 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? readymade)
         {
+
             List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
             foodMenuModel = _iFoodMenuService.GetFoodMenuList().ToList();
             return View(foodMenuModel);

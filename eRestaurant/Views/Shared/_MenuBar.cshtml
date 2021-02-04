@@ -11,74 +11,95 @@
             <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Master
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Masters
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="~/Bank">Bank</a>
-                            <a class="dropdown-item" href="~/PaymentMethod">Payment Method</a>
-                            <a class="dropdown-item" href="~/Store">Store</a>
-                            <a class="dropdown-item" href="~/Outlet">Outlet</a>
-                            <a class="dropdown-item" href="~/Tables">Table</a>
-                            <a class="dropdown-item" href="~/Employee">Employee</a>
-                            <a class="dropdown-item" href="~/User">User</a>
-                            <a class="dropdown-item" asp-controller="Report" asp-action="DataSyncHistory">Data Sync History</a>
+                            <a class="dropdown-item" href="~/User">Users</a>
+                            <a class="dropdown-item" href="~/Employee">Employees</a>
+                            <hr />
+                            <a class="dropdown-item" href="~/Outlet">Outlets</a>
+                            <a class="dropdown-item" href="~/Store">Stores</a>
+                            <a class="dropdown-item" href="~/Tables">Tables</a>
+                            <hr />
+                            <a class="dropdown-item" href="~/Bank">Banks</a>
+                            <a class="dropdown-item" href="~/PaymentMethod">Payment Methods</a>
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkFM" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Food Menu
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkFM" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Items
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkFM">
-                            <a class="dropdown-item" href="~/FoodMenuCategory">Food Menu Category</a>
-                            <a class="dropdown-item" href="~/FoodMenu">Food Menu</a>
-                            <a class="dropdown-item" href="~/IngredientUnit">Unit</a>
-                            <a class="dropdown-item" href="~/IngredientCategory">Ingredient Category</a>
-                            <a class="dropdown-item" href="~/Ingredient">Ingredient</a>
-                            <a class="dropdown-item" href="~/FoodMenuRate">Food Menu Rate</a>
+                            <a class="dropdown-item" href="~/FoodMenu">Menu Items</a>
+                            <a class="dropdown-item" href="~/FoodMenuCategory">Menu Categories</a>
+                            <hr />
+                            <a class="dropdown-item" href="~/FoodMenuRate">Price Lists</a>
+                            <a class="dropdown-item" href="~/Ingredient">Stock Items</a>
+                            <a class="dropdown-item" href="~/IngredientCategory">Stock Categories</a>
+                            <hr />
+                            <a class="dropdown-item" href="~/IngredientUnit">Unit of Measures</a>
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
-        <a class="dropdown-item" href="~/Varient">Varient</a>*@
+                <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkPu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Purchase
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkPu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Transactions
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkPu">
                             <a class="dropdown-item" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
-                                <span>Purchase Order</span>
+                                <span>Purchase Orders</span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="PurchaseGRNFoodMenu" asp-action="PurchaseGRNFoodMenuList">
-                                <span>Goods Receipt Note</span>
+                                <span>Goods Receipt Notes</span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="PurchaseInvoiceFoodMenu" asp-action="PurchaseInvoiceFoodMenuList">
-                                <span>Purchase Invoice</span>
+                                <span>Purchase Invoices</span>
                             </a>
-                        </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Stock
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <hr />
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
                                 <span>Stock In</span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
                                 <span>Stock Transfer</span>
                             </a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Inventory
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
                             <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="Inventory">
                                 <span>Current Stock </span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="Inventory" asp-action="Index">
-                                <span>Physical Stock </span>
+                                <span>Opening Stock </span>
                             </a>
                         </div>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Supplier" asp-action="Index">
-                            <span>Supplier</span>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Utilities
                         </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <a class="dropdown-item" asp-controller="Report" asp-action="DataSyncHistory">Data Sync History</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold; font-size:12px" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            +
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenu">Menu Items</a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenuCategory">Menu Categories</a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/Ingredient">Stock Items</a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/IngredientCategory">Stock Categories</a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
+                                <span>Purchase Orders</span>
+                            </a>
+                        </div>
                     </li>
                 </ul>
             </div>

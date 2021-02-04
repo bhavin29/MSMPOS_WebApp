@@ -1,4 +1,5 @@
-﻿<header>
+﻿@using Microsoft.AspNetCore.Http
+<header>
     <nav class="navbar  navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <a class="navbar-brand" href="~/Home">
             <img src="~/img/Mainwindow_Logo_Inner.bmp" width="114" height="30" alt="">
@@ -37,7 +38,7 @@
                             <a class="dropdown-item" href="~/Ingredient">Ingredient</a>
                             <a class="dropdown-item" href="~/FoodMenuRate">Food Menu Rate</a>
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
-        <a class="dropdown-item" href="~/Varient">Varient</a>*@
+                                <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -83,9 +84,9 @@
                 </ul>
             </div>
             <form class="form-inline my-2 my-lg-0">
-                <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
-                    <span>Logout</span>
-                </a>
+                    <a class="nav-link" asp-area="" asp-controller="Login" asp-action="Index">
+                        <span>Logout</span>
+                    </a>
             </form>
         </div>
     </nav>

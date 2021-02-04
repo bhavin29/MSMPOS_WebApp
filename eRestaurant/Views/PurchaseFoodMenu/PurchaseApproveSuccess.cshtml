@@ -27,12 +27,27 @@
 
                     <div class="row mb-4">
                         <div class="col-sm-6">
-                            <div><strong>Supplier :</strong> @Model.SupplierName</div>
+                            <div><strong>Supplier : </strong> </div>
+                            <div>@Model.SupplierName </div>
+                            <div>@Model.SupplierAddress1 </div>
+                            <div>@Model.SupplierAddress2</div>
+                            <div><strong>Phone : </strong>@Model.SupplierPhone</div>
+                            <div><strong>E-mail : </strong>@Model.SupplierEmail</div>
                             <div><strong>Order# : </strong>@Model.ReferenceNo</div>
-                            <div><strong>Purchase Date :</strong> @Model.Date.ToShortDateString()</div>
+                            <div><strong>Purchase Date : </strong> @Model.Date.ToShortDateString()</div>
+                        </div>
+                        <div width="100px" height="100px" align="center">
+                            <img src="~/img/RocketPOS_logo_header.bmp" alt="Logo"/>
+                        </div>
+                        <div class="col-sm-4">
+                            <div><strong>Client :</strong> </div>
+                            <div>@ViewBag.ClientName </div>
+                            <div>@ViewBag.ClientAddress1 </div>
+                            <div>@ViewBag.ClientAddress2</div>
+                            <div><strong>Phone : </strong>@ViewBag.ClientPhone</div>
+                            <div><strong>E-mail : </strong>@ViewBag.ClientEmail</div>
                         </div>
                     </div>
-
                     <div class="table-responsive-sm">
                         <table class="table table-striped">
                             <thead>
@@ -85,11 +100,17 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-sm-5">
-                            <div><strong>Notes :</strong> @Model.Notes</div>
+                            <div><strong>Remarks :</strong> @Model.Notes</div>
                         </div>
                         <div class="col-lg-4 col-sm-5 ml-auto">
                             <table class="table table-clear">
                                 <tbody>
+                                    <tr>
+                                        <td class="left">
+                                            <strong>GrossAmount</strong>
+                                        </td>
+                                        <td class="right">@Model.GrossAmount</td>
+                                    </tr>
                                     <tr>
                                         <td class="left">
                                             <strong>Discount</strong>
@@ -114,14 +135,27 @@
                             </table>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-5">
+                            <div><strong>Terms and Condtions: </strong> </div>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
     </div>
 </div>
-</br>
 @if (ViewBag.PurchaseStatus == "Pending")
 {
+    <div class="row">
+        <div class="col-lg-4 col-sm-5">
+            <strong> User: </strong>@ViewBag.UserName <strong> Printed On: </strong> @ViewBag.PrintDate
+        </div>
+        <div class="col-lg-2 col-sm-5 ml-auto">
+            <strong> Powered By: </strong> RocketPOS
+        </div>
+    </div>
+    <br />
     <div class="form-button-action" align="center">
         <input id="saveApproveOrder" type="submit" onclick="return ApprovePurchaseOrder(@Model.Id);" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Approve" />
     </div>
@@ -135,7 +169,7 @@
             <div class="modal-body">
             </div>
             <div class="modal-footer">
-                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="save" class="btn btn-primary">Ok</button>
                 <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>

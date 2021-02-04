@@ -156,12 +156,13 @@ namespace RocketPOS.Repository.Reports
                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
                             " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
                             " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
-                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId where INV.StockQty <> 0 And INV.StoreId= " + storeId;
+                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId ";
 
-                //if (supplierId != 0)
-                //{
-                //    query += "  And INV.SupplierId = " + supplierId;
-                //}
+                if (supplierId != 0)
+                {
+                    query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
+                }
+                query += " where INV.StockQty <> 0 And INV.StoreId= " + storeId;
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }
@@ -176,7 +177,7 @@ namespace RocketPOS.Repository.Reports
                 var query = " SELECT  [Outlet],[Process],[ProcessDate] ,[ProcessStatus] " +
                             " FROM SyncHistory order by ProcessDate desc";
 
-                dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
+                //dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
             }
 
             return dataHistorySyncReportModels;

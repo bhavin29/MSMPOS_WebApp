@@ -43,9 +43,7 @@ namespace RocketPOS.Controllers
                                .Where(x => x.ProcessStatus == "Completed")
                                .GroupBy(x => x.Outlet)
                                .Select(x => x.FirstOrDefault()).ToList();
-
                 ViewData["DataHistorySync"] = result;
-
                 return View();
             }
         }

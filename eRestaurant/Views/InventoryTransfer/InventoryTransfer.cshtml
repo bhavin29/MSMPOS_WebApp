@@ -179,7 +179,8 @@
                                                             <div class="form-button-action">
                                                                 @if (Model.InventoryType == 2)
                                                                 {
-                                                                    <a href="#" data-itemid="@item.IngredientId">Delete</a> <a href="#" data-toggle="modal" data-target="@tm"></a>
+                                                                    @*<a href="#" data-itemid="@item.IngredientId">Delete</a> <a href="#" data-toggle="modal" data-target="@tm"></a>*@
+                                                                    <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                 }
                                                                 @if (Model.InventoryType == 1)
                                                                 {
@@ -204,7 +205,7 @@
                                                                 <div class="modal-footer">
                                                                     @if (Model.InventoryType == 2)
                                                                     {
-                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal">Delete</a>
+                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
                                                                     }
                                                                     @if (Model.InventoryType == 1)
                                                                     {

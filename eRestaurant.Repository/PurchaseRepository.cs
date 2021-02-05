@@ -228,8 +228,8 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update Purchase set IsDeleted = 1 where id = " + purchaseId + ";" +
-                    " Update PurchaseDetail set IsDeleted = 1 where PurchaseId = " + purchaseId + ";";
+                var query = $"update Purchase set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + purchaseId + ";" +
+                    " Update PurchaseDetail set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where PurchaseId = " + purchaseId + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -301,7 +301,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      "Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted " +
+                      " Supplier.SupplierAddress1,Supplier.SupplierAddress2,Supplier.SupplierPhone,Supplier.SupplierEmail," +
+                      "Purchase.GrossAmount,Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
             }
@@ -370,7 +371,7 @@ namespace RocketPOS.Repository
                              "  ,[DueAmount]      " +
                              "  ,[Notes]          " +
                              "  ,[Status]          " +
-                             "  ,[UserIdUpdated]  " +
+                             "  ,[UserIdInserted]  " +
                              "  ,[DateInserted]   " +
                              "  ,[IsDeleted])     " +
                              "   VALUES           " +
@@ -421,7 +422,8 @@ namespace RocketPOS.Repository
                                               " ,[TaxPercentage]  " +
                                               " ,[TaxAmount]    " +
                                               " ,[TotalAmount]  " +
-                                              " ,[UserIdUpdated]" +
+                                              " ,[UserIdInserted]" +
+                                              " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
                                               "VALUES           " +
                                               "(" + result + "," +
@@ -434,7 +436,9 @@ namespace RocketPOS.Repository
                                               "" + item.TaxPercentage + "," +
                                               "" + item.TaxAmount + "," +
                                               "" + item.Total + "," +
-                                              "" + LoginInfo.Userid + ",0);  SELECT SCOPE_IDENTITY();";
+                                              "" + LoginInfo.Userid +","+
+                                              "   GetUtcDate(),    " +
+                                              "0);  SELECT SCOPE_IDENTITY();";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -545,7 +549,7 @@ namespace RocketPOS.Repository
                                                   " ,[TaxPercentage]  " +
                                                   " ,[TaxAmount]    " +
                                                   " ,[TotalAmount]  " +
-                                                  " ,[UserIdUpdated] ) " +
+                                                  " ,[UserIdInserted] ,[DateInserted]) " +
                                                   " VALUES           " +
                                                   "(" + purchaseModel.Id + "," +
                                                   "" + item.FoodMenuId + "," +
@@ -557,7 +561,7 @@ namespace RocketPOS.Repository
                                                   "" + item.TaxPercentage + "," +
                                                   "" + item.TaxAmount + "," +
                                                   "" + item.Total + "," +
-                                                  "" + LoginInfo.Userid + "); ";
+                                                  "" + LoginInfo.Userid + ",GetUtcDate());";
                         }
                         detailResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }

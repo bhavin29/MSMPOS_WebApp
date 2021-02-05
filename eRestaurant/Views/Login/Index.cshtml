@@ -93,6 +93,9 @@
             <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
             <script type="text/javascript">
                 $(function () {
+                    if (location.href.includes('?')) {
+                        history.pushState({}, null, location.href.split('?')[0]);
+                    }
                     $("#vModal").modal('show');
                 });
             </script>

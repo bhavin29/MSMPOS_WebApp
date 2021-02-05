@@ -162,10 +162,11 @@ namespace RocketPOS.Repository.Reports
                     query = query + " And INV.StoreId = " + storeId;
                 }
 
-                //if (supplierId != 0)
-                //{
-                //    query += "  And INV.SupplierId = " + supplierId;
-                //}
+                if (supplierId != 0)
+                {
+                    query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
+                }
+                query += " where INV.StockQty <> 0 And INV.StoreId= " + storeId;
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }
@@ -180,7 +181,7 @@ namespace RocketPOS.Repository.Reports
                 var query = " SELECT  [Outlet],[Process],[ProcessDate] ,[ProcessStatus] " +
                             " FROM SyncHistory order by ProcessDate desc";
 
-                dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
+                //dataHistorySyncReportModels = con.Query<DataHistorySyncReportModel>(query).ToList();
             }
 
             return dataHistorySyncReportModels;

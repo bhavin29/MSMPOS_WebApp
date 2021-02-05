@@ -263,7 +263,14 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseModel purchaseModel = new PurchaseModel();
             purchaseModel = _iPurchaseService.GetPurchaseFoodMenuById(id);
             ViewBag.PurchaseStatus = "Pending";
-            
+            ViewBag.ClientName = LoginInfo.ClientName;
+            ViewBag.ClientAddress1 = LoginInfo.Address1;
+            ViewBag.ClientAddress2 = LoginInfo.Address2;
+            ViewBag.ClientEmail = LoginInfo.Email;
+            ViewBag.ClientPhone = LoginInfo.Phone;
+            ViewBag.UserName = LoginInfo.Username;
+            ViewBag.PrintDate = System.DateTime.Now;
+
             expiredDays = (DateTime.Now - purchaseModel.DateInserted).Days;
             if (expiredDays > LoginInfo.ExpiryDays)
             {

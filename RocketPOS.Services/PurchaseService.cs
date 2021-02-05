@@ -99,7 +99,12 @@ namespace RocketPOS.Services
                              Notes = purchase.Notes,
                              Status = purchase.Status,
                              DateInserted = purchase.DateInserted,
-                             SupplierName= purchase.SupplierName
+                             SupplierName= purchase.SupplierName,
+                             SupplierAddress1 = purchase.SupplierAddress1,
+                             SupplierAddress2 = purchase.SupplierAddress2,
+                             SupplierPhone = purchase.SupplierPhone,
+                             SupplierEmail = purchase.SupplierEmail,
+                             GrossAmount=purchase.GrossAmount
                          }).SingleOrDefault();
             if (model != null)
             {

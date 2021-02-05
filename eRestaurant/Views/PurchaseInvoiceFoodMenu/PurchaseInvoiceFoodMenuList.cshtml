@@ -143,7 +143,7 @@
             var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
             var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
 
-            $("#fromDate").val(fdate);
+            $("#fromDate").val(tdate);
             $("#toDate").val(tdate);
             GetSupplierList();
             PurchaseInvoiceFood = $('#@dataTableName').DataTable();

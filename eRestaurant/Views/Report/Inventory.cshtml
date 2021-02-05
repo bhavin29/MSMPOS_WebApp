@@ -42,7 +42,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="margin:25px 0px">
                         <a id="btnLoadData" onclick="return loadInventoryStockList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
@@ -69,58 +69,45 @@
                                     <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr role="row">
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
-                                    <th style="width:12%" rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
-                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Code")</th>
-                                    <th style="width:25%" rowspan="1" colspan="1">@Html.DisplayName("Product")</th>
-                                    <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Opening")</th>
-                                    <th style="width:5%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Net Purchase")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Alert Qty")</th>
-                                    <th style="width:7%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-</tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.StoreName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FoodMenuCode)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.OpeningQty)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.StockQty) @Html.DisplayFor(modelItem => item.Unitname)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.PurchasePrice)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.AlterQty)
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="InventoryDetail" asp-route-id="@item.Id" asp-route-name="@item.FoodMenuName @item.Unitname" asp-route-code="@item.FoodMenuCode" asp-route-stock="@item.StockQty @item.Unitname">Search </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuCategoryName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuCode)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.OpeningQty)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.StockQty) @Html.DisplayFor(modelItem => item.Unitname)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.PurchasePrice)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.AlterQty)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="InventoryDetail" asp-route-id="@item.Id" asp-route-name="@item.FoodMenuName @item.Unitname" asp-route-code="@item.FoodMenuCode" asp-route-stock="@item.StockQty @item.Unitname" asp-route-opening="@item.OpeningQty">Search </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -149,24 +136,15 @@
 </div>
 @section Scripts {
     <script>
-                var InventoryReport = null;
+               var InventoryReport = null;
                 $(document).ready(function () {
-                    InventoryReport
                     GetSupplierList();
                     GetStoreList();
                     InventoryReport = $('#@dataTableName').DataTable();
-                    //$('#InventoryReport').DataTable({
-                    //    dom: 'Bfrtip',
-                    //    buttons: [
-                    //        'copyHtml5',
-                    //        'excelHtml5',
-                    //        'csvHtml5',
-                    //        'pdfHtml5'
-                    //    ]
-                    //});
+                    loadInventoryStockList();
                 });
 
-                function loadInventoryStockList() {
+        function loadInventoryStockList() {
                     $.ajaxSetup({ cache: false });
                     $.ajax({
                         url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
@@ -184,9 +162,10 @@
                                     { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
                                     { "data": "foodMenuCode", "name": "FoodMenuCode", "autoWidth": true },
                                     { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                                    { "data": "openingQty", "name": "OpeningQty", "autoWidth": true, className: "text-right" },
                                     {
+
                                         data: null,
-                                        className: "text-right" ,
                                         mRender: function (data, type, row) {
                                             return row.stockQty + ' ' + row.unitname
                                         },
@@ -197,12 +176,18 @@
                                     {
                                         data: null,
                                         mRender: function (data, type, row) {
-                                            return '<div class="form-button-action"><a href="/Report/InventoryDetail/' + row.id + '?name=' + row.foodMenuName + ' ' + row.unitname + '&code=' + row.foodMenuCode + '&stock=' + row.stockQty + ' ' + row.unitname+'">Search</a></div>'
+                                            return '<div class="form-button-action"><a href="/Report/InventoryDetail/' + row.id + '?name=' + row.foodMenuName + ' ' + row.unitname + '&code=' + row.foodMenuCode + '&stock=' + row.stockQty + ' ' + row.unitname + '&opening=' + row.openingQty +'">Search</a></div>'
                                         },
                                     }
                                 ],
                                 columnDefs: [
-                                    { targets: [4], orderable: false }
+                                    {
+                                        targets: [4,6,7,8],
+                                        render: $.fn.dataTable.render.number(',', '.', 2)
+                                    },
+                                    {
+                                       targets: [4], orderable: false
+                                    }
                                 ],
                                 "bLengthChange": true,
                                 "bInfo": true,
@@ -218,8 +203,8 @@
                                 ],
                             });
                         },
-                        error: function (err) {
-
+                        error: function (jqxhr, status, exception) {
+                            alert('Exception:', exception);
                         }
                     });
                 }

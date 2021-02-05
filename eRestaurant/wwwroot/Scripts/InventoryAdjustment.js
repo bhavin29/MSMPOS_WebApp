@@ -28,7 +28,11 @@ $(document).ready(function () {
                 "visible": false,
                 "searchable": false
             }
-
+            //,
+            //{
+            //    "targets": [2,3,4],
+            //    "render": $.fn.dataTable.render.number(',', '.', 2)
+            //}
         ]
     });
     $("#FoodMenuId").focus();
@@ -98,7 +102,7 @@ $('#addRow').on('click', function (e) {
             rowNode = InventoryAdjustmentDatatable.row.add([
                 '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
                 $('#FoodMenuId').children("option:selected").text(),
-                '<td class="text-right">' + Qty + ' </td>',
+                '<td ="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + Price + ' </td>',
                 '<td class="text-right">' + TotalAmount + ' </td>',
                 '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" ">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"></a></div></td > ' +
@@ -109,6 +113,10 @@ $('#addRow').on('click', function (e) {
             ]).node().id = rowId;
         }
         InventoryAdjustmentDatatable.draw(false);
+        debugger;
+        $(rowNode).find('td').eq(1).addClass('text-right');
+        $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
 
         if (InventoryType == "2") {
             dataArr.push({
@@ -133,11 +141,7 @@ $('#addRow').on('click', function (e) {
                 foodMenuName: $('#FoodMenuId').children("option:selected").text()
             });
         }
-        debugger;
-        $(rowNode).find('td').eq(1).addClass('text-right');
-        $(rowNode).find('td').eq(2).addClass('text-right');
-        $(rowNode).find('td').eq(3).addClass('text-right');
-
+  
         clearItem();
         editDataArr = [];
 

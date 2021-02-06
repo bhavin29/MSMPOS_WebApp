@@ -159,9 +159,17 @@
                     loadInventoryStockList();
                 });
 
-                function loadInventoryStockList() {
-                    $.ajaxSetup({ cache: false });
-                    $.ajax({
+        function loadInventoryStockList() {
+            //if ($("#StoreId").val() == 0) {
+            //    $(".modal-body").text("Select Store");
+            //    $("#save").hide();
+            //    jQuery.noConflict();
+            //    $("#aModal").modal('show');
+            //    return false;
+            //}
+            debugger;
+            $.ajaxSetup({ cache: false });
+            $.ajax({
                         url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
                         dataType: "json",
                         type: "GET",
@@ -179,7 +187,6 @@
                                     { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
                                     { "data": "openingQty", "name": "OpeningQty", "autoWidth": true, className: "text-right" },
                                     {
-
                                         data: null,
                                         className: "text-right" ,
                                         mRender: function (data, type, row) {
@@ -223,7 +230,7 @@
                             alert('Exception:', exception);
                         }
                     });
-                }
+        }
 
                 function GetSupplierList() {
                     $.ajax({

@@ -622,7 +622,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT MAX(convert(int,ReferenceNumber)) + 1  FROM purchaseInvoice where InventoryType=1 and ISDeleted=0;";
+                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNumber)),0) + 1  FROM purchaseInvoice where InventoryType=1 and ISDeleted=0;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {

@@ -13,6 +13,7 @@ namespace RocketPOS.Models
         public string StoreName { get; set; }
         public string Employee { get; set; }
         public int UserId { get; set; }
+        public string Username { get; set; }
         public List<InventoryAdjustmentDetailModel> inventoryAdjustmentDetailModels { get; set; }
     }
 }

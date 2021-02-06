@@ -7,6 +7,6 @@ namespace RocketPOS.Interface.Repository
 {
     public interface ILoginRepository
     {
-        int GetLogin(string userName, string Password);
+        LoginModel GetLogin(string userName, string Password);
     }
 }

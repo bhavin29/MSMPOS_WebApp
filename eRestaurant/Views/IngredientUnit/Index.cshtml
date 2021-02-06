@@ -31,6 +31,12 @@
                                 @Html.DisplayNameFor(model => model.IngredientUnitName)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.UnitShortName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitPrecision)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Notes)
                             </th>
                             <th>
@@ -43,6 +49,12 @@
                         <tr>
                             <th>
                                 @Html.DisplayNameFor(model => model.IngredientUnitName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitShortName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UnitPrecision)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Notes)
@@ -58,25 +70,31 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IngredientUnitName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Notes)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="IngredientUnit"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                    </div>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IngredientUnitName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitShortName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitPrecision)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Notes)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IsActive)
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="IngredientUnit" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                    <label> / </label>
+                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                </div>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

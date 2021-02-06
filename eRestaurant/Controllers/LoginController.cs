@@ -28,10 +28,11 @@ namespace RocketPOS.Controllers
         {
             if (!String.IsNullOrEmpty(userName))
             {
-                int result = _iLoginService.GetLogin(userName, password);
-                if (result > 0)
+                LoginModel loginModel = new LoginModel();
+                loginModel = _iLoginService.GetLogin(userName, password);
+                if (loginModel != null)
                 {
-                    LoginInfo.Userid = result;
+                    MergeLogin(loginModel);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -41,6 +42,38 @@ namespace RocketPOS.Controllers
                 }
             }
             return View();
+        }
+
+        public void MergeLogin(LoginModel loginModel)
+        {
+            LoginInfo.Userid = loginModel.Id;
+            LoginInfo.Username = loginModel.Username;
+            LoginInfo.RoleTypeId = loginModel.RoleTypeId;
+            LoginInfo.ClientName = loginModel.ClientName;
+            LoginInfo.Address1 = loginModel.Address1;
+            LoginInfo.Address2 = loginModel.Address2;
+            LoginInfo.Email = loginModel.Email;
+            LoginInfo.Phone = loginModel.Phone;
+            LoginInfo.Logo = loginModel.Logo;
+            LoginInfo.WebSite = loginModel.WebSite;
+            LoginInfo.ReceiptPrefix = loginModel.ReceiptPrefix;
+            LoginInfo.OrderPrefix = loginModel.OrderPrefix;
+            LoginInfo.TimeZone = loginModel.TimeZone;
+            LoginInfo.Header = loginModel.Header;
+            LoginInfo.Footer = loginModel.Footer;
+            LoginInfo.Footer1 = loginModel.Footer1;
+            LoginInfo.Footer2 = loginModel.Footer2;
+            LoginInfo.Footer3 = loginModel.Footer3;
+            LoginInfo.Footer4 = loginModel.Footer4;
+            LoginInfo.MainWindowSettings = loginModel.MainWindowSettings;
+            LoginInfo.HeaderMarqueeText = loginModel.HeaderMarqueeText;
+            LoginInfo.DeliveryList = loginModel.DeliveryList;
+            LoginInfo.DiscountList = loginModel.DiscountList;
+            LoginInfo.Powerby = loginModel.Powerby;
+            LoginInfo.Lastname = loginModel.Lastname;
+            LoginInfo.Firstname = loginModel.Firstname;
+            LoginInfo.TaxInclusive = loginModel.TaxInclusive;
+            LoginInfo.IsItemOverright = loginModel.IsItemOverright;
         }
 
         //public ActionResult Login(string message)

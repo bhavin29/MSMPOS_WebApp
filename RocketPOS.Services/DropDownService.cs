@@ -243,5 +243,22 @@ namespace RocketPOS.Services
 
             return lstCategory;
         }
+
+        public List<SelectListItem> GetFoodMenuListByCategory(int id)
+        {
+            List<SelectListItem> lstFoodMenu = new List<SelectListItem>();
+
+            lstFoodMenu.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstFoodMenuResult = _dropDownRepository.GetFoodMenuListByCategory(id).ToList();
+            if (lstFoodMenuResult != null && lstFoodMenuResult.Count > 0)
+            {
+                foreach (var item in lstFoodMenuResult)
+                {
+                    lstFoodMenu.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstFoodMenu;
+        }
     }
 }

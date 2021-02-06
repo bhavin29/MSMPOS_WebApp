@@ -14,6 +14,13 @@ namespace RocketPOS.Models
         [DisplayName("Unit")]
         public string IngredientUnitName { get; set; }
 
+        [Required(ErrorMessage = "Enter Unit short name")]
+        [DisplayName("UnitShortName")]
+        public string UnitShortName { get; set; }
+
+        [Required(ErrorMessage = "Select unit precision")]
+        [DisplayName("UnitPrecision")]
+        public int UnitPrecision { get; set; }
         public string Notes { get; set; }
 
         public bool IsActive { get; set; }

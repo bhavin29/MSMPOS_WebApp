@@ -20,26 +20,26 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-        public int GetLogin(string userName, string Password)
+        public LoginModel GetLogin(string userName, string Password)
         {
-            int result = 0;
-
+            LoginModel loginModel = new LoginModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"select Id from [User] where [Username] = '"+ userName +"' and [Password] = '"+ Password + "' and RoleTypeId in (1,2);";
-                result = con.ExecuteScalar<int>(query, null, sqltrans, 0, System.Data.CommandType.Text);
-                if (result > 0)
+                var query = $"select U.Id,U.Username,U.RoletypeId,E.LastName,E.FirstName,C.ClientName,C.Address1,C.Address2,C.Email,C.Phone,C.Logo,C.WebSite,C.ReceiptPrefix,C.OrderPrefix,C.OpenTime, "+
+                            "C.CloseTime,C.CurrencyId,C.TimeZone,C.Header,C.Footer,C.Footer1,C.Footer2,C.Footer3,C.Footer4, C.MainWindowSettings,C.HeaderMarqueeText,C.DeliveryList,C.DiscountList,C.Powerby,C.TaxInclusive, C.IsItemOverright " +
+                            "From[User] U INNER JOIN Employee E On E.Id = U.EmployeeId CROSS JOIN Client C " +
+                            "where[Username] = '" + userName +"' and[Password] = '"+ Password + "' and RoleTypeId in (1, 2); ";
+                loginModel = con.QueryFirstOrDefault<LoginModel>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (loginModel!=null)
                 {
-                    LoginInfo.Userid = result;
                     sqltrans.Commit();
                 }
                 else
                 { sqltrans.Rollback(); }
             }
-
-            return result;
+            return loginModel;
         }
     }
 }

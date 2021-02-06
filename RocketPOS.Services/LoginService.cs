@@ -18,7 +18,7 @@ namespace RocketPOS.Services
             _ILoginReportsitory = iAddondRepository;
         }
 
-        public int GetLogin(string userNamem, string password)
+        public LoginModel GetLogin(string userNamem, string password)
         {
             return _ILoginReportsitory.GetLogin(userNamem, password);
         }

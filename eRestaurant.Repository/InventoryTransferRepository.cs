@@ -82,7 +82,7 @@ namespace RocketPOS.Repository
             {
                 var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus, IAI.CurrentStock " +
                              " FROM InventoryTransferDetail IAI " +
-                             " INNER JOIN InventoryTransferDetail IA ON IAI.InventoryTransferId = IA.Id " +
+                             " INNER JOIN InventoryTransfer IA ON IAI.InventoryTransferId = IA.Id " +
                              " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
                              " LEFT JOIN FoodMenu FM ON FM.Id = IAI.FoodMenuId " +
                              "WHERE IAI.InventoryTransferId= " + invAdjId + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
@@ -258,7 +258,7 @@ namespace RocketPOS.Repository
                     {
                         foreach (var item in inventoryTransferModel.DeletedId)
                         {
-                            var deleteQuery = $"update InventoryTransferDetail set IsDeleted = 1, , UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
+                            var deleteQuery = $"update InventoryTransferDetail set IsDeleted = 1,  UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
                             result = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
                     }
@@ -310,7 +310,7 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdInserted,DateInserted,IsDeleted)   " +
+                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdUpdated,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryTransferModel.Id + "," +
                                                   "" + ingredientId + "," +

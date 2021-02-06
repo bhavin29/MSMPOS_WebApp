@@ -599,7 +599,7 @@ namespace RocketPOS.Repository
                 {
                     query += " And Purchase.SupplierId =" + supplierId;
                 }
-                query += " order by purchasedate,Purchase.DateInserted;";
+                query += " order by Purchase.id desc;";
                 purchaseViewModels = con.Query<PurchaseViewModel>(query).AsList();
             }
 

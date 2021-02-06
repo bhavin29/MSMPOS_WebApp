@@ -232,7 +232,7 @@ function deleteOrder(id, rowId) {
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
             if (dataArr[i].ingredientId == id) {
-                deletedId.push(dataArr[i].inventoryAdjustmentId);
+                deletedId.push(dataArr[i].InventoryTransferId);
                 dataArr.splice(i, 1);
                 InventoryTransferDatatable.row(rowId).remove().draw(false);
                 jQuery.noConflict();
@@ -241,7 +241,7 @@ function deleteOrder(id, rowId) {
         }
         if (InventoryType == "1") {
             if (dataArr[i].foodMenuId == id) {
-                deletedId.push(dataArr[i].inventoryAdjustmentId);
+                deletedId.push(dataArr[i].inventoryTransferId);
                 dataArr.splice(i, 1);
                 InventoryTransferDatatable.row(rowId).remove().draw(false);
                 jQuery.noConflict();

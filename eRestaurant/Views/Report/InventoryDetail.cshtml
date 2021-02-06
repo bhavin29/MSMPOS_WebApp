@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-10">
                 <h5 class="card-title"> @ViewData["StoreName"]: @ViewData["FoodMenuName"] @ViewData["FoodMenuCode"]</h5>
-                
+
             </div>
             <div class="float-right">
                 <h5>Current Stock: @ViewData["StockQty"]</h5>
@@ -23,6 +23,7 @@
         </div>
     </div>
     <br />
+    <div class="col-md-10 text-right"><h6> Opening Stock: @ViewData["OpeningQty"]</h6></div>
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
@@ -70,7 +71,7 @@
                                     @Html.DisplayFor(modelItem => item.SupplierName)
                                 </td>
                                 <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.Remakrs) 
+                                    @Html.DisplayFor(modelItem => item.Remakrs)
                                 </td>
                                 <td class="text-right">
                                     @Html.DisplayFor(modelItem => item.StockInQty)

@@ -26,16 +26,15 @@ namespace RocketPOS.Repository.Reports
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
+                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
                             " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                             " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
                             " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
                             " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
-                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId " + 
+                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId " +
                             " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <>0";
-               
- 
+
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }
 
@@ -53,8 +52,8 @@ namespace RocketPOS.Repository.Reports
                             " inner join Store S ON S.ID = ID.StoreID " +
                             " left join SUPPLIER SP on SP.Id = ID.SupplierId " +
                             " WHERE I.ID=" + id;
-                          //  " where Convert(varchar(10), ID.DocDate, 103) between '01/01/2021' and '01/01/2022'"
-                            
+                //  " where Convert(varchar(10), ID.DocDate, 103) between '01/01/2021' and '01/01/2022'"
+
                 ////  " WHERE I.AlterQty < INV.StockQty  ";
 
                 //if (inventoryReportParamModel.StoreId.ToString().Length != 0)
@@ -110,7 +109,7 @@ namespace RocketPOS.Repository.Reports
             {
 
                 var query = "Exec rptUserRegister " + OutletRegisterId + ";";
-                    outletRegisterReportModels = con.Query<OutletRegisterReportModel>(query).ToList();
+                outletRegisterReportModels = con.Query<OutletRegisterReportModel>(query).ToList();
             }
 
             return outletRegisterReportModels;
@@ -123,7 +122,7 @@ namespace RocketPOS.Repository.Reports
             {
                 string customerOrderDetail = string.Empty;
                 string customerOrderItems = string.Empty;
-                customerOrderDetail = "SELECT b.CustomerOrderId,b.Id As BillId,CO.SalesInvoiceNumber,B.BillDateTime,O.OutletName,U.Username,C.CustomerName,B.GrossAmount,B.TaxAmount,B.VatableAmount,CO.NonVatableAmount, B.Discount,B.ServiceCharge,B.TotalAmount,PM.PaymentMethodName,BD.BillAmount FROM Bill B  "+
+                customerOrderDetail = "SELECT b.CustomerOrderId,b.Id As BillId,CO.SalesInvoiceNumber,B.BillDateTime,O.OutletName,U.Username,C.CustomerName,B.GrossAmount,B.TaxAmount,B.VatableAmount,CO.NonVatableAmount, B.Discount,B.ServiceCharge,B.TotalAmount,PM.PaymentMethodName,BD.BillAmount FROM Bill B  " +
                               " INNER JOIN CustomerOrder CO ON B.CustomerOrderId = CO.Id " +
                               " INNER JOIN BillDetail BD ON B.Id = BD.BillId " +
                               " INNER JOIN Outlet O ON O.Id = B.OutletId " +
@@ -150,7 +149,7 @@ namespace RocketPOS.Repository.Reports
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
                             " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                             " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
@@ -162,7 +161,9 @@ namespace RocketPOS.Repository.Reports
                 {
                     query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
                 }
-                query += " where INV.StockQty <> 0 And INV.StoreId= " + storeId;
+                query = query + " where INV.StoreId = " + storeId;
+
+                query += "   ORDER BY  F.Foodmenuname,INV.StockQty ,F.Readymade desc ";
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }

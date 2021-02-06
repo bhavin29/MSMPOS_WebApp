@@ -68,12 +68,15 @@ namespace RocketPOS.Controllers.Reports
             return View(inventoryReportModel);
         }
 
-        public ActionResult InventoryDetail(int id, string name, string code,string stock)
+        public ActionResult InventoryDetail(int id, string name, string code,string stock,string opening)
         {
+            if (code =="null")
+                code = "";
+
             ViewData["FoodMenuName"] = name;
             ViewData["FoodMenuCode"] = code;
             ViewData["StockQty"] = stock;
-            
+            ViewData["OpeningQty"] = opening;
 
             List<InventoryDetailReportModel> inventoryReportModel = new List<InventoryDetailReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();

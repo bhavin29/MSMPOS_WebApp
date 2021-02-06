@@ -387,7 +387,7 @@ namespace RocketPOS.Repository
                 {
                     query += " And PurchaseInvoice.SupplierId= " + supplierId;
                 }
-                query += "   order by PurchaseInvoiceDate, PurchaseInvoice.DateInserted desc";
+                query += "   order by PurchaseInvoice.id desc";
 
                 purchaseViewModels = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
@@ -622,7 +622,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('' + CONVERT(VARCHAR(8),ISNULL(MAX(ReferenceNumber),0) + 1), 6) FROM purchaseInvoice where InventoryType=1 and ISDeleted=0;";
+                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNumber)),0) + 1  FROM purchaseInvoice where InventoryType=1 and ISDeleted=0;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {

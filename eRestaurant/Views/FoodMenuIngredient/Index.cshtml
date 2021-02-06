@@ -8,7 +8,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-12">
-                        <h5 class="card-title">Food Menu Ingredient</h5>
+                        <h5 class="card-title">Stock Configuration</h5>
                     </div>
 
                 </div>
@@ -19,9 +19,9 @@
                         <div class="col-md-12">
                             <div>
                                 <div class="row">
-                                    <div class="col-md-2 pr-2 pl-2">
+                                    <div class="col-md-3 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="FoodCategoryList" class="control-label">FoodCategory</label>
+                                            <label asp-for="FoodCategoryList" class="control-label">Menu Category</label>
                                             <select asp-for="FoodCategoryId"
                                                     class="form-control"
                                                     asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))" onchange="return GetFoodMenuByCategory();">
@@ -30,7 +30,7 @@
                                     </div>
                                     <div class="col-md-3 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="FoodMenuList" class="control-label">FoodMenu</label>
+                                            <label asp-for="FoodMenuList" class="control-label">Menu item</label>
                                             <select asp-for="FoodMenuId"
                                                     class="form-control"
                                                     asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
@@ -50,16 +50,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-4 pr-2 pl-2">
+                                <div class="col-md-3 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                        <label asp-for="IngredientList" class="control-label">Stock Name</label>
                                         <select asp-for="IngredientId"
                                                 class="form-control"
                                                 asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))" onchange="return GetUnitNameByIngredientId();">
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-2 pr-2 pl-2">
+                                <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label text-right">Consumption</label>
                                         <input class="form-control text-right" placeholder="0.00" id="Consumption" />
@@ -67,22 +67,22 @@
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
-                                        <label id="UnitName" class="control-label text-right"></label>
+                                        <label id="UnitName" class="control-label text-right" style="margin-top: 29px"></label>
                                     </div>
                                 </div>
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label class="control-label"></label>
                                         <input class="form-control" type="hidden" id="Id" value="0" />
-                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
+                                        <button id="addRow" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
                                     </div>
                                 </div>
                                 @*<div class="col-md-1 pr-2 pl-2">
-                                    <div class="form-group">
-                                        <label class="control-label"></label>
-                                        <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
-                                    </div>
-                                </div>*@
+                                        <div class="form-group">
+                                            <label class="control-label"></label>
+                                            <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
                     </div>
@@ -160,10 +160,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <br/>
-                        <div class="form-button-action">
-                            <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
-                            <a href='@Url.Action("Index", "FoodMenuIngredient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                        <br />
+                        <div class="form-group">
+                            <div class="form-button-action">
+                                <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                                <a href='@Url.Action("Index", "FoodMenuIngredient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                            </div>
                         </div>
                     </div>
                 </form>

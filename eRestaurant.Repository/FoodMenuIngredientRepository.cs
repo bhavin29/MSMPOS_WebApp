@@ -46,6 +46,9 @@ namespace RocketPOS.Repository
             int result = 0, detailResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("FoodMenuIngredient");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 
@@ -76,18 +79,22 @@ namespace RocketPOS.Repository
                     else
                     {
                         query = "INSERT INTO FoodMenuIngredient" +
-                                      "  (FoodMenuId " +
+                                      "  (Id " +
+                                      "  ,FoodMenuId " +
                                       " ,IngredientId " +
                                       " ,Consumption" +
                                       " ,UserIdInserted" +
                                       " ,DateInserted,IsDeleted)   " +
                                        "VALUES           " +
-                                       "(" + item.FoodMenuId + "," +
+                                       "("
+                                       + MaxId.ToString() + "," + 
+                                       + item.FoodMenuId + "," +
                                        item.IngredientId + "," +
                                        item.Consumption + "," +
                                        LoginInfo.Userid +
                                        ",GetUtcDate(),0);";
 
+                        MaxId = MaxId + 1;
                     }
                     detailResult = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 }

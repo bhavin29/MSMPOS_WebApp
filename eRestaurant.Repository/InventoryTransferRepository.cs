@@ -98,10 +98,11 @@ namespace RocketPOS.Repository
             List<InventoryTransferViewModel> inventoryTransferModels = new List<InventoryTransferViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
+                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes,U.Username " +
                               "FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.FromStoreId " +
                               "INNER JOIN Store SS ON SS.Id = IA.ToStoreId " +
+                              "inner join [User] U on U.Id=IA.UserIdInserted " +
                               "WHERE IA.IsDeleted = 0 Order by IA.Id desc;";
                 inventoryTransferModels = con.Query<InventoryTransferViewModel>(query).AsList();
             }
@@ -115,10 +116,11 @@ namespace RocketPOS.Repository
             List<InventoryTransferViewModel> inventoryTransferModels = new List<InventoryTransferViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
+                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName,IA.ToStoreId,SS.StoreName as ToStoreName,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes,U.Username " +
                               "FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.FromStoreId " +
                               "INNER JOIN Store SS ON SS.Id = IA.ToStoreId " +
+                               "inner join [User] U on U.Id=IA.UserIdInserted " +
                               "WHERE IA.IsDeleted = 0 " +
                             //"And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "'  Order by IA.EntryDate DESC";
                             " AND Convert(Date, IA.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";

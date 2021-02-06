@@ -10,6 +10,6 @@ namespace RocketPOS.Interface.Services
 {
     public interface ILoginService
     {
-        int GetLogin(string userName, string Password);
+        LoginModel GetLogin(string userName, string Password);
     }
 }

@@ -92,7 +92,7 @@
                                         @Html.DisplayFor(modelItem => item.GrandTotal)
                                     </td>
                                     <td>
-                                        @Html.DisplayName("Rocket")
+                                        @Html.DisplayFor(modelItem => item.Username)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Status)
@@ -179,7 +179,7 @@
                             { "data": "date", "name": "Date", "autoWidth": true },
                             { "data": "supplierName", "name": "Supplier", "autoWidth": true },
                             { "data": "grandTotal", "name": "Amount", "autoWidth": true, className: "text-right" },
-                            { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "username", "name": "Username", "autoWidth": true },
                             { "data": "status", "name": "Status", "autoWidth": true },
                             {
                                 data: null,

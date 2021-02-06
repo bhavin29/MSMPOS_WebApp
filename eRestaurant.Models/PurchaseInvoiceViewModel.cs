@@ -18,6 +18,7 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Due { get; set; }
         public int UserId { get; set; }
+        public string Username { get; set; }
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
         public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetailModels { get; set; }

@@ -353,8 +353,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
+                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due,U.Username " +
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseGRNViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -379,8 +379,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  "+
+                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due,U.Username " +
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
                     // " AND Convert(varchar(10), PurchaseGRNDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
                     " AND Convert(Date, PurchaseGRNDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 

@@ -29,6 +29,21 @@
                                     <span asp-validation-for="IngredientUnitName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
+                                    <label asp-for="UnitShortName" class="control-label">UnitShortName</label>
+                                    <input asp-for="UnitShortName" class="form-control" />
+                                    <span asp-validation-for="UnitShortName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="UnitPrecision" class="control-label">UnitPrecision</label>
+                                    <select asp-for="UnitPrecision" class="form-control">
+                                        <option value="">Select</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                    <span asp-validation-for="UnitPrecision" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
                                     <label asp-for="Notes" class="control-label"></label>
                                     <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
                                     <span asp-validation-for="Notes" class="text-danger"></span>
@@ -44,20 +59,20 @@
                                         </div>
                                     }
                                 }
-                            <div class="form-group">
-                                @if (Model != null)
-                                {
-                                    @if (Model.Id > 0)
+                                <div class="form-group">
+                                    @if (Model != null)
                                     {
-                                        <input type="submit" value="Save" class="btn btn-primary" />
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "IngredientUnit")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     }
-                                    else
-                                    {
-                                        <input type="submit" value="Save" class="btn btn-primary" />
-                                    }
-                                    <a href='@Url.Action("Index", "IngredientUnit")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
-                                }
-                            </div>
+                                </div>
                             </form>
                         </div>
                     </div>

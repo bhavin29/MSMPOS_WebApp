@@ -89,7 +89,7 @@
                                             @Html.DisplayFor(modelItem => item.TotalAmount)
                                         </td>
                                         <td>
-                                            @Html.DisplayName("Rocket")
+                                            @Html.DisplayFor(modelItem => item.Username)
                                         </td>
                                         <td>
                                             <div class="form-button-action">
@@ -164,7 +164,7 @@
                             { "data": "date", "name": "Date", "autoWidth": true },
                             { "data": "supplierName", "name": "Supplier", "autoWidth": true },
                             { "data": "totalAmount", "name": "Amount", "autoWidth": true, className: "text-right" },
-                            { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "username", "name": "Username", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {

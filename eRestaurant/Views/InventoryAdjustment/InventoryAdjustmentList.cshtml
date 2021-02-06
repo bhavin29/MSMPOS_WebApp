@@ -73,7 +73,7 @@
                                             @Html.DisplayFor(modelItem => item.Date, "{0:d}")
                                         </td>
                                         <td>
-                                            @Html.DisplayName("Rocket")
+                                            @Html.DisplayFor(modelItem => item.Username)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.StoreName)
@@ -149,7 +149,7 @@
                         "columns": [
                             { "data": "referenceNo", "name": "Number", "autoWidth": true },
                             { "data": "date", "name": "Created On", "autoWidth": true },
-                            { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "username", "name": "Username", "autoWidth": true },
                             { "data": "storeName", "name": "Store", "autoWidth": true },
                             {
                                 data: null,

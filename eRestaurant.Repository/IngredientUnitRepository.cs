@@ -29,7 +29,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
 
-                var query = "SELECT Id,UnitName as IngredientUnitName,Notes,IsActive FROM Units WHERE IsDeleted = 0 AND Id = @Id;";
+                var query = "SELECT Id,UnitName as IngredientUnitName,UnitShortName,UnitPrecision,Notes,IsActive FROM Units WHERE IsDeleted = 0 AND Id = @Id;";
 
                 ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList().FirstOrDefault();
             }
@@ -43,7 +43,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id,UnitName as IngredientUnitName,Notes,IsActive " +
+                var query = "Select Id,UnitName as IngredientUnitName,UnitShortName,UnitPrecision,Notes,IsActive " +
                           "From Units where IsDeleted=0;" +
                           " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 ingredientUnitModel = con.Query<IngredientUnitModel>(query).ToList();
@@ -62,10 +62,10 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Units (Id,UnitName," +
+                var query = "INSERT INTO Units (Id,UnitName,UnitShortName,UnitPrecision," +
                             "Notes, " +
                             "IsActive)" +
-                            "VALUES (" + MaxId + ",@IngredientUnitName," +
+                            "VALUES (" + MaxId + ",@IngredientUnitName,@UnitShortName,@UnitPrecision," +
                             "@Notes," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, ingredientUnitModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -90,7 +90,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "UPDATE Units SET UnitName =@IngredientUnitName," +
+                var query = "UPDATE Units SET UnitName =@IngredientUnitName,UnitShortName=@UnitShortName,UnitPrecision=@UnitPrecision," +
                             "Notes = @Notes, " +
                             "IsActive = @IsActive " +
                             "WHERE Id = @Id;";

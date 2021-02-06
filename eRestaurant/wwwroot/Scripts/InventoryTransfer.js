@@ -92,7 +92,6 @@ $('#addRow').on('click', function (e) {
               $("#InventoryTransferId").val()
             ]).node().id = rowId;
         }
-        debugger;
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
@@ -230,7 +229,6 @@ $('#ok').click(function () {
 //}
 
 function deleteOrder(id, rowId) {
-    debugger;
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
             if (dataArr[i].ingredientId == id) {

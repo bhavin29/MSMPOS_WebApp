@@ -93,7 +93,7 @@
                                             @Html.DisplayFor(modelItem => item.GrandTotal, "{0:N}")
                                         </td>
                                         <td>
-                                            @Html.DisplayName("Rocket")
+                                            @Html.DisplayFor(modelItem => item.Username)
                                         </td>
                                         <td>
                                             <div class="form-button-action">
@@ -170,7 +170,7 @@
                             { "data": "date", "name": "Created On", "autoWidth": true },
                             { "data": "supplierName", "name": "Store", "autoWidth": true },
                             { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true, className: "text-right" },
-                            { "defaultContent": "Rocket", "autoWidth": true },
+                            { "data": "username", "name": "Username", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {

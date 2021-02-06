@@ -1,0 +1,204 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.FoodMenuIngredientModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="card-title">Food Menu Ingredient</h5>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="FoodMenuIngredient" id="foodMenu" method="post" role="form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-2 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="FoodCategoryList" class="control-label">FoodCategory</label>
+                                            <select asp-for="FoodCategoryId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))" onchange="return GetFoodMenuByCategory();">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="FoodMenuList" class="control-label">FoodMenu</label>
+                                            <select asp-for="FoodMenuId"
+                                                    class="form-control"
+                                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label class="control-label"></label>
+                                            <a id="LoadFoodMenuIngredient" onclick="return loadFoodMenuIngredient();" class="btn btn-light" style="margin-top: 22px">Load</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                        <select asp-for="IngredientId"
+                                                class="form-control"
+                                                asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))" onchange="return GetUnitNameByIngredientId();">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label text-right">Consumption</label>
+                                        <input class="form-control text-right" placeholder="0.00" id="Consumption" />
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label id="UnitName" class="control-label text-right"></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label"></label>
+                                        <input class="form-control" type="hidden" id="Id" value="0" />
+                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
+                                    </div>
+                                </div>
+                                @*<div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label"></label>
+                                        <button id="cancel" class="form-control btn btn-primary" style="margin-top: 7px">cancel</button>
+                                    </div>
+                                </div>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-wrap">
+                                <table id="FoodMenuIngredientTable" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:10%">Id</th>
+                                            <th style="width:20%">IngredientId</th>
+                                            <th style="width:20%">FoodMenuId</th>
+                                            <th style="width:20%">Ingredient</th>
+                                            <th style="width:10%">Consumption</th>
+                                            <th style="width:10%">UnitName</th>
+                                            <th style="width:10%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.FoodMenuIngredientDetails != null)
+                                        {
+                                            @foreach (var item in Model.FoodMenuIngredientDetails)
+                                            {
+                                                var tm = "#myModal" + item.IngredientId;
+                                                var mid = "myModal" + item.IngredientId;
+                                                var rowId = "rowId" + item.IngredientId;
+                                                <tr id="@rowId">
+                                                    <td>
+                                                        @item.Id
+                                                    </td>
+                                                    <td>
+                                                        @item.IngredientId
+                                                    </td>
+                                                    <td>
+                                                        @item.FoodMenuId
+                                                    </td>
+                                                    <td>
+                                                        @item.IngredientName
+                                                    </td>
+                                                    <td class="text-right">
+                                                        @item.Consumption.ToString("N")
+                                                    </td>
+                                                    <td>
+                                                        @item.UnitName
+                                                    </td>
+                                                    <td class="text-left">
+                                                        <div class="form-button-action">
+                                                            <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editItem">Edit</a>
+                                                            <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="@tm">Delete</a>
+                                                        </div>
+                                                    </td>
+                                                    <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <a id="deleteBtn" data-itemId="@item.Id" onclick="deleteOrder(@item.Id,@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <br/>
+                        <div class="form-button-action">
+                            <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                            <a href='@Url.Action("Index", "FoodMenuIngredient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+            dataArr = []
+            dataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.FoodMenuIngredientDetails))');
+        if (dataArr ==null) {
+            dataArr = []
+        }
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/Scripts/FoodMenuIngredient.js"></script>
+}

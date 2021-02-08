@@ -1,0 +1,74 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.ProductionFormulaViewModel>
+@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("ProductionFormula");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("ProductionFormula");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <h5 class="card-title">Production Formula</h5>
+            </div>
+            <div class="col-md-1">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                    <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
+                </div>
+            </div>
+            <div class="float-right">
+                <a asp-action="ProductionFormula" class="btn btn-primary float-sm-left ">Add</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="ProductionFormula" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead role="row">
+                        <tr>
+                            <th>  @Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Batch Size")</th>
+                            <th>@Html.DisplayName("Menu Item")</th>
+                            <th>@Html.DisplayName("Expected Output")</th>
+                            <th>@Html.DisplayName("IsActive")</th>
+                            <th>@Html.DisplayName("Action")</th>
+                        </tr>
+                    </thead>
+                    <tfoot role="row">
+                        <tr>
+                            <th>  @Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Batch Size")</th>
+                            <th>@Html.DisplayName("Menu Item")</th>
+                            <th>@Html.DisplayName("Expected Output")</th>
+                            <th>@Html.DisplayName("IsActive")</th>
+                            <th>@Html.DisplayName("Action")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <tr>
+                            <td>@Html.DisplayName("Formula Name")</td>
+                            <td>@Html.DisplayName("Batch Size")</td>
+                            <td>@Html.DisplayName("Menu Item")</td>
+                            <td>@Html.DisplayName("Expected Output")</td>
+                            <td>@Html.DisplayName("IsActive")</td>
+                            <td>@Html.DisplayName("Action")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var table = $('#@dataTableName').DataTable();
+        });
+    </script>
+}

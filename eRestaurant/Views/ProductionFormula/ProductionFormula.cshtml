@@ -1,0 +1,171 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.ProductionFormulaModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-10">
+                        <h5 class="card-title">Manage Production Formula</h5>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                            <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card-body">
+                <form asp-action="PurchaseGRNFoodMenu" method="post" id="purchaseGRN" role="form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-3 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="FormulaName" class="control-label">Formula Name</label>
+                                            <input asp-for="FormulaName" class="form-control" />
+                                            <span asp-validation-for="FormulaName" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 pr-2 pl-2">
+                                        <div class="form-group">
+                                            <label asp-for="BatchSize" class="control-label">Batch Size</label>
+                                            <input asp-for="BatchSize" class="form-control" />
+                                            <span asp-validation-for="BatchSize" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="FoodmenuList" class="control-label">Menu Item</label>
+                                        <select asp-for="FoodMenuId"
+                                                class="form-control" />
+                                        </select>
+                                        <span asp-validation-for="FoodMenuId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="ExpectedOutput" class="control-label">Expected Output</label>
+                                        <input asp-for="ExpectedOutput" class="form-control" />
+                                        <label asp-for="ExpectedOutput" class="control-label">Unit</label>
+                                        <span asp-validation-for="ExpectedOutput" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label"></label>
+                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
+                                        <input class="form-control" type="hidden" id="PurchaseGRNId" value="0" />
+                                        <input asp-for="Id" class="form-control" type="hidden" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-wrap">
+                                <table id="purchaseOrderDetails" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:70%">Menu Item</th>
+                                            <th style="width:15%" class="text-right">Expected Output</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th style="width:70%">Menu Item</th>
+                                            <th style="width:15%" class="text-right">Expected Output</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:70%">Menu Item</th>
+                                            <th style="width:15%" class="text-right">Expected Output</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="IngredientIList" class="control-label">Stock Item</label>
+                                        <select asp-for="IngredientId"
+                                                class="form-control " onchange="GetFoodMenuLastPrice(FoodMenuId)">
+                                            <option value="">Select</option>
+                                        </select>
+                                        <span asp-validation-for="IngredientId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label text-right">Quantity</label>
+                                        <input class="form-control text-right" type="number" min="1" max="99999" value="1" placeholder="0.00" id="GRNQty" />
+                                        <label asp-for="ExpectedOutput" class="control-label">Unit</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-1 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label class="control-label"></label>
+                                        <button id="addRow" class="btn btn-light" style="margin-top: 22px">Add</button>
+                                        <input class="form-control" type="hidden" id="PurchaseGRNId" value="0" />
+                                        <input asp-for="Id" class="form-control" type="hidden" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-wrap">
+                                <table id="purchaseOrderDetails" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:70%">Stock Item</th>
+                                            <th style="width:15%" class="text-right">Qty</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th style="width:70%">Stock Item</th>
+                                            <th style="width:15%" class="text-right">Qty</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:70%">Stock Item</th>
+                                            <th style="width:15%" class="text-right">Qty</th>
+                                            <th style="width:15%">Action</th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        <a href='@Url.Action("Index", "ProductionFormula")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

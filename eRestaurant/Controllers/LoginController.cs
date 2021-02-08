@@ -10,6 +10,7 @@ using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
 using RocketPOS.Framework;
+using Microsoft.Extensions.Logging;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,10 +19,12 @@ namespace RocketPOS.Controllers
     public class LoginController : Controller
     {
         private readonly ILoginService _iLoginService;
+        private readonly ILogger<LoginController> _logger;
 
-        public LoginController(ILoginService loginService)
+        public LoginController(ILogger<LoginController> logger,ILoginService loginService)
         {
             _iLoginService = loginService;
+            _logger = logger;
         }
 
         public ActionResult Index(string? userName, string? password)
@@ -41,6 +44,7 @@ namespace RocketPOS.Controllers
                     ViewBag.Validate = "Invalid Username or Password!!!";
                 }
             }
+            _logger.LogInformation("Login.Index method called!!!");
             return View();
         }
 

@@ -108,9 +108,8 @@ input.form-fixer {
 hr {
     margin-top: 0rem !important;
     margin-bottom: 0rem !important;
-    background-color: gray;
-    
-    height: 1px;
+    background-color: #f7f7f7;
+    height: .5px;
     border: 0;
 }
 

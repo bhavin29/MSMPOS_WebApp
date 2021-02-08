@@ -32,14 +32,14 @@
                             Items
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkFM">
-                            <a class="dropdown-item" href="~/FoodMenu/FoodMenu">Menu Item</a>
-                            <a class="dropdown-item" href="~/FoodMenuCategory/FoodMenuCategory">Menu Categorie</a>
+                            <a class="dropdown-item" href="~/FoodMenu">Menu Items</a>
+                            <a class="dropdown-item" href="~/FoodMenuCategory">Menu Categories</a>
                             <hr />
-                            <a class="dropdown-item" href="~/FoodMenuRate">Price List</a>
-                            <a class="dropdown-item" href="~/Ingredient/Ingredient">Stock Item</a>
-                            <a class="dropdown-item" href="~/IngredientCategory/IngredientCategory">Stock Category</a>
+                            <a class="dropdown-item" href="~/FoodMenuRate">Price Lists</a>
+                            <a class="dropdown-item" href="~/Ingredient">Stock Items</a>
+                            <a class="dropdown-item" href="~/IngredientCategory">Stock Categories</a>
                             <hr />
-                            <a class="dropdown-item" href="~/IngredientUnit/IngredientUnit">Unit of Measure</a>
+                            <a class="dropdown-item" href="~/IngredientUnit">Unit of Measures</a>
                             @*<a class="dropdown-item" href="~/FoodMenuIngredient">Food Menu Ingredient</a>*@
 
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
@@ -100,12 +100,14 @@
                             +
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
-                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenu">Menu Items</a>
-                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenuCategory">Menu Categories</a>
-                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/Ingredient">Stock Items</a>
-                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/IngredientCategory">Stock Categories</a>
-                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenuList">
-                                <span>Purchase Orders</span>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenu/FoodMenu">Menu Item</a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/FoodMenuCategory/FoodMenuCategory">Menu Category</a>
+                            <hr />
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/Ingredient/Ingredient"><span>Stock Item</span></a>
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/IngredientCategory/IngredientCategory">Stock Category</a>
+                            <hr />
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" asp-area="" asp-controller="PurchaseFoodMenu" asp-action="PurchaseFoodMenu">
+                                <span>Purchase Order</span>
                             </a>
                         </div>
                     </li>

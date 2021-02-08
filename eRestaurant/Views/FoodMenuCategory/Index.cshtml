@@ -12,7 +12,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-11">
-                <h5 class="card-title">FoodMenu Category</h5>
+                <h5 class="card-title">Menu Categories</h5>
             </div>
             <div class="float-right">
                 <a asp-action="FoodMenuCategory" class="btn btn-primary float-sm-left ">Add</a>
@@ -28,7 +28,7 @@
                     <thead row="roor">
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.FoodMenuCategoryName)
+                                @Html.DisplayName("Menu Category")
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Notes)

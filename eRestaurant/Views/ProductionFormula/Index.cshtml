@@ -5,7 +5,7 @@
 @inject LocService SharedLocalizer
 @{
     ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("ProductionFormula");
-    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("ProductionFormula");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("ProductionFormulaTable");
 }
 
 <div class="card">
@@ -16,12 +16,12 @@
             </div>
             <div class="col-md-1">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked />
+                    <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionFormulaList();" />
                     <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                 </div>
             </div>
             <div class="float-right">
-                <a asp-action="ProductionFormula" class="btn btn-primary float-sm-left ">Add</a>
+                <a onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
             </div>
         </div>
     </div>
@@ -29,36 +29,76 @@
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
-                <table id="ProductionFormula" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                <table id="ProductionFormulaTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th>  @Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Formula Name")</th>
                             <th>@Html.DisplayName("Batch Size")</th>
-                            <th>@Html.DisplayName("Menu Item")</th>
-                            <th>@Html.DisplayName("Expected Output")</th>
+                            <th>@Html.DisplayName("Creator")</th>
                             <th>@Html.DisplayName("IsActive")</th>
                             <th>@Html.DisplayName("Action")</th>
+                            <th>@Html.DisplayName("View")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th>  @Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Formula Name")</th>
                             <th>@Html.DisplayName("Batch Size")</th>
-                            <th>@Html.DisplayName("Menu Item")</th>
-                            <th>@Html.DisplayName("Expected Output")</th>
+                            <th>@Html.DisplayName("Creator")</th>
                             <th>@Html.DisplayName("IsActive")</th>
                             <th>@Html.DisplayName("Action")</th>
+                            <th>@Html.DisplayName("View")</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        <tr>
-                            <td>@Html.DisplayName("Formula Name")</td>
-                            <td>@Html.DisplayName("Batch Size")</td>
-                            <td>@Html.DisplayName("Menu Item")</td>
-                            <td>@Html.DisplayName("Expected Output")</td>
-                            <td>@Html.DisplayName("IsActive")</td>
-                            <td>@Html.DisplayName("Action")</td>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                        <tr role="row">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FormulaName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BatchSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                <input asp-for="@item.IsActive" class="form-check-input" style="margin: 12Px 0 0 24px" />
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                    <label> / </label>
+                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                </div>
+                            </td>
                         </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -67,8 +107,116 @@
 </div>
 @section Scripts {
     <script>
+        var ProductionFormulaTable = null;
         $(document).ready(function () {
-            var table = $('#@dataTableName').DataTable();
+            ProductionFormulaTable = $('#@dataTableName').DataTable();
+            loadProductionFormulaList();
         });
+
+        function loadProductionFormulaList() {
+
+            var foodMenuType;
+            var isonthesport = $("#onthespot").is(":checked");
+            if (isonthesport == true) {
+                foodMenuType = 2;
+            }
+            else {
+                foodMenuType = 3;
+            }
+
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/ProductionFormula/GetProductionFormulaList?foodMenuType=" + foodMenuType,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (ProductionFormulaTable != null) {
+                        ProductionFormulaTable.clear();
+                        ProductionFormulaTable.destroy();
+                    }
+
+                    ProductionFormulaTable = $("#ProductionFormulaTable").DataTable({
+                        "data": data.productionFormulaList,
+                        "columns": [
+                            { "data": "formulaName", "name": "FormulaName", "autoWidth": true },
+                            { "data": "batchSize", "name": "BatchSize", "autoWidth": true },
+                            { "data": "username", "name": "Creator", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    if (row.isActive == true) {
+                                        return '<input type=\"checkbox\" checked value="' + data + '">';
+                                    } else {
+                                        return '<input type=\"checkbox\" value="' + data + '">';
+                                    }
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>' +
+                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionFormula(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=View">View</a></div>'
+                                },
+                            }
+                        ],
+                        columnDefs: [
+                            { targets: [4], orderable: false }
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+
+        function AddProductionFormula() {
+            var foodMenuType;
+            var isonthesport = $("#onthespot").is(":checked");
+            if (isonthesport == true) {
+                foodMenuType = 2;
+            }
+            else {
+                foodMenuType = 3;
+            }
+            window.location.href = "/ProductionFormula/ProductionFormula?foodMenuType=" + foodMenuType;
+        }
+
+        function deleteProductionFormula(id) {
+            $.ajax({
+                url: "/ProductionFormula/Delete/" + id,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    loadProductionFormulaList();
+                },
+                error: function (data) {
+                    loadProductionFormulaList();
+                }
+            });
+        };
+
     </script>
 }

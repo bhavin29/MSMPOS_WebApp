@@ -170,12 +170,12 @@ function validation(id) {
 
     if (id == 1) {
         if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
-            var message = 'At least one detail should be entered'
+            var message = 'At least one menu item should be entered'
             return message;
         }
 
         if (!FormulaIngredientTable.data().any() || FormulaIngredientTable.data().row == null) {
-            var message = 'At least one detail should be entered'
+            var message = 'At least one stock item should be entered'
             return message;
         }
     }

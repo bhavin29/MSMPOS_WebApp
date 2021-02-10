@@ -1,5 +1,229 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.ProductionEntryViewModel>
+@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
 @{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("ProductionEntry");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("ProductionEntryTable");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-9">
+                <h5 class="card-title">Production Entries</h5>
+            </div>
+            <div class="col-md-1">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionEntryList();" />
+                    <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
+                </div>
+            </div>
+            <div class="float-right">
+                <a onclick="return AddProductionEntry();" class="btn btn-primary float-sm-left ">Add</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="ProductionEntryTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead role="row">
+                        <tr>
+                            <th>@Html.DisplayName("Number")</th>
+                            <th>@Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Date")</th>
+                            <th>@Html.DisplayName("Actual Batch Size")</th>
+                            <th>@Html.DisplayName("Status")</th>
+                            <th>@Html.DisplayName("Creator")</th>
+                            <th>@Html.DisplayName("Action")</th>
+                            <th>@Html.DisplayName("View")</th>
+                        </tr>
+                    </thead>
+                    <tfoot role="row">
+                        <tr>
+                            <th>@Html.DisplayName("Number")</th>
+                            <th>@Html.DisplayName("Formula Name")</th>
+                            <th>@Html.DisplayName("Date")</th>
+                            <th>@Html.DisplayName("Actual Batch Size")</th>
+                            <th>@Html.DisplayName("Status")</th>
+                            <th>@Html.DisplayName("Creator")</th>
+                            <th>@Html.DisplayName("Action")</th>
+                            <th>@Html.DisplayName("View")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                        <tr role="row">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductionFormulaName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductionDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActualBatchSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                    <label> / </label>
+                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                </div>
+                            </td>
+                        </tr>
+                            <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var ProductionEntryTable = null;
+        $(document).ready(function () {
+            ProductionEntryTable = $('#@dataTableName').DataTable();
+            loadProductionEntryList();
+        });
+
+        function loadProductionEntryList() {
+
+            var foodMenuType;
+            var isonthesport = $("#onthespot").is(":checked");
+            if (isonthesport == true) {
+                foodMenuType = 2;
+            }
+            else {
+                foodMenuType = 3;
+            }
+
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/ProductionEntry/GetProductionEntryList?foodMenuType=" + foodMenuType,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (ProductionEntryTable != null) {
+                        ProductionEntryTable.clear();
+                        ProductionEntryTable.destroy();
+                    }
+
+                    ProductionEntryTable = $("#ProductionEntryTable").DataTable({
+                        "data": data.ProductionEntryList,
+                        "columns": [
+                            { "data": "formulaName", "name": "FormulaName", "autoWidth": true },
+                            { "data": "batchSize", "name": "BatchSize", "autoWidth": true },
+                            { "data": "username", "name": "Creator", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    if (row.isActive == true) {
+                                        return '<input type=\"checkbox\" checked value="' + data + '">';
+                                    } else {
+                                        return '<input type=\"checkbox\" value="' + data + '">';
+                                    }
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>' +
+                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionEntry(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=View">View</a></div>'
+                                },
+                            }
+                        ],
+                        columnDefs: [
+                            { targets: [4], orderable: false }
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+
+        function AddProductionEntry() {
+            var foodMenuType;
+            var isonthesport = $("#onthespot").is(":checked");
+            if (isonthesport == true) {
+                foodMenuType = 2;
+            }
+            else {
+                foodMenuType = 3;
+            }
+            window.location.href = "/ProductionEntry/ProductionEntry?foodMenuType=" + foodMenuType;
+        }
+
+        function deleteProductionEntry(id) {
+            $.ajax({
+                url: "/ProductionEntry/Delete/" + id,
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    loadProductionEntryList();
+                },
+                error: function (data) {
+                    loadProductionEntryList();
+                }
+            });
+        };
+
+    </script>
 }

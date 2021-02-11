@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="float-right">
-                <a onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
+                <a id="AddProdFormula" onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
             </div>
         </div>
     </div>
@@ -59,7 +59,7 @@
                             <td>
                                 @Html.DisplayFor(modelItem => item.FormulaName)
                             </td>
-                            <td>
+                            <td class="text-right">
                                 @Html.DisplayFor(modelItem => item.BatchSize)
                             </td>
                             <td>
@@ -139,7 +139,7 @@
                         "data": data.productionFormulaList,
                         "columns": [
                             { "data": "formulaName", "name": "FormulaName", "autoWidth": true },
-                            { "data": "batchSize", "name": "BatchSize", "autoWidth": true },
+                            { "data": "batchSize", "name": "BatchSize", "autoWidth": true, class:"text-right" },
                             { "data": "username", "name": "Creator", "autoWidth": true },
                             {
                                 data: null,
@@ -216,7 +216,7 @@
                     loadProductionFormulaList();
                 }
             });
-        };
+        }
 
     </script>
 }

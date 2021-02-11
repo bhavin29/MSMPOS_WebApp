@@ -22,6 +22,7 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public string FormulaName { get; set; }
         public string BatchSize { get; set; }
+        public int BatchSizeUnitId { get; set; }        
         public bool IsActive { get; set; }
         public int FoodmenuType { get; set; }        
         public int FoodMenuId { get; set; }

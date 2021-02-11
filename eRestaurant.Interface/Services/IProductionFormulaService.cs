@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Services
 {
     public interface IProductionFormulaService
     {
-        string GetUnitNameByFoodMenuId(int foodMenuId);
+        UnitModel GetUnitNameByFoodMenuId(int foodMenuId);
         ProductionFormulaModel GetProductionFormulaById(int id);
         int InsertProductionFormula(ProductionFormulaModel productionFormulaModel);
         int UpdateProductionFormula(ProductionFormulaModel productionFormulaModel);

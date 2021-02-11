@@ -22,5 +22,7 @@ namespace RocketPOS.Interface.Repository
         List<DropDownModel> GetFoodMenuListByReadymade();
 
         List<DropDownModel> GetFoodMenuListByCategory(int id);
+
+        List<DropDownModel> GetProductionFormulaList();
     }
 }

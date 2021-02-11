@@ -61,9 +61,10 @@ namespace RocketPOS.Controllers.Transaction
 
         public JsonResult GetUnitNameByFoodMenuId(int foodMenuId)
         {
+            UnitModel unitModel = new UnitModel();
             string unitName = string.Empty;
-            unitName = _iProductionFormulaService.GetUnitNameByFoodMenuId(foodMenuId);
-            return Json(new { UnitName = unitName });
+            unitModel = _iProductionFormulaService.GetUnitNameByFoodMenuId(foodMenuId);
+            return Json(new { UnitName = unitModel.UnitName, Id= unitModel.Id });
         }
 
         [HttpPost]

@@ -46,7 +46,7 @@ namespace RocketPOS.Repository
             ProductionFormulaModel productionFormulaModel = new ProductionFormulaModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,FormulaName,[BatchSize],FoodmenuType,IsActive  from ProductionFormula Where IsDeleted=0 And Id=" + id;
+                var query = "select Id,FormulaName,[BatchSize],[BatchSizeUnitId],FoodmenuType,IsActive  from ProductionFormula Where IsDeleted=0 And Id=" + id;
                 productionFormulaModel = con.QueryFirstOrDefault<ProductionFormulaModel>(query);
             }
             return productionFormulaModel;
@@ -97,12 +97,12 @@ namespace RocketPOS.Repository
             return productionFormulaList;
         }
 
-        public string GetUnitNameByFoodMenuId(int foodMenuId)
+        public UnitModel GetUnitNameByFoodMenuId(int foodMenuId)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select U.UnitName from FoodMenu F Inner Join Units U On U.Id=F.UnitsId Where F.IsDeleted=0 And F.Id=" + foodMenuId;
-                return con.QueryFirstOrDefault<string>(query);
+                var query = " select U.Id,U.UnitName from FoodMenu F Inner Join Units U On U.Id=F.UnitsId Where F.IsDeleted=0 And F.Id=" + foodMenuId;
+                return con.QueryFirstOrDefault<UnitModel>(query);
             }
         }
 
@@ -117,6 +117,7 @@ namespace RocketPOS.Repository
                 var query = "INSERT INTO [dbo].[ProductionFormula] " +
                              "  ([FormulaName] " +
                              " ,[BatchSize] " +
+                             " ,[BatchSizeUnitId] " +
                              " ,[FoodmenuType] " +
                              " ,[IsActive] " +
                              " ,[UserIdInserted]  " +
@@ -125,6 +126,7 @@ namespace RocketPOS.Repository
                              "   VALUES           " +
                              "  (@FormulaName " +
                              " ,@BatchSize " +
+                              " ,@BatchSizeUnitId " +
                              " ,@FoodmenuType " +
                              " ,@IsActive, " +
                              "" + LoginInfo.Userid + "," +
@@ -197,6 +199,7 @@ namespace RocketPOS.Repository
                 var query = "Update [dbo].[ProductionFormula] set " +
                             " FormulaName = @FormulaName " +
                             ",BatchSize = @BatchSize " +
+                            ",BatchSizeUnitId = @BatchSizeUnitId " +
                             ",IsActive = @IsActive " +
                             "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
                             "  ,[DateUpdated]  = GetUtcDate()  where id= " + productionFormulaModel.Id + ";";

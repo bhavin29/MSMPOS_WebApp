@@ -12,16 +12,16 @@ namespace RocketPOS.Controllers.Transaction
 {
     public class ProductionEntryController : Controller
     {
-       // private readonly IProductionFormulaService _iProductionFormulaService;
+        private readonly IProductionEntryService _iProductionEntryService;
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
-        public ProductionEntryController(IProductionFormulaService productionFormulaService,
+        public ProductionEntryController(IProductionEntryService productionEntryService,
              IDropDownService idropDownService,
              IStringLocalizer<RocketPOSResources> sharedLocalizer,
              LocService locService)
         {
-           // _iProductionFormulaService = productionFormulaService;
+            _iProductionEntryService = productionEntryService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
@@ -45,9 +45,18 @@ namespace RocketPOS.Controllers.Transaction
             {
                 productionEntryModel.FoodmenuType = 2;
             }
+            productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList();
             productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(productionEntryModel);
+        }
+
+        public JsonResult GetProductionFormulaById(int id)
+        {
+            ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+            productionEntryModel = _iProductionEntryService.GetProductionFormulaById(id);
+            productionEntryModel.ProductionDate = DateTime.Now;
+            return Json(new{ productionEntryModel = productionEntryModel });
         }
     }
 }

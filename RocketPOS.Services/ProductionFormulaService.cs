@@ -35,7 +35,7 @@ namespace RocketPOS.Services
             return iProductionFormulaRepository.GetProductionFormulaList(foodmenuType);
         }
 
-        public string GetUnitNameByFoodMenuId(int foodMenuId)
+        public UnitModel GetUnitNameByFoodMenuId(int foodMenuId)
         {
             return iProductionFormulaRepository.GetUnitNameByFoodMenuId(foodMenuId);
         }

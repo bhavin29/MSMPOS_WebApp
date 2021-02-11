@@ -191,5 +191,16 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetProductionFormulaList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "Select Id,FormulaName AS [Name] From ProductionFormula Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

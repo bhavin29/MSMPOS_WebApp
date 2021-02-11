@@ -174,6 +174,8 @@ namespace RocketPOS
             services.AddScoped<ISchedulerService , SchedulerService>();
             services.AddScoped<IProductionFormulaRepository, ProductionFormulaRepository>();
             services.AddScoped<IProductionFormulaService, ProductionFormulaService>();
+            services.AddScoped<IProductionEntryRepository, ProductionEntryRepository>();
+            services.AddScoped<IProductionEntryService, ProductionEntryService>();
             services.AddHttpClient();
         }
 

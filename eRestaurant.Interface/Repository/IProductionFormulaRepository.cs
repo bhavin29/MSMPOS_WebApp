@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Repository
 {
     public interface IProductionFormulaRepository
     {
-        string GetUnitNameByFoodMenuId(int foodMenuId);
+        UnitModel GetUnitNameByFoodMenuId(int foodMenuId);
         ProductionFormulaModel GetProductionFormulaById(int id);
         List<ProductionFormulaFoodMenuModel> GetProductionFormulaFoodMenuDetails(int productionFormulaId);
         List<ProductionFormulaIngredientModel> GetProductionFormulaIngredientDetails(int productionFormulaId);

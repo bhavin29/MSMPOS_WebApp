@@ -38,6 +38,8 @@
                                             <label asp-for="BatchSize" class="control-label">Batch Size</label>
                                             <input asp-for="BatchSize" class="form-control" />
                                             <span asp-validation-for="BatchSize" class="text-danger"></span>
+                                            <label id="BatchSizeUnitName" class="control-label">Unit</label>
+                                            <input asp-for="BatchSizeUnitId" hidden="hidden" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -59,7 +61,7 @@
                                 <div class="col-md-1 pr-2 pl-2">
                                     <div class="form-group">
                                         <label asp-for="ExpectedOutput" class="control-label">Expected Output</label>
-                                        <input asp-for="ExpectedOutput" class="form-control" />
+                                        <input asp-for="ExpectedOutput" type="number" min="1" max="99999" value="1" placeholder="0.00"  class="form-control" />
                                         <label id="FoodMenuUnitName" class="control-label">Unit</label>
                                     </div>
                                 </div>

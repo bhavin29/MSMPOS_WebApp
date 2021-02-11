@@ -7,7 +7,8 @@ $(document).ready(function () {
     FormulaFoodMenuTable = $('#formulaFoodMenu').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
-            { targets: [1], orderable: false, visible: false }
+            { targets: [1], orderable: false, visible: false },
+            { targets: [3], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -27,7 +28,8 @@ $(document).ready(function () {
     FormulaIngredientTable = $('#formulaIngredient').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
-            { targets: [1], orderable: false, visible: false }
+            { targets: [1], orderable: false, visible: false },
+            { targets: [3], orderable: false, class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -64,7 +66,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             $("#PFFoodMenuId").val(),
             $("#FoodMenuId").val(),
             $('#FoodMenuId').children("option:selected").text(),
-            ExpectedOutput,
+            parseFloat(ExpectedOutput).toFixed(2),
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editFoodMenuItem">Edit</a><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"" ></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
@@ -219,7 +221,7 @@ $('#addIngredientRow').on('click', function (e) {
             $("#PFIngredientId").val(),
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
-            IngredientQty,
+            parseFloat(IngredientQty).toFixed(2),
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editIngredientItem">Edit</a><a href="#" data-itemId="' + $("#IngredientId").val() + '"" ></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
@@ -324,6 +326,8 @@ function GetUnitNameByFoodMenuId() {
         success: function (data) {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
+            $("#BatchSizeUnitName").text(obj.unitName);
+            $("#BatchSizeUnitId").val(obj.id);
         },
         error: function (data) {
             alert(data);
@@ -357,6 +361,7 @@ $(function () {
                     FoodmenuType: $("#FoodmenuType").val(),
                     FormulaName: $("#FormulaName").val(),
                     BatchSize: $("#BatchSize").val(),
+                    BatchSizeUnitId: $("#BatchSizeUnitId").val(),
                     ExpectedOutput: $("#ExpectedOutput").val(),
                     IsActive: $("#IsActive").is(":checked"),
                     ProductionFormulaFoodMenuModels: foodMenuDataArr,

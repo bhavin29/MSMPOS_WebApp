@@ -15,6 +15,7 @@
                             <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" disabled="disabled" />
                             <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                             <input asp-for="FoodmenuType" class="form-control" hidden="hidden" />
+                            <input asp-for="Id" class="form-control" type="hidden" />
                         </div>
                     </div>
 
@@ -31,7 +32,7 @@
                                             <label asp-for="ProductionFormulaName" class="control-label">Formula Name</label>
                                             <select asp-for="ProductionFormulaId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.ProductionFormulaList, "Value", "Text"))" onchange="return loadProductionFormulaById();">
+                                                    asp-items="@(new SelectList(Model.ProductionFormulaList, "Value", "Text"))" onchange="return loadProductionFormula();">
                                             </select>
                                         </div>
                                     </div>
@@ -46,7 +47,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label asp-for="ProductionDate" class="control-label">Production Date</label>
-                                            <input id="ProductionDate" type="date" class="form-control" />
+                                            <input asp-for="ProductionDate" type="date" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
@@ -62,36 +63,6 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="IngredientList" class="control-label">Stock Item</label>
-                                            <select asp-for="IngredientId"
-                                                    class="form-control " asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))" onchange="return GetUnitNameByIngredientId();">
-                                                <option value="">Select</option>
-                                            </select>
-                                            <span asp-validation-for="IngredientId" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label class="control-label text-right">Quantity</label>
-                                            <input asp-for="IngredientQty" type="number" min="1" max="99999" value="1" placeholder="0.00" class="form-control text-right" />
-                                            <label id="IngredientUnitName" class="control-label">Unit</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label class="control-label"></label>
-                                            <button id="addIngredientRow" class="btn btn-light" style="margin-top: 22px">Add</button>
-                                            <input id="PFIngredientId" class="form-control" type="hidden" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-wrap">
@@ -129,29 +100,6 @@
                                                     <td class="text-right">
                                                         @item.ActualIngredientQty.ToString("N")
                                                     </td>
-                                                    @*<td class="text-left">
-                                                            <div class="form-button-action">
-                                                                <a href="#" data-itemid="@item.IngredientId" class="btn btn-link  editIngredientItem">Edit</a>
-                                                                <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="@tm">Delete</a>
-                                                            </div>
-                                                        </td>
-                                                        <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <a id="deleteBtn" data-itemId="@item.PEIngredientId" onclick="deleteIngredientOrder(@item.PEIngredientId,@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>*@
                                                 </tr>
                                             }
                                         }
@@ -160,36 +108,6 @@
                             </div>
                         </div>
                     </div>
-                    @*<div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="FoodMenuList" class="control-label">Menu item</label>
-                                            <select asp-for="FoodMenuId"
-                                                    class="form-control"
-                                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))" onchange="return GetUnitNameByFoodMenuId();">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="ExpectedOutput" class="control-label">Expected Output</label>
-                                            <input asp-for="ExpectedOutput" class="form-control" />
-                                            <label id="FoodMenuUnitName" class="control-label">Unit</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label class="control-label"></label>
-                                            <button id="addFoodMenuRow" class="btn btn-light" style="margin-top: 22px">Add</button>
-                                            <input asp-for="Id" class="form-control" type="hidden" />
-                                            <input id="PFFoodMenuId" class="form-control" type="hidden" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="table-wrap">
@@ -202,7 +120,7 @@
                                             <th style="width:15%" class="text-right">Expected Output</th>
                                             <th style="width:15%" class="text-right">Allocation Output</th>
                                             <th style="width:15%" class="text-right">Actual Output</th>
-                                            <th style="width:15%">Action</th>
+                                            @*<th style="width:15%">Action</th>*@
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -227,34 +145,11 @@
                                                         @item.ExpectedOutput.ToString("N")
                                                     </td>
                                                     <td class="text-right">
-                                                        <input type="number" asp-for="@item.AllocationOutput" id="AllocationOutput" onkeyup="return calculateSum();" class="form-control col-sm-6 AllocationOutput" min="0" max="99999" value="@item.AllocationOutput" />
+                                                        <input type="number" id="allocateOut" asp-for="@item.AllocationOutput" id="AllocationOutput" onkeyup="return calculateSum();" class="form-control col-sm-6 AllocationOutput" min="0" max="99999" value="@item.AllocationOutput" />
                                                     </td>
                                                     <td class="text-right">
-                                                        <input type="number" asp-for="@item.ActualOutput" id="ActualOutput" class="form-control col-sm-6" min="0" max="99999" value="@item.ActualOutput" />
+                                                        <input type="number" id="actualOut" asp-for="@item.ActualOutput" id="ActualOutput" class="form-control col-sm-6" min="0" max="99999" value="@item.ActualOutput" />
                                                     </td>
-                                                    <td class="text-left">
-                                                        <div class="form-button-action">
-                                                            <a href="#" data-itemid="@item.FoodMenuId" class="btn btn-link  editFoodMenuItem">Edit</a>
-                                                            @*<a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="@tm">Delete</a>*@
-                                                        </div>
-                                                    </td>
-                                                    @*<div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <a id="deleteBtn" data-itemId="@item.PEFoodMenuId" onclick="deleteFoodMenuOrder(@item.PEFoodMenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>*@
                                                 </tr>
                                             }
                                         }
@@ -264,15 +159,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <label id="varition"/>
+                        <div class="col-md-6 pl-2 pr-2">
+                            <div class="form-group form-inline">
+                                <label asp-for="Notes" class="col-form-label ">Notes: </label>
+                                <textarea asp-for="Notes" class="form-control input-full text-left" rows="2" cols="140"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-inline">
+                                <label asp-for="VariationNotes" class="col-form-label ">Variation Notes :</label>
+                                <textarea asp-for="VariationNotes" class="form-control input-full text-left" readonly="readonly" rows="2" cols="140"></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
 
                         @if (ViewBag.ActionType != "View")
                         {
-                            <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
+                            @if (Model.Status == 0 || Model.Status == 1)
+                            {
+                                <input type="submit" id="saveOrder" value="Save As Draft" class="btn btn-primary" />
+                                <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
+                            }
+                            @if (Model.Status == 2)
+                            {
+                                <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
+                                <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
+                            }
                         }
                         <a href='@Url.Action("Index", "ProductionEntry")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                     </div>
@@ -303,8 +216,8 @@
         foodMenuDataArr = []
         ingredientDataArr = []
         if (@Model.Id>0){
-            foodMenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryFoodMenuModels))');
-            ingredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryIngredientModels))');
+            @*foodMenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryFoodMenuModels))');
+            ingredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryIngredientModels))');*@
         }
     </script>
 

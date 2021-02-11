@@ -59,35 +59,38 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr role="row">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReferenceNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProductionFormulaName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ProductionDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ActualBatchSize)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
-                                    <label> / </label>
-                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductionFormulaName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductionDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ActualBatchSize)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Status)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                        <label> / </label>
+                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -143,29 +146,38 @@
                     }
 
                     ProductionEntryTable = $("#ProductionEntryTable").DataTable({
-                        "data": data.ProductionEntryList,
+                        "data": data.productionEntryList,
                         "columns": [
-                            { "data": "formulaName", "name": "FormulaName", "autoWidth": true },
-                            { "data": "batchSize", "name": "BatchSize", "autoWidth": true },
+                            { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
+                            { "data": "productionFormulaName", "name": "ProductionFormulaName", "autoWidth": true },
+                            { "data": "productionDate", "name": "ProductionDate", "autoWidth": true },
+                            { "data": "actualBatchSize", "name": "ActualBatchSize", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    if (row.status == 3) {
+                                        return '<div class="form-button-action">Completed</div>'
+                                    } else if (row.status == 2) {
+                                        return '<div class="form-button-action">InProgress</div>'
+                                    } else {
+                                        return '<div class="form-button-action">SaveAsDraft</div>'
+                                    }
+                                },
+                            },
                             { "data": "username", "name": "Creator", "autoWidth": true },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    if (row.isActive == true) {
-                                        return '<input type=\"checkbox\" checked value="' + data + '">';
-                                    } else {
-                                        return '<input type=\"checkbox\" value="' + data + '">';
-                                    }
-                                },
-                            },
-                            {
-                                data: null,
-                                mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>' +
-                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionEntry(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                    if (row.status == 3) {
+                                        return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a></div>'
+                                        }
+                                    else {
+                                        return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>'+
+                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionEntry(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                        }
                                 },
                             },
                             {

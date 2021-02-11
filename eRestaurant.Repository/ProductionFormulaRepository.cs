@@ -28,8 +28,8 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = $"update ProductionFormula set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
-                            " update ProductionFormulaFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
-                            " update ProductionFormulaIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";";
+                            " update ProductionFormulaFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where ProductionFormulaId = " + id + ";" +
+                            " update ProductionFormulaIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where ProductionFormulaId = " + id + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {

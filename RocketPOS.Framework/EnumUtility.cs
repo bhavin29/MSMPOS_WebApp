@@ -83,4 +83,14 @@ namespace RocketPOS.Framework
         [Display(Name = "Rejected")]
         Rejected = 3,
     }
+
+    public enum ProductionEntryStatus
+    {
+        [Display(Name = "SaveAsDraft")]
+        SaveAsDraft = 1,
+        [Display(Name = "InProgress")]
+        InProgress = 2,
+        [Display(Name = "Completed")]
+        Completed = 3,
+    }
 }

@@ -67,9 +67,9 @@ $('#addFoodMenuRow').on('click', function (e) {
             $("#FoodMenuId").val(),
             $('#FoodMenuId').children("option:selected").text(),
             parseFloat(ExpectedOutput).toFixed(2),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editFoodMenuItem">Edit</a><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"" ></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editFoodMenuItem">Edit</a></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
         ]).node().id = rowId;
         FormulaFoodMenuTable.draw(false);
@@ -83,6 +83,7 @@ $('#addFoodMenuRow').on('click', function (e) {
         $(rowNode).find('td').eq(2).addClass('text-right');
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
+        $("#ExpectedOutput").val(parseFloat(1.00).toFixed(2));
         $("#FoodMenuId").focus();
     }
     else if (message != '') {
@@ -222,9 +223,9 @@ $('#addIngredientRow').on('click', function (e) {
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
             parseFloat(IngredientQty).toFixed(2),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editIngredientItem">Edit</a><a href="#" data-itemId="' + $("#IngredientId").val() + '"" ></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editIngredientItem">Edit</a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteIngredientOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
         ]).node().id = rowId;
         FormulaIngredientTable.draw(false);
@@ -238,7 +239,8 @@ $('#addIngredientRow').on('click', function (e) {
         $(rowNode).find('td').eq(2).addClass('text-right');
         clearIngredientItem();
         editIngredientDataArr = [];
-        $("#IngredientId").focus();
+        $("#IngredientQty").val(parseFloat(1.00).toFixed(2));
+     $("#IngredientId").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);

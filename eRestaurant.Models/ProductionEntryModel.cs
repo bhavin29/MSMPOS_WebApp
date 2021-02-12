@@ -16,7 +16,8 @@ namespace RocketPOS.Models
         public DateTime ProductionCompletionDate { get; set; }
         public string ActualBatchSize { get; set; }
         public int Status { get; set; }
-  
+        public string Username { get; set; }
+
     }
     public class ProductionEntryModel
     {
@@ -39,6 +40,8 @@ namespace RocketPOS.Models
         public decimal ActualOutput { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+        public string Notes { get; set; }
+        public string VariationNotes { get; set; }        
         public List<SelectListItem> IngredientList { get; set; }
         public decimal IngredientQty { get; set; }
         public decimal ActualIngredientQty { get; set; }

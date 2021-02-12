@@ -4,7 +4,6 @@ var editIngredientDataArr = [];
 var ingredientDeletedId = [];
 $(document).ready(function () {
     $("#productionEntryForm").validate();
-    $(".AllocationOutput").on('keyup change', calculateSum);
     EntryIngredient = $('#EntryIngredient').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
@@ -47,17 +46,19 @@ $(document).ready(function () {
         ],
     });
 
-
-
-    //if ($("#FoodmenuType").val() == 2) {
-    //    $("#onthespot").prop('checked', true);
-    //}
-    //else {
-    //    $("#onthespot").prop('checked', false);
-    //}
+    if ($("#FoodmenuType").val() == 2) {
+        $("#onthespot").prop('checked', true);
+    }
+    else {
+        $("#onthespot").prop('checked', false);
+    }
 
 });
 
+function loadProductionFormula() {
+    window.location.href = "/ProductionEntry/ProductionEntry?productionFormulaId=" + $("#ProductionFormulaId").val() + "&foodMenuType=" + $("#FoodmenuType").val();
+}
+/*
 function loadProductionFormulaById() {
     $.ajaxSetup({ cache: false });
     $.ajax({
@@ -117,19 +118,13 @@ function loadProductionFormulaById() {
                     {
                         data: null,
                         mRender: function (data, type, row) {
-                            return '<input type="number" onkeyup="return calculateSum();" class="form-control col-sm-6 AllocationOutput" min="0" max="99999" value="' + row.allocationOutput + '"/>';
+                            return '<input type="number" id="allocateOut"  onkeyup="return calculateSum();" class="form-control col-sm-6 AllocationOutput" min="0" max="99999" value="' + row.allocationOutput + '"/>';
                         },
                     },
                     {
                         data: null,
                         mRender: function (data, type, row) {
-                            return '<input type="number" class="form-control col-sm-6" min="0" max="99999" value="' + row.actualOutput + '"/>';
-                        },
-                    },
-                    {
-                        data: null,
-                        mRender: function (data, type, row) {
-                            return '<div class="form-button-action"><a href="#" data-itemid="' + row.foodMenuId+'" class="btn btn-link  editFoodMenuItem">Edit</a></div>';
+                            return '<input type="number" id="actualOut" class="form-control col-sm-6" min="0" max="99999" value="' + row.actualOutput + '"/>';
                         },
                     }
                 ],
@@ -158,7 +153,7 @@ function loadProductionFormulaById() {
         }
     });
 }
-
+*/
 $("#CurrentBatchSize").keyup(function () {
     var entryIngredient = document.getElementById('EntryIngredient');
     var batchSize = $("#BatchSize").val();
@@ -166,35 +161,273 @@ $("#CurrentBatchSize").keyup(function () {
     var ingredientQty=0;
     for (var i = 1; i < entryIngredient.rows.length; i++) {
         ingredientQty = entryIngredient.rows[i].cells[1].innerText;
-        actualIngredientQty = ingredientQty * currentBatchSize * batchSize;
+        actualIngredientQty = (ingredientQty * currentBatchSize )/batchSize;
         entryIngredient.rows[i].cells[2].innerHTML = actualIngredientQty;
     }
-    
-    //iterate through each row in the table
-    //$('tr > td').each(function () {
-    //    //the value of sum needs to be reset for each row, so it has to be set inside the row loop
-    //    var sum = 0
-    //    $(this)[0].children[3].text('1');
-    //    //find the combat elements in the current row and sum it 
-    //    $(this).find('.combat').each(function () {
-    //        //var combat = $(this).text();
-    //        $(this).text('1');
-    //        //if (!isNaN(combat) && combat.length !== 0) {
-    //        //    sum += parseFloat(combat);
-    //        //}
-    //    });
-    //    //set the value of currents rows sum to the total-combat element in the current row
-    //});
 });
 
 function calculateSum() {
-    var $input = $(this);
-    var $row = $input.closest('td');
-    var sum = 0;
-
-    $row.find(".AllocationOutput").each(function () {
-        sum += parseFloat(this.value) || 0;
-    });
-
-    $("#varition").text(sum);
+    var subtotal = 0;
+    $('.AllocationOutput').each(function () {
+        var $this = $(this);
+        var quantity = parseInt($this.val());
+        subtotal += quantity;
+    })
+    var variation = "Batch size is " + $("#BatchSize").val() + " " + $("#BatchSizeUnitName").text() + " and expected with " + subtotal + " "+$("#BatchSizeUnitName").text();
+    $("#VariationNotes").val(variation);
 }
+
+function saveOrder(data) {
+    console.log(data);
+    return $.ajax({
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        type: 'POST',
+        beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
+        url: 'ProductionEntry',
+        data: data,
+        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+    });
+};
+
+$(function () {
+    $('#saveOrder').click(function () {
+
+        $("#EntryIngredient tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var dataline = $('#EntryIngredient').DataTable().row(currentRow).data();
+
+            ingredientDataArr.push({
+                peIngredientId: dataline[0],
+                ingredientId: dataline[1],
+                ingredientQty: dataline[3],
+                actualIngredientQty: tds[2].textContent
+            });
+        });
+
+        $("#EntryFoodMenu tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var datatrline = $('#EntryFoodMenu').DataTable().row(currentRow).data();
+
+            foodMenuDataArr.push({
+                peFoodMenuId: datatrline[0],
+                foodMenuId: datatrline[1],
+                expectedOutput: datatrline[3],
+                allocationOutput: $(currentRow).find("#allocateOut").val(),
+                actualOutput: $(currentRow).find("#actualOut").val()
+            });
+        });
+
+        //var message = validation(1);
+        var message = '';
+        if (message == '') {
+            $("#productionEntryForm").on("submit", function (e) {
+                e.preventDefault();
+                var data = ({
+                    Id: $("#Id").val(),
+                    FoodmenuType: $("#FoodmenuType").val(),
+                    ProductionFormulaId: $("#ProductionFormulaId").val(),
+                    ActualBatchSize: $("#BatchSize").val(),
+                    ProductionDate: $("#ProductionDate").val(),
+                    Status:1,
+                    VariationNotes: $("#VariationNotes").val(),
+                    Notes: $("#Notes").val(),
+                    productionEntryFoodMenuModels: foodMenuDataArr,
+                    productionEntryIngredientModels: ingredientDataArr
+                });
+                $.when(saveOrder(data)).then(function (response) {
+                    if (response.status == "200") {
+                        $(".modal-body").text(response.message);
+                        $("#save").show();
+                        $("#ok").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    else {
+                        $(".modal-body").text(response.message);
+                        $("#ok").show();
+                        $("#save").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    console.log(response);
+                }).fail(function (err) {
+                    console.log(err);
+                });
+            });
+        }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
+    })
+});
+
+$(function () {
+    $('#inProgress').click(function () {
+
+        $("#EntryIngredient tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var dataline = $('#EntryIngredient').DataTable().row(currentRow).data();
+
+            ingredientDataArr.push({
+                peIngredientId: dataline[0],
+                ingredientId: dataline[1],
+                ingredientQty: dataline[3],
+                actualIngredientQty: tds[2].textContent
+            });
+        });
+
+        $("#EntryFoodMenu tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var datatrline = $('#EntryFoodMenu').DataTable().row(currentRow).data();
+
+            foodMenuDataArr.push({
+                peFoodMenuId: datatrline[0],
+                foodMenuId: datatrline[1],
+                expectedOutput: datatrline[3],
+                allocationOutput: $(currentRow).find("#allocateOut").val(),
+                actualOutput: $(currentRow).find("#actualOut").val()
+            });
+        });
+
+        //var message = validation(1);
+        var message = '';
+        if (message == '') {
+            $("#productionEntryForm").on("submit", function (e) {
+                e.preventDefault();
+                var data = ({
+                    Id: $("#Id").val(),
+                    FoodmenuType: $("#FoodmenuType").val(),
+                    ProductionFormulaId: $("#ProductionFormulaId").val(),
+                    ActualBatchSize: $("#BatchSize").val(),
+                    ProductionDate: $("#ProductionDate").val(),
+                    Status: 2,
+                    VariationNotes: $("#VariationNotes").val(),
+                    Notes: $("#Notes").val(),
+                    productionEntryFoodMenuModels: foodMenuDataArr,
+                    productionEntryIngredientModels: ingredientDataArr
+                });
+                $.when(saveOrder(data)).then(function (response) {
+                    if (response.status == "200") {
+                        $(".modal-body").text(response.message);
+                        $("#save").show();
+                        $("#ok").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    else {
+                        $(".modal-body").text(response.message);
+                        $("#ok").show();
+                        $("#save").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    console.log(response);
+                }).fail(function (err) {
+                    console.log(err);
+                });
+            });
+        }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
+    })
+});
+
+
+$(function () {
+    $('#completed').click(function () {
+
+        $("#EntryIngredient tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var dataline = $('#EntryIngredient').DataTable().row(currentRow).data();
+
+            ingredientDataArr.push({
+                peIngredientId: dataline[0],
+                ingredientId: dataline[1],
+                ingredientQty: dataline[3],
+                actualIngredientQty: tds[2].textContent
+            });
+        });
+
+        $("#EntryFoodMenu tbody tr").each(function () {
+            var tds = $(this).find("td");
+            var currentRow = $(this).closest("tr");
+            var datatrline = $('#EntryFoodMenu').DataTable().row(currentRow).data();
+
+            foodMenuDataArr.push({
+                peFoodMenuId: datatrline[0],
+                foodMenuId: datatrline[1],
+                expectedOutput: datatrline[3],
+                allocationOutput: $(currentRow).find("#allocateOut").val(),
+                actualOutput: $(currentRow).find("#actualOut").val()
+            });
+        });
+
+        //var message = validation(1);
+        var message = '';
+        if (message == '') {
+            $("#productionEntryForm").on("submit", function (e) {
+                e.preventDefault();
+                var data = ({
+                    Id: $("#Id").val(),
+                    FoodmenuType: $("#FoodmenuType").val(),
+                    ProductionFormulaId: $("#ProductionFormulaId").val(),
+                    ActualBatchSize: $("#BatchSize").val(),
+                    ProductionDate: $("#ProductionDate").val(),
+                    Status: 3,
+                    VariationNotes: $("#VariationNotes").val(),
+                    Notes: $("#Notes").val(),
+                    productionEntryFoodMenuModels: foodMenuDataArr,
+                    productionEntryIngredientModels: ingredientDataArr
+                });
+                $.when(saveOrder(data)).then(function (response) {
+                    if (response.status == "200") {
+                        $(".modal-body").text(response.message);
+                        $("#save").show();
+                        $("#ok").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    else {
+                        $(".modal-body").text(response.message);
+                        $("#ok").show();
+                        $("#save").hide();
+                        jQuery.noConflict();
+                        $("#aModal").modal('show');
+                    }
+                    console.log(response);
+                }).fail(function (err) {
+                    console.log(err);
+                });
+            });
+        }
+        else {
+            $(".modal-body").text(message);
+            $("#save").hide();
+            jQuery.noConflict();
+            $("#aModal").modal('show');
+            return false;
+        }
+    })
+});
+$('#save').click(function () {
+    window.location.href = "/ProductionEntry/Index";
+});
+
+$('#ok').click(function () {
+    $("#aModal").modal('hide');
+});

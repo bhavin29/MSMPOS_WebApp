@@ -261,12 +261,12 @@ namespace RocketPOS.Services
             return lstFoodMenu;
         }
 
-        public List<SelectListItem> GetProductionFormulaList()
+        public List<SelectListItem> GetProductionFormulaList(int foodmenuType)
         {
             List<SelectListItem> lstProductionFormula = new List<SelectListItem>();
 
             lstProductionFormula.Add(new SelectListItem { Text = "Select", Value = "0" });
-            List<DropDownModel> lstProductionFormulaResult = _dropDownRepository.GetProductionFormulaList().ToList();
+            List<DropDownModel> lstProductionFormulaResult = _dropDownRepository.GetProductionFormulaList(foodmenuType).ToList();
             if (lstProductionFormulaResult != null && lstProductionFormulaResult.Count > 0)
             {
                 foreach (var item in lstProductionFormulaResult)

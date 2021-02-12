@@ -46,7 +46,7 @@ namespace RocketPOS.Repository
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName,PE.ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
+                var query = "select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName, convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
                             "PE.FoodmenuType,U.UnitName from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId Inner Join [Units] U On U.Id=PF.BatchSizeUnitId Where PE.IsDeleted=0 And PE.Id=" + id;
                 productionEntryModel = con.QueryFirstOrDefault<ProductionEntryModel>(query);
             }
@@ -82,7 +82,7 @@ namespace RocketPOS.Repository
             List<ProductionEntryViewModel> productionEntryList = new List<ProductionEntryViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,PE.ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType,U.Username from ProductionEntry  PE  " +
+                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType,U.Username from ProductionEntry  PE  " +
                             " inner join ProductionFormula  PF On PF.Id=PE.ProductionFormulaId  inner join [User] U On U.Id=PE.UserIdInserted where PE.IsDeleted=0 ";
 
                 if (foodmenuType != 0)
@@ -143,7 +143,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 
-                var refNoQuery = $"SELECT RIGHT('PO-' + convert(varchar(8), isnull(count(*), 0) + 1), 12) FROM ProductionEntry where isdeleted = 0; ";
+                var refNoQuery = $"SELECT ISNULL(MAX(convert(int,ReferenceNo)),0) + 1  FROM ProductionEntry where isdeleted = 0; ";
                 var referenceNo = con.ExecuteScalar<string>(refNoQuery, null, sqltrans, 0, System.Data.CommandType.Text);
 
                 var query = "INSERT INTO [dbo].[ProductionEntry] " +

@@ -12,8 +12,8 @@ $(document).ready(function () {
         ],
         "paging": false,
         "bLengthChange": true,
-        "bInfo": true,
-        "bFilter": true,
+        "bInfo": false,
+        "bFilter": false,
         "ordering": true,
         "autoWidth": false,
         "orderCellsTop": true,
@@ -33,8 +33,8 @@ $(document).ready(function () {
         ],
         "paging": false,
         "bLengthChange": true,
-        "bInfo": true,
-        "bFilter": true,
+        "bInfo": false,
+        "bFilter": false,
         "ordering": true,
         "autoWidth": false,
         "orderCellsTop": true,
@@ -67,7 +67,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             $("#FoodMenuId").val(),
             $('#FoodMenuId').children("option:selected").text(),
             parseFloat(ExpectedOutput).toFixed(2),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class="btn btn-link editFoodMenuItem">Edit</a></a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -216,6 +216,7 @@ $('#addIngredientRow').on('click', function (e) {
     var message = validation(2);
     var rowId = "rowId" + $("#IngredientId").val();
     IngredientQty = $("#IngredientQty").val();
+    debugger;
     if (message == '') {
         FormulaIngredientTable.row('.active').remove().draw(false);
         var rowNode = FormulaIngredientTable.row.add([
@@ -223,7 +224,7 @@ $('#addIngredientRow').on('click', function (e) {
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
             parseFloat(IngredientQty).toFixed(2),
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="btn btn-link editIngredientItem">Edit</a><a href="#" data-toggle="modal" class="btn btn-link" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class=" editIngredientItem">Edit</a> / <a href="#" data-toggle="modal"  data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteIngredientOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',

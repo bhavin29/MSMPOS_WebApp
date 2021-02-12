@@ -11,17 +11,19 @@
 <div class="card">
     <div class="card-header container-fluid">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <h5 class="card-title">Production Entries</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 pl-0 pr-0">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionEntryList();" />
                     <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                 </div>
             </div>
-            <div class="float-right">
-                <a onclick="return AddProductionEntry();" class="btn btn-primary float-sm-left ">Add</a>
+            <div class="col-md-1">
+                <div class="float-right">
+                    <a onclick="return AddProductionEntry();" class="btn btn-primary float-sm-left ">Add</a>
+                </div>
             </div>
         </div>
     </div>
@@ -32,26 +34,26 @@
                 <table id="ProductionEntryTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th>@Html.DisplayName("Number")</th>
-                            <th>@Html.DisplayName("Formula Name")</th>
-                            <th>@Html.DisplayName("Date")</th>
-                            <th>@Html.DisplayName("Actual Batch Size")</th>
-                            <th>@Html.DisplayName("Status")</th>
-                            <th>@Html.DisplayName("Creator")</th>
-                            <th>@Html.DisplayName("Action")</th>
-                            <th>@Html.DisplayName("View")</th>
+                            <th style="width:10%">@Html.DisplayName("Number")</th>
+                            <th style="width:30%">@Html.DisplayName("Formula Name")</th>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:12%">@Html.DisplayName("Actual Batch Size")</th>
+                            <th style="width:12%">@Html.DisplayName("Status")</th>
+                            <th style="width:10%">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%">@Html.DisplayName("Action")</th>
+                            <th style="width:8%">@Html.DisplayName("View")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th>@Html.DisplayName("Number")</th>
-                            <th>@Html.DisplayName("Formula Name")</th>
-                            <th>@Html.DisplayName("Date")</th>
-                            <th>@Html.DisplayName("Actual Batch Size")</th>
-                            <th>@Html.DisplayName("Status")</th>
-                            <th>@Html.DisplayName("Creator")</th>
-                            <th>@Html.DisplayName("Action")</th>
-                            <th>@Html.DisplayName("View")</th>
+                            <th style="width:10%">@Html.DisplayName("Number")</th>
+                            <th style="width:30%">@Html.DisplayName("Formula Name")</th>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:12%">@Html.DisplayName("Actual Batch Size")</th>
+                            <th style="width:12%">@Html.DisplayName("Status")</th>
+                            <th style="width:10%">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%">@Html.DisplayName("Action")</th>
+                            <th style="width:8%">@Html.DisplayName("View")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -69,7 +71,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ProductionDate)
                                 </td>
-                                <td>
+                                <td style="text-align:right">
                                     @Html.DisplayFor(modelItem => item.ActualBatchSize)
                                 </td>
                                 <td>
@@ -158,9 +160,9 @@
                                     if (row.status == 3) {
                                         return '<div class="form-button-action">Completed</div>'
                                     } else if (row.status == 2) {
-                                        return '<div class="form-button-action">InProgress</div>'
+                                        return '<div class="form-button-action">In Progress</div>'
                                     } else {
-                                        return '<div class="form-button-action">SaveAsDraft</div>'
+                                        return '<div class="form-button-action">Save As Draft</div>'
                                     }
                                 },
                             },

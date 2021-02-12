@@ -14,7 +14,7 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" disabled="disabled" />
                             <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
-                            <input asp-for="FoodmenuType" class="form-control" hidden="hidden" />
+                            <input id="hidID" asp-for="FoodmenuType" class="form-control" hidden="hidden" />
                         </div>
                     </div>
 
@@ -43,7 +43,7 @@
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label id="BatchSizeUnitName" class="control-label" style="margin-top: 28px">Unit</label>
+                                                <label id="BatchSizeUnitName" class="control-label" style="margin-top: 28px"></label>
                                                 <input asp-for="BatchSizeUnitId" hidden="hidden" class="form-control" />
                                             </div>
                                         </div>
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label id="FoodMenuUnitName" class="control-label" style="margin-top: 28px">Unit</label>
+                                                <label id="FoodMenuUnitName" class="control-label" style="margin-top: 28px"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
@@ -84,15 +84,14 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-11 pr-2 pl-2">
-
                                             <table id="formulaFoodMenu" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                 <thead>
                                                     <tr>
                                                         <th style="width:0%">PFFoodMenuId</th>
                                                         <th style="width:0%">FoodMenuId</th>
-                                                        <th style="width:50%">Menu Item</th>
+                                                        <th style="width:70%">Menu Item</th>
                                                         <th style="width:15%">Output</th>
-                                                        <th style="width:20%">Action</th>
+                                                        <th style="width:15%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -118,8 +117,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-button-action">
-                                                                        <a href="#" data-itemid="@item.FoodMenuId" class="btn btn-link editFoodMenuItem">Edit</a>
-                                                                        <a href="#" data-toggle="modal" class="btn btn-link" data-target="@tm">Delete</a>
+                                                                        <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> / 
+                                                                        <a href="#" data-toggle="modal"  data-target="@tm">Delete</a>
                                                                     </div>
                                                                 </td>
                                                                 <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -144,11 +143,9 @@
                                                     }
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="col-md-6 col-lg-6">
                                     <div class="row">
                                         <div class="col-md-1 pr-2 pl-2">
@@ -159,7 +156,7 @@
                                             <div class="col-md-2 pr-2 pl-2">
                                                 <div class="form-group">
                                                     <label class="control-label text-right"></label>
-                                                    <input asp-for="IngredientQty" type="number" style="visibility:hidden"  min="1" max="99999" value="1" placeholder="0.00" class="form-control text-right" />
+                                                    <input type="number" style="visibility:hidden"  min="1" max="99999" value="1" placeholder="0.00" class="form-control text-right" />
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +179,7 @@
                                         </div>
                                         <div class="col-md-2 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label id="IngredientUnitName" class="control-label" style="margin-top: 28px">Unit</label>
+                                                <label id="IngredientUnitName" class="control-label" style="margin-top: 28px"></label>
                                             </div>
                                         </div>
                                         <div class="col-md-2 pr-2 pl-2">
@@ -201,9 +198,9 @@
                                                     <tr>
                                                         <th style="width:0%">PFIngredientId</th>
                                                         <th style="width:0%">IngredientId</th>
-                                                        <th style="width:50%">Stock Item</th>
+                                                        <th style="width:70%">Stock Item</th>
                                                         <th style="width:15%" >Qty</th>
-                                                        <th style="width:20%">Action</th>
+                                                        <th style="width:15%">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -229,8 +226,9 @@
                                                                 </td>
                                                                 <td class="text-left">
                                                                     <div class="form-button-action">
-                                                                        <a href="#" data-itemid="@item.IngredientId" class="btn btn-link editIngredientItem">Edit</a>
-                                                                        <a href="#" data-toggle="modal" class="btn btn-link" data-target="@tm">Delete</a>
+                                                                        <a href="#" data-itemid="@item.IngredientId" class=" editIngredientItem">Edit</a> /
+
+                                                                        <a href="#" data-toggle="modal"  data-target="@tm">Delete</a>
                                                                     </div>
                                                                 </td>
                                                                 <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -268,7 +266,7 @@
                                         {
                                             <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
                                         }
-                                        <a href='@Url.Action("Index", "ProductionFormula")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                        <a id="GoToRedirectAction" href='@Url.Action("Index", "ProductionFormula")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     </div>
                                 </div>
                             </div>

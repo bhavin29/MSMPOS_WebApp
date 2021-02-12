@@ -11,17 +11,19 @@
 <div class="card">
     <div class="card-header container-fluid">
         <div class="row">
-            <div class="col-md-9">
-                <h5 class="card-title">Production Formulas</h5>
+            <div class="col-md-10">
+                <h5 class="card-title">Master Formulas</h5>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 pl-0 pr-0">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionFormulaList();" />
                     <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                 </div>
             </div>
-            <div class="float-right">
-                <a id="AddProdFormula" onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
+            <div class="col-md-1">
+                <div class="form-check form-switch">
+                    <a id="AddProdFormula" onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
+                </div>
             </div>
         </div>
     </div>
@@ -32,22 +34,22 @@
                 <table id="ProductionFormulaTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th>@Html.DisplayName("Formula Name")</th>
-                            <th>@Html.DisplayName("Batch Size")</th>
-                            <th>@Html.DisplayName("Creator")</th>
-                            <th>@Html.DisplayName("IsActive")</th>
-                            <th>@Html.DisplayName("Action")</th>
-                            <th>@Html.DisplayName("View")</th>
+                            <th style="width:50%">@Html.DisplayName("Formula Name")</th>
+                            <th style="width:10%">@Html.DisplayName("Batch Size")</th>
+                            <th style="width:10%">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%">@Html.DisplayName("IsActive")</th>
+                            <th style="width:10%">@Html.DisplayName("Action")</th>
+                            <th style="width:10%">@Html.DisplayName("View")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th>@Html.DisplayName("Formula Name")</th>
-                            <th>@Html.DisplayName("Batch Size")</th>
-                            <th>@Html.DisplayName("Creator")</th>
-                            <th>@Html.DisplayName("IsActive")</th>
-                            <th>@Html.DisplayName("Action")</th>
-                            <th>@Html.DisplayName("View")</th>
+                            <th style="width:50%">@Html.DisplayName("Formula Name")</th>
+                            <th style="width:10%">@Html.DisplayName("Batch Size")</th>
+                            <th style="width:10%">@Html.DisplayName("Creator")</th>
+                            <th style="width:10%">@Html.DisplayName("IsActive")</th>
+                            <th style="width:10%">@Html.DisplayName("Action")</th>
+                            <th style="width:10%">@Html.DisplayName("View")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -55,32 +57,32 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr role="row">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FormulaName)
-                            </td>
-                            <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.BatchSize)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Username)
-                            </td>
-                            <td>
-                                <input asp-for="@item.IsActive" class="form-check-input" style="margin: 12Px 0 0 24px" />
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
-                                    <label> / </label>
-                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FormulaName)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.BatchSize)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    <input asp-for="@item.IsActive" class="form-check-inpup " style="margin: 12Px 0 0 24px; " />
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                        <label> / </label>
+                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

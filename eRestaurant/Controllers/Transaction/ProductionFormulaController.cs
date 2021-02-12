@@ -53,6 +53,7 @@ namespace RocketPOS.Controllers.Transaction
             else
             {
                 productionFormulaModel.FoodmenuType = 2;
+                productionFormulaModel.IsActive = true;
             }
             productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
@@ -63,7 +64,10 @@ namespace RocketPOS.Controllers.Transaction
         {
             UnitModel unitModel = new UnitModel();
             string unitName = string.Empty;
-            unitModel = _iProductionFormulaService.GetUnitNameByFoodMenuId(foodMenuId);
+            if (foodMenuId > 0)
+            {
+                unitModel = _iProductionFormulaService.GetUnitNameByFoodMenuId(foodMenuId);
+            }
             return Json(new { UnitName = unitModel.UnitName, Id= unitModel.Id });
         }
 

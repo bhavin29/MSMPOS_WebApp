@@ -86,9 +86,9 @@ namespace RocketPOS.Framework
 
     public enum ProductionEntryStatus
     {
-        [Display(Name = "SaveAsDraft")]
+        [Display(Name = "Save As Draft")]
         SaveAsDraft = 1,
-        [Display(Name = "InProgress")]
+        [Display(Name = "In Progress")]
         InProgress = 2,
         [Display(Name = "Completed")]
         Completed = 3,

@@ -12,8 +12,8 @@ $(document).ready(function () {
         ],
         "paging": false,
         "bLengthChange": true,
-        "bInfo": true,
-        "bFilter": true,
+        "bInfo": false,
+        "bFilter": false,
         "ordering": true,
         "autoWidth": false,
         "orderCellsTop": true,
@@ -33,8 +33,8 @@ $(document).ready(function () {
         ],
         "paging": false,
         "bLengthChange": true,
-        "bInfo": true,
-        "bFilter": true,
+        "bInfo": false,
+        "bFilter": false,
         "ordering": true,
         "autoWidth": false,
         "orderCellsTop": true,
@@ -53,10 +53,13 @@ $(document).ready(function () {
         $("#onthespot").prop('checked', false);
     }
 
+    $("#ProductionFormulaId").focus();
+
 });
 
 function loadProductionFormula() {
     window.location.href = "/ProductionEntry/ProductionEntry?productionFormulaId=" + $("#ProductionFormulaId").val() + "&foodMenuType=" + $("#FoodmenuType").val();
+    $("#ProductionFormulaId").focus();
 }
 /*
 function loadProductionFormulaById() {
@@ -162,7 +165,7 @@ $("#CurrentBatchSize").keyup(function () {
     for (var i = 1; i < entryIngredient.rows.length; i++) {
         ingredientQty = entryIngredient.rows[i].cells[1].innerText;
         actualIngredientQty = (ingredientQty * currentBatchSize )/batchSize;
-        entryIngredient.rows[i].cells[2].innerHTML = actualIngredientQty;
+        entryIngredient.rows[i].cells[2].innerHTML = parseFloat(actualIngredientQty).toFixed(2);
     }
 });
 

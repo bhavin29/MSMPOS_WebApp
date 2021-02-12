@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Web.Mvc;
 
@@ -12,8 +13,9 @@ namespace RocketPOS.Models
         public string ProductionFormulaName { get; set; }
         public int FoodmenuType { get; set; }
         public string ReferenceNo { get; set; }
-        public DateTime ProductionDate { get; set; }
+        public string ProductionDate { get; set; }
         public DateTime ProductionCompletionDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public string ActualBatchSize { get; set; }
         public int Status { get; set; }
         public string Username { get; set; }
@@ -36,14 +38,18 @@ namespace RocketPOS.Models
         public int FoodMenuId { get; set; }
         public string FoodmenuName { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ExpectedOutput { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualOutput { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public string Notes { get; set; }
         public string VariationNotes { get; set; }        
         public List<SelectListItem> IngredientList { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal IngredientQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualIngredientQty { get; set; }
         public int Status { get; set; }
         public List<ProductionEntryFoodMenuModel> productionEntryFoodMenuModels { get; set; }
@@ -57,8 +63,11 @@ namespace RocketPOS.Models
         public int PEFoodMenuId { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ExpectedOutput { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal AllocationOutput { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualOutput { get; set; }
 
     }
@@ -67,7 +76,9 @@ namespace RocketPOS.Models
         public int PEIngredientId { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal IngredientQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualIngredientQty { get; set; }
     }
 }

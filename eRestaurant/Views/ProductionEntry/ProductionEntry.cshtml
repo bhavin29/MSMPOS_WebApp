@@ -37,7 +37,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pr-2 pl-2">
+                                        <div class="col-md-3 pr-2 pl-2">
                                             <div class="form-group">
                                                 <label asp-for="BatchSize" class="control-label">Batch Size</label>
                                                 <input asp-for="BatchSize" class="form-control" style="text-align:right"  disabled="disabled" />
@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label id="BatchSizeUnitName" class="control-label" style="margin-top: 28px">Unit</label>
+                                                <label asp-for="BatchSizeUnitName" class="control-label" style="margin-top: 28px">@(Model.BatchSizeUnitName)</label>
                                             </div>
                                         </div>
                                     </div>
@@ -57,16 +57,16 @@
                                                 <input asp-for="ProductionDate" type="date" class="form-control" />
                                             </div>
                                         </div>
-                                        <div class="col-md-2 pr-2 pl-2">
+                                        <div class="col-md-3 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label class="control-label">Actual Size </label>
-                                                <input asp-for="ActualBatchSize" id="CurrentBatchSize"  type="number" placeholder="0.00" class="form-control " style="text-align:right" />
+                                                <label class="control-label">Actual Batch Size </label>
+                                                <input asp-for="ActualBatchSize" type="number" placeholder="0.00" class="form-control " style="text-align:right" />
                                                 <span asp-validation-for="ActualBatchSize" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label id="CurrentBatchSizeUnitName" class="control-label" style="margin-top: 28px">Unit</label>
+                                                <label class="control-label" style="margin-top: 28px">@(Model.BatchSizeUnitName)</label>
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@
                                                                     @item.FoodMenuName
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    @item.ExpectedOutput.ToString("N")
+                                                                    @item.ExpectedOutput.ToString("N") @item.FoodMenuUnitName
                                                                 </td>
                                                                 <td class="text-right">
                                                                     <input type="number" id="allocateOut" asp-for="@item.AllocationOutput" id="AllocationOutput" onkeyup="return calculateSum();" class="form-control col-sm-11 text-right AllocationOutput" min="0" max="99999" value="@item.AllocationOutput" />
@@ -150,7 +150,7 @@
                                                                 @item.IngredientName
                                                             </td>
                                                             <td class="text-right">
-                                                                @item.IngredientQty.ToString("N")
+                                                                @item.IngredientQty.ToString("N") @item.IngredientUnitName
                                                             </td>
                                                             <td class="text-right">
                                                                 @item.ActualIngredientQty.ToString("N")
@@ -172,7 +172,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group form-inline">
-                                        <label asp-for="VariationNotes" class="col-form-label ">Variation Notes</label>
+                                        <label asp-for="VariationNotes" class="col-form-label ">Variation</label>
                                         <textarea asp-for="VariationNotes" class="form-control input-full text-left" readonly="readonly" rows="2" cols="140"></textarea>
                                     </div>
                                 </div>
@@ -188,9 +188,9 @@
                                     }
                                     @if (Model.Status == 2)
                                     {
-                                        <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
                                         <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
-                                    }
+                                        <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
+                                 }
                                 }
                                 <a href='@Url.Action("Index", "ProductionEntry")' class="btn btn-primary" style="margin:0px 0px 0px 0px">Cancel</a>
                             </div>

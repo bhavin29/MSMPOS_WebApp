@@ -33,7 +33,7 @@ namespace RocketPOS.Models
         public DateTime ProductionCompletionDate { get; set; }
         public string BatchSize { get; set; }
         public int BatchSizeUnitId { get; set; }
-        public string UnitName { get; set; }        
+        public string BatchSizeUnitName { get; set; }        
         public string ActualBatchSize { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodmenuName { get; set; }
@@ -69,6 +69,7 @@ namespace RocketPOS.Models
         public decimal AllocationOutput { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualOutput { get; set; }
+        public string FoodMenuUnitName { get; set; }
 
     }
     public class ProductionEntryIngredientModel
@@ -80,5 +81,6 @@ namespace RocketPOS.Models
         public decimal IngredientQty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal ActualIngredientQty { get; set; }
+        public string IngredientUnitName { get; set; }
     }
 }

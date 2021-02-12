@@ -95,8 +95,19 @@
     @section Scripts {
         <script>
         $(document).ready(function () {
-            var table = $('#@dataTableName').DataTable({
-                "order": [[1, "asc"]]
+            table = $('#@dataTableName').DataTable({
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 50,
+                        "lengthMenu": [
+                            [50, 100, 200, 500],
+                            ['50', '100', '200', '500']
+                        ],
             });
         });
         </script>

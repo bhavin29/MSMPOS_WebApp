@@ -45,7 +45,6 @@ $(document).ready(function () {
             ['200', '500', '1000']
         ],
     });
-
     if ($("#FoodmenuType").val() == 2) {
         $("#onthespot").prop('checked', true);
     }
@@ -66,7 +65,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             $("#PFFoodMenuId").val(),
             $("#FoodMenuId").val(),
             $('#FoodMenuId').children("option:selected").text(),
-            parseFloat(ExpectedOutput).toFixed(2),
+            parseFloat(ExpectedOutput).toFixed(2) + ' ' + $("#FoodMenuUnitName").text() ,
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -77,13 +76,14 @@ $('#addFoodMenuRow').on('click', function (e) {
             pfFoodMenuId: $("#PFFoodMenuId").val(),
             foodMenuId: $("#FoodMenuId").val(),
             expectedOutput: $("#ExpectedOutput").val(),
+            foodMenuUnitName: $("#FoodMenuUnitName").text(),
             foodMenuName: $('#FoodMenuId').children("option:selected").text()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
-        $("#ExpectedOutput").val(parseFloat(1.00).toFixed(2));
+ 
         $("#FoodMenuId").focus();
     }
     else if (message != '') {
@@ -204,7 +204,8 @@ function validation(id) {
 function clearFoodMenuItem() {
     $("#FoodMenuId").val('0');
     $("#PFFoodMenuId").val('0');    
-    $("#ExpectedOutput").val('');
+    $("#ExpectedOutput").val(parseFloat(1.00).toFixed(2));
+    $("#FoodMenuUnitName").html('');
 }
 
 
@@ -216,14 +217,13 @@ $('#addIngredientRow').on('click', function (e) {
     var message = validation(2);
     var rowId = "rowId" + $("#IngredientId").val();
     IngredientQty = $("#IngredientQty").val();
-    debugger;
     if (message == '') {
         FormulaIngredientTable.row('.active').remove().draw(false);
         var rowNode = FormulaIngredientTable.row.add([
             $("#PFIngredientId").val(),
             $("#IngredientId").val(),
             $('#IngredientId').children("option:selected").text(),
-            parseFloat(IngredientQty).toFixed(2),
+            parseFloat(IngredientQty).toFixed(2) + ' ' + $("#IngredientUnitName").text(),
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class=" editIngredientItem">Edit</a> / <a href="#" data-toggle="modal"  data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -240,8 +240,7 @@ $('#addIngredientRow').on('click', function (e) {
         $(rowNode).find('td').eq(2).addClass('text-right');
         clearIngredientItem();
         editIngredientDataArr = [];
-        $("#IngredientQty").val(parseFloat(1.00).toFixed(2));
-     $("#IngredientId").focus();
+        $("#IngredientId").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -301,7 +300,8 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
 function clearIngredientItem() {
     $("#IngredientId").val('0');
     $("#PFIngredientId").val('0');
-    $("#IngredientQty").val('');
+    $("#IngredientQty").val(parseFloat(1.00).toFixed(2));
+    $("#IngredientUnitName").html('');
 }
 
 function GetUnitNameByIngredientId() {
@@ -329,8 +329,8 @@ function GetUnitNameByFoodMenuId() {
         success: function (data) {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
-            $("#BatchSizeUnitName").text(obj.unitName);
-            $("#BatchSizeUnitId").val(obj.id);
+            //$("#BatchSizeUnitName").text(obj.unitName);
+            //$("#BatchSizeUnitId").val(obj.id);
         },
         error: function (data) {
             alert(data);

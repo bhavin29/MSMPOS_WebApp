@@ -26,7 +26,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " Select T.Id,TableName,OutletId,OutletName,PersonCapacity,TableIcon,Status FROM Tables T INNER JOIN Outlet O ON T.OutletId = O.Id WHERE T.IsDeleted=0" +
+                var query = " Select T.Id,TableName,OutletId,OutletName,PersonCapacity,TableIcon,Status,T.IsActive FROM Tables T INNER JOIN Outlet O ON T.OutletId = O.Id WHERE T.IsDeleted=0" +
                             "ORDER BY T.TableName ";
                 TablesModel = con.Query<TablesModel>(query).ToList();
             }
@@ -43,9 +43,9 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Tables (TableName,OutletId,PersonCapacity,TableIcon,Status)" +
+                var query = "INSERT INTO Tables (TableName,OutletId,PersonCapacity,TableIcon,Status,IsActive)" +
                             "VALUES" +
-                            "(@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status);" +
+                            "(@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status,@IsActive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, TablesModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -70,7 +70,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE Tables SET TableName=@TableName,OutletId=@OutletId," +
-                            "PersonCapacity=@PersonCapacity,TableIcon=@TableIcon,Status=@Status " +
+                            "PersonCapacity=@PersonCapacity,TableIcon=@TableIcon,Status=@Status,IsActive=@IsActive " +
                            "WHERE Id = @Id;";
                 result = con.Execute(query, TablesModel, sqltrans, 0, System.Data.CommandType.Text);
 

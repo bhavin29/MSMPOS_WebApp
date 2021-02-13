@@ -25,6 +25,7 @@ namespace RocketPOS.Interface.Services
 
         List<SelectListItem> GetFoodMenuListByCategory(int id);
         List<SelectListItem> GetProductionFormulaList(int foodmenuType);
+        List<SelectListItem> GetAssetItemList();
 
     }
 }

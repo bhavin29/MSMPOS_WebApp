@@ -93,4 +93,24 @@ namespace RocketPOS.Framework
         [Display(Name = "Completed")]
         Completed = 3,
     }
+
+    public enum AssetEventType
+    {
+        [Display(Name = "Catering")]
+        Catering = 1,
+        [Display(Name = "On-Demand")]
+        OnDemand = 2,
+    }
+
+    public enum AssetEventStatus
+    {
+        [Display(Name = "Created")]
+        Created = 1,
+        [Display(Name = "Allocated")]
+        Allocated = 2,
+        [Display(Name = "Returned")]
+        Return = 3,
+        [Display(Name = "Closed")]
+        Closed = 4,
+    }
 }

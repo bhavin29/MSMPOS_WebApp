@@ -4,6 +4,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel;
 
 namespace RocketPOS.Models
 {
@@ -13,7 +14,7 @@ namespace RocketPOS.Models
 
         [Required(ErrorMessage = "Enter Category")]
         public string IngredientCategoryName { get; set; }
-
+        [DisplayName("Raw Material")]
         public string RawMaterialType { get; set; }
 
         [Required(ErrorMessage = "Select Raw Material")]

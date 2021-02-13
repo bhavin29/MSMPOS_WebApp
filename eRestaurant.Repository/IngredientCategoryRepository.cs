@@ -53,7 +53,7 @@ namespace RocketPOS.Repository
             {
                 var query = " SELECT IC.Id,IC.IngredientCategoryName,IC.RawMaterialId, R.RawMaterialName as RawMaterialType,IC.Notes,IC.IsActive  " +
                             " FROM IngredientCategory IC INNER JOIN RawMaterial R ON R.ID = IC.RawMaterialId WHERE IC.IsDeleted = 0 " +
-                            " ORDER BY IC.IngredientCategoryName ";
+                            " ORDER BY R.RawMaterialName,IC.IngredientCategoryName ";
 
                 ingredientUnitModel = con.Query<IngredientCategoryModel>(query).ToList();
             }

@@ -93,4 +93,13 @@ namespace RocketPOS.Framework
         [Display(Name = "Completed")]
         Completed = 3,
     }
+    public enum FoodMenuType
+    {
+        [Display(Name = "Readymade")]
+        Readymade = 1,
+        [Display(Name = "On the spot")]
+        OnTheSpot = 2,
+        [Display(Name = "Other")]
+        Other = 3,
+    }
 }

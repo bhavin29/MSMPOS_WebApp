@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuName, FoodMenuCode, Readymade, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             "SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 " +
                             "ORDER BY FoodMenuName ";
@@ -42,7 +42,7 @@ namespace RocketPOS.Repository
             List<FoodMenuModel> foodManuModelList = new List<FoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FM.UnitsId,FM.FoodVatTaxId, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , Readymade,FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                var query = "SELECT  FM.Id, FM.UnitsId,FM.FoodVatTaxId, FoodMenuType,FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName,FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             "SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 and " +
                             " FM.Id = " + foodMenuId +
@@ -80,10 +80,10 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO FoodMenu " +
-                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuCode, PurchasePrice,SalesPrice ,Readymade, Notes, UnitsId,FoodVatTaxId," +
+                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuType,FoodMenuCode, PurchasePrice,SalesPrice, Notes, UnitsId,FoodVatTaxId," +
                     " Position,  IsActive) " +
                     "Values " +
-                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName, @FoodMenuCode, @PurchasePrice,@SalesPrice,@Readymade, @Notes,@UnitsId,@FoodVatTaxId," +
+                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName,@FoodMenuType, @FoodMenuCode, @PurchasePrice,@SalesPrice, @Notes,@UnitsId,@FoodVatTaxId," +
                   "@Position,  @IsActive);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
 
@@ -94,7 +94,7 @@ namespace RocketPOS.Repository
                     sqltrans.Commit();
 
                     //CREATE ENTRY INTO INVETORY AS STOCK 0.00
-                    query = " INSERT INTO INVENTORY (STOREID,FOODMENUID,STOCKQTY,USERIDINSERTED,ISDELETED)" + 
+                    query = " INSERT INTO INVENTORY (STOREID,FOODMENUID,STOCKQTY,USERIDINSERTED,ISDELETED)" +
                             " Select S.ID as StoreId,FM.Id,0,1,0 from foodmenu FM CROSS JOIN STORE S " +
                             " WHERE FM.ID =" + MaxId;
 
@@ -103,7 +103,7 @@ namespace RocketPOS.Repository
                     //CREATE ENTRY INTO FOODMENURATE
                     query = " INSERT INTO FOODMENURATE(Id, OutletId, FoodMenuId, SalesPrice, FoodVatTaxId, IsActive) " +
                             " Select(select max(Id) from foodmenurate) + ROW_NUMBER() OVER(ORDER BY fm.id desc) AS Row# " +
-		                    " , O.Id,FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 from FoodMenu FM Cross join Outlet O " +
+                            " , O.Id,FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 from FoodMenu FM Cross join Outlet O " +
                             " Where FM.Id =" + MaxId;
 
                     result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -130,11 +130,11 @@ namespace RocketPOS.Repository
                 var query = "UPDATE FoodMenu SET " +
                      "FoodCategoryId=@FoodCategoryId, " +
                      "FoodMenuName=@FoodMenuName, " +
+                     "FoodMenuType=@FoodMenuType, " +
                      "FoodMenuCode=@FoodMenuCode, " +
                      "PurchasePrice=@PurchasePrice, " +
                      " UnitsId = @UnitsId," +
-                     " FoodVatTaxId =@FoodVatTaxId ,"+
-                     "Readymade=@Readymade, " +
+                     " FoodVatTaxId =@FoodVatTaxId ," +
                      "ColourCode=@ColourCode," +
                      "BigThumb=@BigThumb, " +
                      "MediumThumb=@MediumThumb, " +
@@ -189,9 +189,9 @@ namespace RocketPOS.Repository
 
                     if (result > 0)
                     {
-                        sqltrans.Commit(); 
-                       //  query = $"UPDATE FoodMenuRate SET FoodVatTaxId = " + foodMenuModel.FoodVatTaxId + " WHERE FoodmenuId = {foodMenuId};";
-                      //  result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                        sqltrans.Commit();
+                        //  query = $"UPDATE FoodMenuRate SET FoodVatTaxId = " + foodMenuModel.FoodVatTaxId + " WHERE FoodmenuId = {foodMenuId};";
+                        //  result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
                     else
@@ -216,7 +216,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
-                    
+
                     query = $"UPDATE FoodMenuRate SET IsDeleted = 1 WHERE FoodmenuId = {foodMenuId};";
                     result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 }

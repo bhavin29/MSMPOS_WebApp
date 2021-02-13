@@ -163,7 +163,7 @@ namespace RocketPOS.Repository.Reports
                 }
                 query = query + " where INV.StoreId = " + storeId;
 
-                query += "   ORDER BY  F.Foodmenuname,INV.StockQty ,F.Readymade desc ";
+                query += "   ORDER BY  F.Foodmenuname,INV.StockQty ,F.foodmenutype desc ";
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }

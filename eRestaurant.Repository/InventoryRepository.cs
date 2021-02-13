@@ -29,7 +29,7 @@ namespace RocketPOS.Repository
                             "FROM dbo.Inventory I " +
                             "Inner Join FoodMenu FM On FM.Id = I.FoodMenuId  " +
                             "Inner Join FoodMenuCategory FMC On FMC.Id = FM.FoodCategoryId  " +
-                            "Where I.IsDeleted = 0 And FM.Readymade=1 And I.StoreId = " + storeId;
+                            "Where I.IsDeleted = 0 And FM.Foodmenutype=1 And I.StoreId = " + storeId;
 
                 if (foodCategoryId > 0)
                 {

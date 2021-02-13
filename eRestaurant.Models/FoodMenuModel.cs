@@ -4,7 +4,7 @@ using System.Text;
 using System.Web.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-
+using RocketPOS.Framework;
 namespace RocketPOS.Models
 {
     public class FoodMenuModel
@@ -25,7 +25,6 @@ namespace RocketPOS.Models
         public string FoodMenuCode { get; set; }
         public string ColourCode { get; set; }
         public decimal PurchasePrice {get; set;}
-        public bool Readymade { get; set; }
         public string BigThumb { get; set; }
         public string MediumThumb { get; set; }
         public string SmallThumb { get; set; }
@@ -37,6 +36,13 @@ namespace RocketPOS.Models
         public int FoodVatTaxId { get; set; }
         public string FoodVatTaxName { get; set; }
         public List<SelectListItem> FoodVatTaxList { get; set; }
+
+        [Required(ErrorMessage = "Select Foodmenu Type")]
+        [EnumDataType(typeof(FoodMenuType))]
+        [Range(1, 3, ErrorMessage = "Select Foodmenu Type")]
+
+        [DisplayName("FoodMenu Type")]
+        public FoodMenuType? FoodMenuType { get; set; }
         public List<SelectListItem> UnitsList { get; set; }
         public int UnitsId { get; set; }
         public string UnitName { get; set; }

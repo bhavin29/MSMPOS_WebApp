@@ -67,7 +67,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "select PurchasePrice from FoodMenu where Readymade=1 and IsActive = 1 AND IsDeleted= 0  And Id="+ foodMenuId;
+                var query = "select PurchasePrice from FoodMenu where Foodmenutype=1 and IsActive = 1 AND IsDeleted= 0  And Id="+ foodMenuId;
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }

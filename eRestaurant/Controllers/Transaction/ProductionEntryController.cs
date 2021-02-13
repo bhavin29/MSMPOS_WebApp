@@ -29,6 +29,14 @@ namespace RocketPOS.Controllers.Transaction
 
         public IActionResult Index(int? foodMenuType)
         {
+            if (TempData["foodMenuType"] == null)
+            {
+                TempData["foodMenuType"] = 2;
+            }
+            else if (foodMenuType !=null)
+            {
+                TempData["foodMenuType"] = foodMenuType;
+            }
             List<ProductionEntryViewModel> productionEntryViewModels = new List<ProductionEntryViewModel>();
             productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType));
             return View(productionEntryViewModels);
@@ -37,15 +45,20 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public JsonResult GetProductionEntryList(int? foodMenuType)
         {
+            TempData["foodMenuType"] = foodMenuType;
             List<ProductionEntryViewModel> productionEntryViewModels = new List<ProductionEntryViewModel>();
             productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType));
             return Json(new { productionEntryList = productionEntryViewModels });
         }
         public ActionResult ProductionEntry(int? id, int? foodMenuType, int? productionFormulaId, string type)
         {
+ 
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+            TempData["foodMenuType"] = foodMenuType;
+
             if (id > 0)
             {
+
                 ViewBag.ActionType = type;
                 productionEntryModel = _iProductionEntryService.GetProductionEntryById(Convert.ToInt32(id));
             }
@@ -55,12 +68,13 @@ namespace RocketPOS.Controllers.Transaction
                 {
                     productionEntryModel = _iProductionEntryService.GetProductionFormulaById(Convert.ToInt32(productionFormulaId));
                 }
-                productionEntryModel.ProductionDate = DateTime.Now;
+              //  productionEntryModel.ProductionDate = DateTime.Now;
                 productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
             }
             productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
+  
             return View(productionEntryModel);
         }
 
@@ -68,7 +82,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             productionEntryModel = _iProductionEntryService.GetProductionFormulaById(id);
-            productionEntryModel.ProductionDate = DateTime.Now;
+          //  productionEntryModel.ProductionDate = DateTime.Now;
             return Json(new { productionEntryModel = productionEntryModel });
         }
 

@@ -16,7 +16,15 @@
             </div>
             <div class="col-md-1 pl-0 pr-0">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionEntryList();" />
+                    @if (((int)TempData["foodMenuType"]) == 2)
+                    {
+                        <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" onchange="return loadProductionEntryList();" />
+                    }
+                    else
+                    {
+                        <input class="form-check-input" type="checkbox" id="onthespot"  onchange="return loadProductionEntryList();" />
+
+                    }
                     <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                 </div>
             </div>

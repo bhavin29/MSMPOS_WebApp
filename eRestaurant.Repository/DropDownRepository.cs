@@ -157,7 +157,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional from FoodMenu where  Readymade=1 and IsActive = 1 AND IsDeleted= 0 Order by FoodMenuName";
+                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional from FoodMenu where  FoodmenuType=1 and IsActive = 1 AND IsDeleted= 0 Order by FoodMenuName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -198,6 +198,16 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "Select Id,FormulaName AS [Name] From ProductionFormula Where IsDeleted=0 And foodmenuType="+ foodmenuType;
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+        public List<DropDownModel> GetRawMaterialList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id,RawMaterialName as [Name] from RawMaterial   Order by RawMaterialName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

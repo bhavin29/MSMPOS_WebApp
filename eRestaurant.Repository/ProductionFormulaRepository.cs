@@ -57,8 +57,10 @@ namespace RocketPOS.Repository
             List<ProductionFormulaFoodMenuModel> productionFormulaFoodMenuDetail = new List<ProductionFormulaFoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFM.Id AS PFFoodMenuId,PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput  from ProductionFormulaFoodmenu PFM " +
-                            " Inner Join FoodMenu FM On FM.Id = PFM.FoodMenuId Where PFM.IsDeleted = 0 And PFM.ProductionFormulaId =" + productionFormulaId;
+                var query = " select PFM.Id AS PFFoodMenuId,PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput, U.Unitname as FoodMenuUnitName "+
+                            " from ProductionFormulaFoodmenu PFM " +
+                            " Inner Join FoodMenu FM On FM.Id = PFM.FoodMenuId inner join Units U ON U.Id = FM.UnitsId " +
+                            " Where PFM.IsDeleted = 0 And PFM.ProductionFormulaId =" + productionFormulaId;
                 productionFormulaFoodMenuDetail = con.Query<ProductionFormulaFoodMenuModel>(query).AsList();
             }
             return productionFormulaFoodMenuDetail;
@@ -69,8 +71,10 @@ namespace RocketPOS.Repository
             List<ProductionFormulaIngredientModel> productionFormulaIngredientDetail = new List<ProductionFormulaIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFI.Id AS PFIngredientId,PFI.IngredientId,I.IngredientName,PFI.IngredientQty  from ProductionFormulaIngredient PFI " +
-                            " Inner Join Ingredient I On I.Id=PFI.IngredientId Where PFI.IsDeleted=0 And PFI.ProductionFormulaId=" + productionFormulaId;
+                var query = " select PFI.Id AS PFIngredientId,PFI.IngredientId,I.IngredientName,PFI.IngredientQty, U.Unitname as IngredientUnitName " +
+                            " from ProductionFormulaIngredient PFI " +
+                            " Inner Join Ingredient I On I.Id=PFI.IngredientId inner join Units U ON U.Id = I.ingredientUnitId  " + 
+                            " Where PFI.IsDeleted=0 And PFI.ProductionFormulaId=" + productionFormulaId;
                 productionFormulaIngredientDetail = con.Query<ProductionFormulaIngredientModel>(query).AsList();
             }
             return productionFormulaIngredientDetail;

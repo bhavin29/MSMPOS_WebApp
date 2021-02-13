@@ -22,7 +22,8 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public string FormulaName { get; set; }
         public string BatchSize { get; set; }
-        public int BatchSizeUnitId { get; set; }        
+        public int BatchSizeUnitId { get; set; }
+        public List<SelectListItem> BatchSizeUnitsList { get; set; }
         public bool IsActive { get; set; }
         public int FoodmenuType { get; set; }        
         public int FoodMenuId { get; set; }
@@ -45,6 +46,7 @@ namespace RocketPOS.Models
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
         public decimal ExpectedOutput { get; set; }
+        public string FoodMenuUnitName { get; set; }
 
     }
     public class ProductionFormulaIngredientModel
@@ -53,6 +55,7 @@ namespace RocketPOS.Models
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public decimal IngredientQty { get; set; }
+        public string IngredientUnitName { get; set; }
 
     }
 }

@@ -29,5 +29,9 @@ namespace RocketPOS.Models
 
         [EnumDataType(typeof(TableStatus))]
         public TableStatus? Status { get; set; }
+
+        public bool IsActive { get; set; }
+
+        
     }
 }

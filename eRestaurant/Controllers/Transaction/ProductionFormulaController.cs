@@ -29,6 +29,14 @@ namespace RocketPOS.Controllers.Transaction
         }
         public IActionResult Index(int? foodMenuType)
         {
+            if (TempData["foodMenuType"] == null)
+            {
+                TempData["foodMenuType"] = 2;
+            }
+            else if (foodMenuType != null)
+            {
+                TempData["foodMenuType"] = foodMenuType;
+            }
             List<ProductionFormulaViewModel> productionFormulaViewModels = new List<ProductionFormulaViewModel>();
             productionFormulaViewModels = _iProductionFormulaService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             return View(productionFormulaViewModels);
@@ -37,6 +45,7 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public JsonResult GetProductionFormulaList(int? foodMenuType)
         {
+            TempData["foodMenuType"] = foodMenuType;
             List<ProductionFormulaViewModel> productionFormulaViewModels = new List<ProductionFormulaViewModel>();
             productionFormulaViewModels = _iProductionFormulaService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             return Json(new { productionFormulaList = productionFormulaViewModels });
@@ -45,6 +54,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult ProductionFormula(int? id,int? foodMenuType, string type)
         {
             ProductionFormulaModel productionFormulaModel = new ProductionFormulaModel();
+            TempData["foodMenuType"] = foodMenuType;
             if (id > 0)
             {
                 ViewBag.ActionType = type;
@@ -52,11 +62,13 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                productionFormulaModel.FoodmenuType = 2;
+                productionFormulaModel.FoodmenuType =(int) foodMenuType;
                 productionFormulaModel.IsActive = true;
             }
             productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
+            productionFormulaModel.BatchSizeUnitsList = _iDropDownService.GetUnitList();
+
             return View(productionFormulaModel);
         }
 

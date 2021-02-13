@@ -8,7 +8,7 @@ $(document).ready(function () {
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
             { targets: [1], orderable: false, visible: false },
-            { targets: [3,4], orderable: false, class: "text-right" },
+            { targets: [3, 4], orderable: false, class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -29,7 +29,7 @@ $(document).ready(function () {
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
             { targets: [1], orderable: false, visible: false },
-            { targets: [3,4], orderable: false, class: "text-right" }
+            { targets: [3, 4], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -53,6 +53,7 @@ $(document).ready(function () {
         $("#onthespot").prop('checked', false);
     }
 
+    calculateSum();
     $("#ProductionFormulaId").focus();
 
 });
@@ -157,14 +158,14 @@ function loadProductionFormulaById() {
     });
 }
 */
-$("#CurrentBatchSize").keyup(function () {
+$("#ActualBatchSize").keyup(function () {
     var entryIngredient = document.getElementById('EntryIngredient');
     var batchSize = $("#BatchSize").val();
-    var currentBatchSize = $("#CurrentBatchSize").val();
-    var ingredientQty=0;
+    var actualBatchSize = $("#ActualBatchSize").val();
+    var ingredientQty = 0;
     for (var i = 1; i < entryIngredient.rows.length; i++) {
         ingredientQty = entryIngredient.rows[i].cells[1].innerText;
-        actualIngredientQty = (ingredientQty * currentBatchSize )/batchSize;
+        actualIngredientQty = (ingredientQty * actualBatchSize) / batchSize;
         entryIngredient.rows[i].cells[2].innerHTML = parseFloat(actualIngredientQty).toFixed(2);
     }
 });
@@ -175,8 +176,13 @@ function calculateSum() {
         var $this = $(this);
         var quantity = parseInt($this.val());
         subtotal += quantity;
-    })
-    var variation = "Batch size is " + $("#BatchSize").val() + " " + $("#BatchSizeUnitName").text() + " and expected with " + subtotal + " "+$("#BatchSizeUnitName").text();
+    });
+
+    var variation = "";
+    if ($("#ActualBatchSize").val() != subtotal) {
+        variation = "Actual Batch size is " + $("#ActualBatchSize").val() + " " + $("#BatchSizeUnitName").text() + " and allocation with " + subtotal + " " + $("#BatchSizeUnitName").text();
+    }
+
     $("#VariationNotes").val(variation);
 }
 
@@ -232,9 +238,9 @@ $(function () {
                     Id: $("#Id").val(),
                     FoodmenuType: $("#FoodmenuType").val(),
                     ProductionFormulaId: $("#ProductionFormulaId").val(),
-                    ActualBatchSize: $("#BatchSize").val(),
+                    ActualBatchSize: $("#ActualBatchSize").val(),
                     ProductionDate: $("#ProductionDate").val(),
-                    Status:1,
+                    Status: 1,
                     VariationNotes: $("#VariationNotes").val(),
                     Notes: $("#Notes").val(),
                     productionEntryFoodMenuModels: foodMenuDataArr,
@@ -310,7 +316,7 @@ $(function () {
                     Id: $("#Id").val(),
                     FoodmenuType: $("#FoodmenuType").val(),
                     ProductionFormulaId: $("#ProductionFormulaId").val(),
-                    ActualBatchSize: $("#BatchSize").val(),
+                    ActualBatchSize: $("#ActualBatchSize").val(),
                     ProductionDate: $("#ProductionDate").val(),
                     Status: 2,
                     VariationNotes: $("#VariationNotes").val(),
@@ -389,7 +395,7 @@ $(function () {
                     Id: $("#Id").val(),
                     FoodmenuType: $("#FoodmenuType").val(),
                     ProductionFormulaId: $("#ProductionFormulaId").val(),
-                    ActualBatchSize: $("#BatchSize").val(),
+                    ActualBatchSize: $("#ActualBatchSize").val(),
                     ProductionDate: $("#ProductionDate").val(),
                     Status: 3,
                     VariationNotes: $("#VariationNotes").val(),

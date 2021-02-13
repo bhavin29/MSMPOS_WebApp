@@ -276,6 +276,22 @@ namespace RocketPOS.Services
             }
             return lstProductionFormula;
         }
+        public List<SelectListItem> GetRawMaterialList()
+        {
+            List<SelectListItem> lstCategory = new List<SelectListItem>();
+
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetRawMaterialList().ToList();
+            if (lstCategoryResult != null && lstCategoryResult.Count > 0)
+            {
+                foreach (var item in lstCategoryResult)
+                {
+                    lstCategory.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+
+            return lstCategory;
+        }
 
         public List<SelectListItem> GetAssetItemList()
         {

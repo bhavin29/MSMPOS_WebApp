@@ -51,8 +51,9 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT Id,IngredientCategoryName,RawMaterialType,Notes,IsActive  FROM IngredientCategory WHERE IsDeleted = 0 " +
-               "ORDER BY IngredientCategoryName ";
+                var query = " SELECT IC.Id,IC.IngredientCategoryName,IC.RawMaterialId, R.RawMaterialName as RawMaterialType,IC.Notes,IC.IsActive  " +
+                            " FROM IngredientCategory IC INNER JOIN RawMaterial R ON R.ID = IC.RawMaterialId WHERE IC.IsDeleted = 0 " +
+                            " ORDER BY IC.IngredientCategoryName ";
 
                 ingredientUnitModel = con.Query<IngredientCategoryModel>(query).ToList();
             }
@@ -68,14 +69,13 @@ namespace RocketPOS.Repository
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
                 int MaxId = commonRepository.GetMaxId("IngredientCategory");
 
-                ingredientCategoryModel.RawMaterialType = (ingredientCategoryModel.RawMaterialType == 0) ? null : ingredientCategoryModel.RawMaterialType;
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO IngredientCategory (Id,IngredientCategoryName," +
-                            "RawMaterialType,Notes, " +
+                            "RawMaterialId,Notes, " +
                             "IsActive)" +
                             "VALUES (" + MaxId + ",@IngredientCategoryName," +
-                            "@RawMaterialType,@Notes," +
+                            "@RawMaterialId,@Notes," +
                             "@IsActive); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, ingredientCategoryModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -100,7 +100,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE IngredientCategory SET IngredientCategoryName =@IngredientCategoryName," +
-                            "RawMaterialType=@RawMaterialType,Notes = @Notes, " +
+                            "RawMaterialId=@RawMaterialId,Notes = @Notes, " +
                             "IsActive = @IsActive " +
                             "WHERE Id = @Id;";
                 result = con.Execute(query, ingredientCategoryModel, sqltrans, 0, System.Data.CommandType.Text);

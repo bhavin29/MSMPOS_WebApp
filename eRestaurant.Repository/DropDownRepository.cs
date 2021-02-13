@@ -202,5 +202,15 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+        public List<DropDownModel> GetRawMaterialList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Id,RawMaterialName as [Name] from RawMaterial   Order by RawMaterialName";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

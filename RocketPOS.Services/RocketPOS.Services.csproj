@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\eRestaurant.Interface\RocketPOS.Interface.csproj" />
     <ProjectReference Include="..\eRestaurant.Models\RocketPOS.Models.csproj" />
     <ProjectReference Include="..\eRestaurant.Repository\RocketPOS.Repository.csproj" />
   </ItemGroup>

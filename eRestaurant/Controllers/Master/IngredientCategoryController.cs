@@ -15,12 +15,15 @@ namespace RocketPOS.Controllers.Master
     public class IngredientCategoryController : Controller
     {
         private readonly IIngredientCategoryService _iIngredientCategoryService;
+        private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public IngredientCategoryController(IIngredientCategoryService ingredientCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public IngredientCategoryController(IIngredientCategoryService ingredientCategoryService, IDropDownService idropDownService,
+  IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iIngredientCategoryService = ingredientCategoryService;
+            _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
@@ -31,8 +34,6 @@ namespace RocketPOS.Controllers.Master
             List<IngredientCategoryModel> ingredientCategoryList = new List<IngredientCategoryModel>();
             ingredientCategoryList = _iIngredientCategoryService.GetIngredientCategoryList().ToList();
             return View(ingredientCategoryList);
-            // return View("../Master/IngredientCategory/Index");
-
         }
 
         // GET: IngredientCategoryController/Details/5
@@ -44,6 +45,7 @@ namespace RocketPOS.Controllers.Master
                 int ingredientCategroyId = Convert.ToInt32(id);
                 ingredientCategoryModel = _iIngredientCategoryService.GetIngredientCategoryById(ingredientCategroyId);
             }
+            ingredientCategoryModel.RawMaterialList = _iDropDownService.GetRawMaterialList();
 
             return View(ingredientCategoryModel);
         }
@@ -73,14 +75,15 @@ namespace RocketPOS.Controllers.Master
                 var result = _iIngredientCategoryService.InsertIngredientCategory(ingredientCategoryModel);
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
+            ingredientCategoryModel.RawMaterialList = _iDropDownService.GetRawMaterialList();
 
             return RedirectToAction("Index", "IngredientCategory");
         }
 
-            // GET: IngredientCategory/Delete/5
-            public ActionResult Delete(int id)
+        // GET: IngredientCategory/Delete/5
+        public ActionResult Delete(int id)
         {
-            var deletedid =_iIngredientCategoryService.DeleteIngredientCategory(id);
+            var deletedid = _iIngredientCategoryService.DeleteIngredientCategory(id);
 
             return RedirectToAction(nameof(Index));
         }

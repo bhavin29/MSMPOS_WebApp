@@ -1,17 +1,5 @@
-﻿@using RocketPOS.Framework;
-@model RocketPOS.Models.IngredientCategoryModel
-
-@{
-    //  ViewData["Title"] = "IngredientCategory";
-}
-
-
-@if (!string.IsNullOrEmpty(ViewBag.msg))
-{
-    <script type="text/javascript">
-        alert("@ViewBag.msg");
-    </script>
-}
+﻿@model RocketPOS.Models.IngredientCategoryModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <div class="page-inner">
     <div class="page-header"></div>
@@ -25,18 +13,19 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <form asp-action="IngredientCategory">
+                            <form asp-action="IngredientCategory" method="post" role="form">
                                 <div class="form-group">
                                     <label asp-for="IngredientCategoryName" class="control-label">Stock Category</label>
                                     <input asp-for="IngredientCategoryName" class="form-control" />
                                     <span asp-validation-for="IngredientCategoryName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="RawMaterialType" class="control-label">Raw Material Type</label>
-                                    <select asp-for="RawMaterialType" class="form-control" asp-items="Html.GetEnumSelectList<RawMaterialType>()">
-                                        <option selected="selected" value="">Select</option>
+                                    <label asp-for="RawMaterialList" class="control-label">Raw Material</label>
+                                    <select asp-for="RawMaterialId"
+                                            class="form-control"
+                                            asp-items="@(new SelectList(Model.RawMaterialList, "Value", "Text"))">
                                     </select>
-                                    <span asp-validation-for="RawMaterialType" class="text-danger" />
+                                    <span asp-validation-for="RawMaterialId" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="Notes" class="control-label"></label>
@@ -50,30 +39,30 @@
 
                                         <div class="form-group">
                                             <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
-                                            <input asp-for="IsActive" class="form-check-input" style="margin: 15Px 0 0 42px"  />
+                                            <input asp-for="IsActive" class="form-check-input" style="margin: 15Px 0 0 42px" />
                                             <span class="alert-danger" asp-validation-for="IsActive"></span>
                                         </div>
                                     }
                                 }
                                 @*<div class="form-group">
-                                        <label asp-for="UserId" class="control-label"></label>
-                                        <input asp-for="UserId" class="form-control" />
-                                        <span asp-validation-for="UserId" class="text-danger"></span>
-                                    </div>*@
-                            <div class="form-group">
-                                @if (Model != null)
-                                {
-                                    @if (Model.Id > 0)
+            <label asp-for="UserId" class="control-label"></label>
+            <input asp-for="UserId" class="form-control" />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+        </div>*@
+                                <div class="form-group">
+                                    @if (Model != null)
                                     {
-                                        <input type="submit" value="Save" class="btn btn-primary" />
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "IngredientCategory")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     }
-                                    else
-                                    {
-                                        <input type="submit" value="Save" class="btn btn-primary" />
-                                    }
-                                    <a href='@Url.Action("Index", "IngredientCategory")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
-                                }
-                            </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -101,6 +90,22 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="vModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Validate
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="OK" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
 @{
     if (ViewBag.Result != null)
     {
@@ -109,6 +114,16 @@
         <script type="text/javascript">
             $(function () {
                 $("#aModal").modal('show');
+            });
+        </script>
+    }
+    if (ViewBag.Validate != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#vModal").modal('show');
             });
         </script>
     }

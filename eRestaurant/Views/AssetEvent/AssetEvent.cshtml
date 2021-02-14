@@ -8,7 +8,7 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-10">
-                        <h5 class="card-title">Asset Event</h5>
+                        <h5 class="card-title">Catering</h5>
                     </div>
                     <div class="col-md-2">
                         <div class="form-check form-switch">
@@ -24,106 +24,101 @@
                         <form asp-action="AssetEvent" method="post" id="assetEventForm" role="form">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-3 pr-0 pl-0">
+                                    <div class="col-md-1 pr-0 pl-0">
                                         <div class="form-group">
                                             <label asp-for="ReferenceNo" class="control-label">Doc Number</label>
                                             <input asp-for="ReferenceNo" disabled="disabled" class="form-control" />
                                         </div>
                                     </div>
+                                    @*<div class="col-md-3 pr-2 pl-2">
+                <div class="form-group">
+                    <label asp-for="EventType" class="control-label">Event Type</label>
+                    <select asp-for="EventType" class="form-control">
+                        <option value="">Select</option>
+                        <option value="1">Catering</option>
+                        <option value="2">On-Demand</option>
+                    </select>
+                </div>
+            </div>*@
                                     <div class="col-md-3 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="EventType" class="control-label">Event Type</label>
-                                            <select asp-for="EventType" class="form-control">
-                                                <option value="">Select</option>
-                                                <option value="1">Catering</option>
-                                                <option value="2">On-Demand</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="EventName" class="control-label">Event Name</label>
+                                            <label asp-for="EventName" class="control-label">Catering Name</label>
                                             <input asp-for="EventName" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3 pr-2 pl-2">
+                                    <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="EventDatetime" class="control-label">Event Date</label>
+                                            <label asp-for="EventDatetime" class="control-label">Date</label>
                                             <input asp-for="EventDatetime" type="date" class="form-control" />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-4 pr-2 pl-2">
+                                    <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="EventPlace" class="control-label">Event Place</label>
+                                            <label asp-for="EventPlace" class="control-label">Place</label>
                                             <input asp-for="EventPlace" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="ContactPersonName" class="control-label">Contact Person Name</label>
+                                            <label asp-for="ContactPersonName" class="control-label">Contact Person</label>
                                             <input asp-for="ContactPersonName" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label asp-for="ContactPersonNumber" class="control-label">Contact Person Number</label>
+                                            <label asp-for="ContactPersonNumber" class="control-label">Contact Number</label>
                                             <input asp-for="ContactPersonNumber" class="form-control" />
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-6 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="AssetItemList" class="control-label">AssetItem</label>
-                                                <select asp-for="AssetItemId"
-                                                        class="form-control"
-                                                        asp-items="@(new SelectList(Model.AssetItemList, "Value", "Text"))">
-                                                </select>
+                                <div class="row">
+                                    <h6>Assets Detail</h6>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4 pr-0 pl-0">
+                                                <div class="form-group">
+                                                    <label asp-for="AssetItemList" class="control-label">Asset Item</label>
+                                                    <select asp-for="AssetItemId"
+                                                            class="form-control"
+                                                            asp-items="@(new SelectList(Model.AssetItemList, "Value", "Text"))">
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-1 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label class="control-label text-right">EventQty</label>
-                                                <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="EventQty" />
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <div class="form-group">
+                                                    <label class="control-label text-right">Qty</label>
+                                                    <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="EventQty" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-1 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label class="control-label"></label>
-                                                <button id="addRowItem" class="btn btn-light" style="margin-top: 22px">Add</button>
-                                                <input class="form-control" type="hidden" id="AssetEventItemId" value="0" />
-                                                <input class="form-control" type="hidden" id="StockQty" />
-                                                <input class="form-control" type="hidden" id="AllocatedQty" />
-                                                <input class="form-control" type="hidden" id="ReturnQty" />
-                                                <input class="form-control" type="hidden" id="MissingQty" />
-                                                <input class="form-control" type="hidden" id="MissingNote" />
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"></label>
+                                                    <button id="addRowItem" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
+                                                    <input class="form-control" type="hidden" id="AssetEventItemId" value="0" />
+                                                    <input class="form-control" type="hidden" id="StockQty" />
+                                                    <input class="form-control" type="hidden" id="AllocatedQty" />
+                                                    <input class="form-control" type="hidden" id="ReturnQty" />
+                                                    <input class="form-control" type="hidden" id="MissingQty" />
+                                                    <input class="form-control" type="hidden" id="MissingNote" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-12 pr-2 pl-2">
+                                    <div class="col-md-12 pr-0 pl-0">
                                         <table id="AssetEventItem" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                             <thead>
                                                 <tr>
                                                     <th style="width:0%"></th>
                                                     <th style="width:0%"></th>
-                                                    <th style="width:35%">AssetItemName</th>
-                                                    <th style="width:15%" class="text-right">StockQty</th>
-                                                    <th style="width:15%" class="text-right">EventQty </th>
-                                                    <th style="width:15%" class="text-right">AllocatedQty</th>
-                                                    <th style="width:15%" class="text-right">ReturnQty</th>
-                                                    <th style="width:15%" class="text-right">MissingQty</th>
-                                                    <th style="width:15%">MissingNote</th>
+                                                    <th style="width:35%">Asset Item</th>
+                                                    <th style="width:15%" class="text-right">Stock Qty</th>
+                                                    <th style="width:15%" class="text-right">Event Qty </th>
+                                                    <th style="width:15%" class="text-right">Allocated Qty</th>
+                                                    <th style="width:15%" class="text-right">Return Qty</th>
+                                                    <th style="width:15%" class="text-right">Missing Qty</th>
+                                                    <th style="width:15%">Missing Note</th>
                                                     <th style="width:15%">Action</th>
                                                 </tr>
                                             </thead>
@@ -193,187 +188,195 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-6 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="FoodMenuList" class="control-label">FoodMenu</label>
-                                                <select asp-for="FoodMenuId"
-                                                        class="form-control"
-                                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
-                                                </select>
+                                <div class="row">
+                                    <h6>Foodmenu Detail</h6>
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-4 pr-0 pl-0">
+                                                <div class="form-group">
+                                                    <label asp-for="FoodMenuList" class="control-label">FoodMenu</label>
+                                                    <select asp-for="FoodMenuId"
+                                                            class="form-control"
+                                                            asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-1 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label class="control-label text-right">Quantity</label>
-                                                <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="Quantity" />
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <div class="form-group">
+                                                    <label class="control-label text-right">Quantity</label>
+                                                    <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="Quantity" />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-md-1 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label class="control-label"></label>
-                                                <button id="addRowFood" class="btn btn-light" style="margin-top: 22px">Add</button>
-                                                <input class="form-control" type="hidden" id="AssetEventFoodmenuId" value="0" />
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <div class="form-group">
+                                                    <label class="control-label"></label>
+                                                    <button id="addRowFood" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
+                                                    <input class="form-control" type="hidden" id="AssetEventFoodmenuId" value="0" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-12">
                                 <div class="row">
-                                    <table id="AssetEventFoodmenu" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:0%" hidden="hidden">AssetEventFoodmenuId</th>
-                                                <th style="width:0%" hidden="hidden">FoodmenuId</th>
-                                                <th style="width:30%">FoodMenuName</th>
-                                                <th style="width:15%">SalesPrice</th>
-                                                <th style="width:15%">Qunatity</th>
-                                                <th style="width:15%">TotalPrice</th>
-                                                <th style="width:15%">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @if (Model.assetEventFoodmenuModels != null)
-                                            {
-                                                @foreach (var item in Model.assetEventFoodmenuModels)
+                                    <div class="col-md-12 pr-0 pl-0">
+                                        <table id="AssetEventFoodmenu" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:0%" hidden="hidden">AssetEventFoodmenuId</th>
+                                                    <th style="width:0%" hidden="hidden">FoodmenuId</th>
+                                                    <th style="width:40%">FoodMenu</th>
+                                                    <th style="width:15%">Price</th>
+                                                    <th style="width:15%">Qunatity</th>
+                                                    <th style="width:15%">Total</th>
+                                                    <th style="width:15%">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Model.assetEventFoodmenuModels != null)
                                                 {
-                                                    var tm = "#myModal" + item.FoodMenuId;
-                                                    var mid = "myModal" + item.FoodMenuId;
-                                                    var rowId = "rowId" + item.FoodMenuId;
-                                                    <tr id="@rowId">
-                                                        <td>
-                                                            @item.AssetEventFoodmenuId
-                                                        </td>
-                                                        <td>
-                                                            @item.FoodMenuId
-                                                        </td>
-                                                        <td>
-                                                            @item.FoodMenuName
-                                                        </td>
-                                                        <td class="text-right">
-                                                            @item.SalesPrice.ToString("N")
-                                                        </td>
-                                                        <td class="text-right">
-                                                            @item.Qunatity.ToString("N")
-                                                        </td>
-                                                        <td class="text-right">
-                                                            @item.TotalPrice.ToString("N")
-                                                        </td>
-                                                        <td>
-                                                            <div class="form-button-action">
-                                                                <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
-                                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                                            </div>
-                                                        </td>
-                                                        <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <a id="deleteBtn" data-itemId="@item.AssetEventFoodmenuId" onclick="deleteFoodMenuOrder(@item.AssetEventFoodmenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                    @foreach (var item in Model.assetEventFoodmenuModels)
+                                                    {
+                                                        var tm = "#myModal" + item.FoodMenuId;
+                                                        var mid = "myModal" + item.FoodMenuId;
+                                                        var rowId = "rowId" + item.FoodMenuId;
+                                                        <tr id="@rowId">
+                                                            <td>
+                                                                @item.AssetEventFoodmenuId
+                                                            </td>
+                                                            <td>
+                                                                @item.FoodMenuId
+                                                            </td>
+                                                            <td>
+                                                                @item.FoodMenuName
+                                                            </td>
+                                                            <td class="text-right">
+                                                                @item.SalesPrice.ToString("N")
+                                                            </td>
+                                                            <td class="text-right">
+                                                                @item.Qunatity.ToString("N")
+                                                            </td>
+                                                            <td class="text-right">
+                                                                @item.TotalPrice.ToString("N")
+                                                            </td>
+                                                            <td>
+                                                                <div class="form-button-action">
+                                                                    <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
+                                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                                </div>
+                                                            </td>
+                                                            <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <a id="deleteBtn" data-itemId="@item.AssetEventFoodmenuId" onclick="deleteFoodMenuOrder(@item.AssetEventFoodmenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </tr>
+                                                        </tr>
+                                                    }
                                                 }
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="row mb-6">
-                                    <div class="col-sm-6">
-                                        <div><strong>History : </strong> </div>
-                                        @if (Model.DateInserted.ToShortDateString() == "01/01/0001")
-                                        { }
-                                        else
-                                        {
-                                            <div><strong>Created : </strong>@Model.DateInserted</div>
-                                        }
-                                        @if (Model.AllocationDatetime.ToShortDateString() == "01/01/0001")
-                                        { }
-                                        else
-                                        {
-                                            <div><strong>Allocation : </strong>@Model.AllocationDatetime</div>
-                                        }
-
-                                        @if (Model.ReturnDatetime.ToShortDateString() == "01/01/0001")
-                                        { }
-                                        else
-                                        {
-                                            <div><strong>ReturnDatetime : </strong>@Model.ReturnDatetime</div>
-                                        }
-
-                                        @if (Model.ClosedDatetime.ToShortDateString() == "01/01/0001")
-                                        { }
-                                        else
-                                        {
-                                            <div><strong>ClosedDatetime : </strong> @Model.ClosedDatetime</div>
-                                        }
-                                    </div>
-                                    <div class="col-lg-4 col-sm-5 ml-auto">
-                                        <table class="table table-clear">
-                                            <tbody>
-                                                <tr>
-                                                    <td class="left">
-                                                        <strong>FoodGrossAmount</strong>
-                                                    </td>
-                                                    <td class="right"><input asp-for="FoodGrossAmount" class="form-control input-full text-right" disabled="disabled" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left">
-                                                        <strong>FoodDiscountAmount</strong>
-                                                    </td>
-                                                    <td class="right"><input asp-for="FoodDiscountAmount" type="number" min="0" max="99999" class="form-control input-full text-right" /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="left">
-                                                        <strong>FoodNetAmount</strong>
-                                                    </td>
-                                                    <td class="right"><input asp-for="FoodNetAmount" class="form-control input-full text-right" disabled="disabled" /></td>
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                @if (ViewBag.ActionType != "View")
-                                {
-                                    @if (Model.Status == 0)
-                                    {
-                                        <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
-                                        <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
-                                    }
-                                    @if (Model.Status == 1)
-                                    {
-                                        <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
-                                        <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
-                                    }
-                                    @if (Model.Status == 2)
-                                    {
-                                        <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
-                                        <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
-                                    }
-                                    @if (Model.Status == 3)
-                                    {
-                                        <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
-                                    }
-                                }
-                                <a href='@Url.Action("Index", "AssetEvent")' class="btn btn-primary" style="margin:0px 0px 0px 0px">Cancel</a>
+                                <div class="row">
+                                    <div class="col-md-12 pl-0 pr-0">
+                                        <div class="form-group form-inline fc-left">
+                                            <div class="col-md-1 pr-0 pl-0">
+                                                <label asp-for="FoodGrossAmount" class="control-label">Gross</label>
+                                                <input asp-for="FoodGrossAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                            </div>
+                                            @*<div class="col-md-1 pr-2 pl-2">
+                        <label asp-for="" class="control-label">VAT </label>
+                        <input asp-for="" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                    </div>
+                    <div class="col-md-1 pr-2 pl-2">
+                        <label asp-for="" class="control-label">Tax</label>
+                        <input asp-for="" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                    </div>*@
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <label asp-for="FoodDiscountAmount" class="control-label">Discount</label>
+                                                <input asp-for="FoodDiscountAmount" style="width:80px" type="number" min="0" max="99999" class="form-control input-full text-right">
+                                            </div>
+                                            <div class="col-md-1 pr-2 pl-2">
+                                                <label asp-for="FoodNetAmount" class="control-label">NET</label>
+                                                <input asp-for="FoodNetAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12 pl-0 pr-0">
+                                        <div class="col-sm-6 pl-0 pr-0">
+                                            <div><strong>History </strong> </div>
+                                            @if (Model.DateInserted.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><span>Created:   </span>@Model.DateInserted</div>
+                                            }
+                                            @if (Model.AllocationDatetime.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><span>Allocation:</span>@Model.AllocationDatetime</div>
+                                            }
+
+                                            @if (Model.ReturnDatetime.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><span>Return:    </span>@Model.ReturnDatetime</div>
+                                            }
+
+                                            @if (Model.ClosedDatetime.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><span>Closed:    </span> @Model.ClosedDatetime</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="row">
+                                    <div class="form-group">
+                                        @if (ViewBag.ActionType != "View")
+                                        {
+                                            @if (Model.Status == 0)
+                                            {
+                                                <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
+                                                <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
+                                            }
+                                            @if (Model.Status == 1)
+                                            {
+                                                <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
+                                                <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
+                                            }
+                                            @if (Model.Status == 2)
+                                            {
+                                                <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
+                                                <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
+                                            }
+                                            @if (Model.Status == 3)
+                                            {
+                                                <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
+                                            }
+                                        }
+                                        <a href='@Url.Action("Index", "AssetEvent")' class="btn btn-primary" style="margin:0px 0px 0px 0px">Cancel</a>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>

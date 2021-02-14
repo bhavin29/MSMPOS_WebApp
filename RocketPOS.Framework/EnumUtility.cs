@@ -101,8 +101,10 @@ namespace RocketPOS.Framework
         OnTheSpot = 2,
         [Display(Name = "Other")]
         Other = 3,
+        [Display(Name = "Catering")]
+        Catering = 4,
     }
-
+    
     public enum AssetEventType
     {
         [Display(Name = "Catering")]

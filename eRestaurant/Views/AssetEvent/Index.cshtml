@@ -12,7 +12,13 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <h5 class="card-title">Asset Event Entries</h5>
+                <h5 class="card-title">Catering Entries</h5>
+            </div>
+            <div class="col-md-1 pl-0 pr-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="onHistory" checked="checked"  />
+                    <label class="form-check-label" for="flexSwitchCheckChecked">History</label>
+                </div>
             </div>
             <div class="col-md-1">
                 <div class="float-right">
@@ -29,7 +35,7 @@
                     <thead role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:30%">@Html.DisplayName("Event Name")</th>
+                            <th style="width:30%">@Html.DisplayName("Catering Name")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
                             <th style="width:10%">@Html.DisplayName("Creator")</th>
                             <th style="width:10%">@Html.DisplayName("Action")</th>
@@ -39,7 +45,7 @@
                     <tfoot role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:30%">@Html.DisplayName("Event Name")</th>
+                            <th style="width:30%">@Html.DisplayName("Catering Name")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
                             <th style="width:10%">@Html.DisplayName("Creator")</th>
                             <th style="width:10%">@Html.DisplayName("Action")</th>

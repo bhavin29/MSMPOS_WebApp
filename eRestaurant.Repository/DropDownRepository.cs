@@ -212,5 +212,16 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetAssetItemList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "Select Id,AssetItemName AS [Name] From AssetItem Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

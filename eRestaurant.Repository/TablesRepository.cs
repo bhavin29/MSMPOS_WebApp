@@ -39,13 +39,15 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                TablesModel.Status = (TablesModel.Status == 0) ? null : TablesModel.Status;  
+                TablesModel.Status = (TablesModel.Status == 0) ? null : TablesModel.Status;
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                int MaxId = commonRepository.GetMaxId("Tables");
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Tables (TableName,OutletId,PersonCapacity,TableIcon,Status,IsActive)" +
-                            "VALUES" +
-                            "(@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status,@IsActive);" +
+                var query = "INSERT INTO Tables (Id,TableName,OutletId,PersonCapacity,TableIcon,Status,IsActive)" +
+                            "VALUES ( "+ MaxId + 
+                            "@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status,@IsActive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, TablesModel, sqltrans, 0, System.Data.CommandType.Text);
 

@@ -27,6 +27,7 @@ namespace RocketPOS.Services
             assetEventModel = _iAssetEventRepository.GetAssetEventById(id);
             assetEventModel.assetEventItemModels = _iAssetEventRepository.GetAssetEventItemDetails(id);
             assetEventModel.assetEventFoodmenuModels = _iAssetEventRepository.GetAssetEventFoodmenuDetails(id);
+            assetEventModel.assetEventIngredientModels = _iAssetEventRepository.GetAssetIngredientDetails(id);
             return assetEventModel;
         }
 
@@ -40,9 +41,24 @@ namespace RocketPOS.Services
             throw new NotImplementedException();
         }
 
-        public List<AssetEventViewModel> GetAssetEventList()
+        public List<AssetEventViewModel> GetAssetEventList(bool isHistory)
         {
-            return _iAssetEventRepository.GetAssetEventList();
+            return _iAssetEventRepository.GetAssetEventList(isHistory);
+        }
+
+        public decimal GetAssetItemPriceById(int id)
+        {
+            return _iAssetEventRepository.GetAssetItemPriceById(id);
+        }
+
+        public AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id)
+        {
+            return _iAssetEventRepository.GetFoodMenuPriceTaxDetailById(id);
+        }
+
+        public decimal GetIngredientPriceById(int id)
+        {
+            return _iAssetEventRepository.GetIngredientPriceById(id);
         }
 
         public int InsertAssetEvent(AssetEventModel assetEventModel)

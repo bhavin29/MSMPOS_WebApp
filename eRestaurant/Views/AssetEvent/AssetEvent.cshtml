@@ -104,6 +104,7 @@
                                                                     <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="AssetItemCostPrice" />
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
                                                                     <label class="control-label text-right">Qty</label>
@@ -115,11 +116,11 @@
                                                                     <label class="control-label"></label>
                                                                     <button id="addRowItem" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
                                                                     <input class="form-control" type="hidden" id="AssetEventItemId" value="0" />
-                                                                    <input class="form-control" type="hidden" id="StockQty" />
-                                                                    <input class="form-control" type="hidden" id="AllocatedQty" />
-                                                                    <input class="form-control" type="hidden" id="ReturnQty" />
-                                                                    <input class="form-control" type="hidden" id="MissingQty" />
-                                                                    <input class="form-control" type="hidden" id="MissingNote" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="StockQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="AllocatedQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="ReturnQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="MissingQty" />
+                                                                    @*<input class="form-control" type="hidden" id="MissingNote" />*@
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -134,13 +135,13 @@
                                                                     <th style="width:0%"></th>
                                                                     <th style="width:35%">Asset Item</th>
                                                                     <th style="width:10%" class="text-right">Stock Qty</th>
-                                                                    <th style="width:10%" class="text-right">Event Qty </th>
+                                                                    <th style="width:10%" class="text-right">Qty </th>
+                                                                    <th style="width:5%" class="text-right">Cost Price</th>
+                                                                    <th style="width:10%" class="text-right">Total Amount</th>
                                                                     <th style="width:10%" class="text-right">Allocated Qty</th>
                                                                     <th style="width:10%" class="text-right">Return Qty</th>
-                                                                    <th style="width:10%" class="text-right">Missing Qty</th>
-                                                                    <th style="width:10%" class="text-right">Cost Price</th>
-                                                                    <th style="width:10%" class="text-right">Total Amount</th>
-                                                                    <th style="width:10%">Missing Note</th>
+                                                                    <th style="width:5%" class="text-right">Missing Qty</th>
+                                                                    <th style="width:15%">Missing Note</th>
                                                                     <th style="width:10%">Action</th>
                                                                 </tr>
                                                             </thead>
@@ -152,64 +153,67 @@
                                                                         var tm = "#myAModal" + item.AssetItemId;
                                                                         var mid = "myAModal" + item.AssetItemId;
                                                                         var rowId = "rowId" + item.AssetItemId;
-                                                                <tr id="@rowId">
-                                                                    <td>
-                                                                        <input class="form-control" type="hidden" value="@item.AssetEventItemId" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-control" type="hidden" value="@item.AssetItemId" />
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.AssetItemName
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.StockQty
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        @item.EventQty
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        <input type="number" id="allocatedQty" asp-for="@item.AllocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocatedQty" />
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        <input type="number" id="missingQty" asp-for="@item.MissingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.MissingQty" />
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        @item.CostPrice
-                                                                    </td>
-                                                                    <td class="text-right">
-                                                                        @item.TotalAmount
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text" id="missingNote" asp-for="@item.MissingNote" class="form-control col-sm-11" value="@item.MissingNote" />
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-button-action">
-                                                                            <a href="#" data-itemid="@item.AssetItemId" class="editAssetItem">Edit</a> /
-                                                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                                                        </div>
-                                                                    </td>
-                                                                    <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                                        <div class="modal-dialog">
-                                                                            <div class="modal-content">
-                                                                                <div class="modal-header">
-                                                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                        <tr id="@rowId">
+                                                                            <td>
+                                                                                <input class="form-control" type="hidden" value="@item.AssetEventItemId" />
+                                                                            </td>
+                                                                            <td>
+                                                                                <input class="form-control" type="hidden" value="@item.AssetItemId" />
+                                                                            </td>
+                                                                            <td>
+                                                                                @item.AssetItemName
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.StockQty
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.EventQty
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.CostPrice
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.TotalAmount
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                <input type="number" id="allocatedQty" asp-for="@item.AllocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocatedQty" />
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                @item.MissingQty
+                                                                            </td>
+                                                                            <td>
+                                                                                <select asp-for="@item.MissingNote"
+                                                                                        class="form-control"
+                                                                                        asp-items="@(new SelectList(Model.MissingNoteList, "Value", "Text"))">
+                                                                                </select>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="form-button-action">
+                                                                                    <a href="#" data-itemid="@item.AssetItemId" class="editAssetItem">Edit</a> /
+                                                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                                 </div>
-                                                                                <div class="modal-body">
-                                                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                                </div>
-                                                                                <div class="modal-footer">
-                                                                                    <a id="deleteBtn" data-itemId="@item.AssetEventItemId" onclick="deleteAssetOrder(@item.AssetEventItemId,@item.AssetItemId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                                            </td>
+                                                                            <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                                                <div class="modal-dialog">
+                                                                                    <div class="modal-content">
+                                                                                        <div class="modal-header">
+                                                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                                        </div>
+                                                                                        <div class="modal-body">
+                                                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                                        </div>
+                                                                                        <div class="modal-footer">
+                                                                                            <a id="deleteBtn" data-itemId="@item.AssetEventItemId" onclick="deleteAssetOrder(@item.AssetEventItemId,@item.AssetItemId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                                                        </div>
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </tr>
+                                                                        </tr>
                                                                     }
                                                                 }
                                                             </tbody>
@@ -261,8 +265,13 @@
                                                             </div>
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
-                                                                    <label class="control-label text-right">Quantity</label>
+                                                                    <label class="control-label text-right">Qty</label>
                                                                     <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="Quantity" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1 pr-2 pl-2">
+                                                                <div class="form-group">
+                                                                    <label id="FoodMenuUnitName" class="control-label" style="margin-top: 28px"></label>
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-1 pr-2 pl-2">
@@ -280,11 +289,11 @@
                                                         <table id="AssetEventFoodmenu" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                             <thead>
                                                                 <tr>
-                                                                    <th style="width:0%" hidden="hidden">AssetEventFoodmenuId</th>
-                                                                    <th style="width:0%" hidden="hidden">FoodmenuId</th>
+                                                                    <th style="width:0%">AssetEventFoodmenuId</th>
+                                                                    <th style="width:0%">FoodmenuId</th>
                                                                     <th style="width:40%">FoodMenu</th>
                                                                     <th style="width:15%">Price</th>
-                                                                    <th style="width:15%">Qunatity</th>
+                                                                    <th style="width:15%">Qty</th>
                                                                     <th style="width:15%">Vat</th>
                                                                     <th style="width:15%">Tax</th>
                                                                     <th style="width:15%">Total</th>
@@ -313,7 +322,7 @@
                                                                                 @item.SalesPrice.ToString("N")
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.Qunatity.ToString("N")
+                                                                                @item.Qunatity.ToString("N") <label>@item.FoodMenuUnitName</label>
                                                                             </td>
                                                                             <td class="text-right">
                                                                                 @item.FoodVatAmount.ToString("N")
@@ -421,12 +430,17 @@
                                                             </div>
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
+                                                                    <label id="IngredientUnitName" class="control-label" style="margin-top: 28px"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1 pr-2 pl-2">
+                                                                <div class="form-group">
                                                                     <label class="control-label"></label>
                                                                     <button id="addRowIngredient" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
                                                                     <input class="form-control" type="hidden" id="AssetEventIngredientId" value="0" />
-                                                                    <input class="form-control" type="hidden" id="IngredientStockQty" />
-                                                                    <input class="form-control" type="hidden" id="IngredientReturnQty" />
-                                                                    <input class="form-control" type="hidden" id="IngredientActualQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="IngredientStockQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="IngredientReturnQty" />
+                                                                    <input class="form-control" type="hidden" value="0.0" id="IngredientActualQty" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -441,11 +455,11 @@
                                                                     <th style="width:0%"></th>
                                                                     <th style="width:35%">Ingredient Name</th>
                                                                     <th style="width:15%" class="text-right">Stock Qty</th>
-                                                                    <th style="width:15%" class="text-right">Event Qty </th>
-                                                                    <th style="width:15%" class="text-right">Return Qty</th>
-                                                                    <th style="width:15%" class="text-right">Actual Qty</th>
+                                                                    <th style="width:15%" class="text-right">Qty </th>
                                                                     <th style="width:15%" class="text-right">Cost Price</th>
                                                                     <th style="width:15%" class="text-right">Total Amount</th>
+                                                                    <th style="width:15%" class="text-right">Return Qty</th>
+                                                                    <th style="width:15%" class="text-right">Actual Qty</th>
                                                                     <th style="width:15%">Action</th>
                                                                 </tr>
                                                             </thead>
@@ -468,22 +482,22 @@
                                                                                 @item.IngredientName
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="stockQty" asp-for="@item.StockQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.StockQty" />
+                                                                                @item.StockQty
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.EventQty
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
-                                                                            </td>
-                                                                            <td class="text-right">
-                                                                                <input type="number" id="missingQty" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
+                                                                                <label> @item.EventQty</label>  <label>@item.IngredientUnitName</label>
                                                                             </td>
                                                                             <td class="text-right">
                                                                                 @item.CostPrice
                                                                             </td>
                                                                             <td class="text-right">
                                                                                 @item.TotalAmount
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
+                                                                            </td>
+                                                                            <td class="text-right">
+                                                                                <input type="number" id="missingQty" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
@@ -573,8 +587,8 @@
                                         {
                                             @if (Model.Status == 0)
                                             {
-                                                    <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
-                                                    <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
+                                                <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
+                                                <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
                                             }
                                             @if (Model.Status == 1)
                                             {

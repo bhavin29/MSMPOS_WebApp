@@ -60,8 +60,8 @@ namespace RocketPOS.Repository
             List<AssetEventFoodmenuModel> assetEventFoodmenuModel = new List<AssetEventFoodmenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.FoodVatAmount,AEF.FoodTaxAmount,AEF.TotalPrice  FROM AssetEventFoodmenu AEF " +
-                            "  inner join FoodMenu F On F.Id=AEF.FoodmenuId Where AEF.IsDeleted=0 And AEF.AssetEventId=" + assetEventId;
+                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.FoodVatAmount,AEF.FoodTaxAmount,AEF.TotalPrice,U.UnitName As FoodMenuUnitName  FROM AssetEventFoodmenu AEF " +
+                            "  inner join FoodMenu F On F.Id=AEF.FoodmenuId  inner join Units U On U.Id=F.UnitsId Where AEF.IsDeleted=0 And AEF.AssetEventId=" + assetEventId;
                 assetEventFoodmenuModel = con.Query<AssetEventFoodmenuModel>(query).AsList();
             }
             return assetEventFoodmenuModel;
@@ -105,8 +105,8 @@ namespace RocketPOS.Repository
             List<AssetEventIngredientModel> assetEventIngredientModel = new List<AssetEventIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AEI.Id AS AssetEventIngredientId,AEI.IngredientId,I.IngredientName,AEI.StockQty,AEI.EventQty,AEI.ReturnQty,AEI.ActualQty,AEI.CostPrice,AEI.TotalAmount from AssetEventIngredient AEI " +
-                            " Inner Join Ingredient I On I.Id=AEI.IngredientId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
+                var query = " select AEI.Id AS AssetEventIngredientId,AEI.IngredientId,I.IngredientName,AEI.StockQty,AEI.EventQty,AEI.ReturnQty,AEI.ActualQty,AEI.CostPrice,AEI.TotalAmount,U.UnitName As IngredientUnitName from AssetEventIngredient AEI " +
+                            " Inner Join Ingredient I On I.Id=AEI.IngredientId inner join Units U On U.Id=I.IngredientUnitId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
                 assetEventIngredientModel = con.Query<AssetEventIngredientModel>(query).AsList();
             }
             return assetEventIngredientModel;

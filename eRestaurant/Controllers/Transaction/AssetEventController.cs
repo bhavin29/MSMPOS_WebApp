@@ -27,10 +27,11 @@ namespace RocketPOS.Controllers.Transaction
             _locService = locService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(bool? isHistory)
         {
+            TempData["History"] = Convert.ToBoolean(isHistory);
             List<AssetEventViewModel> asssetEventViewModel = new List<AssetEventViewModel>();
-            asssetEventViewModel = _iAssetEventService.GetAssetEventList().ToList();
+            asssetEventViewModel = _iAssetEventService.GetAssetEventList(Convert.ToBoolean(isHistory)).ToList();
             return View(asssetEventViewModel);
         }
 
@@ -49,6 +50,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
             assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
             return View(assetEventModel);
         }
 
@@ -60,8 +62,8 @@ namespace RocketPOS.Controllers.Transaction
             string assetEventMessage = string.Empty;
             if (assetEventModel != null)
             {
-                //if (assetEventModel.assetEventItemModels.Count > 0 && assetEventModel.assetEventFoodmenuModels.Count > 0)
-                //{
+                if (assetEventModel.assetEventItemModels.Count > 0 && assetEventModel.assetEventFoodmenuModels.Count > 0 && assetEventModel.assetEventIngredientModels.Count > 0)
+                {
                     if (assetEventModel.Id > 0)
                     {
                         result = _iAssetEventService.UpdateAssetEvent(assetEventModel);
@@ -78,12 +80,12 @@ namespace RocketPOS.Controllers.Transaction
                             assetEventMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
                         }
                     }
-                //}
-                //else
-                //{
-                //    assetEventMessage = _locService.GetLocalizedHtmlString("ValidProductionFormula");
-                //    return Json(new { error = true, message = assetEventMessage, status = 201 });
-                //}
+                }
+                else
+                {
+                    assetEventMessage = _locService.GetLocalizedHtmlString("ValidProductionFormula");
+                    return Json(new { error = true, message = assetEventMessage, status = 201 });
+                }
             }
             else
             {
@@ -101,6 +103,30 @@ namespace RocketPOS.Controllers.Transaction
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
             }
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        public JsonResult GetAssetItemPriceById(int id)
+        {
+            decimal assetItemCostPrice = 0;
+            assetItemCostPrice = _iAssetEventService.GetAssetItemPriceById(id);
+            return Json(new { assetItemCostPrice = assetItemCostPrice });
+        }
+
+        [HttpGet]
+        public JsonResult GetIngredientPriceById(int id)
+        {
+            decimal ingredientPrice = 0;
+            ingredientPrice = _iAssetEventService.GetIngredientPriceById(id);
+            return Json(new { ingredientPrice = ingredientPrice });
+        }
+
+        [HttpGet]
+        public JsonResult GetFoodMenuPriceTaxDetailById(int id)
+        {
+            AssetFoodMenuPriceDetail assetFoodMenuPriceDetail = new AssetFoodMenuPriceDetail();
+            assetFoodMenuPriceDetail = _iAssetEventService.GetFoodMenuPriceTaxDetailById(id);
+            return Json(new { salesPrice = assetFoodMenuPriceDetail.SalesPrice, taxPercentage = assetFoodMenuPriceDetail.TaxPercentage });
         }
     }
 }

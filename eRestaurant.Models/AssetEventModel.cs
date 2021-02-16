@@ -34,6 +34,14 @@ namespace RocketPOS.Models
         public Decimal FoodDiscountAmount { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public Decimal FoodNetAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public Decimal FoodVatAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public Decimal FoodTaxAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public Decimal IngredientNetAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public Decimal AssetItemNetAmount { get; set; }
         public int Status { get; set; }
         public DateTime DateInserted { get; set; }
 
@@ -45,10 +53,16 @@ namespace RocketPOS.Models
         public string AssetItemName { get; set; }
         public List<SelectListItem> AssetItemList { get; set; }
 
+        public int IngredientId { get; set; }
+        public string IngredientName { get; set; }
+        public List<SelectListItem> IngredientList { get; set; }
+
         public List<AssetEventItemModel> assetEventItemModels { get; set; }
         public List<AssetEventFoodmenuModel> assetEventFoodmenuModels { get; set; }
+        public List<AssetEventIngredientModel> assetEventIngredientModels { get; set; }
         public int[] AssetEventItemDeletedId { get; set; }
         public int[] AssetEventFoodmenuDeletedId { get; set; }
+        public int[] AssetEventIngredientDeletedId { get; set; }
     }
 
     public class AssetEventItemModel
@@ -66,6 +80,10 @@ namespace RocketPOS.Models
         public decimal ReturnQty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal MissingQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal CostPrice { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal TotalAmount { get; set; }
         public string MissingNote { get; set; }
     }
 
@@ -79,6 +97,36 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Qunatity { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal FoodVatAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal FoodTaxAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalPrice { get; set; }
+    }
+
+    public class AssetEventIngredientModel
+    {
+        public int AssetEventIngredientId { get; set; }
+        public int IngredientId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public string IngredientName { get; set; }
+        public decimal StockQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal EventQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal ReturnQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal ActualQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal CostPrice { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal TotalAmount { get; set; }
+    }
+
+    public class AssetFoodMenuPriceDetail
+    {
+        public decimal SalesPrice { get; set; }
+        public decimal TaxPercentage { get; set; }
+        public int FoodVatTaxId { get; set; }
     }
 }

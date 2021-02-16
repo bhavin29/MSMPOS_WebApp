@@ -6,6 +6,7 @@ using RocketPOS.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
 namespace RocketPOS.Repository
@@ -29,7 +30,8 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = $"update AssetEvent set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
                             " update AssetEventItem set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
-                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";";
+                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";"+
+                            " update AssetEventIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -46,7 +48,7 @@ namespace RocketPOS.Repository
             AssetEventModel assetEventModel = new AssetEventModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " Select Id,ReferenceNo,EventType,EventName,EventDatetime,DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,Status " +
+                var query = " Select Id,ReferenceNo,EventType,EventName,EventDatetime,DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status " +
                             " From AssetEvent Where IsDeleted=0 And Id=" + id;
                 assetEventModel = con.QueryFirstOrDefault<AssetEventModel>(query);
             }
@@ -58,7 +60,7 @@ namespace RocketPOS.Repository
             List<AssetEventFoodmenuModel> assetEventFoodmenuModel = new List<AssetEventFoodmenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.TotalPrice  FROM AssetEventFoodmenu AEF " +
+                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.FoodVatAmount,AEF.FoodTaxAmount,AEF.TotalPrice  FROM AssetEventFoodmenu AEF " +
                             "  inner join FoodMenu F On F.Id=AEF.FoodmenuId Where AEF.IsDeleted=0 And AEF.AssetEventId=" + assetEventId;
                 assetEventFoodmenuModel = con.Query<AssetEventFoodmenuModel>(query).AsList();
             }
@@ -70,29 +72,77 @@ namespace RocketPOS.Repository
             List<AssetEventItemModel> assetEventItemModel = new List<AssetEventItemModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty,AEI.MissingQty,AEI.MissingNote FROM AssetEventItem AEI " +
+                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty,AEI.MissingQty,AEI.CostPrice,AEI.TotalAmount,AEI.MissingNote FROM AssetEventItem AEI " +
                             " Inner Join AssetItem AI ON AI.Id=AEI.AssetItemId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
                 assetEventItemModel = con.Query<AssetEventItemModel>(query).AsList();
             }
             return assetEventItemModel;
         }
 
-        public List<AssetEventViewModel> GetAssetEventList()
+        public List<AssetEventViewModel> GetAssetEventList(bool isHistory)
         {
             List<AssetEventViewModel> assetEventList = new List<AssetEventViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username FROM AssetEvent  AE  " +
-                            " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0 ";
+                var query=string.Empty;
+                if (isHistory)
+                {
+                     query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username FROM AssetEvent  AE  " +
+                            " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0 And AE.Status = 4";
+                }
+                else
+                {
+                    query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username FROM AssetEvent  AE  " +
+                            " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0 And AE.Status In (1,2,3) ";
+                }
                 assetEventList = con.Query<AssetEventViewModel>(query).AsList();
             }
             return assetEventList;
         }
 
+        public List<AssetEventIngredientModel> GetAssetIngredientDetails(int assetEventId)
+        {
+            List<AssetEventIngredientModel> assetEventIngredientModel = new List<AssetEventIngredientModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select AEI.Id AS AssetEventIngredientId,AEI.IngredientId,I.IngredientName,AEI.StockQty,AEI.EventQty,AEI.ReturnQty,AEI.ActualQty,AEI.CostPrice,AEI.TotalAmount from AssetEventIngredient AEI " +
+                            " Inner Join Ingredient I On I.Id=AEI.IngredientId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
+                assetEventIngredientModel = con.Query<AssetEventIngredientModel>(query).AsList();
+            }
+            return assetEventIngredientModel;
+        }
+
+        public decimal GetAssetItemPriceById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select CostPrice From AssetItem Where IsDeleted=0 And Id=" + id;
+                return con.ExecuteScalar<decimal>(query);
+            }
+        }
+
+        public AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select CateringPrice as SalesPrice,FoodVatTaxId,T.TaxPercentage from FoodMenu F inner join Tax T On F.FoodVatTaxId=T.Id where F.IsDeleted=0 And F.id=" + id;
+                return con.Query<AssetFoodMenuPriceDetail>(query).ToList().FirstOrDefault();
+            }
+        }
+
+        public decimal GetIngredientPriceById(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select SalesPrice From Ingredient Where IsDeleted=0 And Id=" + id;
+                return con.ExecuteScalar<decimal>(query);
+            }
+        }
+
         public int InsertAssetEvent(AssetEventModel assetEventModel)
         {
             int result = 0;
-            int foodMenuResult = 0, itemResult = 0;
+            int foodMenuResult = 0, itemResult = 0, ingredientResult = 0; 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -108,6 +158,10 @@ namespace RocketPOS.Repository
                              " ,[FoodGrossAmount] " +
                              " ,[FoodDiscountAmount] " +
                              " ,[FoodNetAmount] " +
+                             " ,[FoodVatAmount] " +
+                             " ,[FoodTaxAmount] " +
+                             " ,[IngredientNetAmount] " +
+                             " ,[AssetItemNetAmount] " +
                              " ,[Status] " +
                              "  ,[UserIdInserted]  " +
                              "  ,[DateInserted]   " +
@@ -123,6 +177,10 @@ namespace RocketPOS.Repository
                              " ,@FoodGrossAmount " +
                              " ,@FoodDiscountAmount " +
                              " ,@FoodNetAmount " +
+                             " ,@FoodVatAmount " +
+                             " ,@FoodTaxAmount " +
+                             " ,@IngredientNetAmount " +
+                             " ,@AssetItemNetAmount " +
                              " ,@Status, " +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
@@ -144,6 +202,8 @@ namespace RocketPOS.Repository
                                                  " ,[AllocatedQty] " +
                                                  " ,[ReturnQty] " +
                                                  " ,[MissingQty] " +
+                                                 " ,[CostPrice] " +
+                                                 " ,[TotalAmount] " +
                                                  " ,[MissingNote] " +
                                                  " ,[UserIdInserted]" +
                                                  " ,[DateInserted]" +
@@ -152,11 +212,13 @@ namespace RocketPOS.Repository
                                                   "(" + result + "," +
                                                   assetItem.AssetItemId + "," +
                                                   assetItem.StockQty + "," +
-                                                   assetItem.EventQty + "," +
-                                                    assetItem.AllocatedQty + "," +
-                                                     assetItem.ReturnQty + "," +
-                                                      assetItem.MissingQty + ",'" +
-                                                      assetItem.MissingNote + "'," +
+                                                  assetItem.EventQty + "," +
+                                                  assetItem.AllocatedQty + "," +
+                                                  assetItem.ReturnQty + "," +
+                                                  assetItem.MissingQty + "," +
+                                                  assetItem.CostPrice + "," +
+                                                  assetItem.TotalAmount + ",'" +
+                                                  assetItem.MissingNote + "'," +
                                         LoginInfo.Userid + ",GetUtcDate(),0);";
                             itemResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
@@ -172,6 +234,8 @@ namespace RocketPOS.Repository
                                                  " ,[FoodmenuId] " +
                                                  " ,[SalesPrice] " +
                                                  " ,[Qunatity] " +
+                                                 " ,[FoodVatAmount] " +
+                                                 " ,[FoodTaxAmount] " +
                                                  " ,[TotalPrice] " +
                                                  " ,[UserIdInserted]" +
                                                  " ,[DateInserted]" +
@@ -181,13 +245,45 @@ namespace RocketPOS.Repository
                                                   assetFood.FoodMenuId + "," +
                                                   assetFood.SalesPrice + "," +
                                                    assetFood.Qunatity + "," +
+                                                    assetFood.FoodVatAmount + "," +
+                                                     assetFood.FoodTaxAmount + "," +
                                                    assetFood.TotalPrice + "," +
                                         LoginInfo.Userid + ",GetUtcDate(),0);";
                             foodMenuResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
                     }
 
-                    if (foodMenuResult > 0 )//&& itemResult > 0)
+                    if (assetEventModel.assetEventIngredientModels != null)
+                    {
+                        foreach (var assetItem in assetEventModel.assetEventIngredientModels)
+                        {
+                            var queryDetails = "INSERT INTO [dbo].[AssetEventIngredient]" +
+                                                 "  ([AssetEventId] " +
+                                                  " ,[IngredientId] " +
+                                                 " ,[StockQty] " +
+                                                 " ,[EventQty] " +
+                                                 " ,[ReturnQty] " +
+                                                 " ,[ActualQty] " +
+                                                 " ,[CostPrice] " +
+                                                 " ,[TotalAmount] " +
+                                                 " ,[UserIdInserted]" +
+                                                 " ,[DateInserted]" +
+                                                  " ,[IsDeleted])   " +
+                                                  "VALUES           " +
+                                                  "(" + result + "," +
+                                                  assetItem.IngredientId + "," +
+                                                  assetItem.StockQty + "," +
+                                                  assetItem.EventQty + "," +
+                                                  assetItem.ReturnQty + "," +
+                                                  assetItem.ActualQty + "," +
+                                                  assetItem.CostPrice + "," +
+                                                  assetItem.TotalAmount + "," +
+                                        LoginInfo.Userid + ",GetUtcDate(),0);";
+                            ingredientResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                    }
+
+                    if (foodMenuResult > 0 && itemResult > 0 && ingredientResult > 0)
                     {
                         sqltrans.Commit();
                     }
@@ -226,7 +322,7 @@ namespace RocketPOS.Repository
 
         public int UpdateAssetEvent(AssetEventModel assetEventModel)
         {
-            int result = 0, deleteFoodMenuResult = 0, deleteItemResult = 0, foodmenudetails = 0, itemdetails = 0;
+            int result = 0, deleteFoodMenuResult = 0, deleteItemResult = 0, foodmenudetails = 0, itemdetails = 0, ingredientdetails = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -240,6 +336,10 @@ namespace RocketPOS.Repository
                             ",ContactPersonNumber = @ContactPersonNumber " +
                             ",FoodGrossAmount = @FoodGrossAmount " +
                             ",FoodDiscountAmount = @FoodDiscountAmount " +
+                            ",FoodVatAmount = @FoodVatAmount " +
+                            ",FoodTaxAmount = @FoodTaxAmount " +
+                            ",IngredientNetAmount = @IngredientNetAmount " +
+                            ",AssetItemNetAmount = @AssetItemNetAmount " +
                             ",FoodNetAmount = @FoodNetAmount ";
 
                 if (assetEventModel.Status==2)
@@ -281,6 +381,15 @@ namespace RocketPOS.Repository
                         }
                     }
 
+                    if (assetEventModel.AssetEventIngredientDeletedId != null)
+                    {
+                        foreach (var item in assetEventModel.AssetEventIngredientDeletedId)
+                        {
+                            var deleteQuery = $"update AssetEventIngredient set IsDeleted = 1, UserIdDeleted = " + LoginInfo.Userid + ", DateDeleted = GetutcDate() where id = " + item + ";";
+                            deleteFoodMenuResult = con.Execute(deleteQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                    }
+
                     foreach (var item in assetEventModel.assetEventItemModels)
                     {
                         var queryDetails = string.Empty;
@@ -293,6 +402,8 @@ namespace RocketPOS.Repository
                                              ",[AllocatedQty]     = " + item.AllocatedQty +
                                              ",[ReturnQty]     = " + item.ReturnQty +
                                              ",[MissingQty]     = " + item.MissingQty +
+                                             ",[CostPrice]     = " + item.CostPrice +
+                                             ",[TotalAmount]     = " + item.TotalAmount +
                                              ",[MissingNote]     = '" + item.MissingNote +
                                              "',[UserIdUpdated] = " + LoginInfo.Userid + "," +
                                              " [DateUpdated] = GetUTCDate() " +
@@ -308,6 +419,8 @@ namespace RocketPOS.Repository
                                                  " ,[AllocatedQty] " +
                                                  " ,[ReturnQty] " +
                                                  " ,[MissingQty] " +
+                                                 " ,[CostPrice] " +
+                                                 " ,[TotalAmount] " +
                                                  " ,[MissingNote] " +
                                                  " ,[UserIdInserted]" +
                                                  " ,[DateInserted]" +
@@ -319,7 +432,9 @@ namespace RocketPOS.Repository
                                                    item.EventQty + "," +
                                                     item.AllocatedQty + "," +
                                                      item.ReturnQty + "," +
-                                                      item.MissingQty + ",'" +
+                                                      item.MissingQty + "," +
+                                                       item.CostPrice + "," +
+                                                        item.TotalAmount + ",'" +
                                                       item.MissingNote + "'," +
                                         LoginInfo.Userid + ",GetUtcDate(),0);";
                         }
@@ -335,6 +450,8 @@ namespace RocketPOS.Repository
                                              "[FoodmenuId]		  	 = " + item.FoodMenuId +
                                              ",[SalesPrice]     = " + item.SalesPrice +
                                              ",[Qunatity]     = " + item.Qunatity +
+                                             ",[FoodVatAmount]     = " + item.FoodVatAmount +
+                                             ",[FoodTaxAmount]     = " + item.FoodTaxAmount +
                                              ",[TotalPrice]     = " + item.TotalPrice +
                                              " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
                                              " [DateUpdated] = GetUTCDate() " +
@@ -347,6 +464,8 @@ namespace RocketPOS.Repository
                                                 " ,[FoodmenuId] " +
                                                 " ,[SalesPrice] " +
                                                 " ,[Qunatity] " +
+                                                " ,[FoodVatAmount] " +
+                                                " ,[FoodTaxAmount] " +
                                                 " ,[TotalPrice] " +
                                                 " ,[UserIdInserted]" +
                                                 " ,[DateInserted]" +
@@ -356,13 +475,60 @@ namespace RocketPOS.Repository
                                                  item.FoodMenuId + "," +
                                                  item.SalesPrice + "," +
                                                   item.Qunatity + "," +
+                                                    item.FoodVatAmount + "," +
+                                                      item.FoodTaxAmount + "," +
                                                   item.TotalPrice + "," +
                                        LoginInfo.Userid + ",GetUtcDate(),0);";
                         }
                         foodmenudetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
 
-                    if (foodmenudetails > 0 && itemdetails > 0)
+                    foreach (var item in assetEventModel.assetEventIngredientModels)
+                    {
+                        var queryDetails = string.Empty;
+                        if (item.AssetEventIngredientId > 0)
+                        {
+                            queryDetails = "Update [dbo].[AssetEventIngredient] set " +
+                                             "[IngredientId]     = " + item.IngredientId +
+                                             ",[StockQty]     = " + item.StockQty +
+                                             ",[EventQty]     = " + item.EventQty +
+                                             ",[ReturnQty]     = " + item.ReturnQty +
+                                             ",[ActualQty]     = " + item.ActualQty +
+                                             ",[CostPrice]     = " + item.CostPrice +
+                                             ",[TotalAmount]     = " + item.TotalAmount +
+                                             ",[UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                             " [DateUpdated] = GetUTCDate() " +
+                                             " where id = " + item.AssetEventIngredientId + ";";
+                        }
+                        else
+                        {
+                            queryDetails = "INSERT INTO [dbo].[AssetEventIngredient]" +
+                                                 "  ([AssetEventId] " +
+                                                  " ,[IngredientId] " +
+                                                 " ,[StockQty] " +
+                                                 " ,[EventQty] " +
+                                                 " ,[ReturnQty] " +
+                                                 " ,[ActualQty] " +
+                                                 " ,[CostPrice] " +
+                                                 " ,[TotalAmount] " +
+                                                 " ,[UserIdInserted]" +
+                                                 " ,[DateInserted]" +
+                                                  " ,[IsDeleted])   " +
+                                                  "VALUES           " +
+                                                  "(" + assetEventModel.Id + "," +
+                                                  item.IngredientId + "," +
+                                                  item.StockQty + "," +
+                                                  item.EventQty + "," +
+                                                  item.ReturnQty + "," +
+                                                  item.ActualQty + "," +
+                                                  item.CostPrice + "," +
+                                                  item.TotalAmount + "," +
+                                        LoginInfo.Userid + ",GetUtcDate(),0);";
+                        }
+                        ingredientdetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                    }
+
+                    if (foodmenudetails > 0 && itemdetails > 0 && ingredientdetails > 0)
                     {
                         sqltrans.Commit();
                     }

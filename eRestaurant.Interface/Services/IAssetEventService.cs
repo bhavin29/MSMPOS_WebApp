@@ -11,9 +11,12 @@ namespace RocketPOS.Interface.Services
         int UpdateAssetEvent(AssetEventModel assetEventModel);
         int InsertAssetEvent(AssetEventModel assetEventModel);
 
-        List<AssetEventViewModel> GetAssetEventList();
+        List<AssetEventViewModel> GetAssetEventList(bool isHistory);
         int DeleteAssetEven(int id);
 
         AssetEventModel GetAssetEventById(int id);
+        AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id);
+        decimal GetAssetItemPriceById(int id);
+        decimal GetIngredientPriceById(int id);
     }
 }

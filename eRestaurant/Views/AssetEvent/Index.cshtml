@@ -16,7 +16,14 @@
             </div>
             <div class="col-md-1 pl-0 pr-0">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" id="onHistory" checked="checked"  />
+                    @if (((bool)TempData["History"]) == true)
+                    {
+                        <input class="form-check-input" type="checkbox" id="onHistory" checked="checked" onchange="return GetHistoryEventLists();" />
+                    }
+                    else
+                    {
+                        <input class="form-check-input" type="checkbox" id="onHistory" onchange="return GetHistoryEventLists();" />
+                    }
                     <label class="form-check-label" for="flexSwitchCheckChecked">History</label>
                 </div>
             </div>
@@ -88,8 +95,11 @@
                                 <td>
                                     <div class="form-button-action">
                                         <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                        <label> / </label>
-                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                        @if (((bool)TempData["History"]) != true)
+                                        {
+                                            <label> / </label>
+                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                        }
                                     </div>
                                 </td>
                                 <td>
@@ -134,7 +144,7 @@
 
         //    $.ajaxSetup({ cache: false });
         //    $.ajax({
-        //        url: "/AssetEvent/Index",
+        //        url: "/AssetEvent/Index/" + isHistory,
         //        dataType: "json",
         //        type: "GET",
         //        success: function (data) {
@@ -207,6 +217,12 @@
         //        }
         //    });
         //}
+
+        function GetHistoryEventLists() {
+            var isHistory;
+            var isHistory = $("#onHistory").is(":checked");
+            window.location.href = "/AssetEvent/Index?isHistory=" + isHistory;
+        }
 
         function deleteAssetEvent(id) {
             $.ajax({

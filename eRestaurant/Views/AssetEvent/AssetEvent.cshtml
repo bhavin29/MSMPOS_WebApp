@@ -101,7 +101,7 @@
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
                                                                     <label class="control-label text-right">Cost Price</label>
-                                                                    <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="AssetItemCostPrice" />
+                                                                    <input class="form-control text-right" type="number" min="0" max="9999" value="1" placeholder="0.00" id="AssetItemCostPrice" />
                                                                 </div>
                                                             </div>
 
@@ -133,16 +133,16 @@
                                                                 <tr>
                                                                     <th style="width:0%"></th>
                                                                     <th style="width:0%"></th>
-                                                                    <th style="width:35%">Asset Item</th>
-                                                                    <th style="width:10%" class="text-right">Stock Qty</th>
-                                                                    <th style="width:10%" class="text-right">Qty </th>
-                                                                    <th style="width:5%" class="text-right">Cost Price</th>
-                                                                    <th style="width:10%" class="text-right">Total Amount</th>
-                                                                    <th style="width:10%" class="text-right">Allocated Qty</th>
-                                                                    <th style="width:10%" class="text-right">Return Qty</th>
-                                                                    <th style="width:5%" class="text-right">Missing Qty</th>
-                                                                    <th style="width:15%">Missing Note</th>
-                                                                    <th style="width:10%">Action</th>
+                                                                    <th style="width:20%">Asset Item</th>
+                                                                    <th style="width:8%" class="text-right">Stock Qty</th>
+                                                                    <th style="width:8%" class="text-right">Qty </th>
+                                                                    <th style="width:8%" class="text-right">Cost Price</th>
+                                                                    <th style="width:8%" class="text-right">Total </th>
+                                                                    <th style="width:8%" class="text-right">Allocated Qty</th>
+                                                                    <th style="width:8%" class="text-right">Return Qty</th>
+                                                                    <th style="width:8%" class="text-right">Missing Qty</th>
+                                                                    <th style="width:16%">Missing Note</th>
+                                                                    <th style="width:8%">Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -260,7 +260,7 @@
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
                                                                     <label class="control-label text-right">Catering Price</label>
-                                                                    <input class="form-control text-right" type="number" min="1" max="9999" value="1" placeholder="0.00" id="SalesPrice" />
+                                                                    <input class="form-control text-right" type="number" min="0" max="9999" value="0" placeholder="0.00" id="SalesPrice" />
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-1 pr-2 pl-2">
@@ -292,12 +292,12 @@
                                                                     <th style="width:0%">AssetEventFoodmenuId</th>
                                                                     <th style="width:0%">FoodmenuId</th>
                                                                     <th style="width:40%">FoodMenu</th>
-                                                                    <th style="width:15%">Price</th>
-                                                                    <th style="width:15%">Qty</th>
-                                                                    <th style="width:15%">Vat</th>
-                                                                    <th style="width:15%">Tax</th>
-                                                                    <th style="width:15%">Total</th>
-                                                                    <th style="width:15%">Action</th>
+                                                                    <th style="width:10%">Price</th>
+                                                                    <th style="width:10%">Qty</th>
+                                                                    <th style="width:10%">Vatable</th>
+                                                                    <th style="width:10%">Tax</th>
+                                                                    <th style="width:10%">Total</th>
+                                                                    <th style="width:10%">Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -396,8 +396,8 @@
                                     <div class="card">
                                         <div class="card-header" id="headingThree">
                                             <h5 class="mb-0">
-                                                <button class="btn btn-link collapsed pl-2" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                                    <h6>Ingredient Detail</h6>
+                                                <button class="btn btn-link collapsed pl-0" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                    <h6>Stock Detail</h6>
                                                 </button>
                                             </h5>
                                         </div>
@@ -409,7 +409,7 @@
                                                         <div class="row">
                                                             <div class="col-md-4 pr-0 pl-2">
                                                                 <div class="form-group">
-                                                                    <label asp-for="IngredientList" class="control-label">Ingredient Item</label>
+                                                                    <label asp-for="IngredientList" class="control-label">Stock Item</label>
                                                                     <select asp-for="IngredientId"
                                                                             class="form-control"
                                                                             asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))" onchange="return GetIngredientPriceById();">
@@ -453,14 +453,14 @@
                                                                 <tr>
                                                                     <th style="width:0%"></th>
                                                                     <th style="width:0%"></th>
-                                                                    <th style="width:35%">Ingredient Name</th>
-                                                                    <th style="width:15%" class="text-right">Stock Qty</th>
-                                                                    <th style="width:15%" class="text-right">Qty </th>
-                                                                    <th style="width:15%" class="text-right">Cost Price</th>
-                                                                    <th style="width:15%" class="text-right">Total Amount</th>
-                                                                    <th style="width:15%" class="text-right">Return Qty</th>
-                                                                    <th style="width:15%" class="text-right">Actual Qty</th>
-                                                                    <th style="width:15%">Action</th>
+                                                                    <th style="width:35%">Stock Item </th>
+                                                                    <th style="width:10%" class="text-right">Stock Qty</th>
+                                                                    <th style="width:10%" class="text-right">Qty </th>
+                                                                    <th style="width:10%" class="text-right">Cost Price</th>
+                                                                    <th style="width:10%" class="text-right">Total</th>
+                                                                    <th style="width:12%" class="text-right">Return Qty</th>
+                                                                    <th style="width:12%" class="text-right">Actual Qty</th>
+                                                                    <th style="width:10%">Action</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -639,9 +639,9 @@
         assetEventItemDataArr = []
         assetEventIngredientDataArr = []
         if (@Model.Id>0){
-            assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
+            @*assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
             assetEventFoodmenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventFoodmenuModels))');
-            assetEventIngredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventIngredientModels))');
+            assetEventIngredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventIngredientModels))');*@
         }
     </script>
 

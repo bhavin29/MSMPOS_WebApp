@@ -14,9 +14,9 @@ $(document).ready(function () {
     $("#assetEventForm").validate();
 
     AssetEventItem = $('#AssetEventItem').DataTable({
-        columnDefs: [
-            { targets: [0, 1], orderable: false },
-            { targets: [3, 4], orderable: false, class: "text-right" },
+        "columnDefs": [
+            { targets: [0, 1], orderable: false, visible: false },
+            { targets: [3, 4,5,6], orderable: false, class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -34,7 +34,7 @@ $(document).ready(function () {
     });
 
     AssetEventFoodmenu = $('#AssetEventFoodmenu').DataTable({
-        columnDefs: [
+        "columnDefs": [
             { targets: [0, 1], orderable: false, visible: false },
             { targets: [3], orderable: false, class: "text-right" }
         ],
@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
-            { targets: [0, 1], orderable: false },
+            { targets: [0, 1], orderable: false, visible: false },
             { targets: [3,4,5, 6], orderable: false, class: "text-right" }
         ],
         "paging": false,
@@ -84,13 +84,11 @@ $(document).ready(function () {
         AssetIngredientItem.columns([7, 8]).visible(false);
     }
     if ($("#Status").val() == 1) {
-        AssetIngredientItem.columns([8]).visible(false);
+        AssetIngredientItem.columns([7,8]).visible(false);
     }
 });
 
-//EventItem
-
-
+//AssetEventItem
 $('#addRowItem').on('click', function (e) {
     e.preventDefault();
     var message = validation(3);
@@ -113,21 +111,18 @@ $('#addRowItem').on('click', function (e) {
         }
     });
 
-
     var rowId = "rowId" + $("#AssetItemId").val();
 
     var AssetItemCostPrice;
     var AssetItemTotalPrice = 0;
-    AssetItemCostPrice = $("#AssetItemCostPrice").val();
-
+    AssetItemCostPrice = parseFloat($("#AssetItemCostPrice").val()).toFixed(2);
+  
     var EventQty = parseFloat($("#EventQty").val()).toFixed(2);
     var StockQty = parseFloat($("#StockQty").val()).toFixed(2);
     var AllocatedQty = parseFloat($("#AllocatedQty").val()).toFixed(2);
     var ReturnQty = parseFloat($("#ReturnQty").val()).toFixed(2);
-    //var MissingQty = parseFloat($("#MissingQty").val()).toFixed(2);
     var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
-    //var MissingNote = $("#MissingNote").val();
-
+  
     AssetItemTotalPrice = parseFloat(EventQty * AssetItemCostPrice).toFixed(2);
 
     if (message == '') {
@@ -165,9 +160,8 @@ $('#addRowItem').on('click', function (e) {
         AssetItemNetAmountTotal = calculateAssetItemColumn(6);
         $("#AssetItemNetAmount").val(parseFloat(AssetItemNetAmountTotal).toFixed(2));
 
-
         clearAssetItem();
-        editAssetEventItemDataArr = [];
+        editAssetEveneditAssetEventItemDataArrtItemDataArr = [];
         $("#AssetItemId").focus()
     }
     else if (message != '') {
@@ -181,7 +175,7 @@ $('#addRowItem').on('click', function (e) {
 
 function clearAssetItem() {
     $("#AssetItemId").val('0');
-    $("#AssetItemCostPrice").val('0');
+    $("#AssetItemCostPrice").val('');
     $("#EventQty").val('1');
 }
 
@@ -294,6 +288,10 @@ $('#addRowFood').on('click', function (e) {
         foodVatAmount = TotalPrice;
     }
 
+    foodTaxAmount = parseFloat(foodTaxAmount).toFixed(2);
+    foodVatAmount = parseFloat(foodVatAmount).toFixed(2);
+
+
     if (message == '') {
         AssetEventFoodmenu.row('.active').remove().draw(false);
         var rowNode = AssetEventFoodmenu.row.add([
@@ -322,6 +320,8 @@ $('#addRowFood').on('click', function (e) {
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
         $(rowNode).find('td').eq(4).addClass('text-right');
+        $(rowNode).find('td').eq(5).addClass('text-right');
+        $(rowNode).find('td').eq(6).addClass('text-right');
 
 
         TotalFoodVatAmount = calculateColumn(3);
@@ -567,9 +567,10 @@ function GetIngredientPriceById() {
     $("#AssetIngredientCostPrice").val(IngredientCostPrice);
 }
 
-//////Save ORder
+//////Save Order
 
 function saveOrder(data) {
+    console.log(data);
     return $.ajax({
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -596,20 +597,21 @@ function GetAssetItemArray() {
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 allocatedQty: 0.0,
                 returnQty: 0.0,
                 missingQty: 0.0,
                 missingNote: ''
             });
         } else if ($("#Status").val() == 1) {
+            debugger;
             assetEventItemDataArr.push({
                 assetEventItemId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
                 assetItemId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 allocatedQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
                 returnQty: 0.0,
                 missingQty: 0.0,
@@ -623,7 +625,7 @@ function GetAssetItemArray() {
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 allocatedQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
                 returnQty: $(currentRow).find("td:eq(8) input[type='number']").val(),
                 missingQty: tds[9].textContent,
@@ -647,7 +649,7 @@ function GetAssetIngredientArray() {
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].children[0].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 returnQty: 0.0,
                 actualQty: 0.0     
             });
@@ -658,7 +660,7 @@ function GetAssetIngredientArray() {
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].children[0].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 returnQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
                 actualQty: 0.0     
             });
@@ -670,7 +672,7 @@ function GetAssetIngredientArray() {
                 stockQty: tds[3].textContent,
                 eventQty: tds[4].children[0].textContent,
                 costPrice: tds[5].textContent,
-                totalAmount: tds[6].textContent,
+                totalAmount: tds[6].innerHTML,
                 returnQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
                 actualQty: $(currentRow).find("td:eq(8) input[type='number']").val()               
             });
@@ -683,8 +685,8 @@ $(function () {
     $('#saveOrder').click(function () {
         var message = validation(2);
 
-        GetAssetItemArray();
-        GetAssetIngredientArray();
+      //  GetAssetItemArray();
+      //  GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -755,6 +757,11 @@ $('#ok').click(function () {
 
 function validation(id) {
     var message = '';
+    debugger;
+    if ($("#EventName").val() == '') {
+        message = "Enter Catering Name"
+        return message;
+    }
 
     if (id == 1) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
@@ -779,20 +786,24 @@ function validation(id) {
     }
 
     if (id == 2) {
-        if (!AssetEventItem.data().any() || AssetEventItem.data().row == null) {
-            var message = 'At least one order should be entered'
-            return message;
+        var entry = 0;
+        if (AssetEventItem.data().any() ) {
+            entry = 1;
         }
 
-        if (!AssetEventFoodmenu.data().any() || AssetEventFoodmenu.data().row == null) {
-            var message = 'At least one order should be entered'
-            return message;
+        if (AssetEventFoodmenu.data().any() ) {
+            entry = 1;
         }
 
-        if (!AssetIngredientItem.data().any() || AssetIngredientItem.data().row == null) {
-            var message = 'At least one order should be entered'
+        if (AssetIngredientItem.data().any() ) {
+            entry = 1;
+        }
+
+        if (entry == 0) {
+            var message = 'At least one entry from Asset Detail / Foodmenu Detail / Stock Detail should be entered'
             return message;
         }
+       
     }
 
     if (id == 3) {
@@ -886,8 +897,6 @@ function calculateGross() {
     return total;
 }
 
-
-
 $("#FoodDiscountAmount").change(function () {
     var FoodNetAmount;
     FoodNetAmount = parseFloat($("#FoodGrossAmount").val()) - parseFloat($("#FoodDiscountAmount").val());
@@ -904,8 +913,8 @@ $("#FoodDiscountAmount").keyup(function () {
 $(function () {
     $('#allocateOrder').click(function () {
         var message = validation(2);
-        GetAssetItemArray();
-        GetAssetIngredientArray();
+       // GetAssetItemArray();
+       // GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -971,8 +980,8 @@ $(function () {
 $(function () {
     $('#returnOrder').click(function () {
         var message = validation(2);
-        GetAssetItemArray();
-        GetAssetIngredientArray();
+      //  GetAssetItemArray();
+     //   GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1038,8 +1047,8 @@ $(function () {
 $(function () {
     $('#closeOrder').click(function () {
         var message = validation(2);
-        GetAssetItemArray();
-        GetAssetIngredientArray();
+      //  GetAssetItemArray();
+      //  GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {

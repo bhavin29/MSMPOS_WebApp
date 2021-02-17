@@ -30,7 +30,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = $"update AssetEvent set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
                             " update AssetEventItem set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
-                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";"+
+                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
                             " update AssetEventIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";";
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
@@ -84,17 +84,9 @@ namespace RocketPOS.Repository
             List<AssetEventViewModel> assetEventList = new List<AssetEventViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query=string.Empty;
-                if (isHistory)
-                {
-                     query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username FROM AssetEvent  AE  " +
-                            " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0 And AE.Status = 4";
-                }
-                else
-                {
-                    query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username FROM AssetEvent  AE  " +
-                            " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0 And AE.Status In (1,2,3) ";
-                }
+                var query = string.Empty;
+                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
+                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0  ";
                 assetEventList = con.Query<AssetEventViewModel>(query).AsList();
             }
             return assetEventList;
@@ -142,7 +134,7 @@ namespace RocketPOS.Repository
         public int InsertAssetEvent(AssetEventModel assetEventModel)
         {
             int result = 0;
-            int foodMenuResult = 0, itemResult = 0, ingredientResult = 0; 
+            int foodMenuResult = 0, itemResult = 0, ingredientResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -283,7 +275,8 @@ namespace RocketPOS.Repository
                         }
                     }
 
-                    if (foodMenuResult > 0 && itemResult > 0 && ingredientResult > 0)
+                    //if (foodMenuResult > 0 && itemResult > 0 && ingredientResult > 0)
+                    if (result > 0)
                     {
                         sqltrans.Commit();
                     }
@@ -342,7 +335,7 @@ namespace RocketPOS.Repository
                             ",AssetItemNetAmount = @AssetItemNetAmount " +
                             ",FoodNetAmount = @FoodNetAmount ";
 
-                if (assetEventModel.Status==2)
+                if (assetEventModel.Status == 2)
                 {
                     query += ",AllocationDatetime = GetUtcDate() ";
                 }
@@ -390,145 +383,156 @@ namespace RocketPOS.Repository
                         }
                     }
 
-                    foreach (var item in assetEventModel.assetEventItemModels)
+                    if (assetEventModel.assetEventItemModels != null)
                     {
-                        var queryDetails = string.Empty;
-                        if (item.AssetEventItemId > 0)
+                        foreach (var item in assetEventModel.assetEventItemModels)
                         {
-                            queryDetails = "Update [dbo].[AssetEventItem] set " +
-                                             "[AssetItemId]     = " + item.AssetItemId +
-                                             ",[StockQty]     = " + item.StockQty +
-                                             ",[EventQty]     = " + item.EventQty +
-                                             ",[AllocatedQty]     = " + item.AllocatedQty +
-                                             ",[ReturnQty]     = " + item.ReturnQty +
-                                             ",[MissingQty]     = " + item.MissingQty +
-                                             ",[CostPrice]     = " + item.CostPrice +
-                                             ",[TotalAmount]     = " + item.TotalAmount +
-                                             ",[MissingNote]     = '" + item.MissingNote +
-                                             "',[UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                             " [DateUpdated] = GetUTCDate() " +
-                                             " where id = " + item.AssetEventItemId + ";";
+                            var queryDetails = string.Empty;
+                            if (item.AssetEventItemId > 0)
+                            {
+                                queryDetails = "Update [dbo].[AssetEventItem] set " +
+                                                 "[AssetItemId]     = " + item.AssetItemId +
+                                                 ",[StockQty]     = " + item.StockQty +
+                                                 ",[EventQty]     = " + item.EventQty +
+                                                 ",[AllocatedQty]     = " + item.AllocatedQty +
+                                                 ",[ReturnQty]     = " + item.ReturnQty +
+                                                 ",[MissingQty]     = " + item.MissingQty +
+                                                 ",[CostPrice]     = " + item.CostPrice +
+                                                 ",[TotalAmount]     = " + item.TotalAmount +
+                                                 ",[MissingNote]     = '" + item.MissingNote +
+                                                 "',[UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                                 " [DateUpdated] = GetUTCDate() " +
+                                                 " where id = " + item.AssetEventItemId + ";";
+                            }
+                            else
+                            {
+                                queryDetails = "INSERT INTO [dbo].[AssetEventItem]" +
+                                                     "  ([AssetEventId] " +
+                                                      " ,[AssetItemId] " +
+                                                     " ,[StockQty] " +
+                                                     " ,[EventQty] " +
+                                                     " ,[AllocatedQty] " +
+                                                     " ,[ReturnQty] " +
+                                                     " ,[MissingQty] " +
+                                                     " ,[CostPrice] " +
+                                                     " ,[TotalAmount] " +
+                                                     " ,[MissingNote] " +
+                                                     " ,[UserIdInserted]" +
+                                                     " ,[DateInserted]" +
+                                                      " ,[IsDeleted])   " +
+                                                      "VALUES           " +
+                                                      "(" + assetEventModel.Id + "," +
+                                                      item.AssetItemId + "," +
+                                                      item.StockQty + "," +
+                                                       item.EventQty + "," +
+                                                        item.AllocatedQty + "," +
+                                                         item.ReturnQty + "," +
+                                                          item.MissingQty + "," +
+                                                           item.CostPrice + "," +
+                                                            item.TotalAmount + ",'" +
+                                                          item.MissingNote + "'," +
+                                            LoginInfo.Userid + ",GetUtcDate(),0);";
+                            }
+                            itemdetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
-                        else
-                        {
-                            queryDetails = "INSERT INTO [dbo].[AssetEventItem]" +
-                                                 "  ([AssetEventId] " +
-                                                  " ,[AssetItemId] " +
-                                                 " ,[StockQty] " +
-                                                 " ,[EventQty] " +
-                                                 " ,[AllocatedQty] " +
-                                                 " ,[ReturnQty] " +
-                                                 " ,[MissingQty] " +
-                                                 " ,[CostPrice] " +
-                                                 " ,[TotalAmount] " +
-                                                 " ,[MissingNote] " +
-                                                 " ,[UserIdInserted]" +
-                                                 " ,[DateInserted]" +
-                                                  " ,[IsDeleted])   " +
-                                                  "VALUES           " +
-                                                  "(" + assetEventModel.Id + "," +
-                                                  item.AssetItemId + "," +
-                                                  item.StockQty + "," +
-                                                   item.EventQty + "," +
-                                                    item.AllocatedQty + "," +
-                                                     item.ReturnQty + "," +
-                                                      item.MissingQty + "," +
-                                                       item.CostPrice + "," +
-                                                        item.TotalAmount + ",'" +
-                                                      item.MissingNote + "'," +
-                                        LoginInfo.Userid + ",GetUtcDate(),0);";
-                        }
-                        itemdetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
 
-                    foreach (var item in assetEventModel.assetEventFoodmenuModels)
+                    if (assetEventModel.assetEventFoodmenuModels != null)
                     {
-                        var queryDetails = string.Empty;
-                        if (item.AssetEventFoodmenuId > 0)
+                        foreach (var item in assetEventModel.assetEventFoodmenuModels)
                         {
-                            queryDetails = "Update [dbo].[AssetEventFoodmenu] set " +
-                                             "[FoodmenuId]		  	 = " + item.FoodMenuId +
-                                             ",[SalesPrice]     = " + item.SalesPrice +
-                                             ",[Qunatity]     = " + item.Qunatity +
-                                             ",[FoodVatAmount]     = " + item.FoodVatAmount +
-                                             ",[FoodTaxAmount]     = " + item.FoodTaxAmount +
-                                             ",[TotalPrice]     = " + item.TotalPrice +
-                                             " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                             " [DateUpdated] = GetUTCDate() " +
-                                             " where id = " + item.AssetEventFoodmenuId + ";";
+                            var queryDetails = string.Empty;
+                            if (item.AssetEventFoodmenuId > 0)
+                            {
+                                queryDetails = "Update [dbo].[AssetEventFoodmenu] set " +
+                                                 "[FoodmenuId]		  	 = " + item.FoodMenuId +
+                                                 ",[SalesPrice]     = " + item.SalesPrice +
+                                                 ",[Qunatity]     = " + item.Qunatity +
+                                                 ",[FoodVatAmount]     = " + item.FoodVatAmount +
+                                                 ",[FoodTaxAmount]     = " + item.FoodTaxAmount +
+                                                 ",[TotalPrice]     = " + item.TotalPrice +
+                                                 " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                                 " [DateUpdated] = GetUTCDate() " +
+                                                 " where id = " + item.AssetEventFoodmenuId + ";";
+                            }
+                            else
+                            {
+                                queryDetails = "INSERT INTO [dbo].[AssetEventFoodmenu]" +
+                                                   "  ([AssetEventId] " +
+                                                   " ,[FoodmenuId] " +
+                                                   " ,[SalesPrice] " +
+                                                   " ,[Qunatity] " +
+                                                   " ,[FoodVatAmount] " +
+                                                   " ,[FoodTaxAmount] " +
+                                                   " ,[TotalPrice] " +
+                                                   " ,[UserIdInserted]" +
+                                                   " ,[DateInserted]" +
+                                                    " ,[IsDeleted])   " +
+                                                    "VALUES           " +
+                                                    "(" + assetEventModel.Id + "," +
+                                                    item.FoodMenuId + "," +
+                                                    item.SalesPrice + "," +
+                                                     item.Qunatity + "," +
+                                                       item.FoodVatAmount + "," +
+                                                         item.FoodTaxAmount + "," +
+                                                     item.TotalPrice + "," +
+                                          LoginInfo.Userid + ",GetUtcDate(),0);";
+                            }
+                            foodmenudetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
-                        else
-                        {
-                             queryDetails = "INSERT INTO [dbo].[AssetEventFoodmenu]" +
-                                                "  ([AssetEventId] " +
-                                                " ,[FoodmenuId] " +
-                                                " ,[SalesPrice] " +
-                                                " ,[Qunatity] " +
-                                                " ,[FoodVatAmount] " +
-                                                " ,[FoodTaxAmount] " +
-                                                " ,[TotalPrice] " +
-                                                " ,[UserIdInserted]" +
-                                                " ,[DateInserted]" +
-                                                 " ,[IsDeleted])   " +
-                                                 "VALUES           " +
-                                                 "(" + assetEventModel.Id + "," +
-                                                 item.FoodMenuId + "," +
-                                                 item.SalesPrice + "," +
-                                                  item.Qunatity + "," +
-                                                    item.FoodVatAmount + "," +
-                                                      item.FoodTaxAmount + "," +
-                                                  item.TotalPrice + "," +
-                                       LoginInfo.Userid + ",GetUtcDate(),0);";
-                        }
-                        foodmenudetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
 
-                    foreach (var item in assetEventModel.assetEventIngredientModels)
+                    if (assetEventModel.assetEventIngredientModels != null)
                     {
-                        var queryDetails = string.Empty;
-                        if (item.AssetEventIngredientId > 0)
+
+                        foreach (var item in assetEventModel.assetEventIngredientModels)
                         {
-                            queryDetails = "Update [dbo].[AssetEventIngredient] set " +
-                                             "[IngredientId]     = " + item.IngredientId +
-                                             ",[StockQty]     = " + item.StockQty +
-                                             ",[EventQty]     = " + item.EventQty +
-                                             ",[ReturnQty]     = " + item.ReturnQty +
-                                             ",[ActualQty]     = " + item.ActualQty +
-                                             ",[CostPrice]     = " + item.CostPrice +
-                                             ",[TotalAmount]     = " + item.TotalAmount +
-                                             ",[UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                             " [DateUpdated] = GetUTCDate() " +
-                                             " where id = " + item.AssetEventIngredientId + ";";
+                            var queryDetails = string.Empty;
+                            if (item.AssetEventIngredientId > 0)
+                            {
+                                queryDetails = "Update [dbo].[AssetEventIngredient] set " +
+                                                 "[IngredientId]     = " + item.IngredientId +
+                                                 ",[StockQty]     = " + item.StockQty +
+                                                 ",[EventQty]     = " + item.EventQty +
+                                                 ",[ReturnQty]     = " + item.ReturnQty +
+                                                 ",[ActualQty]     = " + item.ActualQty +
+                                                 ",[CostPrice]     = " + item.CostPrice +
+                                                 ",[TotalAmount]     = " + item.TotalAmount +
+                                                 ",[UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                                 " [DateUpdated] = GetUTCDate() " +
+                                                 " where id = " + item.AssetEventIngredientId + ";";
+                            }
+                            else
+                            {
+                                queryDetails = "INSERT INTO [dbo].[AssetEventIngredient]" +
+                                                     "  ([AssetEventId] " +
+                                                      " ,[IngredientId] " +
+                                                     " ,[StockQty] " +
+                                                     " ,[EventQty] " +
+                                                     " ,[ReturnQty] " +
+                                                     " ,[ActualQty] " +
+                                                     " ,[CostPrice] " +
+                                                     " ,[TotalAmount] " +
+                                                     " ,[UserIdInserted]" +
+                                                     " ,[DateInserted]" +
+                                                      " ,[IsDeleted])   " +
+                                                      "VALUES           " +
+                                                      "(" + assetEventModel.Id + "," +
+                                                      item.IngredientId + "," +
+                                                      item.StockQty + "," +
+                                                      item.EventQty + "," +
+                                                      item.ReturnQty + "," +
+                                                      item.ActualQty + "," +
+                                                      item.CostPrice + "," +
+                                                      item.TotalAmount + "," +
+                                            LoginInfo.Userid + ",GetUtcDate(),0);";
+                            }
+                            ingredientdetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
-                        else
-                        {
-                            queryDetails = "INSERT INTO [dbo].[AssetEventIngredient]" +
-                                                 "  ([AssetEventId] " +
-                                                  " ,[IngredientId] " +
-                                                 " ,[StockQty] " +
-                                                 " ,[EventQty] " +
-                                                 " ,[ReturnQty] " +
-                                                 " ,[ActualQty] " +
-                                                 " ,[CostPrice] " +
-                                                 " ,[TotalAmount] " +
-                                                 " ,[UserIdInserted]" +
-                                                 " ,[DateInserted]" +
-                                                  " ,[IsDeleted])   " +
-                                                  "VALUES           " +
-                                                  "(" + assetEventModel.Id + "," +
-                                                  item.IngredientId + "," +
-                                                  item.StockQty + "," +
-                                                  item.EventQty + "," +
-                                                  item.ReturnQty + "," +
-                                                  item.ActualQty + "," +
-                                                  item.CostPrice + "," +
-                                                  item.TotalAmount + "," +
-                                        LoginInfo.Userid + ",GetUtcDate(),0);";
-                        }
-                        ingredientdetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
 
-                    if (foodmenudetails > 0 && itemdetails > 0 && ingredientdetails > 0)
+                    //if (foodmenudetails > 0 && itemdetails > 0 && ingredientdetails > 0)
+                    if (result > 0)
                     {
                         sqltrans.Commit();
                     }

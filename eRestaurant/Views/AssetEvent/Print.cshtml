@@ -1,0 +1,322 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.AssetEventModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@section Styles {
+    <link href="@Url.Content("~/Styles/print.css")" rel="stylesheet" type="text/css" />
+}
+@{
+    Layout = "";
+}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag
+    https://bootsnipp.com/snippets/9gjD
+   https://plnkr.co/edit/lWk6Yd?preview ---------->
+
+<div id="CateringReport" class="container">
+    <div class="row">
+
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h4>Catering WorkSheet for #@Model.ReferenceNo</h4>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-xs-6">
+                    <address>
+                        @Model.EventName<br>
+                        <strong>Catering Order To:</strong><br>
+                        @Model.ContactPersonName<br>
+                        @Model.EventPlace<br>
+                        @Model.ContactPersonNumber<br>
+                    </address>
+                </div>
+                <!--<div class="col-xs-6 text-right">-->
+                @*<address>
+                        <strong>Shipped To:</strong><br>
+                        Jane Smith<br>
+                        1234 Main<br>
+                        Apt. 4B<br>
+                        Springfield, ST 54321
+                    </address>*@
+                <!--</div>-->
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <address>
+                        <strong>Event Date:</strong><br>
+                        @Model.EventDatetime.ToShortDateString()<br><br>
+                    </address>
+                </div>
+                @*<div class="col-xs-6 text-right">
+                        <address>
+                            <strong></strong><br>
+                            <br><br>
+                        </address>
+                    </div>*@
+            </div>
+        </div>
+    </div>
+
+    @if (Model.assetEventItemModels.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Asset Summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">Asset Item</th>
+                                    <th style="width:8%" class="text-right">Stock Qty</th>
+                                    <th style="width:8%" class="text-right">Qty </th>
+                                    <th style="width:8%" class="text-right">Cost Price</th>
+                                    <th style="width:8%" class="text-right">Total </th>
+                                    <th style="width:10%" class="text-right">Allocated Qty</th>
+                                    <th style="width:8%" class="text-right">Return Qty</th>
+                                    <th style="width:10%" class="text-right">Missing Qty</th>
+                                    <th style="width:15%">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.assetEventItemModels)
+                                {
+                                    var tm = "#myAModal" + item.AssetItemId;
+                                    var mid = "myAModal" + item.AssetItemId;
+                                    var rowId = "rowId" + item.AssetItemId;
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.AssetItemName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.StockQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.EventQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.CostPrice
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TotalAmount
+                                        </td>
+                                        <td class="text-right">
+                                            @item.AllocatedQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.ReturnQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.MissingQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.MissingNote
+                                        </td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td class="thick-line text-left"><strong>Total</strong></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line"></td>
+                                    <td class="thick-line text-center"></td>
+                                    <td class="thick-line text-right">@Model.AssetItemNetAmount</td>
+                                    <td class="thick-line text-right">1.99</td>
+                                    <td class="thick-line text-right">9.99</td>
+                                    <td class="thick-line text-right">5.99</td>
+                                    <td class="thick-line"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.assetEventFoodmenuModels.Count > 0)
+    {
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Foodmenu Summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:50%">FoodMenu</th>
+                                    <th style="width:10%" class="text-right">Price</th>
+                                    <th style="width:10%" class="text-right">Qty</th>
+                                    <th style="width:10%" class="text-right">Vatable</th>
+                                    <th style="width:10%" class="text-right">Tax</th>
+                                    <th style="width:10%" class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.assetEventFoodmenuModels)
+                                {
+                                    var rowId = "rowId" + item.FoodMenuId;
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.FoodMenuName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.SalesPrice.ToString("N")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.Qunatity.ToString("N") @item.FoodMenuUnitName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.FoodVatAmount.ToString("N")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.FoodTaxAmount.ToString("N")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TotalPrice.ToString("N")
+                                        </td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td class="thick-line text-left"><strong>Total</strong></td>
+                                    <td class="thick-line text-right"></td>
+                                    <td class="thick-line text-right"></td>
+                                    <td class="thick-line text-right">@Model.FoodVatAmount</td>
+                                    <td class="thick-line text-right">@Model.FoodTaxAmount</td>
+                                    <td class="thick-line text-right">@Model.FoodNetAmount</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.assetEventIngredientModels.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Stock Summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:35%">Stock Item </th>
+                                    <th style="width:10%" class="text-right">Stock Qty</th>
+                                    <th style="width:10%" class="text-right">Qty </th>
+                                    <th style="width:10%" class="text-right">Cost Price</th>
+                                    <th style="width:10%" class="text-right">Total</th>
+                                    <th style="width:12%" class="text-right">Return Qty</th>
+                                    <th style="width:12%" class="text-right">Actual Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.assetEventIngredientModels)
+                                {
+                                    var rowId = "rowId" + item.IngredientId;
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.IngredientName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.StockQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.EventQty.ToString("N") @item.IngredientUnitName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.CostPrice
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TotalAmount
+                                        </td>
+                                        <td class="text-right">
+                                            @item.ReturnQty
+                                        </td>
+                                        <td class="text-right">
+                                            @item.ActualQty
+                                        </td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td class="thick-line text-left"><strong>Total</strong></td>
+                                    <td class="thick-line text-right"></td>
+                                    <td class="thick-line text-right"></td>
+                                    <td class="thick-line text-right"></td>
+                                    <td class="thick-line text-right">@Model.IngredientNetAmount</td>
+                                    <td class="thick-line text-right">5.99</td>
+                                    <td class="thick-line text-right">5.99</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @*<div class="row">
+            <div class="col-md-12 ">
+                <div class="col-sm-6">
+                    @if (Model.DateInserted.ToShortDateString() == "01/01/0001")
+                    { }
+                    else
+                    {
+                        <div><strong>History </strong> </div>
+                        <div><span>Created:   </span>@Model.DateInserted</div>
+                    }
+                    @if (Model.AllocationDatetime.ToShortDateString() == "01/01/0001")
+                    { }
+                    else
+                    {
+                        <div><span>Allocation:</span>@Model.AllocationDatetime</div>
+                    }
+
+                    @if (Model.ReturnDatetime.ToShortDateString() == "01/01/0001")
+                    { }
+                    else
+                    {
+                        <div><span>Return:    </span>@Model.ReturnDatetime</div>
+                    }
+
+                    @if (Model.ClosedDatetime.ToShortDateString() == "01/01/0001")
+                    { }
+                    else
+                    {
+                        <div><span>Closed:    </span> @Model.ClosedDatetime</div>
+                    }
+                </div>
+            </div>
+        </div>*@
+
+</div>
+
+@section scripts{
+    <script>
+        assetEventFoodmenuDataArr = []
+        assetEventItemDataArr = []
+        assetEventIngredientDataArr = []
+        if (@Model.Id>0){
+            @*assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
+            assetEventFoodmenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventFoodmenuModels))');
+            assetEventIngredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventIngredientModels))');*@
+        }
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/Scripts/AssetEvent.js"></script>
+}

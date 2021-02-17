@@ -13,7 +13,11 @@ namespace RocketPOS.Models
         public string EventName { get; set; }
         public string Username { get; set; }
         public int Status { get; set; }
-        
+        public string EventDateTime { get; set; }
+        public string ClosedDatetime { get; set; }
+
+
+
     }
     public class AssetEventModel
     {
@@ -65,7 +69,6 @@ namespace RocketPOS.Models
         public int[] AssetEventFoodmenuDeletedId { get; set; }
         public int[] AssetEventIngredientDeletedId { get; set; }
     }
-
     public class AssetEventItemModel
     {
         public int AssetEventItemId { get; set; }
@@ -86,9 +89,8 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
         public string MissingNote { get; set; }
-        
-    }
 
+    }
     public class AssetEventFoodmenuModel
     {
         public int AssetEventFoodmenuId { get; set; }
@@ -107,14 +109,13 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalPrice { get; set; }
     }
-
     public class AssetEventIngredientModel
     {
         public int AssetEventIngredientId { get; set; }
         public int IngredientId { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public string IngredientName { get; set; }
-        public string IngredientUnitName { get; set; }        
+        public string IngredientUnitName { get; set; }
         public decimal StockQty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal EventQty { get; set; }
@@ -127,11 +128,11 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
     }
-
     public class AssetFoodMenuPriceDetail
     {
         public decimal SalesPrice { get; set; }
         public decimal TaxPercentage { get; set; }
         public int FoodVatTaxId { get; set; }
     }
+
 }

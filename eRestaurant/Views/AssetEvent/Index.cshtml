@@ -42,7 +42,9 @@
                     <thead role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:30%">@Html.DisplayName("Catering Name")</th>
+                            <th style="width:26%">@Html.DisplayName("Catering Name")</th>
+                            <th style="width:12%">@Html.DisplayName("Creation")</th>
+                            <th style="width:12%">@Html.DisplayName("Close")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
                             <th style="width:10%">@Html.DisplayName("Creator")</th>
                             <th style="width:10%">@Html.DisplayName("Action")</th>
@@ -52,7 +54,9 @@
                     <tfoot role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:30%">@Html.DisplayName("Catering Name")</th>
+                            <th style="width:26%">@Html.DisplayName("Catering Name")</th>
+                            <th style="width:12%">@Html.DisplayName("Creation")</th>
+                            <th style="width:12%">@Html.DisplayName("Close")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
                             <th style="width:10%">@Html.DisplayName("Creator")</th>
                             <th style="width:10%">@Html.DisplayName("Action")</th>
@@ -64,50 +68,57 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                            <tr role="row">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.EventName)
-                                </td>
-                                <td>
-                                    @if (item.Status == 4)
+                        <tr role="row">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EventName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EventDateTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClosedDatetime)
+                            </td>
+                            <td>
+                                @if (item.Status == 4)
+                                {
+                                    <label>Closed</label>
+                                }
+                                else if (item.Status == 3)
+                                {
+                                    <label>Returned</label>
+                                }
+                                else if (item.Status == 2)
+                                {
+                                    <label>Allocated</label>
+                                }
+                                else
+                                {
+                                    <label>Created</label>
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                    @if (((bool)TempData["History"]) != true)
                                     {
-                                        <label>Closed</label>
+                                        <label> / </label>
+                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                     }
-                                    else if (item.Status == 3)
-                                    {
-                                        <label>Returned</label>
-                                    }
-                                    else if (item.Status == 2)
-                                    {
-                                        <label>Allocated</label>
-                                    }
-                                    else
-                                    {
-                                        <label>Created</label>
-                                    }
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Username)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                        @if (((bool)TempData["History"]) != true)
-                                        {
-                                            <label> / </label>
-                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                        }
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="View">View</a>
-                                    </div>
-                                </td>
-                            </tr>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="View">View</a> / 
+                                    <a asp-action="Print" asp-route-Id="@item.Id" >Print</a>
+                                </div>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

@@ -51,7 +51,7 @@ namespace RocketPOS.Controllers.Transaction
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
             assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
-            assetEventModel.MissingNoteList= _iDropDownService.GetCateringFoodMenuGlobalStatus();
+            assetEventModel.MissingNoteList = _iDropDownService.GetCateringFoodMenuGlobalStatus();
             return View(assetEventModel);
         }
 
@@ -63,29 +63,22 @@ namespace RocketPOS.Controllers.Transaction
             string assetEventMessage = string.Empty;
             if (assetEventModel != null)
             {
-                if (assetEventModel.assetEventItemModels.Count > 0 && assetEventModel.assetEventFoodmenuModels.Count > 0 && assetEventModel.assetEventIngredientModels.Count > 0)
+                if (assetEventModel.Id > 0)
                 {
-                    if (assetEventModel.Id > 0)
+                    result = _iAssetEventService.UpdateAssetEvent(assetEventModel);
+                    if (result > 0)
                     {
-                        result = _iAssetEventService.UpdateAssetEvent(assetEventModel);
-                        if (result > 0)
-                        {
-                            assetEventMessage = _locService.GetLocalizedHtmlString("EditSuccss");
-                        }
-                    }
-                    else
-                    {
-                        result = _iAssetEventService.InsertAssetEvent(assetEventModel);
-                        if (result > 0)
-                        {
-                            assetEventMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
-                        }
+                        assetEventMessage = _locService.GetLocalizedHtmlString("EditSuccss");
                     }
                 }
                 else
                 {
-                    assetEventMessage = _locService.GetLocalizedHtmlString("ValidProductionFormula");
-                    return Json(new { error = true, message = assetEventMessage, status = 201 });
+                    assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent();
+                    result = _iAssetEventService.InsertAssetEvent(assetEventModel);
+                    if (result > 0)
+                    {
+                        assetEventMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
+                    }
                 }
             }
             else
@@ -93,6 +86,8 @@ namespace RocketPOS.Controllers.Transaction
                 assetEventMessage = _locService.GetLocalizedHtmlString("ValidProductionFormula");
                 return Json(new { error = true, message = assetEventMessage, status = 201 });
             }
+
+            assetEventMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
             return Json(new { error = false, message = assetEventMessage, status = 200 });
         }
 
@@ -135,5 +130,27 @@ namespace RocketPOS.Controllers.Transaction
             var FoodMenuGlobalStatus = _iDropDownService.GetCateringFoodMenuGlobalStatus();
             return Json(new { FoodMenuGlobalStatus = FoodMenuGlobalStatus });
         }
+
+        public IActionResult Print(int? id)
+        {
+            AssetEventModel assetEventModel = new AssetEventModel();
+  
+            if (id > 0)
+            {
+                assetEventModel = _iAssetEventService.GetAssetEventById(Convert.ToInt32(id));
+
+            }
+            else
+            {
+                assetEventModel.EventDatetime = DateTime.Now;
+                assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
+            }
+            assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
+            assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
+            assetEventModel.MissingNoteList = _iDropDownService.GetCateringFoodMenuGlobalStatus();
+            return View(assetEventModel);
+        }
+
     }
 }

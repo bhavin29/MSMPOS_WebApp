@@ -69,7 +69,8 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                            <tr role="row">
+
+                            <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.ReferenceNo)
                                 </td>
@@ -134,6 +135,7 @@
         });
 
         function loadProductionEntryList() {
+            debugger;
 
             var foodMenuType;
             var isonthesport = $("#onthespot").is(":checked");
@@ -143,6 +145,8 @@
             else {
                 foodMenuType = 3;
             }
+
+
 
             $.ajaxSetup({ cache: false });
             $.ajax({
@@ -154,7 +158,6 @@
                         ProductionEntryTable.clear();
                         ProductionEntryTable.destroy();
                     }
-
                     ProductionEntryTable = $("#ProductionEntryTable").DataTable({
                         "data": data.productionEntryList,
                         "columns": [

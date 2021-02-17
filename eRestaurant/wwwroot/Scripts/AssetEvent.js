@@ -36,7 +36,7 @@ $(document).ready(function () {
     AssetEventFoodmenu = $('#AssetEventFoodmenu').DataTable({
         columnDefs: [
             { targets: [0, 1], orderable: false, visible: false },
-            { targets: [3, 4], orderable: false, class: "text-right" }
+            { targets: [3], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -56,7 +56,7 @@ $(document).ready(function () {
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
             { targets: [0, 1], orderable: false },
-            { targets: [3, 4], orderable: false, class: "text-right" }
+            { targets: [3,4,5, 6], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -73,8 +73,19 @@ $(document).ready(function () {
         ],
     });
 
-    //$("#EventType").focus();
+    if ($("#Status").val() == 0) {
+        AssetEventItem.columns([7,8,9,10]).visible(false);
+    }
+    if ($("#Status").val() == 1) {
+        AssetEventItem.columns([8, 9, 10]).visible(false);
+    }
 
+    if ($("#Status").val() == 0) {
+        AssetIngredientItem.columns([7, 8]).visible(false);
+    }
+    if ($("#Status").val() == 1) {
+        AssetIngredientItem.columns([8]).visible(false);
+    }
 });
 
 //EventItem
@@ -83,6 +94,26 @@ $(document).ready(function () {
 $('#addRowItem').on('click', function (e) {
     e.preventDefault();
     var message = validation(3);
+    var missingNotes = '';
+    $.ajax({
+        url: "/AssetEvent/GetCateringFoodMenuGlobalStatus",
+        data: {},
+        type: "GET",
+        async: false,
+        dataType: "text",
+        success: function (data) {
+            missingNotes = '<select id="item_MissingNote" class="form-control">';
+            var obj = JSON.parse(data);
+            for (var i = 0; i < obj.foodMenuGlobalStatus.length; ++i) {
+                missingNotes += '<option value="' + obj.foodMenuGlobalStatus[i].value + '">' + obj.foodMenuGlobalStatus[i].text + '</option>';
+            }
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+
+
     var rowId = "rowId" + $("#AssetItemId").val();
 
     var AssetItemCostPrice;
@@ -93,8 +124,9 @@ $('#addRowItem').on('click', function (e) {
     var StockQty = parseFloat($("#StockQty").val()).toFixed(2);
     var AllocatedQty = parseFloat($("#AllocatedQty").val()).toFixed(2);
     var ReturnQty = parseFloat($("#ReturnQty").val()).toFixed(2);
-    var MissingQty = parseFloat($("#MissingQty").val()).toFixed(2);
-    var MissingNote = $("#MissingNote").val();
+    //var MissingQty = parseFloat($("#MissingQty").val()).toFixed(2);
+    var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
+    //var MissingNote = $("#MissingNote").val();
 
     AssetItemTotalPrice = parseFloat(EventQty * AssetItemCostPrice).toFixed(2);
 
@@ -104,14 +136,14 @@ $('#addRowItem').on('click', function (e) {
             '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetEventItemId").val() + '" /> </td>',
             '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetItemId").val() + '" /> </td>',
             $('#AssetItemId').children("option:selected").text(),
-            '<td class="text-right"><input type="number" id="stockQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + StockQty + '" name="item.StockQty"> </td>',
+            '<td class="text-right">' + StockQty + '</td>',
             '<td class="text-right">' + EventQty + ' </td>',
-            '<td class="text-right"><input type="number" id="allocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
-            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right"><input type="number" id="missingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + MissingQty + '" name="item.MissingQty"> </td>',
             '<td class="text-right">' + AssetItemCostPrice + ' </td>',
             '<td class="text-right">' + AssetItemTotalPrice + ' </td>',
-            '<td class="text-right"><input type="text" id="missingNote" class="form-control col-sm-11" value="' + MissingNote + '" name="item.MissingNote"> </td>',
+            '<td class="text-right"><input type="number" id="allocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
+            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right">' + MissingQty + ' </td>',
+            '<td class="text-right">' + missingNotes + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editAssetItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myAModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myAModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -126,12 +158,13 @@ $('#addRowItem').on('click', function (e) {
             missingQty: MissingQty,
             costPrice: AssetItemCostPrice,
             totalAmount: AssetItemTotalPrice,
-            missingNote: MissingNote,
+            missingNote: '',
             assetEventItemId: $("#AssetEventItemId").val()
         });
 
-        AssetItemNetAmountTotal = calculateAssetItemColumn(9);
+        AssetItemNetAmountTotal = calculateAssetItemColumn(6);
         $("#AssetItemNetAmount").val(parseFloat(AssetItemNetAmountTotal).toFixed(2));
+
 
         clearAssetItem();
         editAssetEventItemDataArr = [];
@@ -163,7 +196,7 @@ function deleteAssetOrder(id, assetItemId, rowId) {
             $("#myAModal" + assetItemId).modal('hide');
         }
     }
-    $("#AssetItemNetAmount").val(parseFloat(calculateAssetItemColumn(9)).toFixed(2));
+    $("#AssetItemNetAmount").val(parseFloat(calculateAssetItemColumn(6)).toFixed(2));
 };
 
 
@@ -199,7 +232,7 @@ $(document).on('click', 'a.editAssetItem', function (e) {
                 $("#ReturnQty").val(assetEventItemDataArr[i].returnQty);
                 $("#MissingQty").val(assetEventItemDataArr[i].missingQty);
                 $("#AssetItemCostPrice").val(assetEventItemDataArr[i].costPrice);
-                $("#MissingNote").val(assetEventItemDataArr[i].missingNote);
+                //$("#MissingNote").val(assetEventItemDataArr[i].missingNote);
                 editAssetEventItemDataArr = assetEventItemDataArr.splice(i, 1);
             }
         }
@@ -268,7 +301,7 @@ $('#addRowFood').on('click', function (e) {
             '<td class="text-right">' + $("#FoodMenuId").val() + ' </td>',
             $('#FoodMenuId').children("option:selected").text(),
             '<td class="text-right">' + Price + ' </td>',
-            '<td class="text-right">' + Qty + ' </td>',
+            '<td class="text-right">' + Qty + ' ' + $("#FoodMenuUnitName").text() + ' </td>',
             '<td class="text-right">' + foodVatAmount + ' </td>',
             '<td class="text-right">' + foodTaxAmount + ' </td>',
             '<td class="text-right">' + TotalPrice + ' </td>',
@@ -290,7 +323,7 @@ $('#addRowFood').on('click', function (e) {
         $(rowNode).find('td').eq(3).addClass('text-right');
         $(rowNode).find('td').eq(4).addClass('text-right');
 
-        
+
         TotalFoodVatAmount = calculateColumn(3);
         TotalFoodTaxAmount = calculateColumn(4);
         GrossAmount = calculateColumn(5);
@@ -374,6 +407,7 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
 });
 
 function GetFoodMenuPriceTaxDetailById() {
+    GetUnitNameByFoodMenuId();
     var Price;
     var TaxPercentage;
     $.ajax({
@@ -419,12 +453,12 @@ $('#addRowIngredient').on('click', function (e) {
             '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetEventIngredientId").val() + '" /> </td>',
             '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#IngredientId").val() + '" /> </td>',
             $('#IngredientId').children("option:selected").text(),
-            '<td class="text-right"><input type="number" id="stockQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientStockQty + '" name="item.StockQty"> </td>',
-            '<td class="text-right">' + IngredientEventQty + ' </td>',
-            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right"><input type="number" id="missingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.MissingQty"> </td>',
+            '<td class="text-right">' + IngredientStockQty + ' </td>',
+            '<td class="text-right"><label>' + IngredientEventQty + '</label> <label>' + $("#IngredientUnitName").text() + '</label>  </td>',
             '<td class="text-right">' + IngredientCostPrice + ' </td>',
             '<td class="text-right">' + IngredientTotalPrice + ' </td>',
+            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientReturnQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right"><input type="number" id="missingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.MissingQty"> </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class=" editIngredientItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myBModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myBModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -441,7 +475,7 @@ $('#addRowIngredient').on('click', function (e) {
             assetEventIngredientId: $("#AssetEventIngredientId").val()
         });
 
-        IngredientNetAmountTotal = calculateIngredientColumn(8);
+        IngredientNetAmountTotal = calculateIngredientColumn(6);
         $("#IngredientNetAmount").val(parseFloat(IngredientNetAmountTotal).toFixed(2));
 
         clearIngredientItem();
@@ -474,7 +508,7 @@ function deleteIngredientOrder(id, ingredientId, rowId) {
             $("#myBModal" + assetItemId).modal('hide');
         }
     }
-    $("#IngredientNetAmount").val(parseFloat(calculateIngredientColumn(8)).toFixed(2));
+    $("#IngredientNetAmount").val(parseFloat(calculateIngredientColumn(6)).toFixed(2));
 };
 
 
@@ -504,10 +538,10 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
             if (assetEventIngredientDataArr[i].ingredientId == id) {
                 $("#AssetEventIngredientId").val(assetEventIngredientDataArr[i].assetEventIngredientId);
                 $("#IngredientId").val(assetEventIngredientDataArr[i].ingredientId);
-                $("#IngredientStockQty").val(assetEventIngredientDataArr[i].IngredientStockQty);
-                $("#IngredientEventQty").val(assetEventIngredientDataArr[i].IngredientEventQty);
-                $("#IngredientReturnQty").val(assetEventIngredientDataArr[i].IngredientReturnQty);
-                $("#IngredientActualQty").val(assetEventIngredientDataArr[i].ingredientActualQty);
+                $("#IngredientStockQty").val(assetEventIngredientDataArr[i].stockQty);
+                $("#IngredientEventQty").val(assetEventIngredientDataArr[i].eventQty);
+                $("#IngredientReturnQty").val(assetEventIngredientDataArr[i].returnQty);
+                $("#IngredientActualQty").val(assetEventIngredientDataArr[i].actualQty);
                 $("#AssetIngredientCostPrice").val(assetEventIngredientDataArr[i].costPrice);
                 editAssetEventIngredientDataArr = assetEventIngredientDataArr.splice(i, 1);
             }
@@ -516,7 +550,7 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
 });
 
 function GetIngredientPriceById() {
-
+    GetUnitNameByIngredientId();
     var IngredientCostPrice;
     $.ajax({
         url: "/AssetEvent/GetIngredientPriceById",
@@ -554,18 +588,48 @@ function GetAssetItemArray() {
         var currentRow = $(this).closest("tr");
         //var dataline = $("#AssetEventItem").DataTable().row(currentRow).data();
 
-        assetEventItemDataArr.push({
-            assetEventItemId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
-            assetItemId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
-            stockQty: $(currentRow).find("td:eq(3) input[type='number']").val(),
-            eventQty: tds[4].textContent,
-            allocatedQty: $(currentRow).find("td:eq(5) input[type='number']").val(),
-            returnQty: $(currentRow).find("td:eq(6) input[type='number']").val(),
-            missingQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
-            costPrice: tds[8].textContent,
-            totalAmount: tds[9].textContent,
-            missingNote: $(currentRow).find("td:eq(10) input[type='text']").val()
-        });
+
+        if ($("#Status").val() == 0) {
+            assetEventItemDataArr.push({
+                assetEventItemId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                assetItemId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                allocatedQty: 0.0,
+                returnQty: 0.0,
+                missingQty: 0.0,
+                missingNote: ''
+            });
+        } else if ($("#Status").val() == 1) {
+            assetEventItemDataArr.push({
+                assetEventItemId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                assetItemId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                allocatedQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
+                returnQty: 0.0,
+                missingQty: 0.0,
+                missingNote: ''
+            });
+        }
+        else {
+            assetEventItemDataArr.push({
+                assetEventItemId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                assetItemId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                allocatedQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
+                returnQty: $(currentRow).find("td:eq(8) input[type='number']").val(),
+                missingQty: tds[9].textContent,
+                missingNote: $(currentRow).find("td:eq(10) select[id='item_MissingNote']").val()
+            });
+        }
     });
 }
 
@@ -574,18 +638,44 @@ function GetAssetIngredientArray() {
     $("#AssetIngredientItem tbody tr").each(function () {
         var tds = $(this).find("td");
         var currentRow = $(this).closest("tr");
-        //var dataline = $("#AssetEventItem").DataTable().row(currentRow).data();
+        //var dataline = $("#AssetIngredientItem").DataTable().row(currentRow).data();
 
-        assetEventIngredientDataArr.push({
-            assetEventIngredientId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
-            ingredientId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
-            stockQty: $(currentRow).find("td:eq(3) input[type='number']").val(),
-            eventQty: tds[4].textContent,
-            actualQty: $(currentRow).find("td:eq(6) input[type='number']").val(),
-            returnQty: $(currentRow).find("td:eq(5) input[type='number']").val(),
-            costPrice: tds[7].textContent,
-            totalAmount: tds[8].textContent
-        });
+        if ($("#Status").val() == 0) {
+            assetEventIngredientDataArr.push({
+                assetEventIngredientId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                ingredientId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].children[0].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                returnQty: 0.0,
+                actualQty: 0.0     
+            });
+        } else if ($("#Status").val() == 1) {
+            assetEventIngredientDataArr.push({
+                assetEventIngredientId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                ingredientId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].children[0].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                returnQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
+                actualQty: 0.0     
+            });
+        }
+        else {
+            assetEventIngredientDataArr.push({
+                assetEventIngredientId: $(currentRow).find("td:eq(0) input[type='hidden']").val(),
+                ingredientId: $(currentRow).find("td:eq(1) input[type='hidden']").val(),
+                stockQty: tds[3].textContent,
+                eventQty: tds[4].children[0].textContent,
+                costPrice: tds[5].textContent,
+                totalAmount: tds[6].textContent,
+                returnQty: $(currentRow).find("td:eq(7) input[type='number']").val(),
+                actualQty: $(currentRow).find("td:eq(8) input[type='number']").val()               
+            });
+        }
+
     });
 }
 
@@ -1009,3 +1099,36 @@ $(function () {
         }
     })
 });
+
+
+function GetUnitNameByIngredientId() {
+    $.ajax({
+        url: "/FoodMenuIngredient/GetUnitNameByIngredientId?ingredientId=" + $("#IngredientId").val(),
+        data: {},
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#IngredientUnitName").text(obj.unitName);
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+}
+
+function GetUnitNameByFoodMenuId() {
+    $.ajax({
+        url: "/ProductionFormula/GetUnitNameByFoodMenuId?foodMenuId=" + $("#FoodMenuId").val(),
+        data: {},
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#FoodMenuUnitName").text(obj.unitName);
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+}

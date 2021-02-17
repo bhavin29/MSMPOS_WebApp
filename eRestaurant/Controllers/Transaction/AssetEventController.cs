@@ -51,6 +51,7 @@ namespace RocketPOS.Controllers.Transaction
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
             assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
+            assetEventModel.MissingNoteList= _iDropDownService.GetCateringFoodMenuGlobalStatus();
             return View(assetEventModel);
         }
 
@@ -127,6 +128,12 @@ namespace RocketPOS.Controllers.Transaction
             AssetFoodMenuPriceDetail assetFoodMenuPriceDetail = new AssetFoodMenuPriceDetail();
             assetFoodMenuPriceDetail = _iAssetEventService.GetFoodMenuPriceTaxDetailById(id);
             return Json(new { salesPrice = assetFoodMenuPriceDetail.SalesPrice, taxPercentage = assetFoodMenuPriceDetail.TaxPercentage });
+        }
+
+        public JsonResult GetCateringFoodMenuGlobalStatus()
+        {
+            var FoodMenuGlobalStatus = _iDropDownService.GetCateringFoodMenuGlobalStatus();
+            return Json(new { FoodMenuGlobalStatus = FoodMenuGlobalStatus });
         }
     }
 }

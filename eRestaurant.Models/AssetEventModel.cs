@@ -56,6 +56,7 @@ namespace RocketPOS.Models
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
+        public List<SelectListItem> MissingNoteList { get; set; }
 
         public List<AssetEventItemModel> assetEventItemModels { get; set; }
         public List<AssetEventFoodmenuModel> assetEventFoodmenuModels { get; set; }
@@ -85,6 +86,7 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
         public string MissingNote { get; set; }
+        
     }
 
     public class AssetEventFoodmenuModel
@@ -92,6 +94,8 @@ namespace RocketPOS.Models
         public int AssetEventFoodmenuId { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
+        public string FoodMenuUnitName { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal SalesPrice { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
@@ -110,6 +114,7 @@ namespace RocketPOS.Models
         public int IngredientId { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public string IngredientName { get; set; }
+        public string IngredientUnitName { get; set; }        
         public decimal StockQty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal EventQty { get; set; }

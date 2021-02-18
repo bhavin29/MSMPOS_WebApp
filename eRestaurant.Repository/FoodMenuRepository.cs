@@ -83,7 +83,7 @@ namespace RocketPOS.Repository
                     "(  Id,FoodCategoryId, FoodMenuName, FoodMenuType,FoodMenuCode, PurchasePrice,SalesPrice, Notes, UnitsId,FoodVatTaxId," +
                     " Position,  IsActive) " +
                     "Values " +
-                    "(" + MaxId + ",  @FoodCategoryId, @FoodMenuName,@FoodMenuType, @FoodMenuCode, @PurchasePrice,@SalesPrice, @Notes,@UnitsId,@FoodVatTaxId," +
+                    "(" + MaxId + ",  @FoodCategoryId, upper(@FoodMenuName),@FoodMenuType, @FoodMenuCode, @PurchasePrice,@SalesPrice, @Notes,@UnitsId,@FoodVatTaxId," +
                   "@Position,  @IsActive);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
 

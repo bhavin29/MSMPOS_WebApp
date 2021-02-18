@@ -19,66 +19,6 @@ namespace RocketPOS.Repository
         {
             _ConnectionString = ConnectionString;
         }
-
-        public int DeleteAssetEven(int id)
-        {
-            int result = 0;
-
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                con.Open();
-                SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"update AssetEvent set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
-                            " update AssetEventItem set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
-                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
-                            " update AssetEventIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";";
-                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
-                if (result > 0)
-                {
-                    sqltrans.Commit();
-                }
-                else
-                { sqltrans.Rollback(); }
-            }
-            return result;
-        }
-
-        public AssetEventModel GetAssetEventById(int id)
-        {
-            AssetEventModel assetEventModel = new AssetEventModel();
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                var query = " Select Id,ReferenceNo,EventType,EventName,EventDatetime,DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status " +
-                            " From AssetEvent Where IsDeleted=0 And Id=" + id;
-                assetEventModel = con.QueryFirstOrDefault<AssetEventModel>(query);
-            }
-            return assetEventModel;
-        }
-
-        public List<AssetEventFoodmenuModel> GetAssetEventFoodmenuDetails(int assetEventId)
-        {
-            List<AssetEventFoodmenuModel> assetEventFoodmenuModel = new List<AssetEventFoodmenuModel>();
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.FoodVatAmount,AEF.FoodTaxAmount,AEF.TotalPrice,U.UnitName As FoodMenuUnitName  FROM AssetEventFoodmenu AEF " +
-                            "  inner join FoodMenu F On F.Id=AEF.FoodmenuId  inner join Units U On U.Id=F.UnitsId Where AEF.IsDeleted=0 And AEF.AssetEventId=" + assetEventId;
-                assetEventFoodmenuModel = con.Query<AssetEventFoodmenuModel>(query).AsList();
-            }
-            return assetEventFoodmenuModel;
-        }
-
-        public List<AssetEventItemModel> GetAssetEventItemDetails(int assetEventId)
-        {
-            List<AssetEventItemModel> assetEventItemModel = new List<AssetEventItemModel>();
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty,AEI.MissingQty,AEI.CostPrice,AEI.TotalAmount,AEI.MissingNote,U.UnitName As AssetItemUnitName FROM AssetEventItem AEI " +
-                            " Inner Join AssetItem AI ON AI.Id=AEI.AssetItemId inner join Units U On U.Id=AI.UnitId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
-                assetEventItemModel = con.Query<AssetEventItemModel>(query).AsList();
-            }
-            return assetEventItemModel;
-        }
-
         public List<AssetEventViewModel> GetAssetEventList(bool isHistory)
         {
             List<AssetEventViewModel> assetEventList = new List<AssetEventViewModel>();
@@ -91,7 +31,42 @@ namespace RocketPOS.Repository
             }
             return assetEventList;
         }
-
+        public AssetEventModel GetAssetEventById(int id)
+        {
+            AssetEventModel assetEventModel = new AssetEventModel();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select Id,ReferenceNo,EventType,EventName,EventDatetime,DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status " +
+                            " From AssetEvent Where IsDeleted=0 And Id=" + id;
+                assetEventModel = con.QueryFirstOrDefault<AssetEventModel>(query);
+            }
+            return assetEventModel;
+        }
+        public List<AssetEventItemModel> GetAssetEventItemDetails(int assetEventId)
+        {
+            List<AssetEventItemModel> assetEventItemModel = new List<AssetEventItemModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty," +
+                            // " (Case when AEI.UserIdUpdated is null then AEI.EventQty else AEI.AllocatedQty end) as AllocatedQty, " +
+                            // "(Case when AEI.UserIdUpdated is null then AEI.EventQty else AEI.ReturnQty end) as ReturnQty, " +
+                            " AEI.MissingQty,AEI.CostPrice,AEI.TotalAmount,AEI.MissingNote,U.UnitName As AssetItemUnitName FROM AssetEventItem AEI " +
+                            " Inner Join AssetItem AI ON AI.Id=AEI.AssetItemId inner join Units U On U.Id=AI.UnitId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
+                assetEventItemModel = con.Query<AssetEventItemModel>(query).AsList();
+            }
+            return assetEventItemModel;
+        }
+        public List<AssetEventFoodmenuModel> GetAssetEventFoodmenuDetails(int assetEventId)
+        {
+            List<AssetEventFoodmenuModel> assetEventFoodmenuModel = new List<AssetEventFoodmenuModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " SELECT AEF.Id AS AssetEventFoodmenuId,AEF.AssetEventId,AEF.FoodmenuId,F.FoodMenuName,AEF.SalesPrice,AEF.Qunatity,AEF.FoodVatAmount,AEF.FoodTaxAmount,AEF.TotalPrice,U.UnitName As FoodMenuUnitName  FROM AssetEventFoodmenu AEF " +
+                            "  inner join FoodMenu F On F.Id=AEF.FoodmenuId  inner join Units U On U.Id=F.UnitsId Where AEF.IsDeleted=0 And AEF.AssetEventId=" + assetEventId;
+                assetEventFoodmenuModel = con.Query<AssetEventFoodmenuModel>(query).AsList();
+            }
+            return assetEventFoodmenuModel;
+        }
         public List<AssetEventIngredientModel> GetAssetIngredientDetails(int assetEventId)
         {
             List<AssetEventIngredientModel> assetEventIngredientModel = new List<AssetEventIngredientModel>();
@@ -103,7 +78,6 @@ namespace RocketPOS.Repository
             }
             return assetEventIngredientModel;
         }
-
         public decimal GetAssetItemPriceById(int id)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -112,16 +86,6 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query);
             }
         }
-
-        public string GetAssetItemUnitName(int id)
-        {
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                var query = " select U.UnitName from AssetItem AI Inner Join Units U On U.Id=AI.UnitId Where AI.IsDeleted=0 And AI.Id=" + id;
-                return con.ExecuteScalar<string>(query);
-            }
-        }
-
         public AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -130,7 +94,6 @@ namespace RocketPOS.Repository
                 return con.Query<AssetFoodMenuPriceDetail>(query).ToList().FirstOrDefault();
             }
         }
-
         public decimal GetIngredientPriceById(int id)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -139,7 +102,6 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query);
             }
         }
-
         public int InsertAssetEvent(AssetEventModel assetEventModel)
         {
             int result = 0;
@@ -301,27 +263,6 @@ namespace RocketPOS.Repository
             }
             return result;
         }
-
-        public string ReferenceNumberAssetEvent()
-        {
-            string result = string.Empty;
-
-            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
-            {
-                con.Open();
-                SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNo)),0) + 1  FROM AssetEvent where ISDeleted=0;";
-                result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
-                if (!string.IsNullOrEmpty(result))
-                {
-                    sqltrans.Commit();
-                }
-                else
-                { sqltrans.Rollback(); }
-            }
-            return result;
-        }
-
         public int UpdateAssetEvent(AssetEventModel assetEventModel)
         {
             int result = 0, deleteFoodMenuResult = 0, deleteItemResult = 0, foodmenudetails = 0, itemdetails = 0, ingredientdetails = 0;
@@ -554,6 +495,55 @@ namespace RocketPOS.Repository
                 {
                     sqltrans.Rollback();
                 }
+            }
+            return result;
+        }
+        public string ReferenceNumberAssetEvent()
+        {
+            string result = string.Empty;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNo)),0) + 1  FROM AssetEvent where ISDeleted=0;";
+                result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    sqltrans.Commit();
+                }
+                else
+                { sqltrans.Rollback(); }
+            }
+            return result;
+        }
+        public string GetAssetItemUnitName(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select U.UnitName from AssetItem AI Inner Join Units U On U.Id=AI.UnitId Where AI.IsDeleted=0 And AI.Id=" + id;
+                return con.ExecuteScalar<string>(query);
+            }
+        }
+        public int DeleteAssetEven(int id)
+        {
+            int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update AssetEvent set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where id = " + id + ";" +
+                            " update AssetEventItem set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
+                            " update AssetEventFoodmenu set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";" +
+                            " update AssetEventIngredient set IsDeleted = 1,DateDeleted=GetUTCDate(),UserIdDeleted=" + LoginInfo.Userid + " where AssetEventId = " + id + ";";
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                { sqltrans.Rollback(); }
             }
             return result;
         }

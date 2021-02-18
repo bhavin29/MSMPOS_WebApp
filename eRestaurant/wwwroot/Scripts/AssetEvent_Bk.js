@@ -15,8 +15,8 @@ $(document).ready(function () {
 
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
-            { targets: [0, 1], orderable: false },
-            { targets: [3, 4,5,6], orderable: false, class: "text-right" },
+            { targets: [0, 1], orderable: false, visible: false },
+            { targets: [3, 4, 5, 6], orderable: false, class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -55,8 +55,8 @@ $(document).ready(function () {
 
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
-            { targets: [0, 1], orderable: false },
-            { targets: [3,4,5, 6], orderable: false, class: "text-right" }
+            { targets: [0, 1], orderable: false, visible: false },
+            { targets: [3, 4, 5, 6], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -74,17 +74,17 @@ $(document).ready(function () {
     });
 
     if ($("#Status").val() == 0) {
-        AssetEventItem.columns([7,8,9,10]).visible(false);
+        AssetEventItem.columns([7, 8, 9, 10]).visible(false);
     }
     if ($("#Status").val() == 1) {
         AssetEventItem.columns([8, 9, 10]).visible(false);
     }
 
     if ($("#Status").val() == 0) {
-        AssetIngredientItem.columns([7,8]).visible(false);
+        AssetIngredientItem.columns([7, 8]).visible(false);
     }
     if ($("#Status").val() == 1) {
-        AssetIngredientItem.columns([7,8]).visible(false);
+        AssetIngredientItem.columns([7, 8]).visible(false);
     }
 });
 
@@ -116,13 +116,13 @@ $('#addRowItem').on('click', function (e) {
     var AssetItemCostPrice;
     var AssetItemTotalPrice = 0;
     AssetItemCostPrice = parseFloat($("#AssetItemCostPrice").val()).toFixed(2);
-  
+
     var EventQty = parseFloat($("#EventQty").val()).toFixed(2);
     var StockQty = parseFloat($("#StockQty").val()).toFixed(2);
     var AllocatedQty = parseFloat($("#AllocatedQty").val()).toFixed(2);
     var ReturnQty = parseFloat($("#ReturnQty").val()).toFixed(2);
     var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
-  
+
     AssetItemTotalPrice = parseFloat(EventQty * AssetItemCostPrice).toFixed(2);
 
     if (message == '') {
@@ -132,11 +132,11 @@ $('#addRowItem').on('click', function (e) {
             '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetItemId").val() + '" /> </td>',
             $('#AssetItemId').children("option:selected").text(),
             '<td class="text-right">' + StockQty + '</td>',
-            '<td class="text-right"><label>' + EventQty + '</label> <label>' + $("#AssetItemUnitName").text()+'</label></td>',
+            '<td class="text-right"><label>' + EventQty + '</label> <label>' + $("#AssetItemUnitName").text() + '</label></td>',
             '<td class="text-right">' + AssetItemCostPrice + ' </td>',
             '<td class="text-right">' + AssetItemTotalPrice + ' </td>',
-            '<td class="text-right"><input type="number" id="allocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
-            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right"><input type="number" id="allocatedQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty" data-val="true"> </td>',
+            '<td class="text-right"><input type="number" id="returnQty' + $("#AssetItemId").val() + '"    class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty" data-val="true"> </td>',
             '<td class="text-right">' + MissingQty + ' </td>',
             '<td class="text-right">' + missingNotes + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editAssetItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myAModal0">Delete</a></div></td > ' +
@@ -686,8 +686,11 @@ $(function () {
     $('#saveOrder').click(function () {
         var message = validation(2);
 
-   //     GetAssetItemArray();
-   //     GetAssetIngredientArray();
+        // GetAssetItemArray();
+        // GetAssetIngredientArray();
+
+        var status = $("#Status").val();
+        if (status == 0) { status = 1; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -708,7 +711,7 @@ $(function () {
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
-                    Status: 1,
+                    Status: status,
                     assetEventItemModels: assetEventItemDataArr,
                     assetEventFoodmenuModels: assetEventFoodmenuDataArr,
                     assetEventIngredientModels: assetEventIngredientDataArr,
@@ -787,15 +790,15 @@ function validation(id) {
 
     if (id == 2) {
         var entry = 0;
-        if (AssetEventItem.data().any() ) {
+        if (AssetEventItem.data().any()) {
             entry = 1;
         }
 
-        if (AssetEventFoodmenu.data().any() ) {
+        if (AssetEventFoodmenu.data().any()) {
             entry = 1;
         }
 
-        if (AssetIngredientItem.data().any() ) {
+        if (AssetIngredientItem.data().any()) {
             entry = 1;
         }
 
@@ -803,7 +806,7 @@ function validation(id) {
             var message = 'At least one entry from Asset Detail / Foodmenu Detail / Stock Detail should be entered'
             return message;
         }
-       
+
     }
 
     if (id == 3) {
@@ -913,8 +916,8 @@ $("#FoodDiscountAmount").keyup(function () {
 $(function () {
     $('#allocateOrder').click(function () {
         var message = validation(2);
-    //    GetAssetItemArray();
-     //   GetAssetIngredientArray();
+        //   GetAssetItemArray();
+        //   GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -980,8 +983,8 @@ $(function () {
 $(function () {
     $('#returnOrder').click(function () {
         var message = validation(2);
-    //    GetAssetItemArray();
-    //    GetAssetIngredientArray();
+        //  GetAssetItemArray();
+        //   GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1047,8 +1050,8 @@ $(function () {
 $(function () {
     $('#closeOrder').click(function () {
         var message = validation(2);
-     //   GetAssetItemArray();
-    //    GetAssetIngredientArray();
+        //  GetAssetItemArray();
+        //  GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1142,7 +1145,6 @@ function GetUnitNameByFoodMenuId() {
     });
 }
 
-
 function GetUnitNameByAssetItemId() {
     $.ajax({
         url: "/AssetEvent/GetAssetItemUnitName?id=" + $("#AssetItemId").val(),
@@ -1158,3 +1160,64 @@ function GetUnitNameByAssetItemId() {
         }
     });
 }
+
+
+$(document).on('change1', 'input[name]', function () {
+
+    str = this.id;
+    str2 = "allocatedQty";
+    str3 = "returnQty";
+    str4 = "missingQty";
+
+    //Allocated
+    if (str.indexOf(str2) != -1)
+    {
+        id = str.substring(12, 100);
+        returnId = "#returnQty" + id.toString();
+
+        alert(this.id + " focus out");
+        var qty = $(this).val();
+        alert(qty);
+        $(returnId).val(qty);
+
+        var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
+
+        for (var i = 0; i < assetEventItemDataArr.length; i++) {
+            if (assetEventItemDataArr[i].assetItemId == id) {
+                assetEventItemDataArr[i].allocatedQty = qty;
+                assetEventItemDataArr[i].returnQty = qty;
+                alert("push to the array");
+            }
+        }
+    }
+    //Returned
+    if (str.indexOf(str3) != -1) {
+
+        id = str.substring(9, 100);
+        missingId = "#missingQty" + id.toString();
+        allocatedId = "#allocatedQty" + id.toString();
+
+        alert(this.id + " focus out");
+
+        var returnQty = $(this).val();
+        var allocatedQty = $(allocatedId).val();
+        missingQ = parseFloat((parseFloat(allocatedQty) - parseFloat(returnQty))).toFixed(2);
+
+        alert(returnQty);
+        alert(missingQ);
+
+        $(missingId).val(missingQ);
+ 
+        for (var i = 0; i < assetEventItemDataArr.length; i++) {
+            if (assetEventItemDataArr[i].assetItemId == id) {
+                assetEventItemDataArr[i].returnQty = returnQty;
+                assetEventItemDataArr[i].missingQty = missingQ;
+                alert("push to the array");
+            }
+        }
+    }
+
+
+
+});
+

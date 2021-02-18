@@ -180,13 +180,22 @@
                                                                                 @item.TotalAmount
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="allocatedQty" asp-for="@item.AllocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocatedQty" />
+                                                                                @{
+                                                                                    string allocatedId = "allocatedQty" + @item.AssetItemId;
+                                                                                }
+                                                                                <input type="number" id="@allocatedId" asp-for="@item.AllocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocatedQty" />
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
+                                                                                @{
+                                                                                    string returnId = "returnQty" + @item.AssetItemId;
+                                                                                }
+                                                                                <input type="number" id="@returnId" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @(item.AllocatedQty - item.ReturnQty)
+                                                                                @{
+                                                                                    string missingId = "missingQty" + @item.AssetItemId;
+                                                                                }
+                                                                                <input type="number" id="@missingId" asp-for="@item.MissingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
                                                                             </td>
                                                                             <td>
                                                                                 @if ((item.AllocatedQty - item.ReturnQty) > 0)
@@ -606,16 +615,19 @@
                                             }
                                             @if (Model.Status == 1)
                                             {
+                                                <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
                                                 <input type="submit" id="allocateOrder" value="Allocate" class="btn btn-primary" />
                                                 <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
                                             }
                                             @if (Model.Status == 2)
                                             {
+                                                <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
                                                 <input type="submit" id="returnOrder" value="Return" class="btn btn-primary" />
                                                 <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
                                             }
                                             @if (Model.Status == 3)
                                             {
+                                                <input type="submit" id="saveOrder" value="Save" class="btn btn-primary" />
                                                 <input type="submit" id="closeOrder" value="Close" class="btn btn-primary" />
                                             }
                                         }

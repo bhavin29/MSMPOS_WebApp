@@ -152,5 +152,13 @@ namespace RocketPOS.Controllers.Transaction
             return View(assetEventModel);
         }
 
+        [HttpGet]
+        public JsonResult GetAssetItemUnitName(int id)
+        {
+            string assetItemUnitName = string.Empty;
+            assetItemUnitName = _iAssetEventService.GetAssetItemUnitName(id);
+            return Json(new { assetItemUnitName = assetItemUnitName });
+        }
+
     }
 }

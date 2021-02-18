@@ -72,8 +72,8 @@ namespace RocketPOS.Repository
             List<AssetEventItemModel> assetEventItemModel = new List<AssetEventItemModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty,AEI.MissingQty,AEI.CostPrice,AEI.TotalAmount,AEI.MissingNote FROM AssetEventItem AEI " +
-                            " Inner Join AssetItem AI ON AI.Id=AEI.AssetItemId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
+                var query = " SELECT AEI.Id As AssetEventItemId,AEI.AssetEventId,AEI.AssetItemId,AI.AssetItemName,AEI.StockQty,AEI.EventQty,AEI.AllocatedQty,AEI.ReturnQty,AEI.MissingQty,AEI.CostPrice,AEI.TotalAmount,AEI.MissingNote,U.UnitName As AssetItemUnitName FROM AssetEventItem AEI " +
+                            " Inner Join AssetItem AI ON AI.Id=AEI.AssetItemId inner join Units U On U.Id=AI.UnitId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
                 assetEventItemModel = con.Query<AssetEventItemModel>(query).AsList();
             }
             return assetEventItemModel;
@@ -110,6 +110,15 @@ namespace RocketPOS.Repository
             {
                 var query = " Select CostPrice From AssetItem Where IsDeleted=0 And Id=" + id;
                 return con.ExecuteScalar<decimal>(query);
+            }
+        }
+
+        public string GetAssetItemUnitName(int id)
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select U.UnitName from AssetItem AI Inner Join Units U On U.Id=AI.UnitId Where AI.IsDeleted=0 And AI.Id=" + id;
+                return con.ExecuteScalar<string>(query);
             }
         }
 

@@ -75,6 +75,7 @@ namespace RocketPOS.Models
         public int AssetItemId { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public string AssetItemName { get; set; }
+        public string AssetItemUnitName { get; set; }
         public decimal StockQty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal EventQty { get; set; }

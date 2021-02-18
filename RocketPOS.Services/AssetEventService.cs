@@ -51,6 +51,11 @@ namespace RocketPOS.Services
             return _iAssetEventRepository.GetAssetItemPriceById(id);
         }
 
+        public string GetAssetItemUnitName(int id)
+        {
+            return _iAssetEventRepository.GetAssetItemUnitName(id);
+        }
+
         public AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id)
         {
             return _iAssetEventRepository.GetFoodMenuPriceTaxDetailById(id);

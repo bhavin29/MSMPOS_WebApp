@@ -27,10 +27,14 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
-                            "SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
-                            "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 " +
-                            "ORDER BY FoodMenuName ";
+                var query = " SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                            " SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
+                            " FM.Position,  OutletId, FM.IsActive, U.UnitName,T.TaxName  " +
+                            " FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id " +
+                            " Left join Units U on U.Id = FM.UnitsId " +
+                            " Left join Tax T On T.Id = FM.FoodVatTaxId " + 
+                            " WHERE FM.IsDeleted = 0 " +
+                            " ORDER BY FoodMenuCode,FoodMenuName ";
                 FoodMenuModel = con.Query<FoodMenuModel>(query).ToList();
             }
 

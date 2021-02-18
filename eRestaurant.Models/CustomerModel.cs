@@ -20,6 +20,8 @@ namespace RocketPOS.Models
         [DisplayName("Address")]
         public string CustomerAddress1 { get; set; }
         public string CustomerAddress2 { get; set; }
+        [DisplayName("Contact Number")]
+        [Required(ErrorMessage = "Enter Contect Numnber")]
         public string CustomerPhone { get; set; }
         public string CustomerImage { get; set; }
         public string FavDeliveryAddress { get; set; }
@@ -28,6 +30,7 @@ namespace RocketPOS.Models
         public CustomerModel()
         {
             IsActive = true;
+            CustomerTypeId = 1;
         }
     }
 }

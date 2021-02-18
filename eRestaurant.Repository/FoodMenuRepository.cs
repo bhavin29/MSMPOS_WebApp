@@ -29,7 +29,7 @@ namespace RocketPOS.Repository
             {
                 var query = " SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             " SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
-                            " FM.Position,  OutletId, FM.IsActive, U.UnitName,T.TaxName  " +
+                            " FM.Position,  OutletId, FM.IsActive, U.UnitName,T.TaxName as FoodVatTaxName  " +
                             " FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id " +
                             " Left join Units U on U.Id = FM.UnitsId " +
                             " Left join Tax T On T.Id = FM.FoodVatTaxId " + 

@@ -49,7 +49,7 @@ namespace RocketPOS.Controllers.Transaction
                 assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
             }
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
-            assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            assetEventModel.FoodMenuList = _iDropDownService.GetProductionFormulaFoodMenuList();
             assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
             assetEventModel.MissingNoteList = _iDropDownService.GetCateringFoodMenuGlobalStatus();
             return View(assetEventModel);

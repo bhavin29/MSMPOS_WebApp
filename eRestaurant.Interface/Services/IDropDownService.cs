@@ -31,5 +31,7 @@ namespace RocketPOS.Interface.Services
 
         List<SelectListItem> GetCateringFoodMenuGlobalStatus();
 
+        List<SelectListItem> GetProductionFormulaFoodMenuList();
+
     }
 }

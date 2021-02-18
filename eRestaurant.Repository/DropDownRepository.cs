@@ -234,5 +234,16 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetProductionFormulaFoodMenuList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select Distinct F.Id ,F.FoodMenuName  As [Name] from ProductionFormulaFoodmenu PFF Inner join FoodMenu F On F.Id=PFF.FoodMenuId Where PFF.IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

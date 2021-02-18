@@ -113,6 +113,11 @@
                                                             </div>
                                                             <div class="col-md-1 pr-2 pl-2">
                                                                 <div class="form-group">
+                                                                    <label id="AssetItemUnitName" class="control-label" style="margin-top: 28px"></label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-1 pr-2 pl-2">
+                                                                <div class="form-group">
                                                                     <label class="control-label"></label>
                                                                     <button id="addRowItem" class="btn btn-outline-dark" style="margin-top: 22px">Add</button>
                                                                     <input class="form-control" type="hidden" id="AssetEventItemId" value="0" />
@@ -167,8 +172,7 @@
                                                                                 @item.StockQty
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.EventQty
-                                                                            </td>
+                                                                                <label>@item.EventQty</label> <label>@item.AssetItemUnitName</label>
                                                                             <td class="text-right">
                                                                                 @item.CostPrice
                                                                             </td>
@@ -182,13 +186,23 @@
                                                                                 <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                @item.MissingQty
+                                                                                @(item.AllocatedQty - item.ReturnQty)
                                                                             </td>
                                                                             <td>
-                                                                                <select asp-for="@item.MissingNote"
-                                                                                        class="form-control"
-                                                                                        asp-items="@(new SelectList(Model.MissingNoteList, "Value", "Text"))">
-                                                                                </select>
+                                                                                @if ((item.AllocatedQty - item.ReturnQty) > 0)
+                                                                                {
+                                                                                    <select asp-for="@item.MissingNote"
+                                                                                            class="form-control"
+                                                                                            asp-items="@(new SelectList(Model.MissingNoteList, "Value", "Text"))">
+                                                                                    </select>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <select asp-for="@item.MissingNote" disabled="disabled"
+                                                                                            class="form-control"
+                                                                                            asp-items="@(new SelectList(Model.MissingNoteList, "Value", "Text"))">
+                                                                                    </select>
+                                                                                }
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
@@ -453,7 +467,7 @@
                                                                 <tr>
                                                                     <th style="width:0%"></th>
                                                                     <th style="width:0%"></th>
-                                                                    <th style="width:35%">Stock Item </th>
+                                                                    <th style="width:25%">Stock Item </th>
                                                                     <th style="width:10%" class="text-right">Stock Qty</th>
                                                                     <th style="width:10%" class="text-right">Qty </th>
                                                                     <th style="width:10%" class="text-right">Cost Price</th>
@@ -639,9 +653,9 @@
         assetEventItemDataArr = []
         assetEventIngredientDataArr = []
         if (@Model.Id>0){
-            @*assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
+            assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
             assetEventFoodmenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventFoodmenuModels))');
-            assetEventIngredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventIngredientModels))');*@
+            assetEventIngredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventIngredientModels))');
         }
     </script>
 

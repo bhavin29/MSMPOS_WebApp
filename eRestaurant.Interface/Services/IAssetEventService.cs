@@ -18,5 +18,7 @@ namespace RocketPOS.Interface.Services
         AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id);
         decimal GetAssetItemPriceById(int id);
         decimal GetIngredientPriceById(int id);
+
+        string GetAssetItemUnitName(int id);
     }
 }

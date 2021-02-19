@@ -20,5 +20,9 @@ namespace RocketPOS.Interface.Services
         decimal GetIngredientPriceById(int id);
 
         string GetAssetItemUnitName(int id);
+
+        List<AssetEventViewModel> GetCateringListByStatus(string fromDate, string toDate, int statusId);
+
+        int UpdateStockItemById(List<string> ids);
     }
 }

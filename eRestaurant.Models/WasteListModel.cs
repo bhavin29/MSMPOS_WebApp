@@ -22,5 +22,7 @@ namespace RocketPOS.Models
 
         public string WasteStatus { get; set; }
 
-       }
+        public string StoreName { get; set; }
+
+    }
 }

@@ -53,6 +53,9 @@ $(document).ready(function () {
         $("#onthespot").prop('checked', false);
     }
 
+    if ($("#AssetEventId").val() > 0) {
+        document.getElementById("headerColorChange").style.backgroundColor = "#7FFF00";
+    }
     calculateSum();
     $("#ProductionFormulaId").focus();
 

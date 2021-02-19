@@ -5,20 +5,22 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header" id="headerColorChange">
                 <div class="row">
+
                     <div class="col-md-10">
                         <h5 class="card-title">Production Entry</h5>
                     </div>
+
                     <div class="col-md-2">
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="onthespot" checked="checked" disabled="disabled" />
                             <label class="form-check-label" for="flexSwitchCheckChecked">On the Spot</label>
                             <input asp-for="FoodmenuType" class="form-control" hidden="hidden" />
                             <input asp-for="Id" class="form-control" type="hidden" />
+                            <input asp-for="AssetEventId" class="form-control" type="hidden" />
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="card-body">
@@ -40,7 +42,7 @@
                                         <div class="col-md-3 pr-2 pl-2">
                                             <div class="form-group">
                                                 <label asp-for="BatchSize" class="control-label">Batch Size</label>
-                                                <input asp-for="BatchSize" class="form-control" style="text-align:right"  disabled="disabled" />
+                                                <input asp-for="BatchSize" class="form-control" style="text-align:right" disabled="disabled" />
                                                 <span asp-validation-for="BatchSize" class="text-danger"></span>
                                             </div>
                                         </div>
@@ -190,7 +192,7 @@
                                     {
                                         <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
                                         <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
-                                 }
+                                    }
                                 }
                                 <a href='@Url.Action("Index", "ProductionEntry")' class="btn btn-primary" style="margin:0px 0px 0px 0px">Cancel</a>
                             </div>

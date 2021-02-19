@@ -29,6 +29,10 @@ namespace RocketPOS.Models
         public string EventPlace { get; set; }
         public string ContactPersonName { get; set; }
         public string ContactPersonNumber { get; set; }
+        public string CreatedByUser { get; set; }
+        public string AllocatedByUser { get; set; }
+        public string ReturnedByUser { get; set; }
+        public string ClosedByUser { get; set; }
         public DateTime AllocationDatetime { get; set; }
         public DateTime ReturnDatetime { get; set; }
         public DateTime ClosedDatetime { get; set; }
@@ -128,6 +132,7 @@ namespace RocketPOS.Models
         public decimal CostPrice { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
+        public int StockUpdate { get; set; }
     }
     public class AssetFoodMenuPriceDetail
     {

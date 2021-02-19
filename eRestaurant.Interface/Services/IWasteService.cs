@@ -19,5 +19,8 @@ namespace RocketPOS.Interface.Services
         long ReferenceNumber();
         List<SelectListItem> FoodMenuListForLostAmount();
         List<SelectListItem> IngredientListForLostAmount();
+
+        decimal GetFoodMenuPurchasePrice(int id);
+        decimal GetIngredientPurchasePrice(int id);
     }
 }

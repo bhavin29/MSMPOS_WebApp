@@ -47,7 +47,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName, PE.ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
-                            "PE.FoodmenuType,U.UnitName as BatchSizeUnitName from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId Inner Join [Units] U On U.Id=PF.BatchSizeUnitId Where PE.IsDeleted=0 And PE.Id=" + id;
+                            "PE.FoodmenuType,U.UnitName as BatchSizeUnitName,PE.AssetEventId,AE.EventName from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId Inner Join [Units] U On U.Id=PF.BatchSizeUnitId  left join AssetEvent AE On AE.Id= PE.AssetEventId Where PE.IsDeleted=0 And PE.Id=" + id;
                 productionEntryModel = con.QueryFirstOrDefault<ProductionEntryModel>(query);
             }
             return productionEntryModel;
@@ -86,8 +86,8 @@ namespace RocketPOS.Repository
             List<ProductionEntryViewModel> productionEntryList = new List<ProductionEntryViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType,U.Username from ProductionEntry  PE  " +
-                            " inner join ProductionFormula  PF On PF.Id=PE.ProductionFormulaId  inner join [User] U On U.Id=PE.UserIdInserted where PE.IsDeleted=0 ";
+                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType,U.Username,PE.AssetEventId,AE.EventName from ProductionEntry  PE  " +
+                            " inner join ProductionFormula  PF On PF.Id=PE.ProductionFormulaId  inner join [User] U On U.Id=PE.UserIdInserted left join AssetEvent AE On AE.Id= PE.AssetEventId where PE.IsDeleted=0 ";
 
                 if (foodmenuType != 0)
                 {

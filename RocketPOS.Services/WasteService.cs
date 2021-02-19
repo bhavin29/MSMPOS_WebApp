@@ -100,7 +100,14 @@ namespace RocketPOS.Services
 
         }
 
-    
+        public decimal GetFoodMenuPurchasePrice(int id)
+        {
+            return _iWasteRepository.GetFoodMenuPurchasePrice(id);
+        }
 
+        public decimal GetIngredientPurchasePrice(int id)
+        {
+            return _iWasteRepository.GetIngredientPurchasePrice(id);
+        }
     }
 }

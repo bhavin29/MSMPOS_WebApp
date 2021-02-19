@@ -241,6 +241,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select Distinct F.Id ,F.FoodMenuName  As [Name] from ProductionFormulaFoodmenu PFF Inner join FoodMenu F On F.Id=PFF.FoodMenuId Where Foodmenutype=2 and PFF.IsDeleted=0";
+                //var query = "select Distinct F.Id ,F.FoodMenuName  As [Name] from ProductionFormulaFoodmenu PFF Inner join FoodMenu F On F.Id=PFF.FoodMenuId Where PFF.IsDeleted=0";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

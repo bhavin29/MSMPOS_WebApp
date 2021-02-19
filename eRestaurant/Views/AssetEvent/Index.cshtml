@@ -21,6 +21,38 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label>Start Date : </label>
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <label>Close Date : </label>
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Select Status : </label>
+                            <select Id="statusId"
+                                    class="form-control">
+                                <option value="0">Select Status</option>
+                                <option value="1">Created</option>
+                                <option value="2">Allocated</option>
+                                <option value="3">Returned</option>
+                                <option value="4">CLosed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadAssetEventList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <br />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
@@ -55,57 +87,57 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr role="row">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ReferenceNo)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EventName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.EventDateTime)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ClosedDatetime)
-                            </td>
-                            <td>
-                                @if (item.Status == 4)
-                                {
-                                    <label>Closed</label>
-                                }
-                                else if (item.Status == 3)
-                                {
-                                    <label>Returned</label>
-                                }
-                                else if (item.Status == 2)
-                                {
-                                    <label>Allocated</label>
-                                }
-                                else
-                                {
-                                    <label>Created</label>
-                                }
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Username)
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    @if (item.Status != 4)
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.EventDateTime)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ClosedDatetime)
+                                </td>
+                                <td>
+                                    @if (item.Status == 4)
                                     {
-                                        <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                        <label> / </label>
-                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                        <label>Closed</label>
                                     }
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="View">View</a> / 
-                                    <a asp-action="Print" asp-route-Id="@item.Id" >Print</a>
-                                </div>
-                            </td>
-                        </tr>
+                                    else if (item.Status == 3)
+                                    {
+                                        <label>Returned</label>
+                                    }
+                                    else if (item.Status == 2)
+                                    {
+                                        <label>Allocated</label>
+                                    }
+                                    else
+                                    {
+                                        <label>Created</label>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Username)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        @if (item.Status != 4)
+                                        {
+                                            <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                            <label> / </label>
+                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                        }
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="AssetEvent" asp-route-Id="@item.Id" asp-route-type="View">View</a> /
+                                        <a asp-action="Print" asp-route-Id="@item.Id">Print</a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -134,87 +166,112 @@
     <script>
         var AssetEventTable = null;
         $(document).ready(function () {
-            AssetEventTable = $('#@dataTableName').DataTable();
+            AssetEventTable = $('#@dataTableName').DataTable({
+                columnDefs: [
+                    { targets: [6,7], orderable: false }
+                ],
+                "paging": false,
+                "bLengthChange": true,
+                "bInfo": true,
+                "bFilter": true,
+                "ordering": true,
+                "autoWidth": false,
+                "orderCellsTop": true,
+                "stateSave": false,
+                "pageLength": 200,
+                "lengthMenu": [
+                    [200, 500, 1000],
+                    ['200', '500', '1000']
+                ],
+            });
+            var myDate = new Date();
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(tdate);
+            $("#toDate").val(tdate);
             //loadAssetEventList();
         });
 
-        //function loadAssetEventList() {
+        function loadAssetEventList() {
 
-        //    $.ajaxSetup({ cache: false });
-        //    $.ajax({
-        //        url: "/AssetEvent/Index/" + isHistory,
-        //        dataType: "json",
-        //        type: "GET",
-        //        success: function (data) {
-        //            if (AssetEventTable != null) {
-        //                AssetEventTable.clear();
-        //                AssetEventTable.destroy();
-        //            }
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/AssetEvent/GetCateringListByStatus?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&statusId=" + $("#statusId").val(),
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (AssetEventTable != null) {
+                        AssetEventTable.clear();
+                        AssetEventTable.destroy();
+                    }
 
-        //            AssetEventTable = $("#AssetEventTable").DataTable({
-        //                "data": data.assetEventList,
-        //                "columns": [
-        //                    { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
-        //                    { "data": "eventName", "name": "EventName", "autoWidth": true },
-        //                    {
-        //                        data: null,
-        //                        mRender: function (data, type, row) {
-        //                            if (row.status == 4) {
-        //                                return '<div class="form-button-action">Closed</div>'
-        //                            } else if (row.status == 3) {
-        //                                return '<div class="form-button-action">Returned</div>'
-        //                            } else if (row.status == 1) {
-        //                                return '<div class="form-button-action">Allocated</div>'
-        //                            } else {
-        //                                return '<div class="form-button-action">Created</div>'
-        //                            }
-        //                        },
-        //                    },
-        //                    { "data": "username", "name": "Username", "autoWidth": true },
-        //                    {
-        //                        data: null,
-        //                        mRender: function (data, type, row) {
-        //                            if (row.status == 4) {
-        //                                return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a></div>'
-        //                                }
-        //                            else {
-        //                                return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a>'+
-        //                                 ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-        //                                    '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-        //                                    '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-        //                                    'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAssetEvent(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
-        //                                }
-        //                        },
-        //                    },
-        //                    {
-        //                        data: null,
-        //                        mRender: function (data, type, row) {
-        //                            return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=View">View</a></div>'
-        //                        },
-        //                    }
-        //                ],
-        //                columnDefs: [
-        //                    { targets: [4], orderable: false }
-        //                ],
-        //                "bLengthChange": true,
-        //                "bInfo": true,
-        //                "bFilter": true,
-        //                "ordering": true,
-        //                "autoWidth": false,
-        //                "orderCellsTop": true,
-        //                "stateSave": false,
-        //                "pageLength": 200,
-        //                "lengthMenu": [
-        //                    [200, 500, 1000],
-        //                    ['200', '500', '1000']
-        //                ],
-        //            });
-        //        },
-        //        error: function (err) {
+                    AssetEventTable = $("#AssetEventTable").DataTable({
+                        "data": data.assetEventLists,
+                        "columns": [
+                            { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
+                            { "data": "eventName", "name": "EventName", "autoWidth": true },
+                            { "data": "eventDateTime", "name": "EventDateTime", "autoWidth": true },
+                            { "data": "closedDatetime", "name": "ClosedDatetime", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    if (row.status == 4) {
+                                        return '<div class="form-button-action">Closed</div>'
+                                    } else if (row.status == 3) {
+                                        return '<div class="form-button-action">Returned</div>'
+                                    } else if (row.status == 2) {
+                                        return '<div class="form-button-action">Allocated</div>'
+                                    } else {
+                                        return '<div class="form-button-action">Created</div>'
+                                    }
+                                },
+                            },
+                            { "data": "username", "name": "Username", "autoWidth": true },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    if (row.status == 4) {
+                                        return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a></div>'
+                                        }
+                                    else {
+                                        return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a>'+
+                                         ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteAssetEvent(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                        }
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=View">View</a> / <a href="/AssetEvent/Print/' + row.id + '">Print</a></div>'
+                                },
+                            }
+                        ],
+                        columnDefs: [
+                            { targets: [4], orderable: false }
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
 
-        //        }
-        //    });
-        //}
+                }
+            });
+        }
 
         function GetHistoryEventLists() {
             var isHistory;

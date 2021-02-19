@@ -21,31 +21,31 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="ReferenceNumber" class="control-label"></label>
+                                                <label asp-for="ReferenceNumber" class="control-label">Number</label>
                                                 <input asp-for="ReferenceNumber" disabled="disabled" class="form-control" />
                                                 <span asp-validation-for="ReferenceNumber" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group">
-                                                <label asp-for="OutletList" class="control-label">Outlet</label>
-                                                <select asp-for="OutletId"
+                                                <label asp-for="StoreList" class="control-label">Store</label>
+                                                <select asp-for="StoreId"
                                                         class="form-control"
-                                                        asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
+                                                        asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
                                                 </select>
-                                                <span asp-validation-for="OutletId" class="text-danger"></span>
+                                                <span asp-validation-for="StoreId" class="text-danger"></span>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label asp-for="EmployeeList" class="control-label">Resposible Person</label>
-                                                <select asp-for="EmployeeId"
-                                                        class="form-control"
-                                                        asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
-                                                </select>
-                                                <span asp-validation-for="EmployeeId" class="text-danger"></span>
-                                            </div>
-                                        </div>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label asp-for="EmployeeList" class="control-label">Resposible Person</label>
+                                                    <select asp-for="EmployeeId"
+                                                            class="form-control"
+                                                            asp-items="@(new SelectList(Model.EmployeeList, "Value", "Text"))">
+                                                    </select>
+                                                    <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                                                </div>
+                                            </div>*@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label asp-for="WasteDateTime" class="control-label"></label>
@@ -120,14 +120,15 @@
                                                                 <button id="addRow" class="form-control btn btn-primary" style="margin-top: 7px">Add New</button>
                                                                 <input class="form-control" type="hidden" id="WasteId" value="0" />
                                                                 <input asp-for="Id" class="form-control" type="hidden" />
+                                                                <input class="form-control" type="hidden" id="WasteIngredientId" value="0" />
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label class="control-label"></label>
-                                                                <button id="Cancle" class="form-control btn btn-primary" style="margin-top: 7px">Cancel</button>
-                                                            </div>
-                                                        </div>
+                                                        @*<div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="control-label"></label>
+                                                                    <button id="Cancle" class="form-control btn btn-primary" style="margin-top: 7px">Cancel</button>
+                                                                </div>
+                                                            </div>*@
                                                     </div>
                                                     <hr />
                                                     <div class="row">
@@ -135,6 +136,7 @@
                                                             <table id="WasteOrderDetails" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                                 <thead>
                                                                     <tr>
+                                                                        <th style="width:35%">WasteIngredientId</th>
                                                                         <th style="width:35%">FoodMenuId</th>
                                                                         <th style="width:35%">FoodMenu</th>
                                                                         <th style="width:35%">IngredientId</th>
@@ -155,6 +157,9 @@
                                                                         var rowId = "rowId" + i;
                                                                         i++;
                                                                         <tr id="@rowId">
+                                                                            <td>
+                                                                                @item.WasteIngredientId
+                                                                            </td>
                                                                             <td>
                                                                                 @item.FoodMenuId
                                                                             </td>
@@ -178,8 +183,7 @@
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
-                                                                                    <a href="#" data-itemid="@(item.FoodMenuId +"|"+ item.IngredientId)" class="btn btn-link  editItem"><i class="fa fa-edit"></i></a>
-                                                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                                                    <a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm">Delete</a>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -231,7 +235,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        @*<div class="col-md-6 col-lg-4"></div>*@
                                                         <div class="col-md-6 col-lg-4">
                                                             <div class="form-group form-inline fc-right">
                                                                 <label asp-for="TotalLossAmount" class="col-md-3 col-form-label">Total Loss Amount</label>
@@ -239,7 +242,7 @@
                                                                     <input type="number" asp-for="TotalLossAmount" class="form-control input-full text-right" disabled="disabled" placeholder="Enter Input">
                                                                 </div>
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -247,9 +250,34 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-12 ">
+                                        <div class="col-sm-6">
+                                            @if (Model.CreatedDatetime.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><strong>History </strong> </div>
+                                                <div><span>Created :   </span>@Model.CreatedDatetime [ @Model.CreatedUserName ]</div>
+                                            }
+                                            @if (Model.ApprovedDateTime.ToShortDateString() == "01/01/0001")
+                                            { }
+                                            else
+                                            {
+                                                <div><span>Approved :</span>@Model.ApprovedDateTime [ @Model.ApprovedUserName ]</div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-button-action">
+                                    @if (ViewBag.ActionType != "View")
+                                    {
+                                        <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
+                                    }
                                     <input type="submit" asp-action="WasteList" value="Cancel" class="btn btn-primary btn-border btn-lg pull-right" />
-                                    <input id="saveOrder" type="submit" class="btn btn-primary" value="Save Order" />
+
                                 </div>
                             </form>
 
@@ -290,5 +318,5 @@
     }
     </script>
     <partial name="_ValidationScriptsPartial" />
-    <script src="~/Scripts/Waste.js"></script>
+    <script src="~/Scripts/Waste_BK.js"></script>
 }

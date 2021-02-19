@@ -105,7 +105,7 @@ $('#addRowItem').on('click', function (e) {
         async: false,
         dataType: "text",
         success: function (data) {
-            missingNotes = '<select id="item_MissingNote" class="form-control">';
+            missingNotes = '<select id="MissingNote' + rowId + '" class="form-control">';
             var obj = JSON.parse(data);
             for (var i = 0; i < obj.foodMenuGlobalStatus.length; ++i) {
                 missingNotes += '<option value="' + obj.foodMenuGlobalStatus[i].value + '">' + obj.foodMenuGlobalStatus[i].text + '</option>';
@@ -139,7 +139,7 @@ $('#addRowItem').on('click', function (e) {
             '<td class="text-right">' + AssetItemTotalPrice + ' </td>',
             '<td class="text-right"><input type="number" id="allocatedQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
             '<td class="text-right"><input type="number" id="returnQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right"><input type="number" id="returnQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + MissingQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right"><input type="number" id="missingQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + MissingQty + '" name="item.MissingQty"> </td>',
             '<td class="text-right">' + missingNotes + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editAssetItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myAModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myAModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
@@ -464,8 +464,8 @@ $('#addRowIngredient').on('click', function (e) {
             '<td class="text-right"><label>' + IngredientEventQty + '</label> <label>' + $("#IngredientUnitName").text() + '</label>  </td>',
             '<td class="text-right">' + IngredientCostPrice + ' </td>',
             '<td class="text-right">' + IngredientTotalPrice + '</td>',
-            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right"><input type="number" id="actualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.ActualQty"> </td>',
+            '<td class="text-right"><input type="number" id="IngredientRQty' + $("#IngredientId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientReturnQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right"><input type="number" id="IngredientAQty' + $("#IngredientId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.ActualQty"> </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="editIngredientItem">Edit</a> / <a href="#" data-toggle="modal" data-target="#myBModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myBModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -704,6 +704,9 @@ $(function () {
     $('#saveOrder').click(function () {
         var message = validation(2);
 
+        var status = $("#Status").val();
+        if (status == 0) { status = 1; }
+
    //     GetAssetItemArray();
    //     GetAssetIngredientArray();
 
@@ -726,7 +729,7 @@ $(function () {
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
-                    Status: 1,
+                    Status: status,
                     assetEventItemModels: assetEventItemDataArr,
                     assetEventFoodmenuModels: assetEventFoodmenuDataArr,
                     assetEventIngredientModels: assetEventIngredientDataArr,
@@ -931,8 +934,9 @@ $("#FoodDiscountAmount").keyup(function () {
 $(function () {
     $('#allocateOrder').click(function () {
         var message = validation(2);
-    //    GetAssetItemArray();
-     //   GetAssetIngredientArray();
+
+        var status = $("#Status").val();
+        if (status == 1) { status = 2; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -953,7 +957,7 @@ $(function () {
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
-                    Status: 2,
+                    Status: status,
                     assetEventItemModels: assetEventItemDataArr,
                     assetEventFoodmenuModels: assetEventFoodmenuDataArr,
                     assetEventIngredientModels: assetEventIngredientDataArr,
@@ -998,8 +1002,9 @@ $(function () {
 $(function () {
     $('#returnOrder').click(function () {
         var message = validation(2);
-    //    GetAssetItemArray();
-    //    GetAssetIngredientArray();
+
+        var status = $("#Status").val();
+        if (status == 2) { status = 3; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1020,7 +1025,7 @@ $(function () {
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
-                    Status: 3,
+                    Status: status,
                     assetEventItemModels: assetEventItemDataArr,
                     assetEventFoodmenuModels: assetEventFoodmenuDataArr,
                     assetEventIngredientModels: assetEventIngredientDataArr,
@@ -1065,8 +1070,9 @@ $(function () {
 $(function () {
     $('#closeOrder').click(function () {
         var message = validation(2);
-     //   GetAssetItemArray();
-    //    GetAssetIngredientArray();
+
+        var status = $("#Status").val();
+        if (status == 3) { status = 4; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1087,7 +1093,7 @@ $(function () {
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
-                    Status: 4,
+                    Status: status,
                     assetEventItemModels: assetEventItemDataArr,
                     assetEventFoodmenuModels: assetEventFoodmenuDataArr,
                     assetEventIngredientModels: assetEventIngredientDataArr,
@@ -1177,21 +1183,23 @@ function GetUnitNameByAssetItemId() {
     });
 }
 
-$(document).on('change1', 'input[name]', function () {
+$(document).on('change', 'input[name]', function () {
 
     str = this.id;
     str2 = "allocatedQty";
     str3 = "returnQty";
     str4 = "missingQty";
+    str5 = "IngredientRQty";
+    str6 = "IngredientAQty";
 
-    //Allocated
+    //Asset Item Allocated
     if (str.indexOf(str2) != -1) {
         id = str.substring(12, 100);
         returnId = "#returnQty" + id.toString();
 
-        alert(this.id + " focus out");
+        //alert(this.id + " focus out");
         var qty = $(this).val();
-        alert(qty);
+       // alert(qty);
         $(returnId).val(qty);
 
         var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
@@ -1200,25 +1208,25 @@ $(document).on('change1', 'input[name]', function () {
             if (assetEventItemDataArr[i].assetItemId == id) {
                 assetEventItemDataArr[i].allocatedQty = qty;
                 assetEventItemDataArr[i].returnQty = qty;
-                alert("push to the array");
             }
         }
     }
-    //Returned
+
+    //Asset Item Returned
     if (str.indexOf(str3) != -1) {
 
         id = str.substring(9, 100);
         missingId = "#missingQty" + id.toString();
         allocatedId = "#allocatedQty" + id.toString();
 
-        alert(this.id + " focus out");
+       // alert(this.id + " focus out");
 
         var returnQty = $(this).val();
         var allocatedQty = $(allocatedId).val();
         missingQ = parseFloat((parseFloat(allocatedQty) - parseFloat(returnQty))).toFixed(2);
 
-        alert(returnQty);
-        alert(missingQ);
+       // alert(missingId);
+      //  alert(missingQ);
 
         $(missingId).val(missingQ);
 
@@ -1226,12 +1234,64 @@ $(document).on('change1', 'input[name]', function () {
             if (assetEventItemDataArr[i].assetItemId == id) {
                 assetEventItemDataArr[i].returnQty = returnQty;
                 assetEventItemDataArr[i].missingQty = missingQ;
-                alert("push to the array");
             }
         }
     }
 
+    //Stock Ingredient Item Return
+    if (str.indexOf(str5) != -1) {
+        id = str.substring(14, 100);
+        returnId = "#IngredientRQty" + id.toString();
 
+       // alert(id + " focus out");
+        var qty = $(this).val();
+       // alert(qty);
+        $(returnId).val(qty);
+
+        for (var i = 0; i < assetEventIngredientDataArr.length; i++) {
+            if (assetEventIngredientDataArr[i].ingredientId == id) {
+                assetEventIngredientDataArr[i].returnQty = qty;
+            }
+        }
+    }
+
+    //Stock Ingredient Item Actual
+    if (str.indexOf(str6) != -1) {
+        id = str.substring(14, 100);
+        returnId = "#IngredientAQty" + id.toString();
+
+       // alert(id + " focus out");
+        var qty = $(this).val();
+       // alert(qty);
+        $(returnId).val(qty);
+
+        for (var i = 0; i < assetEventIngredientDataArr.length; i++) {
+            if (assetEventIngredientDataArr[i].ingredientId == id) {
+                assetEventIngredientDataArr[i].actualQty = qty;
+            }
+        }
+    }
 
 });
 
+$(document).on('onchange', 'select[name]', function () {
+    alert('IN');
+});
+
+$("select").change(function () { // any select that changes.
+    str = this.id;
+    str2 = "MissingNote";
+ 
+    //Allocated
+    if (str.indexOf(str2) != -1) {
+        id = str.substring(11, 100);
+        MissingNoteText = $(this).val();
+
+        for (var i = 0; i < assetEventItemDataArr.length; i++) {
+            if (assetEventItemDataArr[i].assetItemId == id) {
+                assetEventItemDataArr[i].missingNote = MissingNoteText;
+            }
+        }
+    }
+    alert(MissingNoteText);
+})

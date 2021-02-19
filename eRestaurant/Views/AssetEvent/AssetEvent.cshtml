@@ -201,7 +201,9 @@
                                                                             <td>
                                                                                 @if ((item.AllocatedQty - item.ReturnQty) > 0)
                                                                                 {
-                                                                                    <select asp-for="@item.MissingNote"
+                                                                                    string MissingNoteId = "MissingNote" + @item.AssetItemId;
+
+                                                                                    <select id="@MissingNoteId" asp-for="@item.MissingNote"
                                                                                             class="form-control"
                                                                                             asp-items="@(new SelectList(Model.MissingNoteList, "Value", "Text"))">
                                                                                     </select>
@@ -518,10 +520,16 @@
                                                                                 @item.TotalAmount
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
+                                                                                @{
+                                                                                    string IngredientReturnId = "IngredientRQty" + @item.IngredientId;
+                                                                                }
+                                                                                <input type="number" id="@IngredientReturnId" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="actualQty" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
+                                                                                @{
+                                                                                    string IngredientActualId = "IngredientAQty" + @item.IngredientId;
+                                                                                }
+                                                                                <input type="number" id="@IngredientActualId" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">

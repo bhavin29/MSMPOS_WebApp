@@ -42,6 +42,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Ingredient", "IngredientName", ingredientModel.IngredientName, ingredientModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 int MaxId = commonRepository.GetMaxId("Ingredient");
 
                 con.Open();
@@ -82,6 +88,13 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Ingredient", "IngredientName", ingredientModel.IngredientName, ingredientModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "Update Ingredient set IngredientName = @IngredientName," +

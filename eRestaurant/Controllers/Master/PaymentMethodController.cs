@@ -61,11 +61,21 @@ namespace RocketPOS.Controllers.Master
             if (paymentMethodModel.Id > 0)
             {
                 var result = _iPaymentMethodService.UpdatePaymentMethod(paymentMethodModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("PaymentMethodName", "Payment method name already exists");
+                    return View(paymentMethodModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iPaymentMethodService.InsertPaymentMethod(paymentMethodModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("PaymentMethodName", "Payment method name already exists");
+                    return View(paymentMethodModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

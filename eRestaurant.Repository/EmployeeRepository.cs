@@ -47,6 +47,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Employee", "Phone", employeeModel.Phone, employeeModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 int MaxId = commonRepository.GetMaxId("Employee");
 
                 con.Open();
@@ -77,6 +83,13 @@ namespace RocketPOS.Repository
         public int UpdateEmployee(EmployeeModel employeeModel)
         {
             int result = 0;
+            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+            result = commonRepository.GetValidateUnique("Employee", "Phone", employeeModel.Phone, employeeModel.Id.ToString());
+            if (result > 0)
+            {
+                return -1;
+            }
+
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 //"HireDate=@HireDate," +

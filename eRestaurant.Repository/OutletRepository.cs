@@ -41,6 +41,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Outlet", "OutletName", outletModel.OutletName, outletModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 int MaxId = commonRepository.GetMaxId("Outlet");
 
                 con.Open();
@@ -90,6 +96,13 @@ namespace RocketPOS.Repository
             int result = 0, storeCount = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Outlet", "OutletName", outletModel.OutletName, outletModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
 

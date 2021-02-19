@@ -40,8 +40,14 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                UserModel.RoleTypeId = (UserModel.RoleTypeId == 0) ? null : UserModel.RoleTypeId;
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("[User]", "Username", UserModel.Username, UserModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
+                UserModel.RoleTypeId = (UserModel.RoleTypeId == 0) ? null : UserModel.RoleTypeId;
                 int MaxId = commonRepository.GetMaxId("[User]");
 
                 con.Open();
@@ -72,6 +78,13 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("[User]", "Username", UserModel.Username, UserModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //LastLogin=@LastLogin,LastLogout=@LastLogout,

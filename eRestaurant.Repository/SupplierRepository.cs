@@ -39,6 +39,13 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Supplier", "SupplierName", supplierModel.SupplierName, supplierModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO Supplier (SupplierName,TaxType,SupplierAddress1, SupplierAddress2,SupplierPhone,SupplierEmail,SupplierPicture, IsActive)" +
@@ -65,6 +72,13 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("Supplier", "SupplierName", supplierModel.SupplierName, supplierModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE Supplier SET  SupplierName=@SupplierName,TaxType=@TaxType,"+

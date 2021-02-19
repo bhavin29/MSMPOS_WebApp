@@ -76,11 +76,21 @@ namespace RocketPOS.Controllers.Master
             if (storeModel.Id > 0)
             {
                 var result = _istoreService.UpdateStore(storeModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("StoreName", "Store name already exists");
+                    return View(storeModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _istoreService.InsertStore(storeModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("StoreName", "Store name already exists");
+                    return View(storeModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

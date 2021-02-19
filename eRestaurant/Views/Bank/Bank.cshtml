@@ -19,7 +19,7 @@
                                             <label asp-for="BankName" class="control-label"></label>
                                             <input asp-for="BankName" class="form-control" />
                                             <span asp-validation-for="BankName" class="text-danger"></span>
-                                        </div>
+                                         </div>
                                         <div class="form-group">
                                             <label asp-for="AccountName" class="control-label">Account Name</label>
                                             <input asp-for="AccountName" class="form-control" />
@@ -40,10 +40,10 @@
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         @*<div class="form-group">
-                                            <label asp-for="SignaturePicture" class="control-label"></label>
-                                            <input asp-for="SignaturePicture" class="form-control" />
-                                            <span asp-validation-for="SignaturePicture" class="text-danger"></span>
-                                        </div>*@
+                                                <label asp-for="SignaturePicture" class="control-label"></label>
+                                                <input asp-for="SignaturePicture" class="form-control" />
+                                                <span asp-validation-for="SignaturePicture" class="text-danger"></span>
+                                            </div>*@
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -70,34 +70,23 @@
     </div>
 </div>
 
-<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
-     aria-hidden="true">
+@*<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="aModalLabel">Message</h4>
             </div>
             <div class="modal-body">
-                @ViewBag.Result
+                @Html.Encode(ViewBag.Validate)
+                Entry with this name already exists.
             </div>
             <div class="modal-footer">
                 <button type="button" id="save" class="btn btn-primary">OK</button>
             </div>
         </div>
     </div>
-</div>
-@{
-    if (ViewBag.Result != null)
-    {
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                $("#aModal").modal('show');
-            });
-        </script>
-    }
-}
+</div>*@
+
 @section Scripts{
     <script>
         $('#save').click(function () {

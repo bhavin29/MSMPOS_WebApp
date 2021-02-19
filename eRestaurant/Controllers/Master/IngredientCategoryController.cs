@@ -68,11 +68,21 @@ namespace RocketPOS.Controllers.Master
             if (ingredientCategoryModel.Id > 0)
             {
                 var result = _iIngredientCategoryService.UpdateIngredientCategory(ingredientCategoryModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientCategoryName", "Category already exists");
+                    return View(ingredientCategoryModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iIngredientCategoryService.InsertIngredientCategory(ingredientCategoryModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientCategoryName", "Category already exists");
+                    return View(ingredientCategoryModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             ingredientCategoryModel.RawMaterialList = _iDropDownService.GetRawMaterialList();

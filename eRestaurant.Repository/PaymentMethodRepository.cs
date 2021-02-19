@@ -40,6 +40,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("PaymentMethod", "PaymentMethodName", PaymentMethodModel.PaymentMethodName, PaymentMethodModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 int MaxId = commonRepository.GetMaxId("PaymentMethod");
 
                 con.Open();
@@ -66,6 +72,13 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("PaymentMethod", "PaymentMethodName", PaymentMethodModel.PaymentMethodName, PaymentMethodModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE PaymentMethod SET PaymentMethodName =@PaymentMethodName, IsBank=@IsBank,IsIntegration=@IsIntegration," +

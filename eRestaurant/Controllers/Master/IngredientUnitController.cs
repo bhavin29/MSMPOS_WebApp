@@ -62,11 +62,21 @@ namespace RocketPOS.Controllers.Master
             if (ingredientUniModel.Id > 0)
             {
                 var result = _iIngredientUnitService.UpdateIngredientUnit(ingredientUniModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientUnitName", "Unit name already exists");
+                    return View(ingredientUniModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iIngredientUnitService.InsertIngredientUnit(ingredientUniModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientUnitName", "Unit name already exists");
+                    return View(ingredientUniModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

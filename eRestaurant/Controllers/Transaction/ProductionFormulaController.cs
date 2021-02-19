@@ -65,7 +65,7 @@ namespace RocketPOS.Controllers.Transaction
                 productionFormulaModel.FoodmenuType =(int) foodMenuType;
                 productionFormulaModel.IsActive = true;
             }
-            productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType((int)foodMenuType);
             productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
             productionFormulaModel.BatchSizeUnitsList = _iDropDownService.GetUnitList();
 
@@ -107,6 +107,11 @@ namespace RocketPOS.Controllers.Transaction
                         if (result > 0)
                         {
                             productionFormulaMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
+                        }
+                        else if (result == -1 )
+                        {
+                            productionFormulaMessage = _locService.GetLocalizedHtmlString("Recipe formula already created for this Menu item ");
+                            return Json(new { error = true, message = productionFormulaMessage, status = 201 });
                         }
                     }
                 }

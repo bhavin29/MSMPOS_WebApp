@@ -90,7 +90,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select CateringPrice as SalesPrice,FoodVatTaxId,T.TaxPercentage from FoodMenu F inner join Tax T On F.FoodVatTaxId=T.Id where F.IsDeleted=0 And F.id=" + id;
+                var query = " select CateringPrice as SalesPrice,FoodVatTaxId,T.TaxPercentage from FoodMenu F left join Tax T On F.FoodVatTaxId=T.Id where F.IsDeleted=0 And F.id=" + id;
                 return con.Query<AssetFoodMenuPriceDetail>(query).ToList().FirstOrDefault();
             }
         }
@@ -558,6 +558,7 @@ namespace RocketPOS.Repository
         {
             int result = 0;
             int foodMenuResult = 0, ingredientResult = 0;
+
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -565,7 +566,7 @@ namespace RocketPOS.Repository
 
                 List<ProductionAutoEntry> productionAutoEntry = new List<ProductionAutoEntry>();
 
-                var queryGetAssetDetails = " 	select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId from ProductionFormula PF " +
+                var queryGetAssetDetails = " 	select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId,PF.BatchSize,PFFood.ExpectedOutput from ProductionFormula PF " +
                                            "    Inner Join ProductionFormulaFoodmenu PFFood " +
                                            "    On PFFood.ProductionFormulaId = PF.Id And PF.IsDeleted = 0 And PF.IsActive = 1 " +
                                            "    Inner Join ( select AE.Id As AssetEventId, AEF.Id AS AssetEventFoodMenuId, AEF.FoodmenuId, AEF.Qunatity, AE.UserIdInserted from AssetEvent AE " +
@@ -615,24 +616,29 @@ namespace RocketPOS.Repository
                                               "VALUES           " +
                                               "(" + result + "," +
                                               prodEntry.FoodMenuId + "," +
-                                              prodEntry.Qunatity + "," +
-                                              prodEntry.UserIdInserted + "," +
+                                              ((prodEntry.ExpectedOutput * prodEntry.Qunatity) / prodEntry.BatchSize) + "," +
+                                            //     prodEntry.Qunatity + "," +
+                                            prodEntry.UserIdInserted + "," +
                                                prodEntry.AssetEventFoodMenuId + "," +
                                               "GetUtcDate(),0);";
                         foodMenuResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                        decimal manipulate = prodEntry.Qunatity / prodEntry.BatchSize;
 
 
                         var queryIngredientDetails = " Insert into ProductionEntryIngredient " +
                                            " (ProductionEntryId," +
                                            "IngredientId," +
                                            "IngredientQty," +
-                                           "UserIdInserted," +
+                                           "ActualIngredientQty," +
+                                          "UserIdInserted," +
                                            "DateInserted," +
                                            "IsDeleted) " +
                                            " select distinct " +
                                            result + "," +
                                            "PFIngredient.IngredientId," +
                                            "PFIngredient.IngredientQty," +
+                                           "(PFIngredient.IngredientQty * " + manipulate + ")," +
                                            prodEntry.UserIdInserted + "," +
                                            " GETUTCDATE()," +
                                            " 0 " +
@@ -640,20 +646,20 @@ namespace RocketPOS.Repository
                                            " Inner Join ProductionFormulaIngredient PFIngredient On PFIngredient.ProductionFormulaId = PF.Id " +
                                            " And PF.IsDeleted = 0 And PF.IsActive = 1  Where PF.Id = " + prodEntry.ProductionFormulaId;
                         ingredientResult = con.Execute(queryIngredientDetails, null, sqltrans, 0, System.Data.CommandType.Text);
-
-                        if (foodMenuResult > 0 && ingredientResult > 0)
-                        {
-                            sqltrans.Commit();
-                        }
-                        else
-                        {
-                            sqltrans.Rollback();
-                        }
                     }
                     else
                     {
                         sqltrans.Rollback();
                     }
+                }
+
+                if (foodMenuResult > 0 && ingredientResult > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
                 }
             }
         }
@@ -663,6 +669,8 @@ namespace RocketPOS.Repository
             int result = 0;
             int foodMenuResult = 0, ingredientResult = 0;
 
+            if (foodMenuAssetIdList == "")
+                return;
             foodMenuAssetIdList = foodMenuAssetIdList.TrimEnd(',');
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -670,11 +678,11 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 List<ProductionAutoEntry> productionAutoEntry = new List<ProductionAutoEntry>();
-                var queryGetAssetDetails = " Select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId from ProductionFormula PF " +
+                var queryGetAssetDetails = " Select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId,PF.BatchSize,PFFood.ExpectedOutput from ProductionFormula PF " +
                                            " Inner Join ProductionFormulaFoodmenu PFFood On PFFood.ProductionFormulaId = PF.Id And PF.IsDeleted = 0 And PF.IsActive = 1 " +
                                            " Inner Join ( " +
                                            " Select AEF.AssetEventId, AEF.Id As AssetEventFoodMenuId, AEF.Qunatity, AEF.UserIdInserted, AEF.FoodmenuId from AssetEventFoodmenu AEF " +
-                                           " Where AEF.Id in (" + foodMenuAssetIdList + ") "+
+                                           " Where AEF.Id in (" + foodMenuAssetIdList + ") " +
                                            " ) AEDetail On AEDetail.FoodmenuId = PFFood.FoodMenuId";
                 productionAutoEntry = con.Query<ProductionAutoEntry>(queryGetAssetDetails, null, sqltrans).AsList();
 
@@ -700,8 +708,9 @@ namespace RocketPOS.Repository
                                           prodEntry.FoodmenuType + "," +
                                           referenceNo + "," +
                                          "GetUtcDate(), " +
-                                          prodEntry.Qunatity + "," +
-                                         "1," +
+                                         ((prodEntry.ExpectedOutput * prodEntry.Qunatity) / prodEntry.BatchSize) + "," +
+                                        //     prodEntry.Qunatity + "," +
+                                        "1," +
                                           prodEntry.UserIdInserted + "," +
                                              prodEntry.AssetEventId + "," +
                                           "GetUtcDate()," +
@@ -727,11 +736,13 @@ namespace RocketPOS.Repository
                                               "GetUtcDate(),0);";
                         foodMenuResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
+                        decimal manipulate = prodEntry.Qunatity / prodEntry.BatchSize;
 
                         var queryIngredientDetails = " Insert into ProductionEntryIngredient " +
                                            " (ProductionEntryId," +
                                            "IngredientId," +
                                            "IngredientQty," +
+                                           "ActualIngredientQty," +
                                            "UserIdInserted," +
                                            "DateInserted," +
                                            "IsDeleted) " +
@@ -739,6 +750,7 @@ namespace RocketPOS.Repository
                                            result + "," +
                                            "PFIngredient.IngredientId," +
                                            "PFIngredient.IngredientQty," +
+                                           "(PFIngredient.IngredientQty * " + manipulate + ")," +
                                            prodEntry.UserIdInserted + "," +
                                            " GETUTCDATE()," +
                                            " 0 " +

@@ -146,6 +146,10 @@ namespace RocketPOS.Models
         public int UserIdInserted { get; set; }
         public int AssetEventId { get; set; }
         public int AssetEventFoodMenuId { get; set; }
+        public decimal BatchSize { get; set; }
+        public decimal ExpectedOutput { get; set; }
+       
+
     }
 
 }

@@ -24,9 +24,11 @@ namespace RocketPOS.Services
         public ProductionEntryModel GetProductionEntryById(int id)
         {
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+ 
             productionEntryModel = iProductionEntryRepository.GetProductionEntryById(id);
             productionEntryModel.productionEntryFoodMenuModels = iProductionEntryRepository.GetProductionEntryFoodMenuDetails(id);
             productionEntryModel.productionEntryIngredientModels = iProductionEntryRepository.GetProductionEntryIngredientDetails(id);
+
             return productionEntryModel;
         }
 

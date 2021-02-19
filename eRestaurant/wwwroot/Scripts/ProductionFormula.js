@@ -47,6 +47,7 @@ $(document).ready(function () {
     });
     if ($("#FoodmenuType").val() == 2) {
         $("#onthespot").prop('checked', true);
+        $("#FormulaName").attr("disabled", "disabled"); 
     }
     else {
         $("#onthespot").prop('checked', false);
@@ -81,9 +82,13 @@ $('#addFoodMenuRow').on('click', function (e) {
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
+
+        $("#FormulaName").val($('#FoodMenuId').children("option:selected").text()),
+
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
- 
+
+        
         $("#FoodMenuId").focus();
     }
     else if (message != '') {
@@ -147,10 +152,13 @@ function validation(id) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
             message = "Select food menu"
         }
+        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+            message = "Select Batch Size Unit"
+        }
         else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
             message = "Enter Batch Size"
         }
-        else if ($("#FormulaName").val() == '' || $("#FormulaName").val() == 0) {
+        else if (($("#FormulaName").val() == '' || $("#FormulaName").val() == 0) && ($("#FoodmenuType").val() == 3)) {
             message = "Enter Formula Name"
         }
         else if ($("#ExpectedOutput").val() == '' || $("#ExpectedOutput").val() == 0) {
@@ -330,7 +338,7 @@ function GetUnitNameByFoodMenuId() {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
             //$("#BatchSizeUnitName").text(obj.unitName);
-            //$("#BatchSizeUnitId").val(obj.id);
+            $("#BatchSizeUnitId").val(obj.id);
         },
         error: function (data) {
             alert(data);

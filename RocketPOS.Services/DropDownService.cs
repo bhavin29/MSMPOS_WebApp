@@ -211,12 +211,12 @@ namespace RocketPOS.Services
             return lstFoodMenu;
         }
         
-            public List<SelectListItem> GetFoodMenuListByReadymade()
+            public List<SelectListItem> GetFoodMenuListByFoodmenuType(int foodmenutype)
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
             lstCategory.Add(new SelectListItem { Text = "Select", Value = "0" });
-            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuListByReadymade().ToList();
+            List<DropDownModel> lstCategoryResult = _dropDownRepository.GetFoodMenuListByFoodmenuType(foodmenutype).ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
                 foreach (var item in lstCategoryResult)

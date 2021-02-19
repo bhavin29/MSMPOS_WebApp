@@ -120,8 +120,12 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public JsonResult GetFoodMenuPriceTaxDetailById(int id)
         {
+
             AssetFoodMenuPriceDetail assetFoodMenuPriceDetail = new AssetFoodMenuPriceDetail();
-            assetFoodMenuPriceDetail = _iAssetEventService.GetFoodMenuPriceTaxDetailById(id);
+
+            if (id > 0)
+                assetFoodMenuPriceDetail = _iAssetEventService.GetFoodMenuPriceTaxDetailById(id);
+
             return Json(new { salesPrice = assetFoodMenuPriceDetail.SalesPrice, taxPercentage = assetFoodMenuPriceDetail.TaxPercentage });
         }
 
@@ -134,7 +138,7 @@ namespace RocketPOS.Controllers.Transaction
         public IActionResult Print(int? id)
         {
             AssetEventModel assetEventModel = new AssetEventModel();
-  
+
             if (id > 0)
             {
                 assetEventModel = _iAssetEventService.GetAssetEventById(Convert.ToInt32(id));

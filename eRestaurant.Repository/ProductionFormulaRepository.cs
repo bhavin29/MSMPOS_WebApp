@@ -57,7 +57,7 @@ namespace RocketPOS.Repository
             List<ProductionFormulaFoodMenuModel> productionFormulaFoodMenuDetail = new List<ProductionFormulaFoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFM.Id AS PFFoodMenuId,PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput, U.Unitname as FoodMenuUnitName "+
+                var query = " select PFM.Id AS PFFoodMenuId,PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput, U.Unitname as FoodMenuUnitName " +
                             " from ProductionFormulaFoodmenu PFM " +
                             " Inner Join FoodMenu FM On FM.Id = PFM.FoodMenuId inner join Units U ON U.Id = FM.UnitsId " +
                             " Where PFM.IsDeleted = 0 And PFM.ProductionFormulaId =" + productionFormulaId;
@@ -73,7 +73,7 @@ namespace RocketPOS.Repository
             {
                 var query = " select PFI.Id AS PFIngredientId,PFI.IngredientId,I.IngredientName,PFI.IngredientQty, U.Unitname as IngredientUnitName " +
                             " from ProductionFormulaIngredient PFI " +
-                            " Inner Join Ingredient I On I.Id=PFI.IngredientId inner join Units U ON U.Id = I.ingredientUnitId  " + 
+                            " Inner Join Ingredient I On I.Id=PFI.IngredientId inner join Units U ON U.Id = I.ingredientUnitId  " +
                             " Where PFI.IsDeleted=0 And PFI.ProductionFormulaId=" + productionFormulaId;
                 productionFormulaIngredientDetail = con.Query<ProductionFormulaIngredientModel>(query).AsList();
             }
@@ -87,7 +87,7 @@ namespace RocketPOS.Repository
             {
                 var query = " select PF.Id,PF.FormulaName,PF.[BatchSize],PF.FoodmenuType,PF.IsActive,U.Username from ProductionFormula  PF " +
                             " inner join [User] U On U.Id=PF.UserIdInserted where PF.IsDeleted=0 ";
-                
+
                 if (foodmenuType != 0)
                 {
                     query += " And PF.FoodmenuType = " + foodmenuType;
@@ -113,6 +113,14 @@ namespace RocketPOS.Repository
         public int InsertProductionFormula(ProductionFormulaModel productionFormulaModel)
         {
             int result = 0;
+            if (productionFormulaModel.FoodmenuType == 2)
+            {
+                result = GeProductionFormulaFoodmenuExists(productionFormulaModel.Id, productionFormulaModel.productionFormulaFoodMenuModels[0].FoodMenuId);
+                if (result >0)
+                {
+                    return -1;
+                }
+            }
             int foodMenuResult = 0, ingredientResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
@@ -307,5 +315,22 @@ namespace RocketPOS.Repository
             }
             return result;
         }
+
+        public int GeProductionFormulaFoodmenuExists(int id, int foodmenuid)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string query = " SELECT * FROM Productionformulafoodmenu PFFM " +
+                               " inner join Productionformula PF on PF.Id = PFFM.ProductionformulaId " +
+                               " WHERE PF.ID <> " + id + "  and foodmenuid =" + foodmenuid ;
+                result = con.ExecuteScalar<string>(query);
+            }
+
+             result = result !=null ? result : "0";
+
+            return Int16.Parse(result);
+        }
+
     }
 }

@@ -15,16 +15,16 @@ $(document).ready(function () {
 
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
-            { targets: [0, 1], orderable: false },
-            { targets: [3, 4,5,6], orderable: false, class: "text-right" },
+            { targets: [0, 1], visible: false },
+            { targets: [3, 4,5],  class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
         "bInfo": false,
         "bFilter": false,
-        "ordering": true,
+        "ordering": false,
         "autoWidth": false,
-        "orderCellsTop": true,
+        "orderCellsTop": false,
         "stateSave": false,
         "pageLength": 200,
         "lengthMenu": [
@@ -35,16 +35,16 @@ $(document).ready(function () {
 
     AssetEventFoodmenu = $('#AssetEventFoodmenu').DataTable({
         "columnDefs": [
-            { targets: [0, 1], orderable: false, visible: false },
-            { targets: [3], orderable: false, class: "text-right" }
+            { targets: [0, 1], visible: false },
+            { targets: [3],  class: "text-right" },
         ],
-        "paging": false,
+          "paging": false,
         "bLengthChange": true,
         "bInfo": false,
         "bFilter": false,
-        "ordering": true,
+        "ordering": false,
         "autoWidth": false,
-        "orderCellsTop": true,
+        "orderCellsTop": false,
         "stateSave": false,
         "pageLength": 200,
         "lengthMenu": [
@@ -55,16 +55,16 @@ $(document).ready(function () {
 
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
-            { targets: [0, 1], orderable: false },
-            { targets: [3,4,5, 6], orderable: false, class: "text-right" }
+            { targets: [0, 1], visible: false },
+            { targets: [3,4,5], class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
         "bInfo": false,
         "bFilter": false,
-        "ordering": true,
+        "ordering": false,
         "autoWidth": false,
-        "orderCellsTop": true,
+        "orderCellsTop": false,
         "stateSave": false,
         "pageLength": 200,
         "lengthMenu": [
@@ -92,6 +92,11 @@ $(document).ready(function () {
 $('#addRowItem').on('click', function (e) {
     e.preventDefault();
     var message = validation(3);
+    var rowId = $("#AssetItemId").val();
+   // var rowId = "rowId" + $("#AssetItemId").val();
+    var AssetItemCostPrice;
+    var AssetItemTotalPrice = 0;
+
     var missingNotes = '';
     $.ajax({
         url: "/AssetEvent/GetCateringFoodMenuGlobalStatus",
@@ -111,10 +116,6 @@ $('#addRowItem').on('click', function (e) {
         }
     });
 
-    var rowId = "rowId" + $("#AssetItemId").val();
-
-    var AssetItemCostPrice;
-    var AssetItemTotalPrice = 0;
     AssetItemCostPrice = parseFloat($("#AssetItemCostPrice").val()).toFixed(2);
   
     var EventQty = parseFloat($("#EventQty").val()).toFixed(2);
@@ -127,17 +128,18 @@ $('#addRowItem').on('click', function (e) {
 
     if (message == '') {
         AssetEventItem.row('.active').remove().draw(false);
+  
         var rowNode = AssetEventItem.row.add([
-            '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetEventItemId").val() + '" /> </td>',
-            '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetItemId").val() + '" /> </td>',
+            '<td>' + $("#AssetEventItemId").val() + ' </td>',
+            '<td>' + $("#AssetItemId").val() + ' </td>',
             $('#AssetItemId').children("option:selected").text(),
             '<td class="text-right">' + StockQty + '</td>',
             '<td class="text-right"><label>' + EventQty + '</label> <label>' + $("#AssetItemUnitName").text()+'</label></td>',
             '<td class="text-right">' + AssetItemCostPrice + ' </td>',
             '<td class="text-right">' + AssetItemTotalPrice + ' </td>',
-            '<td class="text-right"><input type="number" id="allocatedQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
-            '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right">' + MissingQty + ' </td>',
+            '<td class="text-right"><input type="number" id="allocatedQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
+            '<td class="text-right"><input type="number" id="returnQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + ReturnQty + '" name="item.ReturnQty"> </td>',
+            '<td class="text-right"><input type="number" id="returnQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + MissingQty + '" name="item.ReturnQty"> </td>',
             '<td class="text-right">' + missingNotes + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editAssetItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myAModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myAModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
@@ -156,7 +158,11 @@ $('#addRowItem').on('click', function (e) {
             missingNote: '',
             assetEventItemId: $("#AssetEventItemId").val()
         });
-
+        $(rowNode).find('td').eq(2).addClass('text-right');
+        $(rowNode).find('td').eq(3).addClass('text-right');
+        $(rowNode).find('td').eq(4).addClass('text-right');
+        $(rowNode).find('td').eq(5).addClass('text-right');
+    
         AssetItemNetAmountTotal = calculateAssetItemColumn(6);
         $("#AssetItemNetAmount").val(parseFloat(AssetItemNetAmountTotal).toFixed(2));
 
@@ -449,22 +455,24 @@ $('#addRowIngredient').on('click', function (e) {
 
     if (message == '') {
         AssetIngredientItem.row('.active').remove().draw(false);
+
         var rowNode = AssetIngredientItem.row.add([
-            '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#AssetEventIngredientId").val() + '" /> </td>',
-            '<td class="text-right"><input class="form-control" type="hidden" value="' + $("#IngredientId").val() + '" /> </td>',
+            '<td>' + $("#AssetEventIngredientId").val() + '</td>',
+            '<td>' + $("#IngredientId").val() + ' </td>',
             $('#IngredientId').children("option:selected").text(),
-            '<td class="text-right">' + IngredientStockQty + ' </td>',
+            '<td class="text-right">' + IngredientStockQty + '</td>',
             '<td class="text-right"><label>' + IngredientEventQty + '</label> <label>' + $("#IngredientUnitName").text() + '</label>  </td>',
             '<td class="text-right">' + IngredientCostPrice + ' </td>',
-            '<td class="text-right">' + IngredientTotalPrice + ' </td>',
+            '<td class="text-right">' + IngredientTotalPrice + '</td>',
             '<td class="text-right"><input type="number" id="returnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientReturnQty + '" name="item.ReturnQty"> </td>',
-            '<td class="text-right"><input type="number" id="missingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.MissingQty"> </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class=" editIngredientItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myBModal0">Delete</a></div></td > ' +
+            '<td class="text-right"><input type="number" id="actualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + IngredientActualQty + '" name="item.ActualQty"> </td>',
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class="editIngredientItem">Edit</a> / <a href="#" data-toggle="modal" data-target="#myBModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myBModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteIngredientOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
         ]).draw(false).nodes();
-        assetEventIngredientDataArr.push({
+
+         assetEventIngredientDataArr.push({
             ingredientId: $("#IngredientId").val(),
             stockQty: IngredientStockQty,
             eventQty: IngredientEventQty,
@@ -474,6 +482,13 @@ $('#addRowIngredient').on('click', function (e) {
             totalAmount: IngredientTotalPrice,
             assetEventIngredientId: $("#AssetEventIngredientId").val()
         });
+
+        //$(rowNode).find('td').eq(1).addClass('text-right');
+        //$(rowNode).find('td').eq(2).addClass('text-right');
+        //$(rowNode).find('td').eq(3).addClass('text-right');
+        $(rowNode).find('td').eq(4).addClass('text-right');
+        $(rowNode).find('td').eq(5).addClass('text-right');
+        $(rowNode).find('td').eq(6).addClass('text-right');
 
         IngredientNetAmountTotal = calculateIngredientColumn(6);
         $("#IngredientNetAmount").val(parseFloat(IngredientNetAmountTotal).toFixed(2));
@@ -505,7 +520,7 @@ function deleteIngredientOrder(id, ingredientId, rowId) {
             assetEventIngredientDataArr.splice(i, 1);
             AssetIngredientItem.row(rowId).remove().draw(false);
             jQuery.noConflict();
-            $("#myBModal" + assetItemId).modal('hide');
+            $("#myBModal" + ingredientId).modal('hide');
         }
     }
     $("#IngredientNetAmount").val(parseFloat(calculateIngredientColumn(6)).toFixed(2));
@@ -522,6 +537,8 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
         $("#aModal").modal('show');
     }
     else {
+
+
         e.preventDefault();
         if (editAssetEventIngredientDataArr.length > 0) {
             assetEventIngredientDataArr.push(editAssetEventIngredientDataArr[0]);
@@ -534,6 +551,7 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
             $(this).parents('tr').addClass('active');
         }
         var id = $(this).attr('data-itemId');
+        debugger;
         for (var i = 0; i < assetEventIngredientDataArr.length; i++) {
             if (assetEventIngredientDataArr[i].ingredientId == id) {
                 $("#AssetEventIngredientId").val(assetEventIngredientDataArr[i].assetEventIngredientId);
@@ -1158,3 +1176,62 @@ function GetUnitNameByAssetItemId() {
         }
     });
 }
+
+$(document).on('change1', 'input[name]', function () {
+
+    str = this.id;
+    str2 = "allocatedQty";
+    str3 = "returnQty";
+    str4 = "missingQty";
+
+    //Allocated
+    if (str.indexOf(str2) != -1) {
+        id = str.substring(12, 100);
+        returnId = "#returnQty" + id.toString();
+
+        alert(this.id + " focus out");
+        var qty = $(this).val();
+        alert(qty);
+        $(returnId).val(qty);
+
+        var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
+
+        for (var i = 0; i < assetEventItemDataArr.length; i++) {
+            if (assetEventItemDataArr[i].assetItemId == id) {
+                assetEventItemDataArr[i].allocatedQty = qty;
+                assetEventItemDataArr[i].returnQty = qty;
+                alert("push to the array");
+            }
+        }
+    }
+    //Returned
+    if (str.indexOf(str3) != -1) {
+
+        id = str.substring(9, 100);
+        missingId = "#missingQty" + id.toString();
+        allocatedId = "#allocatedQty" + id.toString();
+
+        alert(this.id + " focus out");
+
+        var returnQty = $(this).val();
+        var allocatedQty = $(allocatedId).val();
+        missingQ = parseFloat((parseFloat(allocatedQty) - parseFloat(returnQty))).toFixed(2);
+
+        alert(returnQty);
+        alert(missingQ);
+
+        $(missingId).val(missingQ);
+
+        for (var i = 0; i < assetEventItemDataArr.length; i++) {
+            if (assetEventItemDataArr[i].assetItemId == id) {
+                assetEventItemDataArr[i].returnQty = returnQty;
+                assetEventItemDataArr[i].missingQty = missingQ;
+                alert("push to the array");
+            }
+        }
+    }
+
+
+
+});
+

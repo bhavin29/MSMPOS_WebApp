@@ -136,8 +136,8 @@
                                                         <table id="AssetEventItem" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                             <thead>
                                                                 <tr>
-                                                                    <th style="width:0%"></th>
-                                                                    <th style="width:0%"></th>
+                                                                    <th style="width:1%">AssetEventItemId</th>
+                                                                    <th style="width:1%">AssetItemId</th>
                                                                     <th style="width:20%">Asset Item</th>
                                                                     <th style="width:8%" class="text-right">Stock Qty</th>
                                                                     <th style="width:8%" class="text-right">Qty </th>
@@ -160,10 +160,10 @@
                                                                         var rowId = "rowId" + item.AssetItemId;
                                                                         <tr id="@rowId">
                                                                             <td>
-                                                                                <input class="form-control" type="hidden" value="@item.AssetEventItemId" />
+                                                                                @item.AssetEventItemId
                                                                             </td>
                                                                             <td>
-                                                                                <input class="form-control" type="hidden" value="@item.AssetItemId" />
+                                                                                @item.AssetItemId
                                                                             </td>
                                                                             <td>
                                                                                 @item.AssetItemName
@@ -173,6 +173,7 @@
                                                                             </td>
                                                                             <td class="text-right">
                                                                                 <label>@item.EventQty</label> <label>@item.AssetItemUnitName</label>
+                                                                            </td>
                                                                             <td class="text-right">
                                                                                 @item.CostPrice
                                                                             </td>
@@ -195,7 +196,7 @@
                                                                                 @{
                                                                                     string missingId = "missingQty" + @item.AssetItemId;
                                                                                 }
-                                                                                <input type="number" id="@missingId" asp-for="@item.MissingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
+                                                                                <input type="number" id="@missingId" asp-for="@item.MissingQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.MissingQty" />
                                                                             </td>
                                                                             <td>
                                                                                 @if ((item.AllocatedQty - item.ReturnQty) > 0)
@@ -474,8 +475,8 @@
                                                         <table id="AssetIngredientItem" width="100%" autowidth="true" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                                             <thead>
                                                                 <tr>
-                                                                    <th style="width:0%"></th>
-                                                                    <th style="width:0%"></th>
+                                                                    <th style="width:0%">AssetEventIngredientId</th>
+                                                                    <th style="width:0%">IngredientId</th>
                                                                     <th style="width:25%">Stock Item </th>
                                                                     <th style="width:10%" class="text-right">Stock Qty</th>
                                                                     <th style="width:10%" class="text-right">Qty </th>
@@ -496,10 +497,10 @@
                                                                         var rowId = "rowId" + item.IngredientId;
                                                                         <tr id="@rowId">
                                                                             <td>
-                                                                                <input class="form-control" type="hidden" value="@item.AssetEventIngredientId" />
+                                                                                @item.AssetEventIngredientId
                                                                             </td>
                                                                             <td>
-                                                                                <input class="form-control" type="hidden" value="@item.IngredientId" />
+                                                                                @item.IngredientId
                                                                             </td>
                                                                             <td>
                                                                                 @item.IngredientName
@@ -520,7 +521,7 @@
                                                                                 <input type="number" id="returnQty" asp-for="@item.ReturnQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ReturnQty" />
                                                                             </td>
                                                                             <td class="text-right">
-                                                                                <input type="number" id="missingQty" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
+                                                                                <input type="number" id="actualQty" asp-for="@item.ActualQty" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualQty" />
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-button-action">
@@ -661,9 +662,9 @@
 
 @section scripts{
     <script>
-        assetEventFoodmenuDataArr = []
-        assetEventItemDataArr = []
-        assetEventIngredientDataArr = []
+        assetEventFoodmenuDataArr = [];
+        assetEventItemDataArr = [];
+        assetEventIngredientDataArr = [];
         if (@Model.Id>0){
             assetEventItemDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventItemModels))');
             assetEventFoodmenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.assetEventFoodmenuModels))');

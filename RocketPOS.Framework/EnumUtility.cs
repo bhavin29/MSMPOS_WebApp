@@ -99,7 +99,7 @@ namespace RocketPOS.Framework
         Readymade = 1,
         [Display(Name = "On the spot")]
         OnTheSpot = 2,
-        [Display(Name = "Other")]
+        [Display(Name = "Production")]
         Other = 3,
         [Display(Name = "Catering")]
         Catering = 4,

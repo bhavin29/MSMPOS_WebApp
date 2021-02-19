@@ -70,7 +70,7 @@
                                 </td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="FoodMenuCategory"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <a asp-action="FoodMenuCategory" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
                                         <label> / </label>
                                         <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                     </div>
@@ -105,8 +105,19 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            table = $('#@dataTableName').DataTable({
-                        "bLengthChange": true,
+            var table = $('#@dataTableName').DataTable({
+                dom: 'Bfrtip',
+                "buttons": [{
+                    extend: 'excel',
+                    exportOptions: { columns: [0, 1, 2] },
+                    filename: function() {
+                        var d = new Date();
+                        var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                        var n = d.getTime();
+                        return 'Foodmenu_Category_' + date + '_' + n;
+                    },
+                     }],
+                "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,
                         "ordering": true,

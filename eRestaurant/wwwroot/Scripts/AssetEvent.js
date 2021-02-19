@@ -1277,19 +1277,17 @@ $(document).on('change', 'input[name]', function () {
 
 });
 
-});
-//Stock Update
+
+
 
 $(document).on('onchange', 'select[name]', function () {
     alert('IN');
-$('#selectAll').click(function (e) {
-    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
 });
 
 $("select").change(function () { // any select that changes.
     str = this.id;
     str2 = "MissingNote";
- 
+
     //Allocated
     if (str.indexOf(str2) != -1) {
         id = str.substring(11, 100);
@@ -1303,6 +1301,13 @@ $("select").change(function () { // any select that changes.
     }
     alert(MissingNoteText);
 })
+
+
+//Stock Update
+$('#selectAll').click(function (e) {
+    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+});
+
 $('#btnStockOut').click(function () {
     var assetEventId = [];
     $('.row input:checked').each(function () {

@@ -58,6 +58,18 @@ namespace RocketPOS.Repository
             return Int16.Parse(result);
         }
 
+        public int GetValidateUnique(string TableName,string ColumnName,string Value, string Rowid)
+        {
+            string result ="";
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string query = "SELECT * FROM " + TableName.ToString() + " WHERE " + ColumnName + "='" + Value +"' AND Id <> " + Rowid;
+                result = con.ExecuteScalar<string>(query);
+
+                result = result != null ? result : "0";
+            }
+            return Int16.Parse(result);
+        }
         public string InventoryPush(string docType,int id)
         {
             string result = "";

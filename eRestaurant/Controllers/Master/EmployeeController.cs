@@ -62,11 +62,21 @@ namespace RocketPOS.Controllers.Master
             if (employeeModel.Id > 0)
             {
                 var result = _iemployeeService.UpdateEmployee(employeeModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Phone", "Phone already exists");
+                    return View(employeeModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iemployeeService.InsertEmployee(employeeModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Phone", "Phone already exists");
+                    return View(employeeModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

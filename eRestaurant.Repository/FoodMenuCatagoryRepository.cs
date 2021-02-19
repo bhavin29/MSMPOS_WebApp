@@ -68,6 +68,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("FoodMenuCategory", "FoodMenuCategoryName", foodCategoryModel.FoodMenuCategoryName, foodCategoryModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 int MaxId = commonRepository.GetMaxId("FoodMenuCategory");
 
                 con.Open();
@@ -98,6 +104,13 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("FoodMenuCategory", "FoodMenuCategoryName", foodCategoryModel.FoodMenuCategoryName, foodCategoryModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE FoodMenuCategory SET FoodMenuCategoryName =@FoodMenuCategoryName," +

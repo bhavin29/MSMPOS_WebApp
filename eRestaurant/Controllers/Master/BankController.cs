@@ -58,14 +58,27 @@ namespace RocketPOS.Controllers.Master
                 }
             }
 
+
             if (bankModel.Id > 0)
             {
                 var result = _iBankService.UpdateBank(bankModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Bankname", "Bank name already exists");
+                    return View(bankModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iBankService.InsertBank(bankModel);
+
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Bankname", "Bank name already exists");
+                    return View(bankModel);
+                }
+
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

@@ -62,11 +62,21 @@ namespace RocketPOS.Controllers.Master
             if (supplierModel.Id > 0)
             {
                 var result = _iSupplierService.UpdateSupplier(supplierModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("SupplierName", "Supplier name already exists");
+                    return View(supplierModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iSupplierService.InsertSupplier(supplierModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("SupplierName", "Supplier name already exists");
+                    return View(supplierModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

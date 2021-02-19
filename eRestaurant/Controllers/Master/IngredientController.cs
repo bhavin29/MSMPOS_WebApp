@@ -74,11 +74,21 @@ namespace RocketPOS.Controllers
             if (ingredientModel.Id > 0)
             {
                 var result = _iIngredientService.UpdateIngredient(ingredientModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientName", "Stock item already exists");
+                    return View(ingredientModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iIngredientService.InsertIngredient(ingredientModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("IngredientName", "Stock item already exists");
+                    return View(ingredientModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             return RedirectToAction("Index", "Ingredient");

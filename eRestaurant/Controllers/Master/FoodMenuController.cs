@@ -66,11 +66,21 @@ namespace RocketPOS.Controllers.Master
             if (foodMenuModel.Id > 0)
             {
                 var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("FoodMenuName", "FoodMenuName already exists");
+                    return View(foodMenuModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("FoodMenuName", "FoodMenuName already exists");
+                    return View(foodMenuModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

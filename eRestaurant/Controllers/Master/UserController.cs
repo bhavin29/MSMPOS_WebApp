@@ -69,11 +69,21 @@ namespace RocketPOS.Controllers.Master
             if (userModel.Id > 0)
             {
                 var result = _iUserService.UpdateUser(userModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Username", "Username already exists");
+                    return View(userModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iUserService.InsertUser(userModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("Username", "Username already exists");
+                    return View(userModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
 

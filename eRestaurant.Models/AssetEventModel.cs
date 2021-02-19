@@ -136,4 +136,16 @@ namespace RocketPOS.Models
         public int FoodVatTaxId { get; set; }
     }
 
+    public class ProductionAutoEntry
+    {
+        public int ProductionFormulaId { get; set; }
+        public int FoodmenuType { get; set; }
+        public int FoodMenuId { get; set; }
+        public int Status { get; set; }
+        public decimal Qunatity { get; set; }
+        public int UserIdInserted { get; set; }
+        public int AssetEventId { get; set; }
+        public int AssetEventFoodMenuId { get; set; }
+    }
+
 }

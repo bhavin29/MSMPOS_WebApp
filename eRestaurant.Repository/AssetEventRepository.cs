@@ -250,6 +250,7 @@ namespace RocketPOS.Repository
                     if (result > 0)
                     {
                         sqltrans.Commit();
+                        InsertProductionAutoEntry(result);
                     }
                     else
                     {
@@ -265,7 +266,8 @@ namespace RocketPOS.Repository
         }
         public int UpdateAssetEvent(AssetEventModel assetEventModel)
         {
-            int result = 0, deleteFoodMenuResult = 0, deleteItemResult = 0, foodmenudetails = 0, itemdetails = 0, ingredientdetails = 0;
+            int result = 0, deleteFoodMenuResult = 0, deleteItemResult = 0, foodmenudetails = 0, itemdetails = 0, ingredientdetails = 0, foodmenuNewdetails = 0;
+            string foodMenuAssets = string.Empty;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -404,6 +406,7 @@ namespace RocketPOS.Repository
                                                  " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
                                                  " [DateUpdated] = GetUTCDate() " +
                                                  " where id = " + item.AssetEventFoodmenuId + ";";
+                                foodmenudetails = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                             }
                             else
                             {
@@ -426,9 +429,11 @@ namespace RocketPOS.Repository
                                                        item.FoodVatAmount + "," +
                                                          item.FoodTaxAmount + "," +
                                                      item.TotalPrice + "," +
-                                          LoginInfo.Userid + ",GetUtcDate(),0);";
+                                          LoginInfo.Userid + ",GetUtcDate(),0);SELECT CAST(SCOPE_IDENTITY() as int);";
+                                foodmenuNewdetails = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+                                foodMenuAssets += foodmenuNewdetails + ",";
                             }
-                            foodmenudetails = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
                         }
                     }
 
@@ -485,6 +490,7 @@ namespace RocketPOS.Repository
                     if (result > 0)
                     {
                         sqltrans.Commit();
+                        InsertProductionAutoEntryUpdateTime(foodMenuAssets);
                     }
                     else
                     {
@@ -546,6 +552,216 @@ namespace RocketPOS.Repository
                 { sqltrans.Rollback(); }
             }
             return result;
+        }
+
+        public void InsertProductionAutoEntry(int id)
+        {
+            int result = 0;
+            int foodMenuResult = 0, ingredientResult = 0;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+
+                List<ProductionAutoEntry> productionAutoEntry = new List<ProductionAutoEntry>();
+
+                var queryGetAssetDetails = " 	select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId from ProductionFormula PF " +
+                                           "    Inner Join ProductionFormulaFoodmenu PFFood " +
+                                           "    On PFFood.ProductionFormulaId = PF.Id And PF.IsDeleted = 0 And PF.IsActive = 1 " +
+                                           "    Inner Join ( select AE.Id As AssetEventId, AEF.Id AS AssetEventFoodMenuId, AEF.FoodmenuId, AEF.Qunatity, AE.UserIdInserted from AssetEvent AE " +
+                                           "    Inner Join AssetEventFoodmenu AEF On AEF.AssetEventId= AE.Id Where AE.Id= " + id + " ) AEDetail On AEDetail.FoodmenuId = PFFood.FoodMenuId";
+                productionAutoEntry = con.Query<ProductionAutoEntry>(queryGetAssetDetails, null, sqltrans).AsList();
+
+                foreach (var prodEntry in productionAutoEntry)
+                {
+
+                    var refNoQuery = $"SELECT ISNULL(MAX(convert(int,ReferenceNo)),0) + 1  FROM  ProductionEntry where foodmenutype=" + prodEntry.FoodmenuType + " and  isdeleted = 0; ";
+                    var referenceNo = con.ExecuteScalar<string>(refNoQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                    var query = "INSERT INTO [dbo].[ProductionEntry] " +
+                                 "  ([ProductionFormulaId] " +
+                                 " ,[FoodmenuType] " +
+                                 " ,[ReferenceNo] " +
+                                 " ,[ProductionDate] " +
+                                 " ,[ActualBatchSize] " +
+                                 " ,[Status] " +
+                                 " ,[UserIdInserted]  " +
+                                 " ,[AssetEventId]  " +
+                                 " ,[DateInserted]   " +
+                                 " ,[IsDeleted])     " +
+                                 "   VALUES           " +
+                                 "  ( " + prodEntry.ProductionFormulaId + "," +
+                                          prodEntry.FoodmenuType + "," +
+                                          referenceNo + "," +
+                                         "GetUtcDate(), " +
+                                          prodEntry.Qunatity + "," +
+                                         "1," +
+                                          prodEntry.UserIdInserted + "," +
+                                             prodEntry.AssetEventId + "," +
+                                          "GetUtcDate()," +
+                                          "0); SELECT CAST(SCOPE_IDENTITY() as int); ";
+                    result = con.ExecuteScalar<int>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                    if (result > 0)
+                    {
+                        var queryDetails = "INSERT INTO [dbo].[ProductionEntryFoodmenu]" +
+                                             "  ([ProductionEntryId] " +
+                                             " ,[FoodMenuId] " +
+                                             " ,[ExpectedOutput] " +
+                                             " ,[UserIdInserted]" +
+                                             " ,[AssetEventFoodMenuId]" +
+                                             " ,[DateInserted]" +
+                                              " ,[IsDeleted])   " +
+                                              "VALUES           " +
+                                              "(" + result + "," +
+                                              prodEntry.FoodMenuId + "," +
+                                              prodEntry.Qunatity + "," +
+                                              prodEntry.UserIdInserted + "," +
+                                               prodEntry.AssetEventFoodMenuId + "," +
+                                              "GetUtcDate(),0);";
+                        foodMenuResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
+
+                        var queryIngredientDetails = " Insert into ProductionEntryIngredient " +
+                                           " (ProductionEntryId," +
+                                           "IngredientId," +
+                                           "IngredientQty," +
+                                           "UserIdInserted," +
+                                           "DateInserted," +
+                                           "IsDeleted) " +
+                                           " select distinct " +
+                                           result + "," +
+                                           "PFIngredient.IngredientId," +
+                                           "PFIngredient.IngredientQty," +
+                                           prodEntry.UserIdInserted + "," +
+                                           " GETUTCDATE()," +
+                                           " 0 " +
+                                           " from ProductionFormula PF " +
+                                           " Inner Join ProductionFormulaIngredient PFIngredient On PFIngredient.ProductionFormulaId = PF.Id " +
+                                           " And PF.IsDeleted = 0 And PF.IsActive = 1  Where PF.Id = " + prodEntry.ProductionFormulaId;
+                        ingredientResult = con.Execute(queryIngredientDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                        if (foodMenuResult > 0 && ingredientResult > 0)
+                        {
+                            sqltrans.Commit();
+                        }
+                        else
+                        {
+                            sqltrans.Rollback();
+                        }
+                    }
+                    else
+                    {
+                        sqltrans.Rollback();
+                    }
+                }
+            }
+        }
+
+        public void InsertProductionAutoEntryUpdateTime(string foodMenuAssetIdList)
+        {
+            int result = 0;
+            int foodMenuResult = 0, ingredientResult = 0;
+
+            foodMenuAssetIdList = foodMenuAssetIdList.TrimEnd(',');
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                List<ProductionAutoEntry> productionAutoEntry = new List<ProductionAutoEntry>();
+                var queryGetAssetDetails = " Select distinct PF.Id As ProductionFormulaId,PF.FoodmenuType,PFFood.FoodMenuId,AEDetail.Qunatity,1 As [Status],AEDetail.UserIdInserted,AEDetail.AssetEventId,AEDetail.AssetEventFoodMenuId from ProductionFormula PF " +
+                                           " Inner Join ProductionFormulaFoodmenu PFFood On PFFood.ProductionFormulaId = PF.Id And PF.IsDeleted = 0 And PF.IsActive = 1 " +
+                                           " Inner Join ( " +
+                                           " Select AEF.AssetEventId, AEF.Id As AssetEventFoodMenuId, AEF.Qunatity, AEF.UserIdInserted, AEF.FoodmenuId from AssetEventFoodmenu AEF " +
+                                           " Where AEF.Id in (" + foodMenuAssetIdList + ") "+
+                                           " ) AEDetail On AEDetail.FoodmenuId = PFFood.FoodMenuId";
+                productionAutoEntry = con.Query<ProductionAutoEntry>(queryGetAssetDetails, null, sqltrans).AsList();
+
+                foreach (var prodEntry in productionAutoEntry)
+                {
+
+                    var refNoQuery = $"SELECT ISNULL(MAX(convert(int,ReferenceNo)),0) + 1  FROM  ProductionEntry where foodmenutype=" + prodEntry.FoodmenuType + " and  isdeleted = 0; ";
+                    var referenceNo = con.ExecuteScalar<string>(refNoQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                    var query = "INSERT INTO [dbo].[ProductionEntry] " +
+                                 "  ([ProductionFormulaId] " +
+                                 " ,[FoodmenuType] " +
+                                 " ,[ReferenceNo] " +
+                                 " ,[ProductionDate] " +
+                                 " ,[ActualBatchSize] " +
+                                 " ,[Status] " +
+                                 " ,[UserIdInserted]  " +
+                                 " ,[AssetEventId]  " +
+                                 " ,[DateInserted]   " +
+                                 " ,[IsDeleted])     " +
+                                 "   VALUES           " +
+                                 "  ( " + prodEntry.ProductionFormulaId + "," +
+                                          prodEntry.FoodmenuType + "," +
+                                          referenceNo + "," +
+                                         "GetUtcDate(), " +
+                                          prodEntry.Qunatity + "," +
+                                         "1," +
+                                          prodEntry.UserIdInserted + "," +
+                                             prodEntry.AssetEventId + "," +
+                                          "GetUtcDate()," +
+                                          "0); SELECT CAST(SCOPE_IDENTITY() as int); ";
+                    result = con.ExecuteScalar<int>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                    if (result > 0)
+                    {
+                        var queryDetails = "INSERT INTO [dbo].[ProductionEntryFoodmenu]" +
+                                             "  ([ProductionEntryId] " +
+                                             " ,[FoodMenuId] " +
+                                             " ,[ExpectedOutput] " +
+                                             " ,[UserIdInserted]" +
+                                             " ,[AssetEventFoodMenuId]" +
+                                             " ,[DateInserted]" +
+                                              " ,[IsDeleted])   " +
+                                              "VALUES           " +
+                                              "(" + result + "," +
+                                              prodEntry.FoodMenuId + "," +
+                                              prodEntry.Qunatity + "," +
+                                              prodEntry.UserIdInserted + "," +
+                                               prodEntry.AssetEventFoodMenuId + "," +
+                                              "GetUtcDate(),0);";
+                        foodMenuResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
+
+                        var queryIngredientDetails = " Insert into ProductionEntryIngredient " +
+                                           " (ProductionEntryId," +
+                                           "IngredientId," +
+                                           "IngredientQty," +
+                                           "UserIdInserted," +
+                                           "DateInserted," +
+                                           "IsDeleted) " +
+                                           " select distinct " +
+                                           result + "," +
+                                           "PFIngredient.IngredientId," +
+                                           "PFIngredient.IngredientQty," +
+                                           prodEntry.UserIdInserted + "," +
+                                           " GETUTCDATE()," +
+                                           " 0 " +
+                                           " from ProductionFormula PF " +
+                                           " Inner Join ProductionFormulaIngredient PFIngredient On PFIngredient.ProductionFormulaId = PF.Id " +
+                                           " And PF.IsDeleted = 0 And PF.IsActive = 1  Where PF.Id = " + prodEntry.ProductionFormulaId;
+                        ingredientResult = con.Execute(queryIngredientDetails, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                        if (foodMenuResult > 0 && ingredientResult > 0)
+                        {
+                            sqltrans.Commit();
+                        }
+                        else
+                        {
+                            sqltrans.Rollback();
+                        }
+                    }
+                    else
+                    {
+                        sqltrans.Rollback();
+                    }
+                }
+            }
         }
     }
 }

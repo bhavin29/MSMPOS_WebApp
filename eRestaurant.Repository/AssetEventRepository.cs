@@ -26,7 +26,7 @@ namespace RocketPOS.Repository
             {
                 var query = string.Empty;
                 query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
-                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0  ";
+                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0  And AE.[Status] <> 4 ";
                 assetEventList = con.Query<AssetEventViewModel>(query).AsList();
             }
             return assetEventList;
@@ -36,8 +36,14 @@ namespace RocketPOS.Repository
             AssetEventModel assetEventModel = new AssetEventModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " Select Id,ReferenceNo,EventType,EventName,EventDatetime,DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status " +
-                            " From AssetEvent Where IsDeleted=0 And Id=" + id;
+                var query = " Select AE.Id,ReferenceNo,EventType,EventName,EventDatetime,AE.DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status, " +
+                            " UserCreated.Username As CreatedByUser,UserAllocated.Username As AllocatedByUser,UserReturned.Username As ReturnedByUser,UserClosed.Username As ClosedByUser " +
+                            " From AssetEvent  AE " +
+                            " left join [User] UserCreated On AE.CreatedUserId=UserCreated.Id " +
+                            " left join [User] UserAllocated On AE.AllocatedUserId=UserAllocated.Id " +
+                            " left join [User] UserReturned On AE.ReturnUserId=UserReturned.Id " +
+                            " left join [User] UserClosed On AE.ClosedUserId=UserClosed.Id " +
+                            "Where AE.IsDeleted=0 And AE.Id=" + id;
                 assetEventModel = con.QueryFirstOrDefault<AssetEventModel>(query);
             }
             return assetEventModel;
@@ -72,7 +78,7 @@ namespace RocketPOS.Repository
             List<AssetEventIngredientModel> assetEventIngredientModel = new List<AssetEventIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AEI.Id AS AssetEventIngredientId,AEI.IngredientId,I.IngredientName,AEI.StockQty,AEI.EventQty,AEI.ReturnQty,AEI.ActualQty,AEI.CostPrice,AEI.TotalAmount,U.UnitName As IngredientUnitName from AssetEventIngredient AEI " +
+                var query = " select AEI.Id AS AssetEventIngredientId,AEI.IngredientId,I.IngredientName,AEI.StockQty,AEI.EventQty,AEI.ReturnQty,AEI.ActualQty,AEI.CostPrice,AEI.TotalAmount,U.UnitName As IngredientUnitName,AEI.StockUpdate from AssetEventIngredient AEI " +
                             " Inner Join Ingredient I On I.Id=AEI.IngredientId inner join Units U On U.Id=I.IngredientUnitId Where AEI.IsDeleted=0 And AEI.AssetEventId=" + assetEventId;
                 assetEventIngredientModel = con.Query<AssetEventIngredientModel>(query).AsList();
             }
@@ -127,6 +133,7 @@ namespace RocketPOS.Repository
                              " ,[AssetItemNetAmount] " +
                              " ,[Status] " +
                              "  ,[UserIdInserted]  " +
+                             "  ,[CreatedUserId]  " +
                              "  ,[DateInserted]   " +
                              "  ,[IsDeleted])     " +
                              "   VALUES           " +
@@ -145,6 +152,7 @@ namespace RocketPOS.Repository
                              " ,@IngredientNetAmount " +
                              " ,@AssetItemNetAmount " +
                              " ,@Status, " +
+                             "" + LoginInfo.Userid + "," +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
@@ -289,15 +297,15 @@ namespace RocketPOS.Repository
 
                 if (assetEventModel.Status == 2)
                 {
-                    query += ",AllocationDatetime = GetUtcDate() ";
+                    query += ",AllocationDatetime = GetUtcDate(),AllocatedUserId = " + LoginInfo.Userid;
                 }
                 if (assetEventModel.Status == 3)
                 {
-                    query += ",ReturnDatetime = GetUtcDate() ";
+                    query += ",ReturnDatetime = GetUtcDate(),ReturnUserId = " + LoginInfo.Userid;
                 }
                 if (assetEventModel.Status == 4)
                 {
-                    query += ",ClosedDatetime = GetUtcDate() ";
+                    query += ",ClosedDatetime = GetUtcDate(),ClosedUserId = " + LoginInfo.Userid;
                 }
 
                 query += ",Status = @Status " +
@@ -774,6 +782,55 @@ namespace RocketPOS.Repository
                     }
                 }
             }
+        }
+
+        public List<AssetEventViewModel> GetCateringListByStatus(string fromDate, string toDate, int statusId)
+        {
+            List<AssetEventViewModel> assetEventList = new List<AssetEventViewModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = string.Empty;
+                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
+                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0   " +
+                        " AND Convert(Date, AE.EventDateTime, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
+                //" AND Convert(Date, AE.ClosedDatetime, 103)  between Convert(Date, '" + toDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
+
+                if (statusId != 0)
+                {
+                    query += " And AE.[Status] =  " + statusId;
+                }
+                query += "   order by AE.Id desc";
+                assetEventList = con.Query<AssetEventViewModel>(query).AsList();
+            }
+            return assetEventList;
+        }
+
+        public int UpdateStockItemById(List<string> ids)
+        {
+            int result = 0;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                foreach (var item in ids)
+                {
+                    if (Convert.ToInt32(item) != 0)
+                    {
+                        var query = " update AssetEventIngredient set StockUpdate=1 Where Id=" + Convert.ToInt32(item);
+                        result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                    }
+                }
+
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
+                }
+            }
+            return result;
         }
     }
 }

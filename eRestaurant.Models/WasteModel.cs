@@ -11,10 +11,10 @@ namespace RocketPOS.Models
     public class WasteModel
     {
         public int Id { get; set; }
-        [Required(ErrorMessage = "Select Outlet")]
-        public int? OutletId { get; set; }
-        public string OutletName { get; set; }
-        public  List<SelectListItem> OutletList { get; set; }
+        [Required(ErrorMessage = "Select Store")]
+        public int? StoreId { get; set; }
+        public string StoreName { get; set; }
+        public  List<SelectListItem> StoreList { get; set; }
 
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
@@ -47,9 +47,17 @@ namespace RocketPOS.Models
 
         public string[] DeletedId { get; set; }
 
+        public DateTime CreatedDatetime { get; set; }
+        public DateTime ApprovedDateTime { get; set; }
+
+        public string CreatedUserName { get; set; }
+
+        public string ApprovedUserName { get; set; }
+
     }
-    public class    WasteDetailModel
+    public class WasteDetailModel
     {
+        public long WasteIngredientId { get; set; }
         public long WasteId { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
@@ -60,6 +68,5 @@ namespace RocketPOS.Models
         public decimal Qty { get; set; }
         public decimal LossAmount { get; set; }
         public bool IsDeleted { get; set; }
-
     }
 }

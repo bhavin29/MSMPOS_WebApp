@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
-            { targets: [0, 1], visible: false },
+            { targets: [1, 2], visible: false },
             { targets: [3,4,5], class: "text-right" },
         ],
         "paging": false,
@@ -440,6 +440,7 @@ $('#addRowIngredient').on('click', function (e) {
     e.preventDefault();
     var message = validation(4);
     var rowId = "rowId" + $("#IngredientId").val();
+    var chkId = $("#AssetEventIngredientId").val();
 
     var IngredientCostPrice;
     var IngredientTotalPrice = 0;
@@ -457,6 +458,7 @@ $('#addRowIngredient').on('click', function (e) {
         AssetIngredientItem.row('.active').remove().draw(false);
 
         var rowNode = AssetIngredientItem.row.add([
+            '<td><input type="checkbox" id="' + chkId + '" /></td>',
             '<td>' + $("#AssetEventIngredientId").val() + '</td>',
             '<td>' + $("#IngredientId").val() + ' </td>',
             $('#IngredientId').children("option:selected").text(),
@@ -1272,7 +1274,11 @@ $(document).on('change', 'input[name]', function () {
         }
     }
 
+
 });
+
+
+
 
 $(document).on('onchange', 'select[name]', function () {
     alert('IN');
@@ -1281,7 +1287,7 @@ $(document).on('onchange', 'select[name]', function () {
 $("select").change(function () { // any select that changes.
     str = this.id;
     str2 = "MissingNote";
- 
+
     //Allocated
     if (str.indexOf(str2) != -1) {
         id = str.substring(11, 100);
@@ -1295,3 +1301,53 @@ $("select").change(function () { // any select that changes.
     }
     alert(MissingNoteText);
 })
+
+
+//Stock Update
+$('#selectAll').click(function (e) {
+    $(this).closest('table').find('td input:checkbox').prop('checked', this.checked);
+});
+
+$('#btnStockOut').click(function () {
+    var assetEventId = [];
+    $('.row input:checked').each(function () {
+        var chkId = $(this)[0].id;
+        if (chkId !="selectAll") {
+            assetEventId.push($(this)[0].id);
+        }
+    });
+
+    $.ajax({
+        url: "/AssetEvent/UpdateStockById",
+        data: { 'ids':assetEventId },
+        type: "POST",
+        dataType: "json",
+        success: function (data) {
+            if (data.status == "200") {
+                $(".bmodal-body").text(data.message);
+                $("#bsave").show();
+                $("#bok").hide();
+                jQuery.noConflict();
+                $("#bModal").modal('show');
+            }
+            else {
+                $(".bmodal-body").text(data.message);
+                $("#bok").show();
+                $("#bsave").hide();
+                jQuery.noConflict();
+                $("#bModal").modal('show');
+            }
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+});
+
+$("#bsave").click(function () {
+    window.location.href = "";
+});
+
+$('#bok').click(function () {
+    $("#bModal").modal('hide');
+});

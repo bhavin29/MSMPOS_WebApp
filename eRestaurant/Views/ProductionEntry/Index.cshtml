@@ -44,6 +44,7 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
                             <th style="width:30%">@Html.DisplayName("Recipe Name")</th>
+                            <th style="width:30%">@Html.DisplayName("Catering")</th>
                             <th style="width:10%">@Html.DisplayName("Date")</th>
                             <th style="width:12%">@Html.DisplayName("Actual Batch Size")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
@@ -56,6 +57,7 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Number")</th>
                             <th style="width:30%">@Html.DisplayName("Recipe Name")</th>
+                            <th style="width:30%">@Html.DisplayName("Catering")</th>
                             <th style="width:10%">@Html.DisplayName("Date")</th>
                             <th style="width:12%">@Html.DisplayName("Actual Batch Size")</th>
                             <th style="width:12%">@Html.DisplayName("Status")</th>
@@ -70,38 +72,41 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ProductionFormulaName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ProductionDate)
-                                </td>
-                                <td style="text-align:right">
-                                    @Html.DisplayFor(modelItem => item.ActualBatchSize)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Status)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Username)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
-                                        <label> / </label>
-                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReferenceNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductionFormulaName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EventName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ProductionDate)
+                            </td>
+                            <td style="text-align:right">
+                                @Html.DisplayFor(modelItem => item.ActualBatchSize)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Username)
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                    <label> / </label>
+                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="ProductionEntry" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                </div>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -163,6 +168,7 @@
                         "columns": [
                             { "data": "referenceNo", "name": "ReferenceNo", "autoWidth": true },
                             { "data": "productionFormulaName", "name": "ProductionFormulaName", "autoWidth": true },
+                            { "data": "eventName", "name": "EventName", "autoWidth": true },
                             { "data": "productionDate", "name": "ProductionDate", "autoWidth": true },
                             { "data": "actualBatchSize", "name": "ActualBatchSize", "autoWidth": true },
                             {
@@ -203,9 +209,14 @@
                         columnDefs: [
                             {
                                 targets: [4], orderable: false,
-                                targets: [3], orderable: false, class: "text-right",
+                                targets: [4], orderable: false, class: "text-right",
                             }
                         ],
+                        "createdRow": function (row, data, dataIndex) {
+                            if (data.assetEventId > 0) {
+                                $(row).css('background-color', '#7FFF00');
+                            }
+                        },
                         "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,

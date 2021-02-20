@@ -19,6 +19,8 @@ namespace RocketPOS.Models
         public string ActualBatchSize { get; set; }
         public int Status { get; set; }
         public string Username { get; set; }
+        public int AssetEventId { get; set; }
+        public string EventName { get; set; }
 
     }
     public class ProductionEntryModel
@@ -45,7 +47,9 @@ namespace RocketPOS.Models
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public string Notes { get; set; }
-        public string VariationNotes { get; set; }        
+        public string VariationNotes { get; set; }
+        public int AssetEventId { get; set; }
+        public string EventName { get; set; }
         public List<SelectListItem> IngredientList { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal IngredientQty { get; set; }

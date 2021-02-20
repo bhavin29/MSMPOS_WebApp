@@ -23,21 +23,27 @@
                             <table id="@SharedLocalizer.GetLocalizedHtmlString("Waste")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                                 <thead>
                                     <tr role="row">
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
+                                        <th rowspan="1" colspan="1">Number</th>
+                                        <th rowspan="1" colspan="1">Store</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>
+                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                         @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("View")</th>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>
+                                        <th rowspan="1" colspan="1">Number</th>
+                                        <th rowspan="1" colspan="1">Store</th>
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>
+                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                         @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
                                         <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                        <th rowspan="1" colspan="1">@Html.DisplayName("View")</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -50,21 +56,41 @@
                                                 @Html.DisplayFor(modelItem => item.ReferenceNumber)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
+                                                @Html.DisplayFor(modelItem => item.StoreName)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.EmployeeName)
+                                                @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
                                             </td>
+                                            @*<td>
+                                                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                                                </td>*@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.TotalLossAmount)
                                             </td>
+                                            <td>
+                                                @if (Convert.ToInt32(item.WasteStatus) == 2)
+                                                {
+                                                    <label>Approved</label>
+                                                }
+                                                else
+                                                {
+                                                    <label>Created</label>
+                                                }
+
+                                            </td>
                                             @*<td>
-                                                @Html.DisplayName("Rocket")
-                                            </td>*@
+                                                    @Html.DisplayName("Rocket")
+                                                </td>*@
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a asp-action="Waste" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
-                                                    <a href="#" class="btn btn-link btn-danger btn-lg" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>
+                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                    <label> / </label>
+                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-button-action">
+                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="View">View</a>
                                                 </div>
                                             </td>
                                         </tr>

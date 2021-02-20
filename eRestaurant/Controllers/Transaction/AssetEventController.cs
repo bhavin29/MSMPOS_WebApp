@@ -35,6 +35,25 @@ namespace RocketPOS.Controllers.Transaction
             return View(asssetEventViewModel);
         }
 
+        [HttpGet]
+        public JsonResult GetCateringListByStatus(string fromDate, string toDate, int statusId)
+        {
+            List<AssetEventViewModel> asssetEventViewModel = new List<AssetEventViewModel>();
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.Now;
+                newToDate = DateTime.Now;
+            }
+            asssetEventViewModel = _iAssetEventService.GetCateringListByStatus(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), statusId).ToList();
+            return Json(new { AssetEventLists = asssetEventViewModel });
+        }
+
         public IActionResult AssetEvent(int? id, string type)
         {
             AssetEventModel assetEventModel = new AssetEventModel();
@@ -164,5 +183,19 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { assetItemUnitName = assetItemUnitName });
         }
 
+        [HttpPost]
+        public JsonResult UpdateStockById(List<string> ids)
+        {
+            int result = 0;
+            result = _iAssetEventService.UpdateStockItemById(ids);
+            if (result > 0)
+            {
+                return Json(new { error = false, message = " Update Success. ", status = 200 });
+            }
+            else
+            {
+                return Json(new { error = true, message = " Update Failed! ", status = 201 });
+            }
+        }
     }
 }

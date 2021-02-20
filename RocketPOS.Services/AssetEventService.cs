@@ -56,6 +56,11 @@ namespace RocketPOS.Services
             return _iAssetEventRepository.GetAssetItemUnitName(id);
         }
 
+        public List<AssetEventViewModel> GetCateringListByStatus(string fromDate, string toDate, int statusId)
+        {
+            return _iAssetEventRepository.GetCateringListByStatus(fromDate, toDate, statusId);
+        }
+
         public AssetFoodMenuPriceDetail GetFoodMenuPriceTaxDetailById(int id)
         {
             return _iAssetEventRepository.GetFoodMenuPriceTaxDetailById(id);
@@ -79,6 +84,11 @@ namespace RocketPOS.Services
         public int UpdateAssetEvent(AssetEventModel assetEventModel)
         {
             return _iAssetEventRepository.UpdateAssetEvent(assetEventModel);
+        }
+
+        public int UpdateStockItemById(List<string> ids)
+        {
+            return _iAssetEventRepository.UpdateStockItemById(ids);
         }
     }
 }

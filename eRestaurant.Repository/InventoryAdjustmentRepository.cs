@@ -67,7 +67,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "select PurchasePrice from FoodMenu where Foodmenutype=1 and IsActive = 1 AND IsDeleted= 0  And Id="+ foodMenuId;
+                var query = "select PurchasePrice from FoodMenu where IsActive = 1 AND IsDeleted= 0  And Id="+ foodMenuId;
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
@@ -158,8 +158,11 @@ namespace RocketPOS.Repository
                         else
                         {
                             foodMenuId = item.FoodMenuId.ToString();
+                            var FoodmenuPurchaePriceUpdate = "" +
+                              " update foodmenu set PurchasePrice = " + item.Price + " Where id = " + item.FoodMenuId;
+                            con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
-                        
+
                         var queryDetails = "INSERT INTO InventoryAdjustmentDetail" +
                                               " (InventoryAdjustmentId,IngredientId,FoodMenuId,Qty,Price,Total ,ConsumptionStatus,UserIdInserted,DateInserted,IsDeleted) " +
                                               "VALUES           " +
@@ -293,6 +296,9 @@ namespace RocketPOS.Repository
                         else
                         {
                             foodMenuId = item.FoodMenuId.ToString();
+                            var FoodmenuPurchaePriceUpdate = "" +
+                               " update foodmenu set PurchasePrice = " + item.Price + " Where id = " + item.FoodMenuId;
+                            con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
                         }
 
                         if (item.InventoryAdjustmentId > 0)

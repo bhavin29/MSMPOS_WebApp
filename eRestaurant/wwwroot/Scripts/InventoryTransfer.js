@@ -27,9 +27,12 @@ $(document).ready(function () {
                 "targets": [4,6],
                 "visible": false,
                 "searchable": false
+            },
+            {
+                "targets": [2, 3],
+                "sClass": "text-right"
             }
-
-        ]
+       ]
     });
     $("#FromStoreId").focus();
 });
@@ -239,6 +242,7 @@ function deleteOrder(id, rowId) {
                 $("#myModal" + id).modal('hide');
             }
         }
+
         if (InventoryType == "1") {
             if (dataArr[i].foodMenuId == id) {
                 deletedId.push(dataArr[i].inventoryTransferId);

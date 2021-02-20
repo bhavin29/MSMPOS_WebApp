@@ -19,7 +19,7 @@ namespace RocketPOS.Repository
         {
             _ConnectionString = ConnectionString;
         }
-        public List<AssetEventViewModel> GetAssetEventList(bool isHistory)
+        public List<AssetEventViewModel> GetAssetEventList()
         {
             List<AssetEventViewModel> assetEventList = new List<AssetEventViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))

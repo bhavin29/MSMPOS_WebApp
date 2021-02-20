@@ -46,9 +46,9 @@
                                         <div class="col-md-4">
                                             <div class="form-group">
                                                 <label asp-for="FoodMenuList" class="control-label">Product</label>
-                                                <select asp-for="FoodMenuId"
-                                                        class="form-control"
-                                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                                <select asp-for="FoodMenuId" class="form-control"
+                                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))"
+                                                        onchange="GetFoodMenuLastPrice(FoodMenuId)">
                                                 </select>
                                                 <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                             </div>
@@ -58,8 +58,13 @@
                                         <div class="form-group">
                                             <label class="control-label">Quantity</label>
                                             <input class="form-control text-right" type="number" value="1" min="1" max="99999" id="Quantity" />
-                                            <input class="form-control text-right" type="number" hidden="hidden" value="" id="Price" />
                                             <input class="form-control text-right" type="number" hidden="hidden" value="" id="TotalAmount" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <div class="form-group">
+                                            <label class="control-label">Pur. Price</label>
+                                            <input class="form-control text-right" type="number" value="0" min="1" max="99999" id="Price" />
                                         </div>
                                     </div>
                                     <div class="col-md-1">
@@ -70,7 +75,7 @@
                                             <input asp-for="Id" class="form-control" type="hidden" />
                                         </div>
                                     </div>
-                                    <div class="col-md-2 pr-0 pl-0">
+                                    <div class="col-md-1 pr-0 pl-0">
                                     </div>
                                     <div class="col-md-3 pr-0 pl-0">
                                         <div class="form-group">
@@ -109,9 +114,9 @@
                                                         <th style="width:5%">FoodMenuId</th>
                                                         <th style="width:55%">Product</th>
                                                     }
-                                                    <th style="width:10%">Quantity</th>
-                                                    <th style="width:10%">Price</th>
-                                                    <th style="width:10%">Total</th>
+                                                    <th style="width:10%" class="text-right">Quantity</th>
+                                                    <th style="width:10%" class="text-right">Price</th>
+                                                    <th style="width:10%" class="text-right">Total</th>
                                                     <th style="width:10%">Actions</th>
                                                     <th style="width:5%">InventoryAdjustmentId</th>
                                                 </tr>
@@ -183,8 +188,8 @@
                                                         <div class="modal-dialog">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                                     <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")

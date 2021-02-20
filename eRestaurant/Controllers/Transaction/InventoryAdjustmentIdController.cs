@@ -85,7 +85,7 @@ namespace RocketPOS.Controllers.Transaction
             ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(1);
+            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             return View(inventoryAdjustmentModel);
         }
 
@@ -96,7 +96,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(1);
+            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             string purchaseMessage = string.Empty;
 
             if (!ModelState.IsValid)
@@ -192,5 +192,13 @@ namespace RocketPOS.Controllers.Transaction
             purchasePrice = _inventoryAdjustmentService.GetFoodMenuPurchasePrice(foodMenuId);
             return Json(new { purchasePrice = purchasePrice });
         }
+
+        public ActionResult GetFoodMenuList()
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+            return Json(new { purchaseModel.FoodMenuList });
+        }
+
     }
 }

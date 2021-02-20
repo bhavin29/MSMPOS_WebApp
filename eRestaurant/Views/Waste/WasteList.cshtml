@@ -7,124 +7,118 @@
     var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Waste");
 }
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="Waste" class="pull-right btn btn-primary">Add Waste</a></div>
-                </div>
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-                        <div class="col-sm-12">
-                            <table id="@SharedLocalizer.GetLocalizedHtmlString("Waste")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                                <thead>
-                                    <tr role="row">
-                                        <th rowspan="1" colspan="1">Number</th>
-                                        <th rowspan="1" colspan="1">Store</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>*@
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("View")</th>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th rowspan="1" colspan="1">Number</th>
-                                        <th rowspan="1" colspan="1">Store</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Resposible Person")</th>*@
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Loss Amount")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                        @*<th rowspan="1" colspan="1">@Html.DisplayName("Added By")</th>*@
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                        <th rowspan="1" colspan="1">@Html.DisplayName("View")</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        var tm = "#myModal" + item.Id;
-                                        var mid = "myModal" + item.Id;
-                                        <tr role="row">
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ReferenceNumber)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.StoreName)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
-                                            </td>
-                                            @*<td>
-                                                    @Html.DisplayFor(modelItem => item.EmployeeName)
-                                                </td>*@
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.TotalLossAmount)
-                                            </td>
-                                            <td>
-                                                @if (Convert.ToInt32(item.WasteStatus) == 2)
-                                                {
-                                                    <label>Approved</label>
-                                                }
-                                                else
-                                                {
-                                                    <label>Created</label>
-                                                }
+            <div class="float-right">
+                <a asp-action="Waste" class="btn btn-primary float-sm-left ">Add</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
 
-                                            </td>
-                                            @*<td>
-                                                    @Html.DisplayName("Rocket")
-                                                </td>*@
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                    <label> / </label>
-                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("Waste")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%">Number</th>
+                                    <th style="width:10%">Store</th>
+                                    <th style="width:10%">@Html.DisplayName("Date")</th>
+                                    <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
+                                    <th style="width:10%">@Html.DisplayName("Status")</th>
+                                    <th style="width:10%">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%">@Html.DisplayName("View")</th>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th style="width:10%">Number</th>
+                                    <th style="width:10%">Store</th>
+                                    <th style="width:10%">@Html.DisplayName("Date")</th>
+                                    <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
+                                    <th style="width:10%">@Html.DisplayName("Status")</th>
+                                    <th style="width:10%">@Html.DisplayName("Actions")</th>
+                                    <th style="width:10%">@Html.DisplayName("View")</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TotalLossAmount)
+                                        </td>
+                                        <td>
+                                            @if (Convert.ToInt32(item.WasteStatus) == 2)
+                                            {
+                                                <label>Approved</label>
+                                            }
+                                            else
+                                            {
+                                                <label>Created</label>
+                                            }
+
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="View">View</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-button-action">
-                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="View">View</a>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
                                                 </div>
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
-                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                    </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
-    <script>
+<script>
         $(document).ready(function () {
             var table = $('#@dataTableName').DataTable();
         });
-    </script>
+</script>
 }

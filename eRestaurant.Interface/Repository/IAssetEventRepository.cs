@@ -10,7 +10,7 @@ namespace RocketPOS.Interface.Repository
         string ReferenceNumberAssetEvent();
         int UpdateAssetEvent(AssetEventModel assetEventModel);
         int InsertAssetEvent(AssetEventModel assetEventModel);
-        List<AssetEventViewModel> GetAssetEventList(bool isHistory);
+        List<AssetEventViewModel> GetAssetEventList();
         int DeleteAssetEven(int id);
         AssetEventModel GetAssetEventById(int id);
         List<AssetEventItemModel> GetAssetEventItemDetails(int assetEventId);

@@ -23,6 +23,15 @@
     <br />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+
+            @*<select asp-for="FoodCategoryId" class="form-control"
+                    asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+            </select>
+
+            <select asp-for="FoodMenuType" class="form-control" asp-items="Html.GetEnumSelectList<FoodMenuType>()">
+                <option selected="selected" value="">Select</option>
+            </select>*@
+
             <div class="col-sm-12">
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenu")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead row="root">
@@ -81,34 +90,34 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodMenuCode)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodMenuName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodVatTaxName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodCategoryName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodMenuType)
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="FoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuCode)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodVatTaxName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodCategoryName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuType)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="FoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -195,6 +204,13 @@
             debugger;
             window.location.href = "/FoodMenu/Index?readymade=" + $("#chkReadymade").val();
         }
+
+        function GetFoodmenuLists() {
+            var categoryid = $("#FoodmenuCategoryid").val();
+            var foodmenutype = $("#FoodmenuType").val();
+            window.location.href = "/FoodMenu/Index?categoryid=" + categoryid + "&foodmenutype=" + foodmenutype;
+        }
+
 
     </script>
 

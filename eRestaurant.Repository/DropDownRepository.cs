@@ -145,9 +145,11 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select FM.Id,FM.FoodMenuName as [Name], FM.SalesPrice as Optional from SupplierItem SI " +
-                            "Inner Join FoodMenu FM ON FM.Id = SI.FoodMenuId " +
-                            "where SI.SupplierId = " + id + " AND FM.IsActive = 1 AND FM.IsDeleted = 0 Order by FM.FoodMenuName";
+                var query = " select FM.Id,FM.FoodMenuName as [Name], FM.SalesPrice as Optional from FoodMenu FM  where FM.IsActive = 1 AND FM.IsDeleted = 0 Order by FM.FoodMenuName ";
+
+                //var query = "select FM.Id,FM.FoodMenuName as [Name], FM.SalesPrice as Optional from SupplierItem SI " +
+                //            "Inner Join FoodMenu FM ON FM.Id = SI.FoodMenuId " +
+                //            "where SI.SupplierId = " + id + " AND FM.IsActive = 1 AND FM.IsDeleted = 0 Order by FM.FoodMenuName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -157,7 +159,14 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional from FoodMenu where  FoodmenuType=" + foodmenuType + "  and IsActive = 1 AND IsDeleted= 0 Order by FoodMenuName";
+                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional from FoodMenu where  IsActive = 1 AND IsDeleted= 0 ";
+
+                if (foodmenuType != -1)
+                {
+                    query = query + " AND FoodmenuType = " + foodmenuType;
+                }
+
+                query = query + " Order by FoodMenuName";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;
@@ -178,10 +187,10 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query=string.Empty;
+                var query = string.Empty;
                 if (id != 0)
                 {
-                     query = "select Id,FoodMenuName as [Name], SalesPrice as Optional from FoodMenu where  FoodCategoryId=" + id + " And IsActive = 1 AND IsDeleted= 0 Order by FoodMenuName";
+                    query = "select Id,FoodMenuName as [Name], SalesPrice as Optional from FoodMenu where  FoodCategoryId=" + id + " And IsActive = 1 AND IsDeleted= 0 Order by FoodMenuName";
                 }
                 else
                 {
@@ -197,7 +206,7 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id,FormulaName AS [Name] From ProductionFormula Where IsDeleted=0 And foodmenuType="+ foodmenuType;
+                var query = "Select Id,FormulaName AS [Name] From ProductionFormula Where IsDeleted=0 And foodmenuType=" + foodmenuType;
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

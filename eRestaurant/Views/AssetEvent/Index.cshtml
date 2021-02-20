@@ -271,12 +271,6 @@
             });
         }
 
-        function GetHistoryEventLists() {
-            var isHistory;
-            var isHistory = $("#onHistory").is(":checked");
-            window.location.href = "/AssetEvent/Index?isHistory=" + isHistory;
-        }
-
         function deleteAssetEvent(id) {
             $.ajax({
                 url: "/AssetEvent/Delete/" + id,

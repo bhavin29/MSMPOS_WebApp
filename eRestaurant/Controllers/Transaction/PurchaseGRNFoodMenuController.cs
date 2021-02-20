@@ -224,8 +224,11 @@ namespace RocketPOS.Controllers.Transaction
         {
             SupplierModel supplierModel = new SupplierModel();
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListBySupplier(supplierId);
-            supplierModel = _iSupplierService.GetSupplierById(supplierId);
+            if (supplierId > 0)
+            {
+                purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListBySupplier(supplierId);
+                supplierModel = _iSupplierService.GetSupplierById(supplierId);
+            }
             return Json(new { email = supplierModel.SupplierEmail, purchaseModel.FoodMenuList });
         }
 
@@ -233,7 +236,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetFoodMenuList()
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(1);
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             return Json(new { purchaseModel.FoodMenuList });
         }
 

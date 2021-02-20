@@ -41,9 +41,9 @@ namespace RocketPOS.Services
             throw new NotImplementedException();
         }
 
-        public List<AssetEventViewModel> GetAssetEventList(bool isHistory)
+        public List<AssetEventViewModel> GetAssetEventList()
         {
-            return _iAssetEventRepository.GetAssetEventList(isHistory);
+            return _iAssetEventRepository.GetAssetEventList();
         }
 
         public decimal GetAssetItemPriceById(int id)

@@ -29,9 +29,8 @@ namespace RocketPOS.Controllers.Transaction
 
         public IActionResult Index(bool? isHistory)
         {
-            TempData["History"] = Convert.ToBoolean(isHistory);
             List<AssetEventViewModel> asssetEventViewModel = new List<AssetEventViewModel>();
-            asssetEventViewModel = _iAssetEventService.GetAssetEventList(Convert.ToBoolean(isHistory)).ToList();
+            asssetEventViewModel = _iAssetEventService.GetAssetEventList().ToList();
             return View(asssetEventViewModel);
         }
 

@@ -938,7 +938,7 @@ $(function () {
         var message = validation(2);
 
         var status = $("#Status").val();
-        if (status == 1) { status = 2; }
+        if (status <= 1) { status = 2; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1006,7 +1006,7 @@ $(function () {
         var message = validation(2);
 
         var status = $("#Status").val();
-        if (status == 2) { status = 3; }
+        if (status <= 2) { status = 3; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -1074,7 +1074,7 @@ $(function () {
         var message = validation(2);
 
         var status = $("#Status").val();
-        if (status == 3) { status = 4; }
+        if (status <= 3) { status = 4; }
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {

@@ -26,16 +26,14 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
-                        <label>Start Date : </label>
                         <input id="fromDate" type="date" class="form-control" />
                     </div>
                     <div class="col-md-2">
-                        <label>Close Date : </label>
+ 
                         <input id="toDate" type="date" class="form-control" />
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label>Select Status : </label>
                             <select Id="statusId"
                                     class="form-control">
                                 <option value="0">Select Status</option>
@@ -232,7 +230,7 @@
                                 data: null,
                                 mRender: function (data, type, row) {
                                     if (row.status == 4) {
-                                        return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a></div>'
+                                        return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit"></a></div>'
                                         }
                                     else {
                                         return '<div class="form-button-action"><a href="/AssetEvent/AssetEvent/' + row.id + '?type=Edit">Edit</a>'+

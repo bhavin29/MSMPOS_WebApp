@@ -540,7 +540,7 @@
                                                                                 @if (item.StockUpdate > 0)
                                                                                 {
                                                                                     <div class="form-button-action">
-                                                                                        <a href="#" data-itemid="@item.IngredientId" hidden="hidden"  class="editIngredientItem">Edit</a>
+                                                                                        <a href="#" data-itemid="@item.IngredientId" hidden="hidden" class="editIngredientItem">Edit</a>
                                                                                         <a href="#" data-toggle="modal" hidden="hidden" data-target="@tm">Delete</a>
                                                                                     </div>
                                                                                 }
@@ -585,11 +585,14 @@
                                                                 <input asp-for="IngredientNetAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
                                                             </div>
                                                         </div>
-                                                        <div class="form-group form-inline fc-left">
-                                                            <div class="col-md-1 pr-2 pl-2">
-                                                                <input type="button" id="btnStockOut" value="Stock Out" class="btn btn-primary" />
+                                                        @if (Model.Status != 0)
+                                                        {
+                                                            <div class="form-group form-inline fc-left">
+                                                                <div class="col-md-1 pr-2 pl-2">
+                                                                    <input type="button" id="btnStockOut" value="Stock Out" class="btn btn-primary" />
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

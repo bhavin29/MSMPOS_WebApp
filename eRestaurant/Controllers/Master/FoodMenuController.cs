@@ -62,13 +62,17 @@ namespace RocketPOS.Controllers.Master
                     return View(foodMenuModel);
                 }
             }
-  
+
             if (foodMenuModel.Id > 0)
             {
                 var result = _iFoodMenuService.UpdateFoodMenu(foodMenuModel);
                 if (result == -1)
                 {
-                    ModelState.AddModelError("FoodMenuName", "FoodMenuName already exists");
+                    ModelState.AddModelError("FoodMenuName", "Menu Item already exists");
+
+                    foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+                    foodMenuModel.FoodVatTaxList = _iDropDownService.GetTaxList();
+                    foodMenuModel.UnitsList = _iDropDownService.GetUnitList();
                     return View(foodMenuModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
@@ -78,7 +82,10 @@ namespace RocketPOS.Controllers.Master
                 var result = _iFoodMenuService.InsertFoodMenu(foodMenuModel);
                 if (result == -1)
                 {
-                    ModelState.AddModelError("FoodMenuName", "FoodMenuName already exists");
+                    ModelState.AddModelError("FoodMenuName", "Menu Item already exists");
+                    foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+                    foodMenuModel.FoodVatTaxList = _iDropDownService.GetTaxList();
+                    foodMenuModel.UnitsList = _iDropDownService.GetUnitList();
                     return View(foodMenuModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");

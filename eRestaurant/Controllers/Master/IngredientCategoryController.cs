@@ -71,6 +71,7 @@ namespace RocketPOS.Controllers.Master
                 if (result == -1)
                 {
                     ModelState.AddModelError("IngredientCategoryName", "Category already exists");
+                    ingredientCategoryModel.RawMaterialList = _iDropDownService.GetRawMaterialList();
                     return View(ingredientCategoryModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
@@ -81,6 +82,7 @@ namespace RocketPOS.Controllers.Master
                 if (result == -1)
                 {
                     ModelState.AddModelError("IngredientCategoryName", "Category already exists");
+                    ingredientCategoryModel.RawMaterialList = _iDropDownService.GetRawMaterialList();
                     return View(ingredientCategoryModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");

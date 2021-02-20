@@ -21,12 +21,9 @@
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="FoodCategoryList" class="control-label">Menu Category</label>
-                                            @if (Model != null)
-                                            {
-                                                <select asp-for="FoodCategoryId" class="form-control"
-                                                        asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
-                                                </select>
-                                            }
+                                            <select asp-for="FoodCategoryId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="FoodMenuCode" class="control-label">Menu Item Code</label>
@@ -40,7 +37,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="UnitsList" class="control-label">Unit</label>
-                                            @if (Model != null)
+                                            @if (Model.UnitsList != null)
                                             {
                                                 <select asp-for="UnitsId" class="form-control"
                                                         asp-items="@(new SelectList(Model.UnitsList, "Value", "Text"))">
@@ -61,7 +58,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label asp-for="FoodVatTaxList" class="control-label">Tax</label>
-                                            @if (Model != null)
+                                            @if (Model.FoodVatTaxList != null)
                                             {
                                                 <select asp-for="FoodVatTaxId" class="form-control"
                                                         asp-items="@(new SelectList(Model.FoodVatTaxList, "Value", "Text"))">
@@ -224,35 +221,23 @@
     </div>
 </div>
 
-<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="aModalLabel">Message</h4>
-            </div>
-            <div class="modal-body">
-                @ViewBag.Result
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="save" class="btn btn-primary">OK</button>
+@*<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="aModalLabel">Message</h4>
+                </div>
+                <div class="modal-body">
+                    @ViewBag.Result
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="save" class="btn btn-primary">OK</button>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>*@
 
-@{
-    if (ViewBag.Result != null)
-    {
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                $("#aModal").modal('show');
-            });
-        </script>
-    }
-}
 @section Scripts{
     <script>
         $('#save').click(function () {

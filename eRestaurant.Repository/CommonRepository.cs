@@ -63,7 +63,7 @@ namespace RocketPOS.Repository
             string result ="";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                string query = "SELECT * FROM " + TableName.ToString() + " WHERE " + ColumnName + "='" + Value +"' AND Id <> " + Rowid;
+                string query = "SELECT * FROM " + TableName.ToString() + " WHERE TRIM(" + ColumnName + ")= TRIM('" + Value +"') AND Id <> " + Rowid;
                 result = con.ExecuteScalar<string>(query);
 
                 result = result != null ? result : "0";

@@ -77,7 +77,7 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + Price + ' </td>',
                 '<td class="text-right">' + TotalAmount + ' </td>',
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" ">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"></a></div></td > ' +
+              '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" "></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(' + $("#FoodMenuId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -91,7 +91,7 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + Price + ' </td>',
                 '<td class="text-right">' + Total + ' </td>',
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" ">Delete</a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"></a></div></td > ' +
+               '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" "></a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '">Delete</a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#IngredientId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
@@ -218,6 +218,7 @@ $('#ok').click(function () {
 });
 
 function deleteOrder(id, rowId) {
+    debugger;
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
             if (dataArr[i].ingredientId == id) {

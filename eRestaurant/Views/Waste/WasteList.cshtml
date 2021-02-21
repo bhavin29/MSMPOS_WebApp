@@ -11,7 +11,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-11">
-                <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
+                <div class="col-md-8"><h4 class="card-title">Wastes</h4></div>
             </div>
             <div class="float-right">
                 <a asp-action="Waste" class="btn btn-primary float-sm-left ">Add</a>
@@ -27,23 +27,23 @@
                         <table id="@SharedLocalizer.GetLocalizedHtmlString("Waste")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                             <thead>
                                 <tr role="row">
-                                    <th style="width:10%">Number</th>
-                                    <th style="width:10%">Store</th>
-                                    <th style="width:10%">@Html.DisplayName("Date")</th>
+                                    <th style="width:8%">Number</th>
+                                    <th style="width:50%">Store</th>
+                                    <th style="width:8%">@Html.DisplayName("Date")</th>
                                     <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
-                                    <th style="width:10%">@Html.DisplayName("Status")</th>
-                                    <th style="width:10%">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%">@Html.DisplayName("View")</th>
+                                    <th style="width:8%">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%">@Html.DisplayName("View")</th>
                             </thead>
                             <tfoot>
                                 <tr>
-                                    <th style="width:10%">Number</th>
-                                    <th style="width:10%">Store</th>
-                                    <th style="width:10%">@Html.DisplayName("Date")</th>
+                                    <th style="width:8%">Number</th>
+                                    <th style="width:50%">Store</th>
+                                    <th style="width:8%">@Html.DisplayName("Date")</th>
                                     <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
-                                    <th style="width:10%">@Html.DisplayName("Status")</th>
-                                    <th style="width:10%">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%">@Html.DisplayName("View")</th>
+                                    <th style="width:8%">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%">@Html.DisplayName("View")</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -61,7 +61,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
                                         </td>
-                                        <td>
+                                        <td class="text-right">
                                             @Html.DisplayFor(modelItem => item.TotalLossAmount)
                                         </td>
                                         <td>

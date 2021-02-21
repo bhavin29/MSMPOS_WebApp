@@ -55,12 +55,12 @@
                                     </div>
                                 </div>
                                 @*<div class="col-md-3 pr-1 pl-1">
-                                    <div class="form-group">
-                                        <label asp-for="Date" class="control-label"></label>
-                                        <input asp-for="Date" type="date" class="form-control" />
-                                        <span asp-validation-for="Date" class="text-danger"></span>
-                                    </div>
-                                </div>*@
+                                        <div class="form-group">
+                                            <label asp-for="Date" class="control-label"></label>
+                                            <input asp-for="Date" type="date" class="form-control" />
+                                            <span asp-validation-for="Date" class="text-danger"></span>
+                                        </div>
+                                    </div>*@
                                 <div class="col-md-1 pr-1 pl-1">
                                     <div class="form-group" style="margin-top:27px">
                                         <input type="checkbox" asp-for="IsSendEmail"> <label asp-for="IsSendEmail" class="control-label"> Send Email</label>
@@ -73,7 +73,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                    @*<div class="col-md-2 pr-2 pl-2">
+                                @*<div class="col-md-2 pr-2 pl-2">
                                         <div class="form-group">
                                             <label asp-for="EmployeeList" class="control-label">Responsible Person</label>
                                             <select asp-for="EmployeeId"
@@ -83,14 +83,14 @@
                                             <span asp-validation-for="EmployeeId" class="text-danger"></span>
                                         </div>
                                     </div>*@
-                                    <div class="col-md-2 pr-2 pl-2">
-                                        <div class="form-group">
-                                            <label asp-for="Date" class="control-label"></label>
-                                            <input asp-for="Date" type="date" class="form-control" />
-                                            <span asp-validation-for="Date" class="text-danger"></span>
-                                        </div>
+                                <div class="col-md-2 pr-2 pl-2">
+                                    <div class="form-group">
+                                        <label asp-for="Date" class="control-label"></label>
+                                        <input asp-for="Date" type="date" class="form-control" />
+                                        <span asp-validation-for="Date" class="text-danger"></span>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                     @*<hr />
@@ -271,18 +271,18 @@
                     </div>
                     <br />
                     <div class="form-button-action">
-                        @if (ViewBag.ActionType!="View")
+                        @if (ViewBag.ActionType != "View")
                         {
                             <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
                         }
                         @*@if ((Model.Status == 0 || Model.Status == 1) && (Model.Id > 0 || Model.Id == 0))
-        {
-            <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
-        }
-        @if (Model.Status == 1 && Model.Id > 0)
-        {
-            <input id="saveAndApprovedOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save & Approved" />
-        }*@
+                            {
+                                <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                            }
+                            @if (Model.Status == 1 && Model.Id > 0)
+                            {
+                                <input id="saveAndApprovedOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save & Approved" />
+                            }*@
 
                         <a href='@Url.Action("PurchaseFoodMenuList", "PurchaseFoodMenu")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                     </div>

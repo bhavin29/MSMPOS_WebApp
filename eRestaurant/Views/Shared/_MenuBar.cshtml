@@ -46,7 +46,7 @@
                             @*<a class="dropdown-item" href="~/FoodMenuIngredient">Food Menu Ingredient</a>*@
 
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
-                <a class="dropdown-item" href="~/Varient">Varient</a>*@
+                                <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -87,6 +87,11 @@
                             <a class="dropdown-item" asp-area="" asp-controller="ProductionFormula" asp-action="Index">
                                 <span>Recipe Formulas</span>
                             </a>
+                            <hr />
+                            <a class="dropdown-item" asp-area="" asp-controller="Waste" asp-action="WasteList">
+                                <span>Wastes</span>
+                            </a>
+                        </div>
                     </li>
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle" style="font-weight:bold" asp-area="" asp-controller="AssetEvent" asp-action="Index">
@@ -131,6 +136,8 @@
                             <hr />
                             <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/ProductionEntry/ProductionEntry"><span>Prodution Entry</span></a>
                             <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/ProductionFormula/ProductionFormula?foodMenuType=2">Recipe Formula</a>
+                            <hr />
+                            <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/Waste/Waste">Waste Entry</a>
                             <hr />
                             <a class="dropdown-item" style="font-weight:bold; font-size:12px" href="~/AssetEvent/AssetEvent"><span>Catering Request</span></a>
                         </div>

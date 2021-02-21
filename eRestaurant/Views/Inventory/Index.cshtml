@@ -67,11 +67,10 @@
                             <th style="width:5%">Opening</th>
                             <th style="width:12%">Phy Stock Date</th>
                             <th style="width:15%">Phy Stock Qty</th>
-                            <th style="width:8%">Phy Lock?</th>
                             <th style="width:8%">Actions</th>
+                            <th style="width:8%">Phy Lock?</th>
                             <th style="width:8%">Stock IN</th>
                             <th style="width:8%">Stock OUT</th>
-                            <th style="width:8%">Re-Cal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -98,15 +97,15 @@
                                         </div>
                                     </td>
                                     <td class="text-right">
-                                        <input type="number" asp-for="@item.PhysicalStockQty" class="form-control col-sm-6" min="-99999" max="99999" value="@item.PhysicalStockQty" />
-                                    </td>
-                                    <td>
-                                        <input asp-for="@item.PhysicalIsLock" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px" />
+                                        <input type="number" asp-for="@item.PhysicalStockQty" class="form-control col-md-10 text-right" min="-99999" max="99999" value="@item.PhysicalStockQty" />
                                     </td>
                                     <td>
                                         <div class="form-button-action">
-                                            <input type="button" value="Save" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id);" />
+                                            <input type="button" value="Process" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId);" />
                                         </div>
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.PhysicalIsLock" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px" />
                                     </td>
                                     <td class="text-right">
                                         @Html.DisplayFor(modelItem => item.PhysicalStockINQty)
@@ -114,11 +113,11 @@
                                     <td class="text-right">
                                         @Html.DisplayFor(modelItem => item.PhysicalStockOutQty)
                                     </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <input type="button" value="Process" class="btn btn-outline-primary" onclick="return StockUpdate(this,@item.FoodMenuId);" />
-                                        </div>
-                                    </td>
+                                    @*<td>
+                                            <div class="form-button-action">
+                                                <input type="button" value="Process" class="btn btn-outline-primary" onclick="return StockUpdate(this,@item.FoodMenuId);" />
+                                            </div>
+                                        </td>*@
                                 </tr>
                             }
                         }
@@ -215,7 +214,7 @@
         }
 
 
-        function SaveInventoryDetailById(row, id) {
+        function SaveInventoryDetailById(row, id,foodmenuid) {
 
             var inventoryDetail = new Array();
             var tds = $(row).closest('tr');
@@ -223,7 +222,9 @@
                 Id: parseInt(tds.find("#item_Id").val()),
                 PhysicalDatetime: tds.find("#item_PhysicalDatetime").val(),
                 PhysicalStockQty: tds.find("#item_PhysicalStockQty").val(),
-                PhysicalIsLock: tds.find("#item_PhysicalIsLock").is(":checked")
+                PhysicalIsLock: tds.find("#item_PhysicalIsLock").is(":checked"),
+                FoodMenuId: foodmenuid,
+                StoreId: $("#StoreId").val()
             });
             inventoryDetail.push(inventory);
 
@@ -235,7 +236,7 @@
                 data: { 'inventoryDetail': jsonstr },
                 timeout: 0,
                 success: function (response) {
-                    var message = 'Record Saved Successfully.'
+                    var message = 'Stock Process Completed Successfully.'
                     $(".modal-body").text(message);
                     $("#save").hide();
                     jQuery.noConflict();
@@ -258,11 +259,11 @@
                     data: { },
                     timeout: 0,
                     success: function (response) {
-                        var message = 'Stock Process Completed Successfully.'
-                        $(".modal-body").text(message);
-                        $("#save").hide();
-                        jQuery.noConflict();
-                        $("#aModal").modal('show');
+                        //var message = 'Stock Process Completed Successfully.'
+                        //$(".modal-body").text(message);
+                        //$("#save").hide();
+                        //jQuery.noConflict();
+                        //$("#aModal").modal('show');
                         return true;
                     },
                     error: function (data) {

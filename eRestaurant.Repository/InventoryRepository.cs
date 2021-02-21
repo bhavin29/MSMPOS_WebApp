@@ -25,11 +25,13 @@ namespace RocketPOS.Repository
             List<InventoryDetail> inventoryDetail = new List<InventoryDetail>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT I.Id,I.StoreId,FMC.Id As FoodCategoryId,FMC.FoodMenuCategoryName,I.FoodMenuId,FM.FoodMenuName,I.PhysicalDatetime AS PhysicalDatetime,I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
+                var query = "SELECT I.Id,I.StoreId,FMC.Id As FoodCategoryId,FMC.FoodMenuCategoryName,I.FoodMenuId,FM.FoodMenuName," +
+                            " (Case when I.PhysicalDatetime  is  null then Getdate() else I.PhysicalDatetime end) as PhysicalDatetime," + 
+                            " I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
                             "FROM dbo.Inventory I " +
                             "Inner Join FoodMenu FM On FM.Id = I.FoodMenuId  " +
                             "Inner Join FoodMenuCategory FMC On FMC.Id = FM.FoodCategoryId  " +
-                            "Where I.IsDeleted = 0 And FM.Foodmenutype=1 And I.StoreId = " + storeId;
+                            "Where I.IsDeleted = 0  And I.StoreId = " + storeId;
 
                 if (foodCategoryId > 0)
                 {

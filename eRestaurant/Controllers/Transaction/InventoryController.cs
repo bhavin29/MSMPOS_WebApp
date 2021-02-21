@@ -51,9 +51,16 @@ namespace RocketPOS.Controllers.Transaction
         public JsonResult SaveInventoryDetailById(string inventoryDetail)
         {
             int result = 0;
+            string res = "";
             List<InventoryDetail> inventoryDetails = new List<InventoryDetail>();
             inventoryDetails = JsonConvert.DeserializeObject<List<InventoryDetail>>(inventoryDetail);
             result = _iInventoryService.UpdateInventoryDetailList(inventoryDetails);
+
+            if (result > 0)
+            {
+                res = _iInventoryService.StockUpdate(Convert.ToInt32(inventoryDetails[0].StoreId), Convert.ToInt32(inventoryDetails[0].FoodMenuId));
+            }
+
             return Json(new { result = result });
         }
 

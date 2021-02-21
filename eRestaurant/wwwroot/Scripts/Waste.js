@@ -1,6 +1,8 @@
 ﻿var WasteDatatable;
 var FoodManuLostAmount = 0;
 var IngredientLostAmount = 0;
+var IngredientPurchasePrice = 0;
+var FoodMenuPurchasePrice = 0;
 var editDataArr = [];
 var deletedId = [];
 $(document).ready(function () {
@@ -15,32 +17,24 @@ $(document).ready(function () {
         },
         "columnDefs": [
             {
-                "targets": [0],
+                "targets": [0, 1, 3, 7],
                 "visible": false,
                 "searchable": false
             },
             {
-                "targets": [2],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [6],
-                "visible": false,
-                "searchable": false
-            },
-            {
-                "targets": [7],
-                "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete Order</a>', "autoWidth": true
+                "targets": [5,6],
+                "sClass": "text-right"
             }
         ]
     });
+    $("#StoreId").focus();
+
 });
 
 $('#Cancle').on('click', function (e) {
     e.preventDefault();
     TotalLossAmount += editDataArr[0].lossAmount;
-    $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(4));
+    $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(2));
     clearItem();
     $("#FoodMenuId").focus();
 })
@@ -68,10 +62,11 @@ $('#addRow').on('click', function (e) {
         }
 
         var Qty = parseFloat($("#Quantity").val()).toFixed(2);
-        var LossAmount = parseFloat($("#LossAmount").val()).toFixed(4);
+        var LossAmount = parseFloat($("#LossAmount").val()).toFixed(2);
 
         WasteDatatable.row('.active').remove().draw(false);
         var rowNode = WasteDatatable.row.add([
+            '<td>' + $("#WasteIngredientId").val() + '</td>',
             '<td>' + $("#FoodMenuId").val() + '</td>',
             '<td>' + FoodMenuName + '</td>',
             '<td>' + $("#IngredientId").val() + '</td>',
@@ -79,13 +74,14 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + Qty + ' </td>',
             '<td class="text-right">' + LossAmount + ' </td>',
             '<td>' + $("#WasteId").val() + '</td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + dataItemId + '" class="btn btn-link editItem"><i class="fa fa-edit"></i></a><a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="#myModal' + myModal + '"><i class="fa fa-times"></i></a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-toggle="modal" data-target="#myModal' + myModal + '">Delete</a></div></td > ' +
             '<div class="modal fade" id="myModal' + myModal + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + dataItemId + '" onclick="deleteOrder(0, ' + $("#IngredientId").val() + ', ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >'
         ]).node().id = rowId;
         WasteDatatable.draw(false);
         dataArr.push({
+            wasteIngredientId: $("#WasteIngredientId").val(),
             foodMenuId: $("#FoodMenuId").val(),
             ingredientId: $("#IngredientId").val(),
             qty: $("#Quantity").val(),
@@ -99,7 +95,7 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(3).addClass('text-right');
 
         TotalLossAmount += ($("#LossAmount").val() * 1);
-        $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(4));
+        $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(2));
         clearItem();
         $("#FoodMenuId").focus();
     }
@@ -302,28 +298,34 @@ function DropdownValueChange(id) {
         if (value != "0") {
             $("#FoodMenuId").attr("disabled", "disabled");
             $("#IngredientIdForLostAmount").val(value);
-            IngredientLostAmount = $('#IngredientIdForLostAmount').children("option:selected").text()
+            //IngredientLostAmount = $('#IngredientIdForLostAmount').children("option:selected").text()
+            GetIngredientPurchasePrice();
+            IngredientLostAmount = IngredientPurchasePrice;
         }
         else {
             $("#FoodMenuId").removeAttr("disabled");
         }
+
     }
     else {
         var value = $('select[name=FoodMenuId]').val();
         if (value != "0") {
             $("#IngredientId").attr("disabled", "disabled");
             $("#FoodMenuIdForLostAmount").val(value);
-            FoodManuLostAmount = $('#FoodMenuIdForLostAmount').children("option:selected").text()
+            //FoodManuLostAmount = $('#FoodMenuIdForLostAmount').children("option:selected").text()
+            GetFoodMenuPurchasePrice();
+            FoodManuLostAmount = FoodMenuPurchasePrice;
         }
         else {
             $("#IngredientId").removeAttr("disabled");
         }
+
     }
 
 }
 
 
-$("#Quantity").blur(function () {
+$("#Quantity").change(function () {
     if (FoodManuLostAmount > 0) {
         var Amount = $("#Quantity").val() * FoodManuLostAmount;
     }
@@ -391,4 +393,37 @@ function clearItem() {
     $("#IngredientIdForLostAmount").val('0');
     FoodManuLostAmount = 0;
     IngredientLostAmount = 0;
+}
+
+
+function GetIngredientPurchasePrice() {
+
+    $.ajax({
+        url: "/Waste/GetIngredientPurchasePrice",
+        data: { "id": $("#IngredientId").val() },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            IngredientPurchasePrice = obj.ingredientPurchasePrice;
+            IngredientPurchasePrice = parseFloat(IngredientPurchasePrice).toFixed(2);
+        }
+    });
+}
+
+function GetFoodMenuPurchasePrice() {
+
+    $.ajax({
+        url: "/Waste/GetFoodMenuPurchasePrice",
+        data: { "id": $("#FoodMenuId").val() },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            FoodMenuPurchasePrice = obj.foodMenuPurchasePrice;
+            FoodMenuPurchasePrice = parseFloat(FoodMenuPurchasePrice).toFixed(2);
+        }
+    });
 }

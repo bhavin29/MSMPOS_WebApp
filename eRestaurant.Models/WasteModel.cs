@@ -35,12 +35,15 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Select Resposible Persoin")]
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalLossAmount { get; set; }
         [Required(ErrorMessage ="Enter Reason for Waste")]
         public string ReasonForWaste { get; set; }
         public WasteStatus WasteStatus { get; set; }
         public List<WasteDetailModel> WasteDetail { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public List<SelectListItem> FoodMenuListForLostAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public List<SelectListItem> IngredientListForLostAmount { get; set; }
         public decimal FoodMenuIdForLostAmount { get; set; }
         public decimal IngredientIdForLostAmount { get; set; }
@@ -65,7 +68,9 @@ namespace RocketPOS.Models
 
         public string IngredientName { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Qty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal LossAmount { get; set; }
         public bool IsDeleted { get; set; }
     }

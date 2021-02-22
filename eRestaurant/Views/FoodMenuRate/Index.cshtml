@@ -16,12 +16,12 @@
             </div>
         </div>
     </div>
-        <br />
+    <br />
     <div class="row">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-1">
-                    <label asp-for="FoodCategoryList" class="control-label pl-2">Menu Categor</label>
+                    <label asp-for="FoodCategoryList" class="control-label pl-2">Category</label>
                 </div>
                 <div class="col-md-3">
                     @if (Model != null)
@@ -58,10 +58,11 @@
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenuRate")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead>
                         <tr>
-                            <th style="width:10%"></th>
-                            <th style="width:40%">Menu Item</th>
-                            <th style="width:25%">Outlet</th>
-                            <th style="width:15%">Sales Price</th>
+                            <th style="width:5%"></th>
+                            <th style="width:30%">Category</th>
+                            <th style="width:30%">Menu Item</th>
+                            <th style="width:20%">Outlet</th>
+                            <th style="width:20%">Sales Price</th>
                             <th style="width:15%">IsActive</th>
                         </tr>
                     </thead>
@@ -73,6 +74,9 @@
                                 <tr role="row">
                                     <td>
                                         <input asp-for="@item.Id" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FoodmenuCategoryName)
                                     </td>
                                     <td>
                                         <a target="_blank" asp-action="FoodMenubyId" asp-route-Id="@item.FoodMenuId">@Html.DisplayFor(modelItem => item.FoodMenuName)</a>
@@ -101,6 +105,35 @@
     <script>
         $(document).ready(function () {
             FoodMenuRate = $('#@dataTableName').DataTable({
+                dom: 'Bfrtip',
+                "buttons": [{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [ 1, 2, 3, 4, 5],
+                        format: {
+                            body: function (data, row, column, node) {
+                                if (column == 0) {
+                                    return data;
+                                }
+                                else if(column == 1) {
+                                    return $(data).text();
+                                }
+                                else if ($(data).is("input"))  {
+                                    return $(data).val();
+                                }
+                                else {
+                                    return data;
+                                }
+                            }
+                        }
+                    },
+                    filename: function () {
+                        var d = new Date();
+                        var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                        var n = d.getTime();
+                        return 'Foodmenu_PriceList_' + date + '_' + n;
+                            },
+                        }],
                         "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,
@@ -119,60 +152,6 @@
         function loadFoodMenuRateList() {
             debugger;
             window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val() + "&outletListId=" + $("#OutletListId").val();
-            //$.ajaxSetup({ cache: false });
-            //$.ajax({
-            //    url: "/FoodMenuRate/GetFoodMenuRateList?foodCategoryId=" + $("#FoodCategoryId").val(),
-            //    dataType: "json",
-            //    type: "GET",
-            //    success: function (data) {
-                    //if (FoodMenuRate != null) {
-                    //    FoodMenuRate.clear();
-                    //    FoodMenuRate.destroy();
-                    //}
-                    //FoodMenuRate = $("#FoodMenuRate").DataTable({
-                    //    "data": data.foodMenuRate,
-                    //    "columns": [
-                    //        { "data": "id", "name": "Number", "autoWidth": true },
-                    //        { "data": "outletName", "name": "OutletName", "autoWidth": true },
-                    //        { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
-                    //        {
-                    //            data: null,
-                    //            mRender: function (data, type, row) {
-                    //                return '<input type="textbox" name="txtSalesPrice" value="'+row.salesPrice+ '">';
-                    //            },
-                    //        },
-                    //        {
-                    //            data: null,
-                    //            mRender: function (data, type, row) {
-                    //                return '<input type="checkbox" name="chkIsActive" checked=' + row.isActive  + '>';
-                    //            },
-                    //        }
-                    //    ],
-                    //    columnDefs: [
-                    //        {
-                    //            "targets": [0],
-                    //            "visible": false,
-                    //            "searchable": false
-                    //        }
-                    //    ],
-                    //    "bLengthChange": true,
-                    //    "bInfo": true,
-                    //    "bFilter": true,
-                    //    "ordering": true,
-                    //    "autoWidth": false,
-                    //    "orderCellsTop": true,
-                    //    "stateSave": false,
-                    //    "pageLength": 200,
-                    //    "lengthMenu": [
-                    //        [200, 500, 1000],
-                    //        ['200', '500', '1000']
-                    //    ],
-                    //});
-            //    },
-            //    error: function (err) {
-
-            //    }
-            //});
         }
 
 

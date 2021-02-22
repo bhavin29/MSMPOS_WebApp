@@ -24,8 +24,8 @@ namespace RocketPOS.Repository
             List<FoodMenuRate> foodMenuRate = new List<FoodMenuRate>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select FMR.Id,FMR.OutletId,O.OutletName,F.FoodMenuName,FMR.FoodMenuId,FMR.SalesPrice,FMR.IsActive from FoodMenuRate FMR " +
-                            "Inner Join FoodMenu F On F.Id = FoodMenuId Left Join Outlet O On O.Id = FMR.OutletId  Where F.ISdeleted=0 ";
+                var query = "select FMR.Id,FMR.OutletId,O.OutletName,F.FoodMenuName,FMR.FoodMenuId,FMR.SalesPrice,FMR.IsActive, FMC.FoodmenuCategoryName from FoodMenuRate FMR " +
+                            "Inner Join FoodMenu F On F.Id = FoodMenuId inner join FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId Left Join Outlet O On O.Id = FMR.OutletId  Where F.ISdeleted=0 ";
 
                 if (foodCategoryId != 0)
                 {

@@ -22,6 +22,7 @@ namespace RocketPOS.Models
         //[JsonProperty("id")]
         public int Id { get; set; }
         //[JsonProperty("outletId")]
+        public string FoodmenuCategoryName { get; set; }
         public int OutletId { get; set; }
         //[JsonProperty("outletName")]
         public string OutletName { get; set; }

@@ -22,9 +22,14 @@ namespace RocketPOS.Repository
             string result = "";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                result = con.Query("InventoryPushPOSScheduler ", commandType: System.Data.CommandType.StoredProcedure).ToString();
+                var query = "Exec InventoryPushPOSScheduler";
+                result = con.Query<int>(query).ToString();
+
+              //  result = con.Query("InventoryPushPOSScheduler ", commandType: System.Data.CommandType.StoredProcedure).ToString();
             }
-            return Convert.ToInt32(result);
+            result = result != null ? result : "0";
+
+            return 1;
         }
     }
 }

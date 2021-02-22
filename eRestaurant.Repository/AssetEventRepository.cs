@@ -36,7 +36,7 @@ namespace RocketPOS.Repository
             AssetEventModel assetEventModel = new AssetEventModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " Select AE.Id,ReferenceNo,EventType,EventName,EventDatetime,AE.DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,Status, " +
+                var query = " Select AE.Id,ReferenceNo,EventType,EventName,EventDatetime,AE.DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,MissingTotalAmount,Status, " +
                             " UserCreated.Username As CreatedByUser,UserAllocated.Username As AllocatedByUser,UserReturned.Username As ReturnedByUser,UserClosed.Username As ClosedByUser " +
                             " From AssetEvent  AE " +
                             " left join [User] UserCreated On AE.CreatedUserId=UserCreated.Id " +
@@ -129,6 +129,7 @@ namespace RocketPOS.Repository
                              " ,[FoodNetAmount] " +
                              " ,[FoodVatAmount] " +
                              " ,[FoodTaxAmount] " +
+                             " ,[FoodTaxAmount] " +
                              " ,[IngredientNetAmount] " +
                              " ,[AssetItemNetAmount] " +
                              " ,[Status] " +
@@ -149,6 +150,7 @@ namespace RocketPOS.Repository
                              " ,@FoodNetAmount " +
                              " ,@FoodVatAmount " +
                              " ,@FoodTaxAmount " +
+                             " ,@MissingTotalAmount " +
                              " ,@IngredientNetAmount " +
                              " ,@AssetItemNetAmount " +
                              " ,@Status, " +
@@ -291,6 +293,7 @@ namespace RocketPOS.Repository
                             ",FoodDiscountAmount = @FoodDiscountAmount " +
                             ",FoodVatAmount = @FoodVatAmount " +
                             ",FoodTaxAmount = @FoodTaxAmount " +
+                            ",MissingTotalAmount = @MissingTotalAmount " +
                             ",IngredientNetAmount = @IngredientNetAmount " +
                             ",AssetItemNetAmount = @AssetItemNetAmount " +
                             ",FoodNetAmount = @FoodNetAmount ";

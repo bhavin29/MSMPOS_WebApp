@@ -50,6 +50,9 @@ namespace RocketPOS.Models
         public Decimal IngredientNetAmount { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public Decimal AssetItemNetAmount { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public Decimal MissingTotalAmount { get; set; }
         public int Status { get; set; }
         public DateTime DateInserted { get; set; }
 

@@ -26,7 +26,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT Id, SupplierName,TaxType,SupplierAddress1, SupplierAddress2,SupplierPhone,SupplierEmail,SupplierPicture, IsActive from Supplier WHERE IsDeleted = 0 " +
+                var query = "SELECT Id, SupplierName,TaxType,SupplierAddress1, SupplierAddress2,SupplierPhone,SupplierEmail,SupplierPicture, IsActive,Vat As VATNumber,Pin As PINNumber from Supplier WHERE IsDeleted = 0 " +
                             "ORDER BY SupplierName ";
                 supplierModel = con.Query<SupplierModel>(query).ToList();
             }
@@ -48,9 +48,9 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Supplier (SupplierName,TaxType,SupplierAddress1, SupplierAddress2,SupplierPhone,SupplierEmail,SupplierPicture, IsActive)" +
+                var query = "INSERT INTO Supplier (SupplierName,TaxType,SupplierAddress1, SupplierAddress2,SupplierPhone,SupplierEmail,SupplierPicture, IsActive,Vat,Pin)" +
                             "VALUES " +
-                            "(@SupplierName,@TaxType,@SupplierAddress1, @SupplierAddress2,@SupplierPhone,@SupplierEmail,@SupplierPicture, @IsActive);" +
+                            "(@SupplierName,@TaxType,@SupplierAddress1, @SupplierAddress2,@SupplierPhone,@SupplierEmail,@SupplierPicture, @IsActive,@VATNumber,@PINNumber);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, supplierModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -83,7 +83,8 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE Supplier SET  SupplierName=@SupplierName,TaxType=@TaxType,"+
                             "SupplierAddress1=@SupplierAddress1, SupplierAddress2=@SupplierAddress2,SupplierPhone=@SupplierPhone," +
-                            "SupplierEmail =@SupplierEmail,SupplierPicture=@SupplierPicture, IsActive=@IsActive " +
+                            "SupplierEmail =@SupplierEmail,SupplierPicture=@SupplierPicture, IsActive=@IsActive, " +
+                            "Vat=@VATNumber,Pin=@PINNumber " +
                             "WHERE Id = @Id;";
                 result = con.Execute(query, supplierModel, sqltrans, 0, System.Data.CommandType.Text);
 

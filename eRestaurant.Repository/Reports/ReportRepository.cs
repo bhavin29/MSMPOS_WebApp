@@ -51,7 +51,7 @@ namespace RocketPOS.Repository.Reports
                             " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and I.FoodmenuId = ID.FoodMenuid " +
                             " inner join Store S ON S.ID = ID.StoreID " +
                             " left join SUPPLIER SP on SP.Id = ID.SupplierId " +
-                            " WHERE I.ID=" + id;
+                            " WHERE I.ID=" + id + "Order by ID.DocDate asc";
                 //  " where Convert(varchar(10), ID.DocDate, 103) between '01/01/2021' and '01/01/2022'"
 
                 ////  " WHERE I.AlterQty < INV.StockQty  ";

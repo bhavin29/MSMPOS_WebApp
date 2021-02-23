@@ -76,11 +76,14 @@
 
                                         </td>
                                         <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                <label> / </label>
-                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                            </div>
+                                            @if (Convert.ToInt32(item.WasteStatus) != 2)
+                                            {
+                                                <div class="form-button-action">
+                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                    <label> / </label>
+                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                </div>
+                                            }
                                         </td>
                                         <td>
                                             <div class="form-button-action">
@@ -116,9 +119,9 @@
 </div>
 
 @section Scripts {
-<script>
+    <script>
         $(document).ready(function () {
             var table = $('#@dataTableName').DataTable();
         });
-</script>
+    </script>
 }

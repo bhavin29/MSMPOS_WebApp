@@ -243,11 +243,6 @@
                 data: { 'inventoryDetail': jsonstr },
                 timeout: 0,
                 success: function (response) {
-                    var message = 'Stock Process Completed Successfully.'
-                    $(".modal-body").text(message);
-                    $("#save").hide();
-                    jQuery.noConflict();
-                    $("#aModal").modal('show');
                     return true;
                 },
                 error: function (err) {
@@ -266,11 +261,6 @@
                     data: { },
                     timeout: 0,
                     success: function (response) {
-                        //var message = 'Stock Process Completed Successfully.'
-                        //$(".modal-body").text(message);
-                        //$("#save").hide();
-                        //jQuery.noConflict();
-                        //$("#aModal").modal('show');
                         return true;
                     },
                     error: function (data) {

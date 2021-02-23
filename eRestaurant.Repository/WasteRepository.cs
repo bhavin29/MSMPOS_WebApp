@@ -32,8 +32,6 @@ namespace RocketPOS.Repository
                             " WHERE W.IsDeleted = 0";
                 wasteViewModelList = con.Query<WasteListModel>(query).AsList();
             }
-
-
             return wasteViewModelList;
         }
 
@@ -54,7 +52,6 @@ namespace RocketPOS.Repository
             }
             return purchaseModelList;
         }
-
         public int InsertWaste(WasteModel wasteModel)
         {
             int result = 0;
@@ -119,6 +116,12 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+
+                        if ((int)wasteModel.WasteStatus == 2)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("Waste", result);
+                        }
                     }
                     else
                     {
@@ -222,6 +225,12 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+                        if ((int)wasteModel.WasteStatus == 2)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("Waste", wasteModel.Id);
+                        }
+
                     }
                     else
                     {

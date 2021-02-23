@@ -31,12 +31,15 @@ namespace RocketPOS.Repository
                             "FROM dbo.Inventory I " +
                             "Inner Join FoodMenu FM On FM.Id = I.FoodMenuId  " +
                             "Inner Join FoodMenuCategory FMC On FMC.Id = FM.FoodCategoryId  " +
-                            "Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+                            "Where I.IsDeleted = 0  And I.StoreId = " + storeId  ;
 
                 if (foodCategoryId > 0)
                 {
                     query += " And FMC.Id = " + foodCategoryId;
                 }
+
+                query += " Order by FMC.FoodMenuCategoryName,FM.FoodMenuName";
+
                 inventoryDetail = con.Query<InventoryDetail>(query).ToList();
             }
             return inventoryDetail;

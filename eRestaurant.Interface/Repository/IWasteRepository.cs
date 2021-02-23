@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Repository
 {
     public interface IWasteRepository
     {
-        List<WasteListModel> GetWasteList();
+        List<WasteListModel> GetWasteList(int foodMenuId, int ingredientId);
         int InsertWaste(WasteModel purchaseModel);
         int UpdateWaste(WasteModel purchaseModel);
         int DeleteWaste(long WasteId);

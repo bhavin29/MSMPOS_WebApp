@@ -20,9 +20,9 @@ namespace RocketPOS.Services
             _iWasteRepository = iWasteRepository;
         }
 
-        public List<WasteListModel> GetWasteList()
+        public List<WasteListModel> GetWasteList(int foodMenuId, int ingredientId)
         {
-            return _iWasteRepository.GetWasteList();
+            return _iWasteRepository.GetWasteList(foodMenuId, ingredientId);
         }
         public int InsertWaste(WasteModel wasteModel)
         {
@@ -39,7 +39,7 @@ namespace RocketPOS.Services
 
         public int DeleteWasteDetails(long wasteId, long foodManuId, long ingredientId)
         {
-            return _iWasteRepository.DeleteWasteDetails(wasteId,foodManuId,ingredientId);
+            return _iWasteRepository.DeleteWasteDetails(wasteId, foodManuId, ingredientId);
         }
 
         public long ReferenceNumber()

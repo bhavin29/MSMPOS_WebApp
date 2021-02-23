@@ -30,11 +30,13 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         // GET: Waste
-        public ActionResult WasteList()
+        public ActionResult WasteList(int? foodMenuId,int? ingredientId)
         {
-            List<WasteListModel> wasteLists = new List<WasteListModel>();
-            wasteLists = _iWasteService.GetWasteList().ToList();
-            return View(wasteLists);
+            WasteListViewModel wasteListViewModel = new WasteListViewModel();
+            wasteListViewModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            wasteListViewModel.IngredientList = _iDropDownService.GetIngredientList();
+            wasteListViewModel.WasteListModels = _iWasteService.GetWasteList(Convert.ToInt32(foodMenuId), Convert.ToInt32(ingredientId)).ToList();
+            return View(wasteListViewModel);
         }
 
         // GET: Waste/Details/5

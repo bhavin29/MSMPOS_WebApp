@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
@@ -27,11 +28,14 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
         }
 
-        public ActionResult Index(int? readymade)
+        public ActionResult Index(int? readymade,int? categoryid,int? foodmenutype)
         {
 
             List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
-            foodMenuModel = _iFoodMenuService.GetFoodMenuList().ToList();
+            if (categoryid!=null && foodmenutype !=null)
+            {
+                foodMenuModel = _iFoodMenuService.GetFoodMenuList(Convert.ToInt32(categoryid), Convert.ToInt32(foodmenutype)).ToList();
+            }
             return View(foodMenuModel);
         }
 
@@ -119,5 +123,11 @@ namespace RocketPOS.Controllers.Master
             return ErrorString;
         }
 
+        public JsonResult GetFoodMenuCategory()
+        {
+            FoodMenuModel foodMenuModel = new FoodMenuModel();
+            foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            return Json(new { FoodCategoryList = foodMenuModel.FoodCategoryList });
+        }
     }
 }

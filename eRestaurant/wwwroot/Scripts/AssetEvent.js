@@ -16,7 +16,7 @@ $(document).ready(function () {
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
             { targets: [0, 1], visible: false },
-            { targets: [3, 4,5],  class: "text-right" },
+            { targets: [3, 4, 5], class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -36,9 +36,9 @@ $(document).ready(function () {
     AssetEventFoodmenu = $('#AssetEventFoodmenu').DataTable({
         "columnDefs": [
             { targets: [0, 1], visible: false },
-            { targets: [3],  class: "text-right" },
+            { targets: [3], class: "text-right" },
         ],
-          "paging": false,
+        "paging": false,
         "bLengthChange": true,
         "bInfo": false,
         "bFilter": false,
@@ -56,7 +56,7 @@ $(document).ready(function () {
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
             { targets: [1, 2], visible: false },
-            { targets: [3,4,5], class: "text-right" },
+            { targets: [3, 4, 5], class: "text-right" },
         ],
         "paging": false,
         "bLengthChange": true,
@@ -74,17 +74,17 @@ $(document).ready(function () {
     });
 
     if ($("#Status").val() == 0) {
-        AssetEventItem.columns([7,8,9,10]).visible(false);
+        AssetEventItem.columns([7, 8, 9, 10]).visible(false);
     }
     if ($("#Status").val() == 1) {
         AssetEventItem.columns([8, 9, 10]).visible(false);
     }
 
     if ($("#Status").val() == 0) {
-        AssetIngredientItem.columns([7,8]).visible(false);
+        AssetIngredientItem.columns([7, 8]).visible(false);
     }
     if ($("#Status").val() == 1) {
-        AssetIngredientItem.columns([7,8]).visible(false);
+        AssetIngredientItem.columns([7, 8]).visible(false);
     }
 });
 
@@ -93,7 +93,7 @@ $('#addRowItem').on('click', function (e) {
     e.preventDefault();
     var message = validation(3);
     var rowId = $("#AssetItemId").val();
-   // var rowId = "rowId" + $("#AssetItemId").val();
+    // var rowId = "rowId" + $("#AssetItemId").val();
     var AssetItemCostPrice;
     var AssetItemTotalPrice = 0;
 
@@ -117,24 +117,24 @@ $('#addRowItem').on('click', function (e) {
     });
 
     AssetItemCostPrice = parseFloat($("#AssetItemCostPrice").val()).toFixed(2);
-  
+
     var EventQty = parseFloat($("#EventQty").val()).toFixed(2);
     var StockQty = parseFloat($("#StockQty").val()).toFixed(2);
     var AllocatedQty = parseFloat($("#AllocatedQty").val()).toFixed(2);
     var ReturnQty = parseFloat($("#ReturnQty").val()).toFixed(2);
     var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
-  
+
     AssetItemTotalPrice = parseFloat(EventQty * AssetItemCostPrice).toFixed(2);
 
     if (message == '') {
         AssetEventItem.row('.active').remove().draw(false);
-  
+
         var rowNode = AssetEventItem.row.add([
             '<td>' + $("#AssetEventItemId").val() + ' </td>',
             '<td>' + $("#AssetItemId").val() + ' </td>',
             $('#AssetItemId').children("option:selected").text(),
             '<td class="text-right">' + StockQty + '</td>',
-            '<td class="text-right"><label>' + EventQty + '</label> <label>' + $("#AssetItemUnitName").text()+'</label></td>',
+            '<td class="text-right"><label>' + EventQty + '</label> <label>' + $("#AssetItemUnitName").text() + '</label></td>',
             '<td class="text-right">' + AssetItemCostPrice + ' </td>',
             '<td class="text-right">' + AssetItemTotalPrice + ' </td>',
             '<td class="text-right"><input type="number" id="allocatedQty' + $("#AssetItemId").val() + '" class="form-control col-sm-11 text-right" min="0" max="99999" value="' + AllocatedQty + '" name="item.AllocatedQty"> </td>',
@@ -162,7 +162,7 @@ $('#addRowItem').on('click', function (e) {
         $(rowNode).find('td').eq(3).addClass('text-right');
         $(rowNode).find('td').eq(4).addClass('text-right');
         $(rowNode).find('td').eq(5).addClass('text-right');
-    
+
         AssetItemNetAmountTotal = calculateAssetItemColumn(6);
         $("#AssetItemNetAmount").val(parseFloat(AssetItemNetAmountTotal).toFixed(2));
 
@@ -474,7 +474,7 @@ $('#addRowIngredient').on('click', function (e) {
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteIngredientOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
         ]).draw(false).nodes();
 
-         assetEventIngredientDataArr.push({
+        assetEventIngredientDataArr.push({
             ingredientId: $("#IngredientId").val(),
             stockQty: IngredientStockQty,
             eventQty: IngredientEventQty,
@@ -709,8 +709,8 @@ $(function () {
         var status = $("#Status").val();
         if (status == 0) { status = 1; }
 
-   //     GetAssetItemArray();
-   //     GetAssetIngredientArray();
+        //     GetAssetItemArray();
+        //     GetAssetIngredientArray();
 
         if (message == '') {
             $("#assetEventForm").on("submit", function (e) {
@@ -729,6 +729,7 @@ $(function () {
                     FoodNetAmount: $("#FoodNetAmount").val(),
                     FoodVatAmount: $("#FoodVatAmount").val(),
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
+                    MissingTotalAmount: $("#MissingTotalAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
                     Status: status,
@@ -810,15 +811,15 @@ function validation(id) {
 
     if (id == 2) {
         var entry = 0;
-        if (AssetEventItem.data().any() ) {
+        if (AssetEventItem.data().any()) {
             entry = 1;
         }
 
-        if (AssetEventFoodmenu.data().any() ) {
+        if (AssetEventFoodmenu.data().any()) {
             entry = 1;
         }
 
-        if (AssetIngredientItem.data().any() ) {
+        if (AssetIngredientItem.data().any()) {
             entry = 1;
         }
 
@@ -826,7 +827,7 @@ function validation(id) {
             var message = 'At least one entry from Asset Detail / Foodmenu Detail / Stock Detail should be entered'
             return message;
         }
-       
+
     }
 
     if (id == 3) {
@@ -957,6 +958,7 @@ $(function () {
                     FoodNetAmount: $("#FoodNetAmount").val(),
                     FoodVatAmount: $("#FoodVatAmount").val(),
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
+                    MissingTotalAmount: $("#MissingTotalAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
                     Status: status,
@@ -1025,6 +1027,7 @@ $(function () {
                     FoodNetAmount: $("#FoodNetAmount").val(),
                     FoodVatAmount: $("#FoodVatAmount").val(),
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
+                    MissingTotalAmount: $("#MissingTotalAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
                     Status: status,
@@ -1093,6 +1096,7 @@ $(function () {
                     FoodNetAmount: $("#FoodNetAmount").val(),
                     FoodVatAmount: $("#FoodVatAmount").val(),
                     FoodTaxAmount: $("#FoodTaxAmount").val(),
+                    MissingTotalAmount: $("#MissingTotalAmount").val(),
                     IngredientNetAmount: $("#IngredientNetAmount").val(),
                     AssetItemNetAmount: $("#AssetItemNetAmount").val(),
                     Status: status,
@@ -1201,7 +1205,7 @@ $(document).on('change', 'input[name]', function () {
 
         //alert(this.id + " focus out");
         var qty = $(this).val();
-       // alert(qty);
+        // alert(qty);
         $(returnId).val(qty);
 
         var MissingQty = parseFloat((parseFloat(AllocatedQty) - parseFloat(ReturnQty))).toFixed(2);
@@ -1221,16 +1225,18 @@ $(document).on('change', 'input[name]', function () {
         missingId = "#missingQty" + id.toString();
         allocatedId = "#allocatedQty" + id.toString();
 
-       // alert(this.id + " focus out");
+        // alert(this.id + " focus out");
 
         var returnQty = $(this).val();
         var allocatedQty = $(allocatedId).val();
         missingQ = parseFloat((parseFloat(allocatedQty) - parseFloat(returnQty))).toFixed(2);
 
-       // alert(missingId);
-      //  alert(missingQ);
+        // alert(missingId);
+        //  alert(missingQ);
 
         $(missingId).val(missingQ);
+
+        $("#MissingTotalAmount").val(calculateMissingTotal());
 
         for (var i = 0; i < assetEventItemDataArr.length; i++) {
             if (assetEventItemDataArr[i].assetItemId == id) {
@@ -1240,14 +1246,19 @@ $(document).on('change', 'input[name]', function () {
         }
     }
 
+    //Missing Total
+    if (str.indexOf(str4) != -1) {
+        $("#MissingTotalAmount").val(calculateMissingTotal());
+    }
+
     //Stock Ingredient Item Return
     if (str.indexOf(str5) != -1) {
         id = str.substring(14, 100);
         returnId = "#IngredientRQty" + id.toString();
 
-       // alert(id + " focus out");
+        // alert(id + " focus out");
         var qty = $(this).val();
-       // alert(qty);
+        // alert(qty);
         $(returnId).val(qty);
 
         for (var i = 0; i < assetEventIngredientDataArr.length; i++) {
@@ -1262,9 +1273,9 @@ $(document).on('change', 'input[name]', function () {
         id = str.substring(14, 100);
         returnId = "#IngredientAQty" + id.toString();
 
-       // alert(id + " focus out");
+        // alert(id + " focus out");
         var qty = $(this).val();
-       // alert(qty);
+        // alert(qty);
         $(returnId).val(qty);
 
         for (var i = 0; i < assetEventIngredientDataArr.length; i++) {
@@ -1312,14 +1323,14 @@ $('#btnStockOut').click(function () {
     var assetEventId = [];
     $('.row input:checked').each(function () {
         var chkId = $(this)[0].id;
-        if (chkId !="selectAll") {
+        if (chkId != "selectAll") {
             assetEventId.push($(this)[0].id);
         }
     });
 
     $.ajax({
         url: "/AssetEvent/UpdateStockById",
-        data: { 'ids':assetEventId },
+        data: { 'ids': assetEventId },
         type: "POST",
         dataType: "json",
         success: function (data) {
@@ -1351,3 +1362,16 @@ $("#bsave").click(function () {
 $('#bok').click(function () {
     $("#bModal").modal('hide');
 });
+
+
+function calculateMissingTotal() {
+    var total = 0;
+    $('#AssetEventItem tbody tr').each(function () {
+        var qty = parseFloat($(this).children("td:eq(7)").find("input").val());
+        var Price = parseFloat($('td', this).eq(3).text()); 
+        if (!isNaN(Price)) {
+            total += (qty * Price);
+        }
+    });
+    return total;
+}

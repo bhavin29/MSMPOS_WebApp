@@ -131,6 +131,17 @@
     <script>
         $(document).ready(function () {
             table = $('#@dataTableName').DataTable({
+                dom: 'Bfrtip',
+                "buttons": [{
+                    extend: 'excel',
+                    exportOptions: { columns: [0, 1, 2, 3] },
+                    filename: function () {
+                        var d = new Date();
+                        var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                        var n = d.getTime();
+                        return 'Tables_' + date + '_' + n;
+                    },
+                    }],
                         "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,

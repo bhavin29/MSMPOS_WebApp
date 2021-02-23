@@ -84,6 +84,8 @@ namespace RocketPOS.Controllers
                 LoginInfo.Firstname = loginModel.Firstname;
                 LoginInfo.TaxInclusive = loginModel.TaxInclusive;
                 LoginInfo.IsItemOverright = loginModel.IsItemOverright;
+                LoginInfo.VATLabel = loginModel.VATLabel;
+                LoginInfo.PINLabel = loginModel.PINLabel;
 
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.Messaging;
+using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
@@ -40,7 +41,8 @@ namespace RocketPOS.Controllers.Master
                 int supplierId = Convert.ToInt32(id);
                 supplierModel = _iSupplierService.GetSupplierById(supplierId);
             }
-
+            ViewData["VatLabel"] =LoginInfo.VATLabel;
+            ViewData["PinLabel"] = LoginInfo.PINLabel;
             return View(supplierModel);
         }
 

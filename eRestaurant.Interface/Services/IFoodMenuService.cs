@@ -10,7 +10,7 @@ namespace RocketPOS.Interface.Services
     public interface IFoodMenuService
     {
         FoodMenuModel GetFoodMenueById(int foodMenuId);
-        List<FoodMenuModel> GetFoodMenuList();
+        List<FoodMenuModel> GetFoodMenuList(int categoryid, int foodmenutype);
 
         int InsertFoodMenu(FoodMenuModel foodMenuModel);
 

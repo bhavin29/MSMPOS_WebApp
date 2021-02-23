@@ -16,22 +16,35 @@
             </div>
             <div class="float-right">
                 <a asp-action="FoodMenu" class="btn btn-primary float-sm-left ">Add</a>
-
             </div>
         </div>
     </div>
     <br />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
-
-            @*<select asp-for="FoodCategoryId" class="form-control"
-                    asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
-            </select>
-
-            <select asp-for="FoodMenuType" class="form-control" asp-items="Html.GetEnumSelectList<FoodMenuType>()">
-                <option selected="selected" value="">Select</option>
-            </select>*@
-
+            <div class="row">
+                <div class="col-md-2">
+                    <label>Select Category  </label>
+                    <select id="FoodCategoryId" class="form-control">
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Select Food Menu Type  </label>
+                    <select id="FoodMenuType" class="form-control">
+                        <option value="-1"> ALL</option>
+                        <option value="1"> Readymade</option>
+                        <option value="2"> OnTheSpot</option>
+                        <option value="3"> Other</option>
+                        <option value="4"> Catering</option>
+                    </select>
+                </div>
+                <div class="col-md-1 pr-2 pl-2">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        <a id="LoadFoodMenuList" onclick="return GetFoodmenuLists();" class="btn btn-light" style="margin-top: 22px">Load</a>
+                    </div>
+                </div>
+            </div>
             <div class="col-sm-12">
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("FoodMenu")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead row="root">
@@ -152,12 +165,12 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2,3,4,5] },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5], rows: ':visible' },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                         var n = d.getTime();
-                        return 'Foodmenu_Category_' + date + '_' + n;
+                        return 'Foodmenu_' + date + '_' + n;
                     },
                 }],
                 "bLengthChange": true,
@@ -173,7 +186,34 @@
                     ['250', '500', '1000', '2000']
                 ],
             });
+
+            GetFoodMenuCategory();
         });
+
+
+        function GetFoodMenuCategory() {
+            $.ajax({
+                url: "/FoodMenu/GetFoodMenuCategory",
+                data: {},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#FoodCategoryId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.foodCategoryList.length; ++i) {
+                        if (i == 0) {
+                            $("#FoodCategoryId").append('<option value="-1">ALL</option>');
+                        }
+                        else {
+                            $("#FoodCategoryId").append('<option value="' + obj.foodCategoryList[i].value + '">' + obj.foodCategoryList[i].text + '</option>');
+                        }
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
     </script>
     <script>
 
@@ -182,7 +222,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2,3,4,5] },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5] },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
@@ -206,8 +246,8 @@
         }
 
         function GetFoodmenuLists() {
-            var categoryid = $("#FoodmenuCategoryid").val();
-            var foodmenutype = $("#FoodmenuType").val();
+            var categoryid = $("#FoodCategoryId").val();
+            var foodmenutype = $("#FoodMenuType").val();
             window.location.href = "/FoodMenu/Index?categoryid=" + categoryid + "&foodmenutype=" + foodmenutype;
         }
 

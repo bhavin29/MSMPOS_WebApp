@@ -39,5 +39,7 @@ namespace RocketPOS.Framework
         public static string Firstname = "";
         public static int TaxInclusive = 1;
         public static bool IsItemOverright = false;
+        public static string VATLabel = "";
+        public static string PINLabel = "";
     }
 }

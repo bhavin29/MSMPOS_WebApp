@@ -26,10 +26,13 @@ namespace RocketPOS.Models
         public string City { get; set; }
         [DisplayName("Contact Person")]
         public string ContactPerson { get; set; }
-        [DisplayName("PIN")]
+        [DisplayName("Vat")]
         public string VATNumber { get; set; }
 
-       public SupplierModel()
+        [DisplayName("Pin")]
+        public string PINNumber { get; set; }
+
+        public SupplierModel()
         {
             IsActive = true;
         }

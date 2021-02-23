@@ -24,12 +24,12 @@
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="row">
                 <div class="col-md-2">
-                    <label>Select Category  </label>
+                    <label>Category</label>
                     <select id="FoodCategoryId" class="form-control">
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <label>Select Food Menu Type  </label>
+                    <label>Menu Item Type  </label>
                     <select id="FoodMenuType" class="form-control">
                         <option value="-1"> ALL</option>
                         <option value="1"> Readymade</option>
@@ -65,7 +65,7 @@
                                 @Html.DisplayName("Menu Category")
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.FoodMenuType)
+                                @Html.DisplayName("Menu Item Type")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -166,11 +166,21 @@
                 "buttons": [{
                     extend: 'excel',
                     exportOptions: { columns: [0, 1, 2, 3, 4, 5], rows: ':visible' },
+                    format: {
+                        body: function (data, row, column, node) {
+                            if ($(data).is("input")) {
+                                return $(data).val();
+                            }
+                            else {
+                                return data;
+                            }
+                        }
+                    },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                         var n = d.getTime();
-                        return 'Foodmenu_' + date + '_' + n;
+                        return 'MenuItem_' + date + '_' + n;
                     },
                 }],
                 "bLengthChange": true,
@@ -227,7 +237,7 @@
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                         var n = d.getTime();
-                        return 'Foodmenu_Category_' + date + '_' + n;
+                        return 'MenuItem_' + date + '_' + n;
                     },
                 }],
                 "pageLength": 3,

@@ -20,16 +20,27 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-        public List<WasteListModel> GetWasteList()
+        public List<WasteListModel> GetWasteList(int foodMenuId, int ingredientId)
         {
             List<WasteListModel> wasteViewModelList = new List<WasteListModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT W.Id, W.StoreId,S.StoreName, W.ReferenceNumber, convert(varchar(12),W.WasteDateTime,3) as WasteDateTime," +
+                var query = "SELECT distinct W.Id, W.StoreId,S.StoreName, W.ReferenceNumber, convert(varchar(12),W.WasteDateTime,3) as WasteDateTime," +
                             " W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
                             " FROM Waste W" +
+                            " Inner Join WasteIngredient WI On W.Id=WI.WasteId " +
                             " INNER JOIN Store S ON W.StoreId = S.Id " +
-                            " WHERE W.IsDeleted = 0";
+                            " WHERE W.IsDeleted = 0 ";
+
+                if (foodMenuId != 0)
+                {
+                    query += " And WI.FoodMenuId= "+ foodMenuId;
+                }
+
+                if (ingredientId != 0)
+                {
+                    query += "  And WI.IngredientId= "+ ingredientId;
+                }
                 wasteViewModelList = con.Query<WasteListModel>(query).AsList();
             }
 

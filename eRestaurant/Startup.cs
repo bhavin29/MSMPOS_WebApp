@@ -178,6 +178,8 @@ namespace RocketPOS
             services.AddScoped<IProductionEntryService, ProductionEntryService>();
             services.AddScoped<IAssetEventRepository, AssetEventRepository>();
             services.AddScoped<IAssetEventService, AssetEventService>();
+            services.AddScoped<IInventoryAlterationRepository, InventoryAlterationRepository>();
+            services.AddScoped<IInventoryAlterationService, InventoryAlterationService>();
             services.AddHttpClient();
         }
 

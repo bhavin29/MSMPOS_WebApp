@@ -108,9 +108,8 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: {
-                        columns: [ 1, 2, 3, 4, 5],
-                        format: {
+                    exportOptions: { columns: [1, 2, 3, 4, 5] },
+                    format: {
                             body: function (data, row, column, node) {
                                 if (column == 0) {
                                     return data;
@@ -125,7 +124,6 @@
                                     return data;
                                 }
                             }
-                        }
                     },
                     filename: function () {
                         var d = new Date();

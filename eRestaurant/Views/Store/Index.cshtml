@@ -81,11 +81,15 @@
                                     @Html.DisplayFor(modelItem => item.Notes)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
                                 </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.IsLock)
-                                    </td>*@
                                 <td>
                                     <div class="form-button-action">
                                         <a asp-action="Store"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>

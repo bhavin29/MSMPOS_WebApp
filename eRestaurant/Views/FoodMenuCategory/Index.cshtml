@@ -66,7 +66,14 @@
                                     @Html.DisplayFor(modelItem => item.Notes)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
                                 </td>
                                 <td>
                                     <div class="form-button-action">

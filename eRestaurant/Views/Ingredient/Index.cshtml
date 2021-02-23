@@ -29,7 +29,7 @@
                             <th rowspan="1" colspan="1">@Html.DisplayName("Stock item")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Stock Category")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                     </thead>
                     <tfoot>
@@ -37,7 +37,7 @@
                             <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
-                            <th rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                         </tr>
                     </tfoot>
@@ -57,7 +57,14 @@
                                     @Html.DisplayFor(modelItem => item.Unit)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
                                 </td>
                                 <td>
                                     <div class="form-button-action">

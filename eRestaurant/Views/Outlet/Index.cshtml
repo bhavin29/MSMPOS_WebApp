@@ -1,4 +1,4 @@
-﻿    @using Microsoft.Extensions.Localization;
+﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.OutletModel>
 @inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
 @using  RocketPOS.Resources
@@ -32,15 +32,6 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.OutletName)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.OutletAddress1)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsCollectTax)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsPreorPostPayment)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
                             </th>
@@ -55,15 +46,6 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.OutletName)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.OutletAddress1)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsCollectTax)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IsPreorPostPayment)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
                             </th>
@@ -82,21 +64,19 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.OutletName)
                                 </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.OutletAddress1)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IsCollectTax)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IsPreorPostPayment)
-                                    </td>*@
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.IsActive)
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
                                 </td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="Outlet"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <a asp-action="Outlet" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
                                         <label> / </label>
                                         <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                     </div>
@@ -135,21 +115,11 @@
                 "buttons": [{
                     extend: 'excel',
                     exportOptions: { columns: [0, 1, 2] },
-                    format: {
-                        body: function (data, row, column, node) {
-                            if ($(data).is("input")) {
-                                return $(data).val();
-                            }
-                            else {
-                                return data;
-                            }
-                        }
-                    },
-                     filename: function () {
-                        var d = new Date();
+                    filename: function () {
+                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                         var n = d.getTime();
-                        return 'Outlets_' + date + '_' + n;
+                        return 'Outlet_' + date + '_' + n;
                         },
                         }],
                         "bLengthChange": true,

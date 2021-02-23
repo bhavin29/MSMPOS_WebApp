@@ -28,71 +28,29 @@
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("User")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.OutletId)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.EmployeeName)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Username)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.Password)
-                                </th>*@
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.ThumbToken)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.RoleTypeId)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.LastLogin)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.LastLogout)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IPAdress)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Counter)
-                                </th>*@
                             <th>@Html.DisplayName("Action")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.OutletName)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.EmployeeName)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.Username)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.Password)
-                                </th>*@
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.ThumbToken)
-                                </th>*@
                             <th>
                                 @Html.DisplayNameFor(model => model.RoleTypeId)
                             </th>
-                            @*<th>
-                                    @Html.DisplayNameFor(model => model.LastLogin)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.LastLogout)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.IPAdress)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Counter)
-                                </th>*@
                             <th>@Html.DisplayName("Action")</th>
                         </tr>
                     </tfoot>
@@ -103,36 +61,15 @@
                             var mid = "myModal" + item.Id;
 
                             <tr>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.OutletName)
-                                    </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.EmployeeName)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Username)
                                 </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.Password)
-                                    </td>*@
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.ThumbToken)
-                                    </td>*@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.RoleTypeId)
                                 </td>
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.LastLogin)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.LastLogout)
-                                    </td>*@
-                                @*<td>
-                                        @Html.DisplayFor(modelItem => item.IPAdress)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Counter)
-                                    </td>*@
                                 <td>
                                     <div class="form-button-action">
                                         <a asp-action="User" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>

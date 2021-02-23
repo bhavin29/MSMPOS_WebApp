@@ -1,9 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.Mvc;
 
 namespace RocketPOS.Models
 {
+
+    public class WasteListViewModel
+    {
+        public int? FoodMenuId { get; set; }
+        public List<SelectListItem> FoodMenuList { get; set; }
+        public int? IngredientId { get; set; }
+        public List<SelectListItem> IngredientList { get; set; }
+        public List<WasteListModel> WasteListModels = new List<WasteListModel>();
+
+    }
     public class WasteListModel
     {
         public int Id { get; set; }

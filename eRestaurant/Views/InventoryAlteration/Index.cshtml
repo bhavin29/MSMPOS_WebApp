@@ -1,0 +1,136 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.InventoryAlterationViewModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Physical Stock");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("InventoryAlteration");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-10">
+                <h5 class="card-title">Physical Stock</h5>
+            </div>
+            <div class="float-right">
+                <a asp-action="InventoryAlteration" class="pull-right btn btn-primary">Add</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="StoreList" class="control-label">Store</label>
+                            <select asp-for="StoreId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                            </select>
+                            <span asp-validation-for="StoreId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="FromDate" class="control-label">From Date</label>
+                            <input asp-for="FromDate" type="date" class="form-control" />
+                            <span asp-validation-for="FromDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="ToDate" class="control-label">To Date</label>
+                            <input asp-for="ToDate" type="date" class="form-control" />
+                            <span asp-validation-for="ToDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="FoodMenuList" class="control-label">Menu Item</label>
+                            <select asp-for="FoodMenuId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                            </select>
+                            <span asp-validation-for="FoodMenuId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadInventoryAlterationList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("InventoryAlteration")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model.InventoryAlterationViewList)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EntryDate, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Qty)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var InventoryAlteration = null;
+        $(document).ready(function () {
+            InventoryAlteration = $('#@dataTableName').DataTable();
+        });
+
+        function loadInventoryAlterationList() {
+            window.location.href = "/InventoryAlteration/Index?storeId=" + $("#StoreId").val() + "&fromDate=" + $("#FromDate").val() + "&toDate=" + $("#ToDate").val() + "&foodMenuId=" + $("#FoodMenuId").val();
+        }
+    </script>
+}

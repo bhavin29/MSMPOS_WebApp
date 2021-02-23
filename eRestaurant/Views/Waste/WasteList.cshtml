@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Extensions.Localization;
-@model IEnumerable<RocketPOS.Models.WasteListModel>
+@model RocketPOS.Models.WasteListViewModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @{
@@ -20,6 +20,34 @@
     </div>
     <div class="row">
         <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="FoodMenuList" class="control-label">Menu Item</label>
+                            <select asp-for="FoodMenuId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                            </select>
+                            <span asp-validation-for="FoodMenuId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="IngredientList" class="control-label">Stock Item</label>
+                            <select asp-for="IngredientId"
+                                    class="form-control"
+                                    asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                            </select>
+                            <span asp-validation-for="IngredientId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadWasteList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
 
                 <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
@@ -47,7 +75,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach (var item in Model)
+                                @foreach (var item in Model.WasteListModels)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
@@ -119,9 +147,25 @@
 </div>
 
 @section Scripts {
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+
+    <!-- jQuery -->
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>*@
+
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function () {
             var table = $('#@dataTableName').DataTable();
+            $("#FoodMenuId").select2();
+            $("#IngredientId").select2();
         });
+
+        function loadWasteList() {
+            window.location.href = "/Waste/WasteList?foodMenuId=" + $("#FoodMenuId").val() + "&ingredientId=" + $("#IngredientId").val();
+        }
     </script>
 }

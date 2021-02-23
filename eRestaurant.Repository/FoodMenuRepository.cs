@@ -21,7 +21,7 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-        public List<FoodMenuModel> GetFoodMenuList()
+        public List<FoodMenuModel> GetFoodMenuList(int categoryid, int foodmenutype)
         {
             List<FoodMenuModel> FoodMenuModel = new List<FoodMenuModel>();
 
@@ -32,9 +32,20 @@ namespace RocketPOS.Repository
                             " FM.Position,  OutletId, FM.IsActive, U.UnitName,T.TaxName as FoodVatTaxName  " +
                             " FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id " +
                             " Left join Units U on U.Id = FM.UnitsId " +
-                            " Left join Tax T On T.Id = FM.FoodVatTaxId " + 
-                            " WHERE FM.IsDeleted = 0 " +
-                            " ORDER BY FoodMenuCode,FoodMenuName ";
+                            " Left join Tax T On T.Id = FM.FoodVatTaxId " +
+                            " WHERE FM.IsDeleted = 0 ";
+
+                if (categoryid != -1)
+                {
+                    query += "AND FM.FoodCategoryId = "+ categoryid ;
+                }
+
+                if (foodmenutype != -1)
+                {
+                    query += "AND FM.FoodMenuType = " + foodmenutype;
+                }
+
+                query += " ORDER BY FoodMenuCode,FoodMenuName ";
                 FoodMenuModel = con.Query<FoodMenuModel>(query).ToList();
             }
 

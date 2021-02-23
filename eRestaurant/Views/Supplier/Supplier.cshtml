@@ -52,9 +52,14 @@
                                             <span asp-validation-for="City" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="VATNumber" class="control-label">PIN</label>
+                                            <label asp-for="VATNumber" class="control-label">@ViewData["VatLabel"]</label>
                                             <input asp-for="VATNumber" class="form-control" />
                                             <span asp-validation-for="VATNumber" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="PINNumber" class="control-label">@ViewData["PinLabel"]</label>
+                                            <input asp-for="PINNumber" class="form-control" />
+                                            <span asp-validation-for="PINNumber" class="text-danger"></span>
                                         </div>
                                     </div>
                                         @if (Model.Id > 0)

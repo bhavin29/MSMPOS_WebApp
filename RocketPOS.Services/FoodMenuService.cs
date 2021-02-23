@@ -18,10 +18,10 @@ namespace RocketPOS.Services
             _iFoodMenuReportsitory = iAddondRepository;
         }
 
-        public List<FoodMenuModel> GetFoodMenuList()
+        public List<FoodMenuModel> GetFoodMenuList(int categoryid, int foodmenutype)
         {
 
-            return _iFoodMenuReportsitory.GetFoodMenuList();
+            return _iFoodMenuReportsitory.GetFoodMenuList(categoryid, foodmenutype);
         }
 
         public int InsertFoodMenu(FoodMenuModel FoodMenuModel)

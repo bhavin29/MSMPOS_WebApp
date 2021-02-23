@@ -101,7 +101,14 @@
                                     </td>
                                     <td>
                                         <div class="form-button-action">
-                                            <input type="button" value="Process" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId);" />
+                                            @if (item.PhysicalStockQty > 0)
+                                            {
+                                                <input type="button" value="Process" style="background-color:green"  class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId);" />
+                                            }
+                                            else
+                                            {
+                                                <input type="button" value="Process" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId);" />
+                                            }
                                         </div>
                                     </td>
                                     <td>

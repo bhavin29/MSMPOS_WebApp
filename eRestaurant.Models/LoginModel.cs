@@ -38,5 +38,7 @@ namespace RocketPOS.Models
         public string Powerby { get; set; }
         public int TaxInclusive { get; set; }
         public bool IsItemOverright { get; set; }
+        public string VATLabel { get; set; }
+        public string PINLabel { get; set; }
     }
 }

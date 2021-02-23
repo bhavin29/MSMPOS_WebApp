@@ -7,7 +7,7 @@ namespace RocketPOS.Interface.Repository
 {
     public interface IFoodMenuRpository
     {
-        List<FoodMenuModel> GetFoodMenuList();
+        List<FoodMenuModel> GetFoodMenuList(int categoryid, int foodmenutype);
 
         int InsertFoodMenu(FoodMenuModel foodMenuModel);
 

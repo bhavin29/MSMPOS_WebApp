@@ -30,6 +30,7 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         public decimal Qty { get; set; }
         public decimal Amount { get; set; }
+        public decimal StockQty { get; set; }
     }
 
     public class InventoryAlterationModel
@@ -45,6 +46,8 @@ namespace RocketPOS.Models
         public List<SelectListItem> FoodMenuList { get; set; }
 
         public List<InventoryAlterationDetailModel> InventoryAlterationDetails { get; set; }
+
+        public string Notes { get; set; }
     }
 
     public class InventoryAlterationDetailModel
@@ -57,5 +60,6 @@ namespace RocketPOS.Models
 
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Amount { get; set; }
+        public decimal StockQty { get; set; }
     }
 }

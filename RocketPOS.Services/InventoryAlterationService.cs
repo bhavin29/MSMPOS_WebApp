@@ -21,6 +21,11 @@ namespace RocketPOS.Services
             return _inventoryAlterationRepository.GetInventoryAlterationList(storeId, fromDate, toDate, foodMenuId);
         }
 
+        public decimal GetInventoryStockQty(int storeId, int foodMenuId)
+        {
+            return _inventoryAlterationRepository.GetInventoryStockQty(storeId, foodMenuId);
+        }
+
         public int InsertInventoryAlteration(InventoryAlterationModel inventoryAlterationModel)
         {
             return _inventoryAlterationRepository.InsertInventoryAlteration(inventoryAlterationModel);

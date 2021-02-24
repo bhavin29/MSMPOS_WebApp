@@ -1,0 +1,136 @@
+﻿@using Microsoft.Extensions.Localization;
+@using RocketPOS.Framework;
+@model RocketPOS.Models.AssetItemModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Asset Item</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form asp-action="AssetItem" method="post" role="form">
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="AssetItemName" class="control-label">Asset Item</label>
+                                            <input asp-for="AssetItemName" class="form-control" />
+                                            <span asp-validation-for="AssetItemName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="AssetSizeList" class="control-label">Size</label>
+                                            <select asp-for="AssetSizeId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.AssetSizeList, "Value", "Text"))">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="AssetLocationList" class="control-label">Location</label>
+                                            <select asp-for="AssetLocationId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.AssetLocationList, "Value", "Text"))">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Code" class="control-label">Code</label>
+                                            <input asp-for="Code" class="form-control" />
+                                            <span asp-validation-for="Code" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="UnitList" class="control-label">Unit</label>
+                                            @if (Model.UnitList != null)
+                                            {
+                                                <select asp-for="UnitId" class="form-control"
+                                                        asp-items="@(new SelectList(Model.UnitList, "Value", "Text"))">
+                                                </select>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="ShortName" class="control-label">Short Name</label>
+                                            <input asp-for="ShortName" class="form-control" />
+                                            <span asp-validation-for="ShortName" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="CostPrice" class="control-label">Cost Price</label>
+                                            <input asp-for="CostPrice" class="form-control" type="number" min="0" max="99999" />
+                                            <span asp-validation-for="CostPrice" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Model" class="control-label"></label>
+                                            <input asp-for="Model" class="form-control" />
+                                            <span asp-validation-for="Model" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Brandname" class="control-label"></label>
+                                            <input asp-for="Brandname" class="form-control" />
+                                            <span asp-validation-for="Brandname" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
+                                       
+                                        <div class="form-group">
+                                            <label asp-for="Notes" class="control-label"></label>
+                                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                                            <span asp-validation-for="Notes" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <div>
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "AssetItem")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#AssetItem").prev().focus();
+            $("#vModal").modal('hide');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}
+

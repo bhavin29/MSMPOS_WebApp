@@ -127,12 +127,12 @@ function validation(id) {
             message = "Select Quantity"
         }
         else if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == 0) {
-            message = "Select food menu"
+            message = "Select Menu item"
         }
 
         for (var i = 0; i < foodMenuDataArr.length; i++) {
             if ($("#FoodMenuId").val() == foodMenuDataArr[i].foodMenuId) {
-                message = "Food menu already selected!"
+                message = "Menu item already selected!"
                 break;
             }
         }

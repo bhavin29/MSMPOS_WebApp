@@ -93,6 +93,8 @@ namespace RocketPOS.Repository
                     if (foodMenuResult > 0)
                     {
                         sqltrans.Commit();
+                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                        string sResult = commonRepository.InventoryPush("PhysicalStock", result);
                     }
                     else
                     {

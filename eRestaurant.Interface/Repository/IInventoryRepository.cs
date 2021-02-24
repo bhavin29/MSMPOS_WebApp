@@ -10,5 +10,7 @@ namespace RocketPOS.Interface.Repository
         List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId);
         int UpdateInventoryDetailList(List<InventoryDetail> inventoryDetails);
         string StockUpdate(int storeId, int foodmenuId);
+        List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId);
+        int BulkImport(List<InventoryOpenigStockImport> inventoryOpenigStockImports);
     }
 }

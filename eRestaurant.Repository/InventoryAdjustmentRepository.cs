@@ -160,7 +160,7 @@ namespace RocketPOS.Repository
                             foodMenuId = item.FoodMenuId.ToString();
                             var FoodmenuPurchaePriceUpdate = "" +
                               " update foodmenu set PurchasePrice = " + item.Price + " Where id = " + item.FoodMenuId;
-                            con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
+                            
                         }
 
                         var queryDetails = "INSERT INTO InventoryAdjustmentDetail" +

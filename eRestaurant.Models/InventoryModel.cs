@@ -33,4 +33,20 @@ namespace RocketPOS.Models
         public DateTime? PhysicalDatetime { get; set; }
         public bool PhysicalIsLock { get; set; }
     }
+
+    public class InventoryOpenigStockImport
+    {
+        public int StoreId { get; set; }
+        public int FoodmenuId { get; set; }
+        public DateTime PhysicalDatetime { get; set; }
+        public bool PhysicalIsLock { get; set; }
+        public DateTime PhysicalLastCalcDatetime { get; set; }
+        public decimal PhysicalStockINQty { get; set; }
+        public decimal PhysicalStockOutQty { get; set; }
+        public decimal PhysicalStockQty { get; set; }
+        public string ImportBatch { get; set; }
+        public string Foodmenuname { get; set; }
+        public string FoodmenuCategoryname { get; set; }
+
+    }
 }

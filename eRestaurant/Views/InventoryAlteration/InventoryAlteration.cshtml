@@ -59,6 +59,12 @@
                                     </div>
                                     <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
+                                            <label class="control-label text-right">StockQty</label>
+                                            <input class="form-control text-right" type="number" min="1" max="99999" value="1" disabled="disabled" placeholder="0.00" id="StockQty" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 pr-2 pl-2">
+                                        <div class="form-group">
                                             <label class="control-label"></label>
                                             <button id="addFoodMenuRow" class="btn btn-outline-dark" style="margin-top: 24px">Add</button>
                                         </div>
@@ -78,6 +84,7 @@
                                                     <th style="width:0%">FoodMenuId</th>
                                                     <th style="width:55%">Menu Item</th>
                                                     <th style="width:15%">Quantity</th>
+                                                    <th style="width:15%">Amount</th>
                                                     <th style="width:15%">Amount</th>
                                                     <th style="width:15%">Action</th>
                                                 </tr>
@@ -102,6 +109,9 @@
                                                             </td>
                                                             <td class="text-right">
                                                                 @item.Amount.ToString("N")
+                                                            </td>
+                                                            <td class="text-right">
+                                                                @item.StockQty.ToString("N")
                                                             </td>
                                                             <td>
                                                                 <div class="form-button-action">
@@ -131,6 +141,22 @@
                                                 }
                                             </tbody>
                                         </table>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 pl-0">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-12 pl-0">
+                                                    <div class="form-group">
+                                                        <label asp-for="Notes" class="col-md-3 col-form-label">Notes</label>
+                                                        <div class="col-md-12 pl-2 ">
+                                                            <input type="text" asp-for="Notes" class="form-control input-full text" placeholder="Enter Input">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">

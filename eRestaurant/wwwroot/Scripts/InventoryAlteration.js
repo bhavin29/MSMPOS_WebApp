@@ -6,7 +6,7 @@ $(document).ready(function () {
     FoodMenuTable = $('#FoodMenuTable').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
-            { targets: [2,3], orderable: false, class: "text-right" }
+            { targets: [2,3,4], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -39,6 +39,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             $('#FoodMenuId').children("option:selected").text(),
             $("#Qty").val(),
             $("#Amount").val(),
+            $("#StockQty").val(),
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -51,6 +52,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             foodMenuId: $("#FoodMenuId").val(),
             foodMenuName: $('#FoodMenuId').children("option:selected").text(),
             qty: $("#Qty").val(),
+            stockQty: $("#StockQty").val(),
             amount: $("#Amount").val()
         });
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -110,6 +112,7 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
                 $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
                 $("#Qty").val(foodMenuDataArr[i].qty);
                 $("#Amount").val(foodMenuDataArr[i].amount);
+                $("#StockQty").val(foodMenuDataArr[i].stockQty);
                 editFoodMenuDataArr = foodMenuDataArr.splice(i, 1);
             }
         }
@@ -150,6 +153,7 @@ function validation(id) {
 function clearFoodMenuItem() {
     $("#FoodMenuId").val('0');
     $("#Qty").val(parseFloat(1.00).toFixed(2));
+    $("#StockQty").val(parseFloat(0.00).toFixed(2));
     $("#Amount").val('0');
 }
 
@@ -177,6 +181,7 @@ $(function () {
                 var data = ({
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
+                    Notes: $("#Notes").val(),
                     InventoryAlterationDetails: foodMenuDataArr,
                     StoreId: $("#StoreId").val()
                 });
@@ -220,7 +225,7 @@ $('#ok').click(function () {
 });
 
 function GetFoodMenuPurchasePrice() {
-
+    GetInventoryStockQty();
     $.ajax({
         url: "/Waste/GetFoodMenuPurchasePrice",
         data: { "id": $("#FoodMenuId").val() },
@@ -239,3 +244,17 @@ function GetFoodMenuPurchasePrice() {
 $("#Qty").change(function () {
     $("#Amount").val(parseFloat(FoodMenuPurchasePrice) * parseFloat($("#Qty").val()));
 });
+
+function GetInventoryStockQty() {
+    $.ajax({
+        url: "/InventoryAlteration/GetInventoryStockQty",
+        data: { "storeId": $("#StoreId").val(), "foodMenuId": $("#FoodMenuId").val()},
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#StockQty").val(parseFloat(obj.stockQty).toFixed(2));
+        }
+    });
+}

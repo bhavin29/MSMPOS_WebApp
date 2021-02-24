@@ -337,5 +337,35 @@ namespace RocketPOS.Services
             }
             return lstFoodMenu;
         }
+
+        public List<SelectListItem> GetAssetSizeList()
+        {
+            List<SelectListItem> lstAssetSize = new List<SelectListItem>();
+            lstAssetSize.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstAssetSizeResult = _dropDownRepository.GetAssetSizeList().ToList();
+            if (lstAssetSizeResult != null && lstAssetSizeResult.Count > 0)
+            {
+                foreach (var item in lstAssetSizeResult)
+                {
+                    lstAssetSize.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return lstAssetSize;
+        }
+
+        public List<SelectListItem> GetAssetLocationList()
+        {
+            List<SelectListItem> lstAssetLocation = new List<SelectListItem>();
+            lstAssetLocation.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstAssetLocationResult = _dropDownRepository.GetAssetLocationList().ToList();
+            if (lstAssetLocationResult != null && lstAssetLocationResult.Count > 0)
+            {
+                foreach (var item in lstAssetLocationResult)
+                {
+                    lstAssetLocation.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return lstAssetLocation;
+        }
     }
 }

@@ -87,5 +87,13 @@ namespace RocketPOS.Controllers.Transaction
             }
             return Json(new { error = false, message = InventoryAlterationMessage, status = 200 });
         }
+
+        [HttpGet]
+        public JsonResult GetInventoryStockQty(int storeId,int foodMenuId)
+        {
+            decimal stockQty = 0;
+            stockQty = _inventoryAlterationService.GetInventoryStockQty(storeId, foodMenuId);
+            return Json(new { stockQty = stockQty });
+        }
     }
 }

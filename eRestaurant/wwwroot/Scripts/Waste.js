@@ -28,7 +28,8 @@ $(document).ready(function () {
         ]
     });
     $("#StoreId").focus();
-
+    $("#FoodMenuId").select2();
+    $("#IngredientId").select2();
 });
 
 $('#Cancle').on('click', function (e) {

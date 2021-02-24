@@ -33,5 +33,8 @@ namespace RocketPOS.Interface.Services
 
         List<SelectListItem> GetProductionFormulaFoodMenuList();
 
+        List<SelectListItem> GetAssetSizeList();
+        List<SelectListItem> GetAssetLocationList();
+
     }
 }

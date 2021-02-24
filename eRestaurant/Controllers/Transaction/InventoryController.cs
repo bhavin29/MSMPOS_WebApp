@@ -109,8 +109,7 @@ namespace RocketPOS.Controllers.Transaction
                 string folderName = "Upload";
                 string webRootPath = _hostingEnvironment.WebRootPath;
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
-
-
+ 
                 string newPath = Path.Combine(webRootPath, folderName);
                 string BatchId = DateTime.Now.ToString("MM/dd/yyyy HH:mm").Replace("/", "").Replace(" ", "").Replace(":", "").ToString() + _random.Next(1000).ToString();
                 if (!Directory.Exists(newPath))
@@ -160,12 +159,17 @@ namespace RocketPOS.Controllers.Transaction
                                     if (j == 0)
                                     {
                                         item.FoodmenuId = Convert.ToInt32(row.GetCell(j).ToString());
+                                        sb.Append("<td class=\"text-right\">" + row.GetCell(j).ToString() + "</td>");
                                     }
                                     else if (j == 3)
                                     {
                                         item.PhysicalStockQty = Convert.ToDecimal(row.GetCell(j).ToString());
+                                        sb.Append("<td  class=\"text-right\">" + row.GetCell(j).ToString() + "</td>");
                                     }
-                                    sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
+                                    else
+                                    {
+                                        sb.Append("<td>" + row.GetCell(j).ToString() + "</td>");
+                                    }
                                 }
                             }
                             sb.AppendLine("</tr>");
@@ -214,7 +218,7 @@ namespace RocketPOS.Controllers.Transaction
                     row.CreateCell(1).SetCellValue("Menu Item Category");
                     row.CreateCell(2).SetCellValue("Menu Item");
                     row.CreateCell(3).SetCellValue("Physical Stock");
-                    row.CreateCell(4).SetCellValue("Physical Stock Date");
+                //    row.CreateCell(4).SetCellValue("Physical Stock Date");
 
                     inventoryOpenigStockImports = _iInventoryService.GetInventoryOpeningStockByStore(storeId, categoryId);
 
@@ -227,7 +231,7 @@ namespace RocketPOS.Controllers.Transaction
                         row.CreateCell(2).SetCellValue(item.Foodmenuname);
                         row.CreateCell(3).SetCellValue(item.PhysicalStockQty.ToString());
                         //  row.CreateCell(4).SetCellValue(item.PhysicalDatetime.ToString("dd/mm/yyyy"));
-                        row.CreateCell(4).SetCellValue("");
+                       // row.CreateCell(4).SetCellValue("");
                         intRow = intRow + 1;
                     }
                     workbook.Write(fs);

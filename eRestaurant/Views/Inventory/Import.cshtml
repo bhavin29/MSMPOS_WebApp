@@ -97,6 +97,7 @@
 
             $("#btnupload").attr("disabled", true);
             $("#btnupload").val('Please wait...');
+            $("#divPrint").css('display', 'none');
 
             var fdata = new FormData();
             var fileUpload = $("#fileupload").get(0);
@@ -119,7 +120,8 @@
                         $('#divPrint').html(response);
                         $("#btnupload").attr("disabled", false);
                         $("#btnupload").val('Upload');
-                   }
+                        $("#divPrint").css('display', 'block');
+                  }
                 },
                 error: function (e) {
                     $('#divPrint').html(e.responseText);

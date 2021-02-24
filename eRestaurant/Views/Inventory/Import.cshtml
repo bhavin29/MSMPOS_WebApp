@@ -1,38 +1,89 @@
-﻿@model IEnumerable<RocketPOS.Models.Reports.InventoryReportModel>
+﻿@model RocketPOS.Models.InventoryOpenigStockImport
+@using Microsoft.Extensions.Localization;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Opening Stock");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Opening Stock");
+}
 
 <form asp-controller="Home" asp-action="Export">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <input type="file" id="fileupload" name="files" class="form-control" />
-            </div>
-            <div class="col-md-3">
-                <input type="button" name="Upload" value="Upload" id="btnupload" class="btn btn-primary" />
-                @*<a href="@Url.Action("Download", "Inventory")">Download</a>*@
-            </div>
-            <div class="col-md-3">
-                <input type="submit" name="Export" value="Download" id="btnExport"
-                       class="btn btn-primary" asp-action="Export" asp-route-storeId="2" asp-route-categoryId="0" />
-            </div>
-            <div class="col-md-2" style="display:none">
-                <input type="submit" name="Process" value="Start Process" id="btnProcess" 
-                       class="btn btn-primary" asp-action="ProcessData" asp-route-storeId="2" asp-route-categoryId="0" />
+
+    <div class="card">
+        <div class="card-header container-fluid">
+            <div class="row">
+                <div class="col-md-11">
+                    <h5 class="card-title">Opening Stock - Import</h5>
+                </div>
+                <div class="float-right">
+                    <input type="submit" name="Export" value="Download" id="btnExport"
+                           class="btn btn-primary" asp-action="Export" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
+                </div>
             </div>
         </div>
-        <div class="clearfix">&nbsp;</div>
         <div class="row">
-            <div id="divPrint"></div>
+            <div class="card-body">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-3 pl-5">
+                            <div class="form-group">
+                                @if (Model != null)
+                                {
+                                    <label asp-for="StoreList" class="control-label">Store</label>
+                                    <select asp-for="StoreId"
+                                            class="form-control"
+                                            asp-items="@(new SelectList(Model.StoreList, "Value", "Text"))">
+                                    </select>
+                                    <span asp-validation-for="StoreId" class="text-danger"></span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pl-0">
+                        <div class="card-body">
+                            <div class="col-md-12 pl-0">
+                                <div class="row">
+                                    <div class="container pl-0">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                <input type="file" id="fileupload" name="files" class="form-control" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="button" name="Upload" value="Upload" id="btnupload" class="btn btn-primary" />
+                                                @*<a href="@Url.Action("Download", "Inventory")">Download</a>*@
+                                            </div>
+                                            <div class="col-md-2" style="display:none">
+                                                <input type="submit" name="Process" value="Start Process" id="btnProcess"
+                                                       class="btn btn-primary" asp-action="ProcessData" asp-route-storeId="2" asp-route-categoryId="0" />
+                                            </div>
+                                        </div>
+                                        <div class="clearfix">&nbsp;</div>
+                                        <div class="row pl-3">
+                                            <div id="divPrint"></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </form>
-
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#btnupload').on('click', function () {
             var fileExtension = ['xls', 'xlsx'];
             var filename = $('#fileupload').val();
-            if (filename.length == 0) {
+
+            if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
+                alert("Please select a store");
+                return false;
+            }
+            else if (filename.length == 0) {
                 alert("Please select a file.");
                 return false;
             }
@@ -43,13 +94,17 @@
                     return false;
                 }
             }
+
+            $("#btnupload").attr("disabled", true);
+            $("#btnupload").val('Please wait...');
+
             var fdata = new FormData();
             var fileUpload = $("#fileupload").get(0);
             var files = fileUpload.files;
             fdata.append(files[0].name, files[0]);
             $.ajax({
                 type: "POST",
-                url: "/Inventory/ImportData?storeId=2",
+                url: "/Inventory/ImportData?storeId=" + $("#StoreId").val(),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("XSRF-TOKEN",
                         $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -62,7 +117,9 @@
                         alert('Some error occured while uploading');
                     else {
                         $('#divPrint').html(response);
-                    }
+                        $("#btnupload").attr("disabled", false);
+                        $("#btnupload").val('Upload');
+                   }
                 },
                 error: function (e) {
                     $('#divPrint').html(e.responseText);
@@ -72,10 +129,15 @@
         $('#btnExport').on('click', function () {
             var fileExtension = ['xls', 'xlsx'];
             var filename = $('#fileupload').val();
+            if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
+                alert("Please select a store");
+                return false;
+            }
             //if (filename.length == 0) {
             //    alert("Please select a file then Import");
             //    return false;
             //}
         });
+
     });
 </script>

@@ -86,7 +86,7 @@ namespace RocketPOS.Repository
             List<InventoryOpenigStockImport> inventoryOpenigStockImports = new List<InventoryOpenigStockImport>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select StoreId,FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty,ImportBatch from inventory i " +
+                var query = " select StoreId,FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty from inventory i " +
                             " inner join foodmenu f on f.id = i.foodmenuid " +
                             " inner join foodmenucategory fc on fc.id = f.foodcategoryid " +
                             " Where I.IsDeleted = 0  And I.StoreId = " + storeId;

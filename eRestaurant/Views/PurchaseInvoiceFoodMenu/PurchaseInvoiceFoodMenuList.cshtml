@@ -54,10 +54,10 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:50%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
                             </thead>
                             <tfoot>
@@ -65,10 +65,10 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:50%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
                             </tfoot>
                             <tbody>
@@ -95,13 +95,13 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Username)
                                         </td>
-                                        <td>
+                                        @*<td>
                                             <div class="form-button-action">
                                                 <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
                                                 <label> / </label>
                                                 <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                             </div>
-                                        </td>
+                                        </td>*@
                                         <td>
                                             <div class="form-button-action">
                                                 <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="View">View</a>
@@ -171,16 +171,16 @@
                             { "data": "supplierName", "name": "Store", "autoWidth": true },
                             { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true, className: "text-right" },
                             { "data": "username", "name": "Username", "autoWidth": true },
-                            {
-                                data: null,
-                                mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu/' + row.id + '?type=Edit">Edit</a>' +
-                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseInvoiceFoodMenu('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
-                                },
-                            },
+                            //{
+                            //    data: null,
+                            //    mRender: function (data, type, row) {
+                            //        return '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/PurchaseInvoiceFoodMenu/' + row.id + '?type=Edit">Edit</a>' +
+                            //            ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                            //            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                            //            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                            //            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseInvoiceFoodMenu('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                            //    },
+                            //},
                             {
                                 data: null,
                                 mRender: function (data, type, row) {

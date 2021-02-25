@@ -487,6 +487,10 @@ namespace RocketPOS.Repository
                     {
                         sqltrans.Commit();
 
+                        int outResult = 0;
+                        if (purchaseModel.PurchaseId > 0)
+                            outResult = UpdatePurchaseOrderId(purchaseModel.PurchaseId);
+
                         CommonRepository commonRepository = new CommonRepository(_ConnectionString);
                         string sResult = commonRepository.InventoryPush("PI", result);
 
@@ -698,6 +702,29 @@ namespace RocketPOS.Repository
                 return con.QueryFirstOrDefault<int>(query);
             }
         }
+
+        public int UpdatePurchaseOrderId(long purchaseId)
+        {
+            int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update Purchase set Status = 5 where id = " + purchaseId;
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
+                }
+            }
+            return result;
+        }
+
 
     }
 }

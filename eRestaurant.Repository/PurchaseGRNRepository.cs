@@ -378,7 +378,7 @@ namespace RocketPOS.Repository
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select PurchaseGRN.Id as Id,PurchaseGRN.PurchaseId, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
                     "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due,U.Username " +
                     "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
                     // " AND Convert(varchar(10), PurchaseGRNDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
@@ -488,6 +488,10 @@ namespace RocketPOS.Repository
                     if (detailResult > 0)
                     {
                         sqltrans.Commit();
+
+                        int outResult = 0;
+                        if (purchaseModel.PurchaseId > 0)
+                            outResult = UpdatePurchaseOrderId(purchaseModel.PurchaseId);
 
                         CommonRepository commonRepository = new CommonRepository(_ConnectionString);
                         string sResult = commonRepository.InventoryPush("GRN", result);
@@ -696,9 +700,32 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id from Purchase Where ReferenceNo='" + poReference +"' and isDeleted=0";
-                return  con.QueryFirstOrDefault<int>(query);
+                var query = "Select Id from Purchase Where ReferenceNo='" + poReference + "' and isDeleted=0";
+                return con.QueryFirstOrDefault<int>(query);
             }
         }
+
+        public int UpdatePurchaseOrderId(long purchaseId)
+        {
+            int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update Purchase set Status = 4 where id = " + purchaseId;
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
+                }
+            }
+            return result;
+        }
+
     }
 }

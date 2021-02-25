@@ -60,7 +60,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
-</thead>
+                            </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -72,51 +72,51 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
-</tfoot>
+                            </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                <tr role="row">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SupplierName)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.GrandTotal)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Username)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
-                                            <label> / </label>
-                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
-                                            <label> / </label>
-                                            <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="View">View</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
+                                                <label> / </label>
+                                                <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                                <label> / </label>
+                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="View">View</a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -184,24 +184,37 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id +'?type=Edit">Edit</a>' +
-                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                    if (row.status == 'GRN' || row.status == 'Invoice') {
+                                        return '';
+                                    }
+                                    else {
+                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=Edit">Edit</a>' +
+                                            ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                    }
                                 },
                             },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
-                                        ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
-                                },
+                                    if (row.status == 'GRN') {
+                                        return ' <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                    }
+                                    else if (row.status == 'Invoice') {
+                                        return '';
+                                    }
+                                    else {
+                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
+                                            ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                    }
+                                    },
                             },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=View">View</a></div>' 
+                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=View">View</a></div>'
                                 },
                             },
                         ],

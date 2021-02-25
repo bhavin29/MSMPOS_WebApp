@@ -82,6 +82,10 @@ namespace RocketPOS.Framework
         Approved = 2,
         [Display(Name = "Rejected")]
         Rejected = 3,
+        [Display(Name = "GRN")]
+        GRN = 4,
+        [Display(Name = "Invoice")]
+        Invoice = 5,
     }
 
     public enum ProductionEntryStatus

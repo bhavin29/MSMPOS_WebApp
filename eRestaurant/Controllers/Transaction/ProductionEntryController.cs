@@ -72,7 +72,7 @@ namespace RocketPOS.Controllers.Transaction
                 productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
             }
             productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
-            productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
             productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
   
             return View(productionEntryModel);

@@ -35,7 +35,7 @@ namespace RocketPOS.Controllers
                     if (loginModel != null)
                     {
                         MergeLogin(loginModel);
-                        return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Home");
                     }
                     else
                     {

@@ -218,22 +218,21 @@ $('#ok').click(function () {
 });
 
 function deleteOrder(id, rowId) {
-    debugger;
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
-            if (dataArr[i].ingredientId == id) {
+            if (dataArr[i].ingredientId == rowId) {
                 deletedId.push(dataArr[i].inventoryAdjustmentId);
                 dataArr.splice(i, 1);
-                InventoryAdjustmentDatatable.row(rowId).remove().draw(false);
+                InventoryAdjustmentDatatable.row(i).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + id).modal('hide');
             }
         }
         if (InventoryType == "1") {
-            if (dataArr[i].foodMenuId == id) {
+            if (dataArr[i].foodMenuId == rowId) {
                 deletedId.push(dataArr[i].inventoryAdjustmentId);
                 dataArr.splice(i, 1);
-                InventoryAdjustmentDatatable.row(rowId).remove().draw(false);
+                InventoryAdjustmentDatatable.row(i).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + id).modal('hide');
             }

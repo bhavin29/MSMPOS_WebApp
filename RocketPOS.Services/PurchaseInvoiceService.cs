@@ -192,7 +192,8 @@ namespace RocketPOS.Services
                              DeliveryDate = purchase.DeliveryDate,
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             PurchaseStatus = purchase.PurchaseStatus
                          }).SingleOrDefault();
             if (model != null)
             {

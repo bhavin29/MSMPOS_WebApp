@@ -144,7 +144,9 @@ namespace RocketPOS.Controllers.Transaction
             else
             {
                 purchaseMessage = _locService.GetLocalizedHtmlString("ValidPurchaseInvoiceDetails");
-                return Json(new { error = true, message = purchaseMessage, status = 201 });
+                return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu");
+
+               // return Json(new { error = true, message = purchaseMessage, status = 201 });
             }
             // return View(purchaseModel);
             return Json(new { error = false, message = purchaseMessage, status = 200 });

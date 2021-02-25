@@ -128,6 +128,8 @@ namespace RocketPOS.Repository
             string foodMenuId = "NULL", ingredientId = "NULL";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                if (LoginInfo.Userid == 0) LoginInfo.Userid = 1;
+ 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO InventoryAdjustment " +

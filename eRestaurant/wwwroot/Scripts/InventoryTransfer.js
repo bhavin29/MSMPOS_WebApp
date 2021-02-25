@@ -24,7 +24,7 @@ $(document).ready(function () {
                 "Data": "", "name": "Action", "defaultContent": '<a href="#" class="deleteItem">Delete</a>', "autoWidth": true
             },
             {
-                "targets": [4,6],
+                "targets": [4, 6],
                 "visible": false,
                 "searchable": false
             },
@@ -32,7 +32,7 @@ $(document).ready(function () {
                 "targets": [2, 3],
                 "sClass": "text-right"
             }
-       ]
+        ]
     });
     $("#FromStoreId").focus();
 });
@@ -90,15 +90,15 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + ProductUnit + ' </td>',
                 '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
                 'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
-              $("#InventoryTransferId").val()
+                $("#InventoryTransferId").val()
             ]).node().id = rowId;
         }
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
-  
+
         InventoryTransferDatatable.draw(false);
 
         if (InventoryType == "2") {
@@ -125,7 +125,7 @@ $('#addRow').on('click', function (e) {
             });
         }
 
-  
+
         clearItem();
         editDataArr = [];
 
@@ -234,20 +234,19 @@ $('#ok').click(function () {
 function deleteOrder(id, rowId) {
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
-            if (dataArr[i].ingredientId == id) {
+            if (dataArr[i].ingredientId == rowId) {
                 deletedId.push(dataArr[i].InventoryTransferId);
                 dataArr.splice(i, 1);
-                InventoryTransferDatatable.row(rowId).remove().draw(false);
+                InventoryTransferDatatable.row(i).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + id).modal('hide');
             }
         }
-
         if (InventoryType == "1") {
-            if (dataArr[i].foodMenuId == id) {
+            if (dataArr[i].foodMenuId == rowId) {
                 deletedId.push(dataArr[i].inventoryTransferId);
                 dataArr.splice(i, 1);
-                InventoryTransferDatatable.row(rowId).remove().draw(false);
+                InventoryTransferDatatable.row(i).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + id).modal('hide');
             }

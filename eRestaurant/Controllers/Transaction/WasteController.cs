@@ -75,7 +75,7 @@ namespace RocketPOS.Controllers.Transaction
             }
 
             wasteModel.StoreList = _iDropDownService.GetStoreList();
-            wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
             wasteModel.IngredientList = _iDropDownService.GetIngredientList();
             wasteModel.FoodMenuListForLostAmount = _iWasteService.FoodMenuListForLostAmount();
             wasteModel.IngredientListForLostAmount = _iWasteService.IngredientListForLostAmount();

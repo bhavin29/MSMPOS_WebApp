@@ -141,7 +141,8 @@ $('#addRow').on('click', function (e) {
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             totalAmount: Total,
-            purchaseInvoiceId: $("#PurchaseInvoiceId").val()
+            purchaseInvoiceId: $("#PurchaseInvoiceId").val(),
+            purchaseStatus: $("#PurchaseStatus").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -186,6 +187,8 @@ function saveOrder(data) {
 
 $(function () {
     $('#saveOrder').click(function () {
+
+        debugger;
         var message = validation(1);
         if (message == '') {
             $("#purchaseInvoice").on("submit", function (e) {
@@ -207,6 +210,7 @@ $(function () {
                     DriverName: $("#DriverName").val(),
                     VehicleNumber: $("#VehicleNumber").val(),
                     Notes: $("#Notes").val(),
+                    purchaseStatus: $("#PurchaseStatus").val(),
                     SupplierList: [],
                     FoodMenuList: [],
                     PurchaseInvoiceDetails: dataArr,

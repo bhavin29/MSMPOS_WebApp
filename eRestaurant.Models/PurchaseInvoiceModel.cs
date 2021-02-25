@@ -44,6 +44,7 @@ namespace RocketPOS.Models
         public  string Notes { get; set; }
         public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetails { get; set; }
         public int[] DeletedId { get; set; }
+        public int PurchaseStatus { get; set; }
     }
     public class PurchaseInvoiceDetailModel
     {

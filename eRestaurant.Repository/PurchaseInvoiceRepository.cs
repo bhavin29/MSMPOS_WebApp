@@ -372,7 +372,7 @@ namespace RocketPOS.Repository
 
             return purchaseDetails;
         }
-        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate,int supplierId)
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -490,9 +490,17 @@ namespace RocketPOS.Repository
                         int outResult = 0;
                         if (purchaseModel.PurchaseId > 0)
                             outResult = UpdatePurchaseOrderId(purchaseModel.PurchaseId);
-
-                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                        string sResult = commonRepository.InventoryPush("PI", result);
+                        
+                        if (purchaseModel.PurchaseId == 0)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PI", result);
+                        }
+                        else if (purchaseModel.PurchaseId >0 && purchaseModel.PurchaseStatus !=4)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PI", result);
+                        }
 
                     }
                     else
@@ -508,7 +516,6 @@ namespace RocketPOS.Repository
 
             return detailResult;
         }
-
         public int UpdatePurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseModel)
         {
             int result = 0;
@@ -617,7 +624,6 @@ namespace RocketPOS.Repository
 
             return result;
         }
-
         public string ReferenceNumberFoodMenu()
         {
             string result = string.Empty;
@@ -637,7 +643,6 @@ namespace RocketPOS.Repository
             }
             return result;
         }
-
         public decimal GetTaxByFoodMenuId(int foodMenuId)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -650,7 +655,6 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
-
         public decimal GetFoodMenuLastPrice(int foodMenuId)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -666,28 +670,26 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
-
         public List<PurchaseInvoiceModel> GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId)
         {
             List<PurchaseInvoiceModel> purchaseModelList = new List<PurchaseInvoiceModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT 0 as Id,P.Id AS PurchaseId,P.StoreId,P.EmployeeId,P.ReferenceNo,GETDATE() AS PurchaseInvoiceDate,Supplier.SupplierName, Supplier.Id as SupplierId,P.GrossAmount,P.TaxAmount,P.GrandTotal As TotalAmount, "+
-                            "P.DueAmount as Due,P.PaidAmount as Paid,null AS DeliveryNoteNumber,null as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes FROM Purchase P inner join Supplier on P.SupplierId = Supplier.Id " +
+                var query = "SELECT 0 as Id,P.Id AS PurchaseId,P.StoreId,P.EmployeeId,P.ReferenceNo,GETDATE() AS PurchaseInvoiceDate,Supplier.SupplierName, Supplier.Id as SupplierId,P.GrossAmount,P.TaxAmount,P.GrandTotal As TotalAmount, " +
+                            "P.DueAmount as Due,P.PaidAmount as Paid,null AS DeliveryNoteNumber,null as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes,P.Status as PurchaseStatus FROM Purchase P inner join Supplier on P.SupplierId = Supplier.Id " +
                             "Where P.InventoryType = 1 And P.Isdeleted = 0 And P.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseInvoiceModel>(query).AsList();
             }
             return purchaseModelList;
         }
-
         public List<PurchaseInvoiceDetailModel> GetPurchaseInvoiceFoodMenuDetailsPurchaseId(long purchaseId)
         {
             List<PurchaseInvoiceDetailModel> purchaseDetails = new List<PurchaseInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select 0 AS PurchaseInvoiceId,PD.FoodMenuId,f.FoodMenuName,pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount "+
-                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId inner join FoodMenu as f on PD.FoodMenuId = f.Id "+
-                            "Where P.InventoryType = 1 and P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = "+ purchaseId;
+                var query = "Select 0 AS PurchaseInvoiceId,PD.FoodMenuId,f.FoodMenuName,pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId inner join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                            "Where P.InventoryType = 1 and P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
                 purchaseDetails = con.Query<PurchaseInvoiceDetailModel>(query).AsList();
             }
 
@@ -698,7 +700,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select Id from Purchase Where ReferenceNo='" + poReference + "'";
+                var query = "Select Id from Purchase Where IsDeleted=0 and Status!=5 and ReferenceNo='" + poReference + "'";
                 return con.QueryFirstOrDefault<int>(query);
             }
         }

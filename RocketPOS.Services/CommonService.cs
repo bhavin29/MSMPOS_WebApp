@@ -15,9 +15,19 @@ namespace RocketPOS.Services
             _iCommonRepository = icommonRepository;
         }
 
+        public ClientModel GetEmailSettings()
+        {
+            return _iCommonRepository.GetEmailSettings();
+        }
+
         public int InsertErrorLog(ErrorModel errorModel)
         {
             return _iCommonRepository.InsertErrorLog(errorModel);
+        }
+
+        public int UpdateEmailSettings(ClientModel clientModel)
+        {
+            return _iCommonRepository.UpdateEmailSettings(clientModel);
         }
     }
 }

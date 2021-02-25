@@ -35,6 +35,8 @@ $(document).ready(function () {
         ]
     });
     $("#FoodMenuId").focus();
+    $("#StoreId").select2();
+    $("#FoodMenuId").select2();
 });
 
 $('#cancel').on('click', function (e) {
@@ -349,7 +351,7 @@ function validation(id) {
 }
 
 function clearItem() {
-        $("#FoodMenuId").val('0'),
+        $('#FoodMenuId').val(0).trigger('change'),
         //$("#ConsumpationStatus").val(''),
         $("#Quantity").val('1'),
         $("#Price").val(''),

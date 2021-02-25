@@ -1,0 +1,115 @@
+﻿@model RocketPOS.Models.RewardSetupModel
+@if (!string.IsNullOrEmpty(ViewBag.msg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.msg");
+    </script>
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Reward Setup</h5>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="RewardSetup">
+                                <div class="form-group">
+                                    <label asp-for="OfferName" class="control-label">Offer Name</label>
+                                    <input asp-for="OfferName" class="form-control" />
+                                    <span asp-validation-for="OfferName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TransactionAmount" class="control-label">Transaction Amount</label>
+                                    <input asp-for="TransactionAmount" class="form-control" type="number" min="1" max="99999" />
+                                    <span asp-validation-for="TransactionAmount" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="RewardPoint" class="control-label">Reward Point</label>
+                                    <input asp-for="RewardPoint" class="form-control" type="number" min="1" max="99999" />
+                                    <span asp-validation-for="RewardPoint" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Notes" class="control-label"></label>
+                                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
+                                </div>
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
+                                    {
+                                        <div class="form-group">
+                                            <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                            <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 42px" />
+                                        </div>
+                                    }
+                                }
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "RewardSetup")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#RewardSetup").prev().focus();
+            $("#vModal").modal('hide');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}
+

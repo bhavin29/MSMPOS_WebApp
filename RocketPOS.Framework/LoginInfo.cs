@@ -6,7 +6,7 @@ namespace RocketPOS.Framework
 {
     public static class LoginInfo
     {
-        public static int Userid =0;
+        public static int Userid = 0;
         public static int RoleType = 1;
         public static string Username = "";
         public static int ExpiryDays = 30;
@@ -41,5 +41,9 @@ namespace RocketPOS.Framework
         public static bool IsItemOverright = false;
         public static string VATLabel = "";
         public static string PINLabel = "";
+        public static string FromEmailAddress = "";
+        public static string EmailDisplayName = "";
+        public static string FromEmailPassword = "";
+        public static string EmailSubject = "";
     }
 }

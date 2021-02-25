@@ -22,6 +22,8 @@ $(document).ready(function () {
             ['200', '500', '1000']
         ],
     });
+    $("#StoreId").select2();
+    $("#FoodMenuId").select2();
 });
 
 
@@ -151,7 +153,7 @@ function validation(id) {
 }
 
 function clearFoodMenuItem() {
-    $("#FoodMenuId").val('0');
+    $('#FoodMenuId').val(0).trigger('change');
     $("#Qty").val(parseFloat(1.00).toFixed(2));
     $("#InventoryStockQty").val(parseFloat(0.00).toFixed(2));
     $("#Amount").val('0');

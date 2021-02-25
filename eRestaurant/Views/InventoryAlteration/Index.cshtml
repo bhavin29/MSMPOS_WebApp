@@ -132,6 +132,8 @@
         var InventoryAlteration = null;
         $(document).ready(function () {
             InventoryAlteration = $('#@dataTableName').DataTable();
+            $("#StoreId").select2();
+            $("#FoodMenuId").select2();
         });
 
         function loadInventoryAlterationList() {

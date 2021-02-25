@@ -13,6 +13,10 @@ var IngredientNetAmountTotal = 0;
 $(document).ready(function () {
     $("#assetEventForm").validate();
 
+    $("#AssetItemId").select2();
+    $("#FoodMenuId").select2();
+    $("#IngredientId").select2();
+
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
             { targets: [0, 1], visible: false },
@@ -86,6 +90,7 @@ $(document).ready(function () {
     if ($("#Status").val() == 1) {
         AssetIngredientItem.columns([7, 8]).visible(false);
     }
+
 });
 
 //AssetEventItem
@@ -180,7 +185,7 @@ $('#addRowItem').on('click', function (e) {
 });
 
 function clearAssetItem() {
-    $("#AssetItemId").val('0');
+    $('#AssetItemId').val(0).trigger('change');
     $("#AssetItemCostPrice").val('');
     $("#EventQty").val('1');
 }
@@ -352,7 +357,7 @@ $('#addRowFood').on('click', function (e) {
 });
 
 function clearFoodMenuItem() {
-    $("#FoodMenuId").val('0');
+    $('#FoodMenuId').val(0).trigger('change');
     $("#SalesPrice").val('0');
     $("#Quantity").val('1');
 }
@@ -509,7 +514,7 @@ $('#addRowIngredient').on('click', function (e) {
 });
 
 function clearIngredientItem() {
-    $("#IngredientId").val('0');
+    $('#IngredientId').val(0).trigger('change');
     $("#AssetIngredientCostPrice").val('0');
     $("#IngredientEventQty").val('1');
 }
@@ -1310,7 +1315,7 @@ $("select").change(function () { // any select that changes.
             }
         }
     }
-    alert(MissingNoteText);
+    //alert(MissingNoteText);
 })
 
 

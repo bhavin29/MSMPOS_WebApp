@@ -12,10 +12,10 @@ namespace RocketPOS.Framework
         {
             try
             {
-                var fromAddress = new MailAddress("bhavinkcs@gmail.com", "RocketPOS");
+                var fromAddress = new MailAddress(LoginInfo.FromEmailAddress, LoginInfo.EmailDisplayName);
                 var toAddress = new MailAddress(email, "");
-                const string fromPassword = "RocketPOS007";
-                const string subject = "RocketPOS - Purchase Approval Request";
+                string fromPassword = LoginInfo.FromEmailPassword;
+                string subject = LoginInfo.EmailSubject;
                 string body = htmlString;
 
                 var smtp = new SmtpClient

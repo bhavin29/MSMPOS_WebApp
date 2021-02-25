@@ -8,5 +8,7 @@ namespace RocketPOS.Interface.Repository
     public interface ICommonRepository
     {
         int InsertErrorLog(ErrorModel errorModel);
+        ClientModel GetEmailSettings();
+        int UpdateEmailSettings(ClientModel clientModel);
     }
 }

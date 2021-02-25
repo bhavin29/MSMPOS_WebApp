@@ -28,6 +28,7 @@ $(document).ready(function () {
         ]
     });
     $("#StoreId").focus();
+    $("#StoreId").select2();
     $("#FoodMenuId").select2();
     $("#IngredientId").select2();
 });

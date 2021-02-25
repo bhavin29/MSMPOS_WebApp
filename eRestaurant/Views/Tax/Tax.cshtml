@@ -1,0 +1,100 @@
+﻿@model RocketPOS.Models.TaxModel
+@if (!string.IsNullOrEmpty(ViewBag.msg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.msg");
+    </script>
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tax</h5>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Tax">
+                                <div class="form-group">
+                                    <label asp-for="TaxName" class="control-label">Tax Name</label>
+                                    <input asp-for="TaxName" class="form-control" />
+                                    <span asp-validation-for="TaxName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TaxPercentage" class="control-label">Tax Percentage</label>
+                                    <input asp-for="TaxPercentage" class="form-control" type="number" min="1" max="99999" />
+                                    <span asp-validation-for="TaxPercentage" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TaxType" class="control-label">Tax Type</label>
+                                    <input asp-for="TaxType" class="form-control" type="number" min="1" max="99999" />
+                                    <span asp-validation-for="TaxType" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "Tax")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#Tax").prev().focus();
+            $("#vModal").modal('hide');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}
+

@@ -39,8 +39,6 @@ namespace RocketPOS.Controllers.Master
             {
                 assetItemModel = _iAssetItemService.GetAssetItemById(Convert.ToInt32(id));
             }
-            assetItemModel.AssetLocationList = _iDropDownService.GetAssetLocationList();
-            assetItemModel.AssetSizeList = _iDropDownService.GetAssetSizeList();
             assetItemModel.UnitList = _iDropDownService.GetUnitList();
             return View(assetItemModel);
         }
@@ -52,11 +50,21 @@ namespace RocketPOS.Controllers.Master
             if (assetItemModel.Id > 0)
             {
                 var result = _iAssetItemService.UpdateAssetItem(assetItemModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("AssetItemName", "Asset item already exists");
+                    return View(assetItemModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iAssetItemService.InsertAssetItem(assetItemModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("AssetItemName", "Asset item already exists");
+                    return View(assetItemModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             return RedirectToAction("Index", "AssetItem");

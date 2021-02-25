@@ -30,7 +30,7 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         public decimal Qty { get; set; }
         public decimal Amount { get; set; }
-        public decimal StockQty { get; set; }
+        public decimal InventoryStockQty { get; set; }
     }
 
     public class InventoryAlterationModel
@@ -60,6 +60,6 @@ namespace RocketPOS.Models
 
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Amount { get; set; }
-        public decimal StockQty { get; set; }
+        public decimal InventoryStockQty { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"UPDATE AssetCategory SET isDeleted= 1,DateDeleted=GetUtcDate(),UserIdDeleted="+LoginInfo.Userid +" WHERE Id = {id}";
+                var query = $"UPDATE AssetCategory SET isDeleted= 1,DateDeleted=GetUtcDate(),UserIdDeleted="+LoginInfo.Userid +" WHERE Id = " + id;
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -60,12 +60,21 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("AssetCategory", "AssetCategoryName", assetCategoryModel.AssetCategoryName, assetCategoryModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
+                int MaxId = commonRepository.GetMaxId("AssetCategory");
+                
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO AssetCategory (AssetCategoryName," +
+                var query = "INSERT INTO AssetCategory (Id, AssetCategoryName," +
                             "Notes, " +
                             "UserIdInserted,DateInserted,IsDeleted)" +
-                            "VALUES (@AssetCategoryName," +
+                            "VALUES (" + MaxId + ",@AssetCategoryName," +
                             "@Notes," +
                             LoginInfo.Userid +",GetUtcDate(),0); SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, assetCategoryModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -88,6 +97,13 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("AssetCategory", "AssetCategoryName", assetCategoryModel.AssetCategoryName, assetCategoryModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE AssetCategory SET AssetCategoryName =@AssetCategoryName," +

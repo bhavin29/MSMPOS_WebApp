@@ -24,8 +24,8 @@
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("AssetItem")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                    <thead row="root">
-                        <tr>
+                    <thead >
+                        <tr role="row>
                             <th>
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
@@ -36,6 +36,9 @@
                                 @Html.DisplayName("Short Name")
                             </th>
                             <th>
+                                @Html.DisplayName("UnitName")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Brandname")
                             </th>
                             <th>
@@ -43,23 +46,14 @@
                             </th>
                             <th>
                                 @Html.DisplayName("Cost Price")
-                            </th>
-                            <th>
-                                @Html.DisplayName("AssetSizeName")
-                            </th>
-                            <th>
-                                @Html.DisplayName("AssetLocationName")
-                            </th>
-                            <th>
-                                @Html.DisplayName("UnitName")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
                             </th>
                         </tr>
                     </thead>
-                    <tfoot row="root">
-                        <tr>
+                    <tfoot>
+                        <tr role="row>
                             <th>
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
@@ -70,6 +64,9 @@
                                 @Html.DisplayName("Short Name")
                             </th>
                             <th>
+                                @Html.DisplayName("UnitName")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Brandname")
                             </th>
                             <th>
@@ -77,15 +74,6 @@
                             </th>
                             <th>
                                 @Html.DisplayName("Cost Price")
-                            </th>
-                            <th>
-                                @Html.DisplayName("AssetSizeName")
-                            </th>
-                            <th>
-                                @Html.DisplayName("AssetLocationName")
-                            </th>
-                            <th>
-                                @Html.DisplayName("UnitName")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -98,43 +86,36 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ShortName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Brandname)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Model)
-                            </td>
-                            <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.CostPrice)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetSizeName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetLocationName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitName)
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="AssetItem" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
-
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssetItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ShortName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Brandname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Model)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.CostPrice)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="AssetItem" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -169,7 +150,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5,6,7,8], rows: ':visible' },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5,6], rows: ':visible' },
                     format: {
                         body: function (data, row, column, node) {
                             if ($(data).is("input")) {

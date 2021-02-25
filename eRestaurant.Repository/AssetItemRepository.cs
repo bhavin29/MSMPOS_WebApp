@@ -25,7 +25,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"UPDATE AssetItem SET IsDeleted = 1,DateDeleted=GetUtcDate(),UserIdDeleted=" + LoginInfo.Userid + " WHERE Id = {id};";
+                var query = $"UPDATE AssetItem SET IsDeleted = 1,DateDeleted=GetUtcDate(),UserIdDeleted=" + LoginInfo.Userid + " WHERE Id = " + id;
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -45,8 +45,8 @@ namespace RocketPOS.Repository
             AssetItemModel assetItemModel = new AssetItemModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.AssetSizeId,AI.AssetLocationId,AI.UnitId,AZ.Sizename As AssetSizeName,AL.AssetLocation AS AssetLocationName,U.UnitName from AssetItem AI " +
-                            " Inner Join AssetSize AZ ON AZ.Id = AI.AssetSizeId Inner Join AssetLocation AL ON AL.Id = AI.AssetLocationId Inner Join Units U ON U.Id = AI.UnitId " +
+                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName from AssetItem AI " +
+                            " Inner Join Units U ON U.Id = AI.UnitId " +
                             " Where AI.IsDeleted = 0 And AI.Id = "+id;
                 assetItemModel = con.Query<AssetItemModel>(query).FirstOrDefault();
             }
@@ -59,8 +59,8 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.AssetSizeId,AI.AssetLocationId,AI.UnitId,AZ.Sizename As AssetSizeName,AL.AssetLocation AS AssetLocationName,U.UnitName from AssetItem AI " +
-                            " Inner Join AssetSize AZ ON AZ.Id = AI.AssetSizeId Inner Join AssetLocation AL ON AL.Id = AI.AssetLocationId Inner Join Units U ON U.Id = AI.UnitId " +
+                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName from AssetItem AI " +
+                            " Inner Join Units U ON U.Id = AI.UnitId " +
                             " Where AI.IsDeleted = 0 ";
                 assetItemModel = con.Query<AssetItemModel>(query).ToList();
             }
@@ -72,13 +72,22 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("AssetItem", "AssetItemName", assetItemModel.AssetItemName, assetItemModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
+
+                int MaxId = commonRepository.GetMaxId("AssetItem");
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO AssetItem " +
-                    "(AssetItemName, ShortName, Code,AssetSizeId, AssetLocationId,Brandname, Model, Notes,CostPrice,UnitId," +
+                    "(AssetItemName, ShortName, Code, Brandname, Model, Notes,CostPrice,UnitId," +
                     " UserIdInserted,  DateInserted,IsDeleted) " +
                     "Values " +
-                    "(@AssetItemName, @ShortName,@Code, @AssetSizeId, @AssetLocationId,@Brandname, @Model,@Notes,@CostPrice,@UnitId," +
+                    "(@AssetItemName, @ShortName,@Code, @Brandname, @Model,@Notes,@CostPrice,@UnitId," +
                   LoginInfo.Userid + ",GetUtcDate(),0);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, assetItemModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -101,14 +110,18 @@ namespace RocketPOS.Repository
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                result = commonRepository.GetValidateUnique("AssetItem", "AssetItemName", assetItemModel.AssetItemName, assetItemModel.Id.ToString());
+                if (result > 0)
+                {
+                    return -1;
+                }
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE AssetItem SET " +
                      "AssetItemName=@AssetItemName, " +
                      "ShortName=@ShortName, " +
                      "Code=@Code, " +
-                     "AssetSizeId=@AssetSizeId, " +
-                     "AssetLocationId=@AssetLocationId, " +
                      " Brandname = @Brandname," +
                      " Model =@Model ," +
                      "Notes=@Notes," +

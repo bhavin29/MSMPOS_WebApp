@@ -99,6 +99,7 @@ $('#addRow').on('click', function (e) {
         $("#TotalLossAmount").val(parseFloat(TotalLossAmount).toFixed(2));
         clearItem();
         $("#FoodMenuId").focus();
+        $('#FoodMenuId').select2('focus');
     }
     else {
         $(".modal-body").text(message);
@@ -394,6 +395,8 @@ function clearItem() {
     $("#IngredientIdForLostAmount").val('0');
     FoodManuLostAmount = 0;
     IngredientLostAmount = 0;
+    $('#FoodMenuId').val(0).trigger('change');
+    $('#IngredientId').val(0).trigger('change');
 }
 
 

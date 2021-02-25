@@ -39,7 +39,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             $('#FoodMenuId').children("option:selected").text(),
             $("#Qty").val(),
             $("#Amount").val(),
-            $("#StockQty").val(),
+            $("#InventoryStockQty").val(),
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -52,7 +52,7 @@ $('#addFoodMenuRow').on('click', function (e) {
             foodMenuId: $("#FoodMenuId").val(),
             foodMenuName: $('#FoodMenuId').children("option:selected").text(),
             qty: $("#Qty").val(),
-            stockQty: $("#StockQty").val(),
+            inventoryStockQty: $("#InventoryStockQty").val(),
             amount: $("#Amount").val()
         });
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -112,7 +112,7 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
                 $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
                 $("#Qty").val(foodMenuDataArr[i].qty);
                 $("#Amount").val(foodMenuDataArr[i].amount);
-                $("#StockQty").val(foodMenuDataArr[i].stockQty);
+                $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
                 editFoodMenuDataArr = foodMenuDataArr.splice(i, 1);
             }
         }
@@ -153,7 +153,7 @@ function validation(id) {
 function clearFoodMenuItem() {
     $("#FoodMenuId").val('0');
     $("#Qty").val(parseFloat(1.00).toFixed(2));
-    $("#StockQty").val(parseFloat(0.00).toFixed(2));
+    $("#InventoryStockQty").val(parseFloat(0.00).toFixed(2));
     $("#Amount").val('0');
 }
 
@@ -254,7 +254,7 @@ function GetInventoryStockQty() {
         dataType: "text",
         success: function (data) {
             var obj = JSON.parse(data);
-            $("#StockQty").val(parseFloat(obj.stockQty).toFixed(2));
+            $("#InventoryStockQty").val(parseFloat(obj.stockQty).toFixed(2));
         }
     });
 }

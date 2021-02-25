@@ -23,7 +23,7 @@ namespace RocketPOS.Repository
             List<InventoryAlterationViewListModel> inventoryAlterationViewList = new List<InventoryAlterationViewListModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT IAD.Id,IA.Id as InventoryAlterationId,IA.ReferenceNo,IA.StoreId,S.StoreName,IAD.EntryDate,F.FoodMenuName,IAD.Qty,IAD.StockQty,IAD.Amount FROM InventoryAlteration IA " +
+                var query = " SELECT IAD.Id,IA.Id as InventoryAlterationId,IA.ReferenceNo,IA.StoreId,S.StoreName,IAD.EntryDate,F.FoodMenuName,IAD.Qty,IAD.InventoryStockQty,IAD.Amount FROM InventoryAlteration IA " +
                             " Inner Join Store S On S.Id = IA.StoreId Inner Join InventoryAlterationDetail IAD On IA.Id = IAD.InventoryAlterationId Inner Join FoodMenu F On F.Id = IAD.FoodMenuId " +
                             " Where IA.IsDeleted = 0";
 
@@ -86,7 +86,7 @@ namespace RocketPOS.Repository
                                              "  ([InventoryAlterationId] " +
                                              " ,[FoodMenuId] " +
                                              " ,[Qty] " +
-                                             " ,[StockQty] " +
+                                             " ,[InventoryStockQty] " +
                                              " ,[Amount] " +
                                              " ,[EntryDate] " +
                                              " ,[UserIdInserted]" +
@@ -96,7 +96,7 @@ namespace RocketPOS.Repository
                                               "(" + result + "," +
                                               foodmenu.FoodMenuId + "," +
                                               foodmenu.Qty + "," +
-                                              foodmenu.StockQty + "," +
+                                              foodmenu.InventoryStockQty + "," +
                                               foodmenu.Amount + "," +
                                               " GetUtcDate()" + "," +
                                     LoginInfo.Userid + ",GetUtcDate(),0);";

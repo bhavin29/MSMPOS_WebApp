@@ -47,11 +47,21 @@ namespace RocketPOS.Controllers.Master
             if (assetCategoryModel.Id > 0)
             {
                 var result = _iAssetCategoryService.UpdateAssetCategory(assetCategoryModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("AssetCategoryName", "Asset category already exists");
+                    return View(assetCategoryModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
                 var result = _iAssetCategoryService.InsertAssetCategory(assetCategoryModel);
+                if (result == -1)
+                {
+                    ModelState.AddModelError("AssetCategoryName", "Asset category already exists");
+                    return View(assetCategoryModel);
+                }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");
             }
             return RedirectToAction("Index", "AssetCategory");

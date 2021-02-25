@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Web.Mvc;
 
@@ -8,6 +9,7 @@ namespace RocketPOS.Models
     public class AssetItemModel
     {
         public int Id { get; set; }
+        [Required(ErrorMessage = "Enter Asset Item")]
         public string AssetItemName { get; set; }
         public string ShortName { get; set; }
         public string Code { get; set; }

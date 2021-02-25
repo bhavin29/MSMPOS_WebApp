@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" style="margin: 24px 0px 0px 0px"  onclick="return loadInventoryAlterationList();" class="btn btn-outline-dark" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" style="margin: 24px 0px 0px 0px" onclick="return loadInventoryAlterationList();" class="btn btn-outline-dark" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -78,8 +78,8 @@
                                     <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("StockQty")</th>
-</thead>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Stock Qty")</th>*@
+                            </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -88,36 +88,36 @@
                                     <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("StockQty")</th>
-</tfoot>
+                                    @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Stock Qty")</th>*@
+                            </tfoot>
                             <tbody>
                                 @foreach (var item in Model.InventoryAlterationViewList)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                <tr role="row">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.StoreName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EntryDate, "{0:d}")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.Qty)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.StockQty)
-                                    </td>
-                                </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EntryDate, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Qty)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.Amount)
+                                        </td>
+                                        @*<td class="text-right">
+                                                @Html.DisplayFor(modelItem => item.InventoryStockQty)
+                                            </td>*@
+                                    </tr>
                                 }
                             </tbody>
                         </table>

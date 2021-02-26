@@ -143,7 +143,9 @@
             $("#toDate").val(tdate);
             GetSupplierList();
             PurchaseGRNFood = $('#@dataTableName').DataTable();
+            $("#SupplierId").select2();
             loadPurchaseGRNList();
+
         });
 
         function loadPurchaseGRNList() {

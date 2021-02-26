@@ -156,6 +156,8 @@
                     GetSupplierList();
                     GetStoreList();
                     InventoryReport = $('#@dataTableName').DataTable();
+                    $("#StoreId").select2();
+                    $("#SupplierId").select2();
                     loadInventoryStockList();
                 });
 

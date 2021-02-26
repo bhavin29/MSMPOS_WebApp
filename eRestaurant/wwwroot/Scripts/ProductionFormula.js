@@ -52,6 +52,9 @@ $(document).ready(function () {
     else {
         $("#onthespot").prop('checked', false);
     }
+    $("#IngredientId").select2();
+    $("#FoodMenuId").select2();
+    $("#BatchSizeUnitId").select2();
 });
 
 
@@ -210,7 +213,7 @@ function validation(id) {
 }
 
 function clearFoodMenuItem() {
-    $("#FoodMenuId").val('0');
+    $('#FoodMenuId').val(0).trigger('change');
     $("#PFFoodMenuId").val('0');    
     $("#ExpectedOutput").val(parseFloat(1.00).toFixed(2));
     $("#FoodMenuUnitName").html('');
@@ -306,7 +309,7 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
 });
 
 function clearIngredientItem() {
-    $("#IngredientId").val('0');
+    $('#IngredientId').val(0).trigger('change');
     $("#PFIngredientId").val('0');
     $("#IngredientQty").val(parseFloat(1.00).toFixed(2));
     $("#IngredientUnitName").html('');

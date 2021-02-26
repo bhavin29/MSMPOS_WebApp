@@ -48,7 +48,9 @@ $(document).ready(function () {
     });
 
     $("#StoreId").focus();
-
+    $("#StoreId").select2();
+    $("#SupplierId").select2();
+    $("#FoodMenuId").select2();
 });
 
 $('#cancel').on('click', function (e) {
@@ -442,7 +444,7 @@ function validation(id) {
 }
 
 function clearItem() {
-    $("#FoodMenuId").val('0'),
+    $('#FoodMenuId').val(0).trigger('change'),
         $("#UnitPrice").val(''),
         $("#POQty").val('1'),
         $("#InvoiceQty").val('1'),

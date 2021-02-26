@@ -86,6 +86,10 @@ namespace RocketPOS.Controllers
                 LoginInfo.IsItemOverright = loginModel.IsItemOverright;
                 LoginInfo.VATLabel = loginModel.VATLabel;
                 LoginInfo.PINLabel = loginModel.PINLabel;
+                LoginInfo.FromEmailAddress = loginModel.FromEmailAddress;
+                LoginInfo.EmailDisplayName = loginModel.EmailDisplayName;
+                LoginInfo.FromEmailPassword = loginModel.FromEmailPassword;
+                LoginInfo.EmailSubject = loginModel.EmailSubject;
 
             }
             catch (Exception ex)

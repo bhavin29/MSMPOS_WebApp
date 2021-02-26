@@ -58,7 +58,7 @@ $(document).ready(function () {
     }
     calculateSum();
     $("#ProductionFormulaId").focus();
-
+    $("#ProductionFormulaId").select2();
 });
 
 function loadProductionFormula() {

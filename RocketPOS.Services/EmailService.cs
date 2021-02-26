@@ -14,7 +14,7 @@ namespace RocketPOS.Services
             string messageBody = "<html><body><p>Hello</p><p>You have a purchase order for your approval.</p>";
             messageBody += "<p>Kindly review - <a href=" + clientModel.WebAppUrl + "PurchaseFoodMenu/PurchaseApproveSuccess/" + purchaseId+">click here</a></p>";
             messageBody += "<p>Thanks</p><p>RocketPOS Team</p><p>PS: This is auto-generated mail from the system. Please do not reply to it.</p></body></html>";
-            SendEmail.Email(messageBody, clientModel.PurchaseApprovalEmail);
+            SendEmail.Email(messageBody, clientModel.PurchaseApprovalEmail, "RocketPOS - Purchase Approval Request");
         }
     }
 }

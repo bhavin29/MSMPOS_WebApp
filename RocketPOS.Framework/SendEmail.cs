@@ -8,14 +8,14 @@ namespace RocketPOS.Framework
 {
     public static class SendEmail
     {
-        public static void Email(string htmlString, string email)
+        public static void Email(string htmlString, string email,string EmailSubject)
         {
             try
             {
                 var fromAddress = new MailAddress(LoginInfo.FromEmailAddress, LoginInfo.EmailDisplayName);
                 var toAddress = new MailAddress(email, "");
                 string fromPassword = LoginInfo.FromEmailPassword;
-                string subject = LoginInfo.EmailSubject;
+                string subject = EmailSubject;
                 string body = htmlString;
 
                 var smtp = new SmtpClient

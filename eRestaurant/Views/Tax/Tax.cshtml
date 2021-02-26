@@ -1,4 +1,5 @@
 ﻿@model RocketPOS.Models.TaxModel
+@using RocketPOS.Framework
 @if (!string.IsNullOrEmpty(ViewBag.msg))
 {
     <script type="text/javascript">
@@ -26,12 +27,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="TaxPercentage" class="control-label">Tax Percentage</label>
-                                    <input asp-for="TaxPercentage" class="form-control" type="number" min="1" max="99999" />
+                                    <input asp-for="TaxPercentage" class="form-control" type="number" min="0" max="99999" />
                                     <span asp-validation-for="TaxPercentage" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="TaxType" class="control-label">Tax Type</label>
-                                    <input asp-for="TaxType" class="form-control" type="number" min="1" max="99999" />
+                                    <select asp-for="TaxType" class="form-control" asp-items="Html.GetEnumSelectList<TaxType>()"></select>
                                     <span asp-validation-for="TaxType" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">

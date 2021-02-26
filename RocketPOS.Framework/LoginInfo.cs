@@ -44,6 +44,5 @@ namespace RocketPOS.Framework
         public static string FromEmailAddress = "";
         public static string EmailDisplayName = "";
         public static string FromEmailPassword = "";
-        public static string EmailSubject = "";
     }
 }

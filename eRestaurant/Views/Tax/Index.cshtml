@@ -66,13 +66,24 @@
                                     @Html.DisplayFor(modelItem => item.TaxPercentage)
                                 </td>
                                 <td class="text-right">
-                                    @Html.DisplayFor(modelItem => item.TaxType)
+                                    @if (item.TaxType == 1)
+                                    {
+                                        @Html.DisplayName("Tax");
+                                    }
+                                    @if (item.TaxType == 2)
+                                    {
+                                        @Html.DisplayName("Exempted");
+                                    }
+                                    @if (item.TaxType == 3)
+                                    {
+                                        @Html.DisplayName("ZERO");
+                                    }
                                 </td>
                                 <td>
                                     <div class="form-button-action">
                                         <a asp-action="Tax" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        @*<label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>*@
                                     </div>
 
                                 </td>

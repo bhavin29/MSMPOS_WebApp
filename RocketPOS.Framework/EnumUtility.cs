@@ -108,7 +108,7 @@ namespace RocketPOS.Framework
         [Display(Name = "Catering")]
         Catering = 4,
     }
-    
+
     public enum AssetEventType
     {
         [Display(Name = "Catering")]
@@ -127,5 +127,14 @@ namespace RocketPOS.Framework
         Return = 3,
         [Display(Name = "Closed")]
         Closed = 4,
+    }
+    public enum TaxType
+    {
+        [Display(Name = "Tax")]
+        Tax = 1,
+        [Display(Name = "Exempted")]
+        Exempted = 2,
+        [Display(Name = "ZERO")]
+        ZERO = 3,
     }
 }

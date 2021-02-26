@@ -89,7 +89,6 @@ namespace RocketPOS.Controllers
                 LoginInfo.FromEmailAddress = loginModel.FromEmailAddress;
                 LoginInfo.EmailDisplayName = loginModel.EmailDisplayName;
                 LoginInfo.FromEmailPassword = loginModel.FromEmailPassword;
-                LoginInfo.EmailSubject = loginModel.EmailSubject;
 
             }
             catch (Exception ex)

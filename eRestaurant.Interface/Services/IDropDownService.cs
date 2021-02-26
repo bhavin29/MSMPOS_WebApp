@@ -35,6 +35,7 @@ namespace RocketPOS.Interface.Services
 
         List<SelectListItem> GetAssetSizeList();
         List<SelectListItem> GetAssetLocationList();
+        List<SelectListItem> GetGlobalStatusList();
 
     }
 }

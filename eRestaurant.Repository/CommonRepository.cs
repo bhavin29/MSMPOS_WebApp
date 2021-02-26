@@ -87,7 +87,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                string query = "Select FromEmailAddress,EmailDisplayName,FromEmailPassword From Client";
+                string query = "Select FromEmailAddress,EmailDisplayName,FromEmailPassword,PurchaseApprovalEmail From Client";
                 return con.Query<ClientModel>(query).FirstOrDefault();
             }
         }
@@ -100,7 +100,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE Client SET FromEmailAddress =@FromEmailAddress," +
-                            "EmailDisplayName = @EmailDisplayName, " +
+                            "EmailDisplayName = @EmailDisplayName,PurchaseApprovalEmail=@PurchaseApprovalEmail, " +
                             "FromEmailPassword = @FromEmailPassword ";
                 result = con.Execute(query, clientModel, sqltrans, 0, System.Data.CommandType.Text);
 

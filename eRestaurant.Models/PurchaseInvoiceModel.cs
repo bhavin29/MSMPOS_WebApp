@@ -15,7 +15,7 @@ namespace RocketPOS.Models
         public long PurchaseId { get; set; }
         [DataType(DataType.Date)]
 
-        public DateTime? PurchaseInvoiceDate { get; set; }
+        public DateTime PurchaseInvoiceDate { get; set; }
         public int? SupplierId { get; set; }
         public List<SelectListItem> SupplierList { get; set; }
         public int? StoreId { get; set; }
@@ -38,13 +38,16 @@ namespace RocketPOS.Models
         public decimal DueAmount { get; set; }
         public string DeliveryNoteNumber { get; set; }
         [DataType(DataType.Date)]
-        public DateTime? DeliveryDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public string DriverName { get; set; }
         public string VehicleNumber { get; set; }
         public  string Notes { get; set; }
         public List<PurchaseInvoiceDetailModel> purchaseInvoiceDetails { get; set; }
         public int[] DeletedId { get; set; }
         public int PurchaseStatus { get; set; }
+
+        public string SupplierName { get; set; }
+        public string StoreName { get; set; }
     }
     public class PurchaseInvoiceDetailModel
     {

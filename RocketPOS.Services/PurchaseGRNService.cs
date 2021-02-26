@@ -112,7 +112,8 @@ namespace RocketPOS.Services
                              DeliveryDate = purchase.DeliveryDate,
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             SupplierName= purchase.SupplierName
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -217,6 +218,54 @@ namespace RocketPOS.Services
         public int GetPurchaseIdByPOReference(string poReference)
         {
             return _iPurchaseGRNRepository.GetPurchaseIdByPOReference(poReference);
+        }
+
+        public PurchaseGRNModel GetViewPurchaseGRNFoodMenuById(long purchaseGRNId)
+        {
+            PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
+
+            var model = (from purchase in _iPurchaseGRNRepository.GetViewPurchaseGRNFoodMenuById(purchaseGRNId).ToList()
+                         select new PurchaseGRNModel()
+                         {
+                             Id = purchase.Id,
+                             ReferenceNo = purchase.ReferenceNo,
+                             SupplierId = purchase.SupplierId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             PurchaseGRNDate = purchase.PurchaseGRNDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes,
+                             SupplierName = purchase.SupplierName,
+                             StoreName= purchase.StoreName
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.PurchaseGRNDetails = (from purchasedetails in _iPurchaseGRNRepository.GetViewPurchaseGRNFoodMenuDetails(purchaseGRNId)
+                                            select new PurchaseGRNDetailModel()
+                                            {
+                                                PurchaseGRNId = purchasedetails.PurchaseGRNId,
+                                                FoodMenuId = purchasedetails.FoodMenuId,
+                                                POQTY = purchasedetails.POQTY,
+                                                GRNQTY = purchasedetails.GRNQTY,
+                                                UnitPrice = purchasedetails.UnitPrice,
+                                                GrossAmount = purchasedetails.GrossAmount,
+                                                DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                DiscountAmount = purchasedetails.DiscountAmount,
+                                                TaxAmount = purchasedetails.TaxAmount,
+                                                TotalAmount = purchasedetails.TotalAmount,
+                                                IngredientName = purchasedetails.IngredientName,
+                                                FoodMenuName = purchasedetails.FoodMenuName
+                                            }).ToList();
+            }
+            return model;
         }
     }
 }

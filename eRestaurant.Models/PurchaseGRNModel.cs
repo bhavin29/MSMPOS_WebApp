@@ -39,7 +39,7 @@ namespace RocketPOS.Models
         public decimal DueAmount { get; set; }
         public string DeliveryNoteNumber { get; set; }
         [DataType(DataType.Date)]
-        public DateTime? DeliveryDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public string DriverName { get; set; }
         public string VehicleNumber { get; set; }
         public string Notes { get; set; }
@@ -47,6 +47,8 @@ namespace RocketPOS.Models
         public int[] DeletedId { get; set; }
         public bool IsSendEmail { get; set; }
         public string SupplierEmail { get; set; }
+        public string SupplierName { get; set; }
+        public string StoreName { get; set; }
 
 
     }

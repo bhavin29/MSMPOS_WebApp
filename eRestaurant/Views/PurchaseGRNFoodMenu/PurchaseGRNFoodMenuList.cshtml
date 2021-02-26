@@ -100,7 +100,7 @@
                                         </td>*@
                                         <td>
                                             <div class="form-button-action">
-                                                <a asp-action="PurchaseGRNFoodMenu" asp-route-Id="@item.Id" asp-route-type="View">View   <i class="fa fa-edit"></i></a>
+                                                <a asp-action="View" asp-route-Id="@item.Id">View   <i class="fa fa-edit"></i></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -180,7 +180,7 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseGRNFoodmenu/PurchaseGRNFoodmenu/' + row.id + '?type=View">View</a></div>'
+                                    return '<div class="form-button-action"><a href="/PurchaseGRNFoodmenu/View/' + row.id + '">View</a></div>'
                                 },
                             }
                         ],

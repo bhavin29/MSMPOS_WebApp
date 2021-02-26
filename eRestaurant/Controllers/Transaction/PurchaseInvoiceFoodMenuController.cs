@@ -146,7 +146,7 @@ namespace RocketPOS.Controllers.Transaction
                 purchaseMessage = _locService.GetLocalizedHtmlString("ValidPurchaseInvoiceDetails");
                 return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu");
 
-               // return Json(new { error = true, message = purchaseMessage, status = 201 });
+                // return Json(new { error = true, message = purchaseMessage, status = 201 });
             }
             // return View(purchaseModel);
             return Json(new { error = false, message = purchaseMessage, status = 200 });
@@ -154,7 +154,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate,int supplierId)
+        public JsonResult PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
             DateTime newFromDate, newToDate;
@@ -169,7 +169,7 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.Now;
             }
 
-            purchaseViewModels = _iPurchaseInvoiceService.PurchaseInvoiceFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"),supplierId).ToList();
+            purchaseViewModels = _iPurchaseInvoiceService.PurchaseInvoiceFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
             return Json(new { PurchaseInvoiceFoodMenu = purchaseViewModels });
         }
         public ActionResult Delete(int id)
@@ -255,6 +255,26 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseInvoiceViewModel purchaseInvoiceViewModel = new PurchaseInvoiceViewModel();
             purchaseInvoiceViewModel.SupplierList = _iDropDownService.GetSupplierList().ToList();
             return Json(new { SupplierList = purchaseInvoiceViewModel.SupplierList });
+        }
+
+        public ActionResult View(long? id)
+        {
+            PurchaseInvoiceModel purchaseModel = new PurchaseInvoiceModel();
+
+            if (id > 0)
+            {
+                long purchaseInvoiceId = Convert.ToInt64(id);
+                purchaseModel = _iPurchaseInvoiceService.GetViewPurchaseInvoiceFoodMenuById(purchaseInvoiceId);
+            }
+            else
+            {
+                purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
+                purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+            }
+            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.StoreList = _iDropDownService.GetStoreList();
+            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            return View(purchaseModel);
         }
     }
 }

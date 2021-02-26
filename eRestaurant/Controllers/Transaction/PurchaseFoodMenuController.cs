@@ -289,5 +289,24 @@ namespace RocketPOS.Controllers.Transaction
             result = _iPurchaseService.ApprovePurchaseOrder(id);
             return Json(new { result = result });
         }
+
+        public ActionResult View(long? id)
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+            if (id > 0)
+            {
+                long purchaseId = Convert.ToInt64(id);
+                purchaseModel = _iPurchaseService.GetViewPurchaseFoodMenuById(purchaseId);
+            }
+            else
+            {
+                purchaseModel.Date = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
+            }
+            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.StoreList = _iDropDownService.GetStoreList();
+            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            return View(purchaseModel);
+        }
     }
 }

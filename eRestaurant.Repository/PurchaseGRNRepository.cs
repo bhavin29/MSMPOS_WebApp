@@ -727,5 +727,31 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public List<PurchaseGRNDetailModel> GetViewPurchaseGRNFoodMenuDetails(long PurchaseGRNId)
+        {
+            List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select pin.Id as PurchaseGRNId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
+                            " from purchaseGRN as P inner join PurchaseGRNDetail as PIN on P.id = pin.PurchaseGRNId " +
+                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + PurchaseGRNId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
+            }
+
+            return purchaseDetails;
+        }
+
+        public List<PurchaseGRNModel> GetViewPurchaseGRNFoodMenuById(long PurchaseGRNId)
+        {
+            List<PurchaseGRNModel> purchaseModelList = new List<PurchaseGRNModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "select PurchaseGRN.Id as Id, PurchaseGRN.StoreId,PurchaseGRN.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseGRNDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
+                      "PurchaseGRN.GrossAmount, PurchaseGRN.TaxAmount,PurchaseGRN.TotalAmount,PurchaseGRN.DueAmount as Due,PurchaseGRN.PaidAmount as Paid,PurchaseGRN.DeliveryNoteNumber ,PurchaseGRN.DeliveryDate ,PurchaseGRN.DriverName ,PurchaseGRN.VehicleNumber,PurchaseGRN.Notes,S.StoreName " +
+                      "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join Store S on PurchaseGRN.StoreId = s.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 and PurchaseGRN.Id = " + PurchaseGRNId;
+                purchaseModelList = con.Query<PurchaseGRNModel>(query).AsList();
+            }
+            return purchaseModelList;
+        }
     }
 }

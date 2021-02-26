@@ -48,6 +48,12 @@ namespace RocketPOS
             services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
 
+            services.AddTransient<SetViewDataFilter>();
+            services.AddMvc(options =>
+            {
+                options.Filters.AddService<SetViewDataFilter>();
+            });
+
             services.AddMvc(option => option.EnableEndpointRouting = false).AddViewLocalization()
            .AddDataAnnotationsLocalization(options =>
            {
@@ -59,7 +65,7 @@ namespace RocketPOS
            });
 
             services.AddMvc().AddRazorPagesOptions(options =>
-            {
+            {   
                 options.Conventions.AddPageRoute("/Login/Index", "");
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

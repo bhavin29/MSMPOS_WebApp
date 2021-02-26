@@ -42,10 +42,10 @@ $(document).ready(function () {
         ]
     });
     $("#StoreId").focus();
-    $("#StoreId").select2();
     $("#SupplierId").select2();
-    $("#FoodMenuId").select2();
-});
+   $("#FoodMenuId").select2();
+    $("#StoreId").select2();
+ });
 
 $('#cancel').on('click', function (e) {
     e.preventDefault();
@@ -134,7 +134,7 @@ $('#addRow').on('click', function (e) {
         $(rowNode).find('td').eq(3).addClass('text-right');
         $(rowNode).find('td').eq(4).addClass('text-right');
         $(rowNode).find('td').eq(5).addClass('text-right');
-        $(rowNode).find('td').eq(6).addClass('text-right');
+       // $(rowNode).find('td').eq(6).addClass('text-right');
         //GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
         //GrandTotal += Total;
 
@@ -149,7 +149,8 @@ $('#addRow').on('click', function (e) {
         $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
         DueAmount();
         clearItem();
-        $("#FoodMenuId").focus();
+        $("#FoodMenuId").select2().focus();
+
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -386,7 +387,7 @@ function validation(id) {
             return message;
         }
         else if ($("#UnitPrice").val() == '' || $("#UnitPrice").val() == 0) {
-            message = "Enter unit price"
+            message = "Enter price"
             return message;
         }
         else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
@@ -404,13 +405,14 @@ function validation(id) {
 }
 
 function clearItem() {
-        $('#FoodMenuId').val(0).trigger('change'),
         $("#UnitPrice").val(''),
         $("#Quantity").val('1'),
         $("#Discount").val(''),
         $("#Amount").val(''),
-        $("#PurchaseId").val('0')
-}
+        $("#PurchaseId").val('0'),
+        $('#FoodMenuId').val(0).trigger('change')
+
+ }
 
 function GetSupplierDetails(supplierId) {
     $.ajax({

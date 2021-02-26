@@ -205,6 +205,8 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
 
+        var message = validation(1);
+        debugger;
         $("#EntryIngredient tbody tr").each(function () {
             var tds = $(this).find("td");
             var currentRow = $(this).closest("tr");
@@ -232,8 +234,6 @@ $(function () {
             });
         });
 
-        //var message = validation(1);
-        var message = '';
         if (message == '') {
             $("#productionEntryForm").on("submit", function (e) {
                 e.preventDefault();
@@ -283,6 +283,8 @@ $(function () {
 $(function () {
     $('#inProgress').click(function () {
 
+        var message = validation(1);
+
         $("#EntryIngredient tbody tr").each(function () {
             var tds = $(this).find("td");
             var currentRow = $(this).closest("tr");
@@ -310,8 +312,6 @@ $(function () {
             });
         });
 
-        //var message = validation(1);
-        var message = '';
         if (message == '') {
             $("#productionEntryForm").on("submit", function (e) {
                 e.preventDefault();
@@ -362,6 +362,8 @@ $(function () {
 $(function () {
     $('#completed').click(function () {
 
+        var message = validation(1);
+
         $("#EntryIngredient tbody tr").each(function () {
             var tds = $(this).find("td");
             var currentRow = $(this).closest("tr");
@@ -389,8 +391,6 @@ $(function () {
             });
         });
 
-        //var message = validation(1);
-        var message = '';
         if (message == '') {
             $("#productionEntryForm").on("submit", function (e) {
                 e.preventDefault();
@@ -443,3 +443,17 @@ $('#save').click(function () {
 $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
+
+function validation(id) {
+    var message = '';
+    if (id == 1) {
+        if ($("#ActualBatchSize").val() == '' || $("#ActualBatchSize").val() == '0') {
+            message = "Enter value for the actual batch size"
+        }
+
+        if ($("#ProductionFormulaId").val() == '' || $("#ProductionFormulaId").val() == '0') {
+            message = "Select Recipe Name"
+        }
+    }
+    return message;
+}

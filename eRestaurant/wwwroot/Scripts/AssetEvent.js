@@ -13,10 +13,6 @@ var IngredientNetAmountTotal = 0;
 $(document).ready(function () {
     $("#assetEventForm").validate();
 
-    $("#AssetItemId").select2();
-    $("#FoodMenuId").select2();
-    $("#IngredientId").select2();
-
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
             { targets: [0, 1], visible: false },
@@ -90,7 +86,11 @@ $(document).ready(function () {
     if ($("#Status").val() == 1) {
         AssetIngredientItem.columns([7, 8]).visible(false);
     }
+    $("#AssetItemId").select2();
+    $("#FoodMenuId").select2();
+    $("#IngredientId").select2();
 
+     $("#EventName").focus();
 });
 
 //AssetEventItem

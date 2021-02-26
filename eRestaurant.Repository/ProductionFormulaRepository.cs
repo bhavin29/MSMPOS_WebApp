@@ -323,7 +323,7 @@ namespace RocketPOS.Repository
             {
                 string query = " SELECT * FROM Productionformulafoodmenu PFFM " +
                                " inner join Productionformula PF on PF.Id = PFFM.ProductionformulaId " +
-                               " WHERE PF.ID <> " + id + "  and foodmenuid =" + foodmenuid ;
+                               " WHERE PF.IsDeleted=0 AND PF.ID <> " + id + "  and foodmenuid =" + foodmenuid ;
                 result = con.ExecuteScalar<string>(query);
             }
 

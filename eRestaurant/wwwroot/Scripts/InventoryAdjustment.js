@@ -34,9 +34,9 @@ $(document).ready(function () {
             }
         ]
     });
-    $("#FoodMenuId").focus();
+    $("#StoreId").focus();
     $("#StoreId").select2();
-    $("#FoodMenuId").select2();
+ //   $("#FoodMenuId").select2();
 });
 
 $('#cancel').on('click', function (e) {
@@ -220,9 +220,10 @@ $('#ok').click(function () {
 });
 
 function deleteOrder(id, rowId) {
+    debugger;
     for (var i = 0; i < dataArr.length; i++) {
         if (InventoryType == "2") {
-            if (dataArr[i].ingredientId == rowId) {
+            if (dataArr[i].ingredientId == id) {
                 deletedId.push(dataArr[i].inventoryAdjustmentId);
                 dataArr.splice(i, 1);
                 InventoryAdjustmentDatatable.row(i).remove().draw(false);
@@ -231,7 +232,7 @@ function deleteOrder(id, rowId) {
             }
         }
         if (InventoryType == "1") {
-            if (dataArr[i].foodMenuId == rowId) {
+            if (dataArr[i].foodMenuId == id) {
                 deletedId.push(dataArr[i].inventoryAdjustmentId);
                 dataArr.splice(i, 1);
                 InventoryAdjustmentDatatable.row(i).remove().draw(false);
@@ -349,6 +350,7 @@ function validation(id) {
     }
     return message;
 }
+
 
 function clearItem() {
         $('#FoodMenuId').val(0).trigger('change'),

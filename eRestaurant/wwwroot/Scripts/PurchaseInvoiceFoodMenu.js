@@ -165,6 +165,7 @@ $('#addRow').on('click', function (e) {
         DueAmount();
         clearItem();
         $("#FoodMenuId").focus()
+        $('#FoodMenuId').select2('focus');
     }
     else if (message != '') {
         $(".modal-body").text(message);

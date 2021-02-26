@@ -55,6 +55,7 @@ $(document).ready(function () {
     $("#IngredientId").select2();
     $("#FoodMenuId").select2();
     $("#BatchSizeUnitId").select2();
+    $("#FoodMenuId").focus();
 });
 
 
@@ -155,6 +156,7 @@ function validation(id) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
             message = "Select food menu"
         }
+
         if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
         }
@@ -188,6 +190,10 @@ function validation(id) {
             return message;
         }
 
+        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+            message = "Select Batch Size Unit"
+        }
+
         if (!FormulaIngredientTable.data().any() || FormulaIngredientTable.data().row == null) {
             var message = 'At least one stock item should be entered'
             return message;
@@ -200,6 +206,10 @@ function validation(id) {
         }
         else if ($("#IngredientQty").val() == '' || $("#IngredientQty").val() == 0) {
             message = "Enter ingredient qty"
+        }
+
+        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+            message = "Select Batch Size Unit"
         }
 
         for (var i = 0; i < ingredientDataArr.length; i++) {

@@ -24,7 +24,8 @@ $(document).ready(function () {
     });
     $("#StoreId").select2();
     $("#FoodMenuId").select2();
-});
+    $("#StoreId").focus();
+ });
 
 
 $('#addFoodMenuRow').on('click', function (e) {

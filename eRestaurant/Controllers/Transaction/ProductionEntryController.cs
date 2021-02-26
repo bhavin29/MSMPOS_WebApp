@@ -33,7 +33,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 TempData["foodMenuType"] = 2;
             }
-            else if (foodMenuType !=null)
+            else if (foodMenuType != null)
             {
                 TempData["foodMenuType"] = foodMenuType;
             }
@@ -52,7 +52,7 @@ namespace RocketPOS.Controllers.Transaction
         }
         public ActionResult ProductionEntry(int? id, int? foodMenuType, int? productionFormulaId, string type)
         {
- 
+
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             TempData["foodMenuType"] = foodMenuType;
 
@@ -68,13 +68,13 @@ namespace RocketPOS.Controllers.Transaction
                 {
                     productionEntryModel = _iProductionEntryService.GetProductionFormulaById(Convert.ToInt32(productionFormulaId));
                 }
-              //  productionEntryModel.ProductionDate = DateTime.Now;
+                productionEntryModel.ProductionDate = DateTime.Now;
                 productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
             }
             productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
             productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
-  
+
             return View(productionEntryModel);
         }
 
@@ -82,7 +82,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             productionEntryModel = _iProductionEntryService.GetProductionFormulaById(id);
-          //  productionEntryModel.ProductionDate = DateTime.Now;
+            //  productionEntryModel.ProductionDate = DateTime.Now;
             return Json(new { productionEntryModel = productionEntryModel });
         }
 

@@ -26,6 +26,8 @@
                             <a class="dropdown-item" href="~/Bank">Banks</a>
                             <a class="dropdown-item" href="~/PaymentMethod">Payment Methods</a>
                             <hr />
+                            <a class="dropdown-item" href="~/RewardSetup">Reward Setup</a>
+                            <hr />
                             <a class="dropdown-item" href="~/Supplier">Suppliers</a>
                             <a class="dropdown-item" href="~/Customer">Customers</a>
                         </div>
@@ -41,6 +43,7 @@
                             <a class="dropdown-item" href="~/FoodMenuRate">Price Lists</a>
                             <a class="dropdown-item" href="~/Ingredient">Stock Items</a>
                             <a class="dropdown-item" href="~/IngredientCategory">Stock Categories</a>
+                            <a class="dropdown-item" href="~/rawmaterial">Stock Raw Material</a>
                             <hr />
                             <a class="dropdown-item" href="~/AssetCategory">Asset Category</a>
                             <a class="dropdown-item" href="~/AssetItem">Asset Item</a>
@@ -49,7 +52,7 @@
                             @*<a class="dropdown-item" href="~/FoodMenuIngredient">Food Menu Ingredient</a>*@
 
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
-        <a class="dropdown-item" href="~/Varient">Varient</a>*@
+                                <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -67,9 +70,9 @@
                                 <span>Purchase Invoices</span>
                             </a>
                             @*<hr />
-                            <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
-                                <span>Invoices</span>
-                            </a>*@
+                                <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
+                                    <span>Invoices</span>
+                                </a>*@
                             <hr />
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
                                 <span>Stock In</span>
@@ -80,7 +83,7 @@
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryAlteration" asp-action="Index">
                                 <span>Physical Stock</span>
                             </a>
-                            
+
                         </div>
                     </li>
                     <li class="nav-item dropdown">

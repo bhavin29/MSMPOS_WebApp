@@ -14,7 +14,9 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Enter Offer Name")]
         public string OfferName { get; set; }
 
+        [DisplayName("Transaction Amount")]
         public decimal TransactionAmount { get; set; }
+        [DisplayName("Reward Point")]
         public decimal RewardPoint { get; set; }
         public string Notes { get; set; }
 

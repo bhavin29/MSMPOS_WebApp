@@ -34,10 +34,10 @@ $(document).ready(function () {
             }
         ]
     });
-    $("#StoreId").focus();
     $("#StoreId").select2();
- //   $("#FoodMenuId").select2();
-});
+    $("#FoodMenuId").select2();
+    $("#StoreId").focus();
+ });
 
 $('#cancel').on('click', function (e) {
     e.preventDefault();

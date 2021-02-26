@@ -35,6 +35,10 @@ $(document).ready(function () {
         ]
     });
     $("#FromStoreId").focus();
+    $("#FromStoreId").select2();
+    $("#ToStoreId").select2();
+    $("#FoodMenuId").select2();
+    $("#IngredientId").select2(); 
 });
 
 $('#cancel').on('click', function (e) {
@@ -366,8 +370,8 @@ function validation(id) {
 }
 
 function clearItem() {
-    $("#IngredientId").val('0'),
-        $("#FoodMenuId").val('0'),
+        $('#IngredientId').val(0).trigger('change'),
+        $('#FoodMenuId').val(0).trigger('change'),
         $("#CurrentStock").val('0'),
         $("#ProductUnit").val('0'),
         //$("#ConsumpationStatus").val(''),

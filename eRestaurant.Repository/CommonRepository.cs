@@ -5,6 +5,7 @@ using RocketPOS.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
 namespace RocketPOS.Repository
@@ -78,6 +79,40 @@ namespace RocketPOS.Repository
 
                 var query = "Exec InventoryPush '" + docType + "'," + id;
                 result = con.Query(query).ToString();
+            }
+            return result;
+        }
+
+        public ClientModel GetEmailSettings()
+        {
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string query = "Select FromEmailAddress,EmailDisplayName,FromEmailPassword,EmailSubject From Client";
+                return con.Query<ClientModel>(query).FirstOrDefault();
+            }
+        }
+
+        public int UpdateEmailSettings(ClientModel clientModel)
+        {
+            int result = 0;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = "UPDATE Client SET FromEmailAddress =@FromEmailAddress," +
+                            "EmailDisplayName = @EmailDisplayName, " +
+                            "FromEmailPassword = @FromEmailPassword, " +
+                            "EmailSubject = @EmailSubject ";
+                result = con.Execute(query, clientModel, sqltrans, 0, System.Data.CommandType.Text);
+
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
+                }
             }
             return result;
         }

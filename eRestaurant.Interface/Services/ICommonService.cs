@@ -8,5 +8,8 @@ namespace RocketPOS.Interface.Services
     public interface ICommonService
     {
         int InsertErrorLog(ErrorModel errorModel);
+
+        ClientModel GetEmailSettings();
+        int UpdateEmailSettings(ClientModel clientModel);
     }
 }

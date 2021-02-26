@@ -1,0 +1,105 @@
+﻿@model RocketPOS.Models.ClientModel
+@if (!string.IsNullOrEmpty(ViewBag.msg))
+{
+    <script type="text/javascript">
+        alert("@ViewBag.msg");
+    </script>
+}
+
+<div class="page-inner">
+    <div class="page-header"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Email Setting</h5>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="EmailSetting">
+                                <div class="form-group">
+                                    <label asp-for="FromEmailAddress" class="control-label">From Email Address</label>
+                                    <input asp-for="FromEmailAddress" class="form-control" />
+                                    <span asp-validation-for="FromEmailAddress" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="FromEmailPassword" class="control-label">From Email Password</label>
+                                    <input asp-for="FromEmailPassword" class="form-control" />
+                                    <span asp-validation-for="FromEmailPassword" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="EmailDisplayName" class="control-label">Email Display Name</label>
+                                    <input asp-for="EmailDisplayName" class="form-control" />
+                                    <span asp-validation-for="EmailDisplayName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="EmailSubject" class="control-label">Email Subject</label>
+                                    <textarea asp-for="EmailSubject" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="EmailSubject" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    @if (Model != null)
+                                    {
+                                        @if (Model.Id > 0)
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                        }
+                                        <a href='@Url.Action("Index", "Home")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $("#aModal").modal('show');
+            });
+        </script>
+    }
+}
+@section Scripts{
+    <script>
+        $('#save').click(function () {
+            window.location.href = "Index";
+        });
+        $('#OK').click(function () {
+            $("#EmailSetting").prev().focus();
+            $("#vModal").modal('hide');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+}
+

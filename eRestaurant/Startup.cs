@@ -190,6 +190,12 @@ namespace RocketPOS
             services.AddScoped<IAssetCategoryService, AssetCategoryService>();
             services.AddScoped<IAssetItemRepository, AssetItemRepository>();
             services.AddScoped<IAssetItemService, AssetItemService>();
+            services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
+            services.AddScoped<IRawMaterialService, RawMaterialService>();
+            services.AddScoped<IRewardSetupRepository, RewardSetupRepository>();
+            services.AddScoped<IRewardSetupService, RewardSetupService>();
+            services.AddScoped<ITaxRepository, TaxRepository>();
+            services.AddScoped<ITaxService, TaxService>();
             services.AddHttpClient();
         }
 

@@ -26,5 +26,6 @@ namespace RocketPOS.Interface.Services
         int GetPurchaseIdByReferenceNo(string referenceNo);
 
         int ApprovePurchaseOrder(int id);
+        PurchaseModel GetViewPurchaseFoodMenuById(long purchaseId);
     }
 }

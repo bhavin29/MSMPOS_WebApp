@@ -222,5 +222,54 @@ namespace RocketPOS.Services
         {
             return _iPurchaseInvoiceRepository.GetPurchaseIdByPOReference(poReference);
         }
+
+        public PurchaseInvoiceModel GetViewPurchaseInvoiceFoodMenuById(long purchaseId)
+        {
+            var model = (from purchase in _iPurchaseInvoiceRepository.GetViewPurchaseInvoiceFoodMenuById(purchaseId).ToList()
+                         select new PurchaseInvoiceModel()
+                         {
+                             Id = purchase.Id,
+                             PurchaseId = purchase.PurchaseId,
+                             ReferenceNo = purchase.ReferenceNo,
+                             SupplierId = purchase.SupplierId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             PurchaseInvoiceDate = purchase.PurchaseInvoiceDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes,
+                             PurchaseStatus = purchase.PurchaseStatus,
+                             StoreName=purchase.StoreName,
+                             SupplierName=purchase.SupplierName
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.purchaseInvoiceDetails = (from purchasedetails in _iPurchaseInvoiceRepository.GetViewPurchaseInvoiceFoodMenuDetails(purchaseId)
+                                                select new PurchaseInvoiceDetailModel()
+                                                {
+                                                    PurchaseInvoiceId = purchasedetails.PurchaseInvoiceId,
+                                                    FoodMenuId = purchasedetails.FoodMenuId,
+                                                    IngredientId = purchasedetails.IngredientId,
+                                                    POQTY = purchasedetails.POQTY,
+                                                    InvoiceQty = purchasedetails.InvoiceQty,
+                                                    UnitPrice = purchasedetails.UnitPrice,
+                                                    GrossAmount = purchasedetails.GrossAmount,
+                                                    DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                    DiscountAmount = purchasedetails.DiscountAmount,
+                                                    TaxAmount = purchasedetails.TaxAmount,
+                                                    TotalAmount = purchasedetails.TotalAmount,
+                                                    IngredientName = purchasedetails.IngredientName,
+                                                    FoodMenuName = purchasedetails.FoodMenuName
+                                                }).ToList();
+            }
+            return model;
+        }
     }
 }

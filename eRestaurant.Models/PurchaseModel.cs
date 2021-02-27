@@ -52,6 +52,7 @@ namespace RocketPOS.Models
         public bool IsSendEmail { get; set; }        
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }
+        public string StoreName { get; set; }
     }
    
     public class PurchaseDetailsModel

@@ -1,4 +1,5 @@
-﻿@model RocketPOS.Models.ClientModel
+﻿@model RocketPOS.Models.SectionModel
+
 @if (!string.IsNullOrEmpty(ViewBag.msg))
 {
     <script type="text/javascript">
@@ -12,33 +13,33 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>Email Setting</h5>
+                    <h5>Section</h5>
                 </div>
                 <div class="card-body">
 
                     <div class="row">
                         <div class="col-md-4">
-                            <form asp-action="EmailSetting">
+                            <form asp-action="Section">
                                 <div class="form-group">
-                                    <label asp-for="FromEmailAddress" class="control-label">From Email Address</label>
-                                    <input asp-for="FromEmailAddress" class="form-control" />
-                                    <span asp-validation-for="FromEmailAddress" class="text-danger"></span>
+                                    <label asp-for="SectionName" class="control-label">Section</label>
+                                    <input asp-for="SectionName" class="form-control" />
+                                    <span asp-validation-for="SectionName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="FromEmailPassword" class="control-label">From Email Password</label>
-                                    <input asp-for="FromEmailPassword" class="form-control" />
-                                    <span asp-validation-for="FromEmailPassword" class="text-danger"></span>
+                                    <label asp-for="Notes" class="control-label"></label>
+                                    <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                                    <span asp-validation-for="Notes" class="text-danger"></span>
                                 </div>
-                                <div class="form-group">
-                                    <label asp-for="EmailDisplayName" class="control-label">Email Display Name</label>
-                                    <input asp-for="EmailDisplayName" class="form-control" />
-                                    <span asp-validation-for="EmailDisplayName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="PurchaseApprovalEmail" class="control-label">Purchase Approval Email</label>
-                                    <input asp-for="PurchaseApprovalEmail" class="form-control" />
-                                    <span asp-validation-for="PurchaseApprovalEmail" class="text-danger"></span>
-                                </div>
+                                @if (Model != null)
+                                {
+                                    @if (Model.Id > 0)
+                                    {
+                                        <div class="form-group">
+                                            <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
+                                            <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 42px" />
+                                        </div>
+                                    }
+                                }
                                 <div class="form-group">
                                     @if (Model != null)
                                     {
@@ -50,7 +51,7 @@
                                         {
                                             <input type="submit" value="Save" class="btn btn-primary" />
                                         }
-                                        <a href='@Url.Action("Index", "Home")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                        <a href='@Url.Action("Index", "Section")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                                     }
                                 </div>
                             </form>
@@ -95,7 +96,7 @@
             window.location.href = "Index";
         });
         $('#OK').click(function () {
-            $("#EmailSetting").prev().focus();
+            $("#Section").prev().focus();
             $("#vModal").modal('hide');
         });
     </script>

@@ -1,0 +1,135 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.PurchaseGRNModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@section Styles {
+    <link href="@Url.Content("~/Styles/print.css")" rel="stylesheet" type="text/css" />
+}
+@{
+    Layout = "";
+}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag
+    https://bootsnipp.com/snippets/9gjD
+   https://plnkr.co/edit/lWk6Yd?preview ---------->
+
+<div id="CateringReport" class="container">
+    <div class="row">
+
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h4>@Model.SupplierName</h4>
+            </div>
+            <hr>
+            <div class="row mb-4">
+                <div class="col-xs-9">
+                </div>
+                <div class="col-xs-3">
+                    <address>
+                        <strong>No#  </strong>@Model.ReferenceNo<br>
+                        <strong>Purchase GRN Date  :  </strong>@Model.PurchaseGRNDate.ToShortDateString()<br>
+                        <strong>Store Name  :  </strong>@Model.StoreName<br>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.PurchaseGRNDetails.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Purchase GRN Details</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">Menu Item</th>
+                                    <th style="width:8%" class="text-right">Unit Price</th>
+                                    <th style="width:8%" class="text-right">PO Qty </th>
+                                    <th style="width:8%" class="text-right">GRN Qty </th>
+                                    <th style="width:10%" class="text-right">Gross Amount</th>
+                                    <th style="width:8%" class="text-right">Tax Amount</th>
+                                    <th style="width:10%" class="text-right">Discount Amount</th>
+                                    <th style="width:10%" class="text-right">Discount %</th>
+                                    <th style="width:10%" class="text-right">Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.PurchaseGRNDetails)
+                                {
+                                    var tm = "#myAModal" + item.PurchaseGRNId;
+                                    var mid = "myAModal" + item.PurchaseGRNId;
+                                    var rowId = "rowId" + item.PurchaseGRNId;
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.FoodMenuName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.UnitPrice
+                                        </td>
+                                        <td class="text-right">
+                                            @item.POQTY
+                                        </td>
+                                        <td class="text-right">
+                                            @item.GRNQTY
+                                        </td>
+                                        <td class="text-right">
+                                            @item.GrossAmount
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TaxAmount
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountAmount
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountPercentage
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TotalAmount
+                                        </td>
+                                    </tr>
+                                }
+                                </tbody>
+                        </table>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12 ">
+                            <div class="col-sm-9">
+                            </div>
+                            <div class="col-sm-3">
+                                <div><strong>Gross Amount  : </strong>@Model.GrossAmount</div>
+                                <div><strong>Tax Amount  : </strong>@Model.TaxAmount</div>
+                                <div><strong>Total Amount  : </strong>@Model.TotalAmount</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="col-sm-6">
+                <div><strong>Delivery Note# :   </strong>@Model.DeliveryNoteNumber</div>
+                <div><strong>Delivery Date : </strong>@Model.DeliveryDate.ToShortDateString()</div>
+                <div><strong>Driver Name : </strong>@Model.DriverName</div>
+                <div><strong>Vehicle# : </strong> @Model.VehicleNumber</div>
+                <div><strong>Notes : </strong> @Model.Notes</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

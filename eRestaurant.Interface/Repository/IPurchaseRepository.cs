@@ -27,5 +27,8 @@ namespace RocketPOS.Interface.Repository
         ClientModel GetClientDetail();
         int GetPurchaseIdByReferenceNo(string referenceNo);
         int ApprovePurchaseOrder(int id);
+
+        List<PurchaseModel> GetViewPurchaseFoodMenuById(long purchaseId);
+        List<PurchaseDetailsModel> GetViewPurchaseFoodMenuDetails(long purchaseId);
     }
 }

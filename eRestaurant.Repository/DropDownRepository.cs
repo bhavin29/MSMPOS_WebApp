@@ -277,5 +277,16 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetGlobalStatusList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT Distinct(ModuleName) As [Name]  FROM [RocketPOS].[dbo].[GlobalStatus] Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

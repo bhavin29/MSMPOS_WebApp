@@ -53,12 +53,12 @@ namespace RocketPOS.Controllers.Transaction
             return View(purchaseModel);
         }
 
-        public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId,string type)
+        public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId, string type)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
             if (purchaseId > 0)
             {
-                
+
                 purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
                 if (purchaseModel != null)
                 {
@@ -157,7 +157,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 purchaseMessage = _locService.GetLocalizedHtmlString("ValidPurchaseGRNDetails");
                 return RedirectToAction("PurchaseGRNFoodMenu", "PurchaseGRNFoodMenu");
-               // return Json(new { error = true, message = purchaseMessage, status = 201 });
+                // return Json(new { error = true, message = purchaseMessage, status = 201 });
             }
             // return View(purchaseModel);
             return Json(new { error = false, message = purchaseMessage, status = 200 });
@@ -165,7 +165,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate,int supplierId)
+        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             DateTime newFromDate, newToDate;
@@ -262,6 +262,26 @@ namespace RocketPOS.Controllers.Transaction
             int purchaseId = 0;
             purchaseId = _iPurchaseGRNService.GetPurchaseIdByPOReference(poReference);
             return Json(new { purchaseId = purchaseId });
+        }
+
+        public IActionResult View(int? id)
+        {
+            PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
+            if (id > 0)
+            {
+                long purchaseGRNId = Convert.ToInt64(id);
+                purchaseModel = _iPurchaseGRNService.GetViewPurchaseGRNFoodMenuById(purchaseGRNId);
+            }
+            else
+            {
+                purchaseModel.PurchaseGRNDate = DateTime.Now;
+                purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+            }
+
+            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+            purchaseModel.StoreList = _iDropDownService.GetStoreList();
+            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+            return View(purchaseModel);
         }
     }
 }

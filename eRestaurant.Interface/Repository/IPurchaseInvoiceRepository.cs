@@ -28,5 +28,7 @@ namespace RocketPOS.Interface.Repository
         List<PurchaseInvoiceModel> GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId);
         List<PurchaseInvoiceDetailModel> GetPurchaseInvoiceFoodMenuDetailsPurchaseId(long purchaseId);
         int GetPurchaseIdByPOReference(string poReference);
+        List<PurchaseInvoiceModel> GetViewPurchaseInvoiceFoodMenuById(long purchaseId);
+        List<PurchaseInvoiceDetailModel> GetViewPurchaseInvoiceFoodMenuDetails(long purchaseId);
     }
 }

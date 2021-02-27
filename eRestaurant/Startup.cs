@@ -196,6 +196,10 @@ namespace RocketPOS
             services.AddScoped<IRewardSetupService, RewardSetupService>();
             services.AddScoped<ITaxRepository, TaxRepository>();
             services.AddScoped<ITaxService, TaxService>();
+            services.AddScoped<ISectionRepository, SectionRepository>();
+            services.AddScoped<ISectionService, SectionService>();
+            services.AddScoped<IGlobalStatusRepository, GlobalStatusRepository>();
+            services.AddScoped<IGlobalStatusService, GlobalStatusService>();
             services.AddHttpClient();
         }
 

@@ -43,5 +43,7 @@ namespace RocketPOS.Models
         public string FromEmailAddress { get; set; }
         public string EmailDisplayName { get; set; }
         public string FromEmailPassword { get; set; }
+        public string PurchaseApprovalEmail { get; set; }
+        
     }
 }

@@ -13,7 +13,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5>GlobalStatus</h5>
+                    <h5>Global Notes</h5>
                 </div>
                 <div class="card-body">
 
@@ -28,6 +28,7 @@
                                                 asp-items="@(new SelectList(Model.ModuleList, "Value", "Text"))">
                                         </select>
                                     }
+                                    <span asp-validation-for="ModuleName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
                                     <label asp-for="StatusName" class="control-label">Status Name</label>

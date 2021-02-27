@@ -40,7 +40,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [ 6,7, 11],
+                "targets": [ 6,7, 11,12],
                 "visible": false,
                 "searchable": false
             }
@@ -64,7 +64,6 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
-    debugger;
     e.preventDefault();
     var message = validation(0);
     var DiscountPercentage = 0;
@@ -72,18 +71,23 @@ $('#addRow').on('click', function (e) {
     var TaxPercentage = 0;
     var TaxAmount = 0;
     var foodMenuId = $("#FoodMenuId").val();
-    $.ajax({
-        url: "/PurchaseGRNFoodMenu/GetTaxByFoodMenuId",
-        data: { "foodMenuId": foodMenuId },
-        async: false,
-        type: "GET",
-        dataType: "text",
-        success: function (data) {
-            var obj = JSON.parse(data);
-            TaxPercentage = obj.taxPercentage;
-            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
-        }
-    });
+    var itemType = $("#ItemType").val();
+
+    if (itemType == 0) {
+        $.ajax({
+            url: "/PurchaseGRNFoodMenu/GetTaxByFoodMenuId",
+            data: { "foodMenuId": foodMenuId },
+            async: false,
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                var obj = JSON.parse(data);
+                TaxPercentage = obj.taxPercentage;
+                TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
+            }
+        });
+    }
+
     var POQty = parseFloat($("#POQty").val()).toFixed(2);
     var GRNQty = parseFloat($("#GRNQty").val()).toFixed(2);
     DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
@@ -130,7 +134,8 @@ $('#addRow').on('click', function (e) {
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
-            $("#PurchaseGRNId").val()
+            $("#PurchaseGRNId").val(),
+            $("#ItemType").val()
         ]).draw(false).nodes();
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
@@ -143,7 +148,8 @@ $('#addRow').on('click', function (e) {
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             totalAmount: Total,
-            purchaseGRNId: $("#PurchaseGRNId").val()
+            purchaseGRNId: $("#PurchaseGRNId").val(),
+            itemType: $("#ItemType").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -163,7 +169,7 @@ $('#addRow').on('click', function (e) {
 
         DueAmount();
         clearItem();
-        $("#FoodMenuId").focus()
+        $("#ItemType").focus();
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -367,8 +373,9 @@ $(document).on('click', 'a.editItem', function (e) {
                     $("#UnitPrice").val(dataArr[i].unitPrice),
                     $("#DiscountPercentage").val(dataArr[i].DiscountPercentage),
                     $("#DiscountAmounts").val(dataArr[i].Discount),
-                    $("#PurchaseGRNId").val(dataArr[i].purchaseId)
-                GrandTotal = $("#GrossAmount").val();
+                    $("#PurchaseGRNId").val(dataArr[i].purchaseId),
+                    $("#ItemType").val(dataArr[i].itemType)
+               GrandTotal = $("#GrossAmount").val();
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
                 $("#GrossAmount").val(GrandTotal);
@@ -413,7 +420,7 @@ function validation(id) {
     }
     else {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
-            message = "Select foodMenu"
+            message = "Select Product"
             return message;
         }
         else if ($("#UnitPrice").val() == '' || $("#UnitPrice").val() == 0) {
@@ -429,8 +436,8 @@ function validation(id) {
             return message;
         }
         for (var i = 0; i < dataArr.length; i++) {
-            if ($("#FoodMenuId").val() == dataArr[i].foodMenuId) {
-                message = "FoodMenu already selected!"
+            if ($("#FoodMenuId").val() == dataArr[i].foodMenuId && $("#ItemType").val() == dataArr[i].itemType) {
+                message = "Product already selected!"
                 break;
             }
         }
@@ -439,12 +446,14 @@ function validation(id) {
 }
 
 function clearItem() {
-    $('#FoodMenuId').val(0).trigger('change'),
         $("#UnitPrice").val(''),
         $("#POQty").val('1'),
         $("#GRNQty").val('1'),
         $("#DiscountPercentage").val(''),
-        $("#PurchaseGRNId").val('0')
+        $("#PurchaseGRNId").val('0'),
+        $("#ItemType").val('0'),
+        $('#FoodMenuId').val(0).trigger('change')
+        GetFoodMenuByItemType();
 }
 
 function GetSupplierDetails(supplierId) {
@@ -460,6 +469,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#ItemType").val('0');
         },
         error: function (data) {
             alert(data);
@@ -480,6 +490,7 @@ function GetSupplierDetailsById(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#ItemType").val('0');
         },
         error: function (data) {
             alert(data);
@@ -539,9 +550,11 @@ function calculateGross() {
 }
 
 function GetFoodMenuLastPrice(foodMenuId) {
+    var itemType = $("#ItemType").val();
+
     $.ajax({
         url: "/PurchaseGRNFoodMenu/GetFoodMenuLastPrice",
-        data: { "foodMenuId": foodMenuId.value },
+        data: { "itemType": itemType, "foodMenuId": foodMenuId.value },
         type: "GET",
         dataType: "text",
         success: function (data) {
@@ -578,3 +591,45 @@ function GetPurchaseGRNbyPO(poReference) {
     });
     debugger;
 }
+
+function GetFoodMenuByItemType() {
+
+    var itemType = $("#ItemType").val();
+    if (itemType == 0) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetFoodMenuList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.foodMenuList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+    if (itemType == 1) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetIngredientList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.ingredientList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.ingredientList[i].value + '">' + obj.ingredientList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+}
+

@@ -36,7 +36,10 @@ $(document).ready(function () {
     });
     $("#StoreId").select2();
     $("#FoodMenuId").select2();
-    $("#StoreId").focus();
+    $("#IngredientId").select2();
+    $("#FoodMenuId").focus();
+    $("#IngredientId").focus();
+
  });
 
 $('#cancel').on('click', function (e) {
@@ -47,10 +50,10 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
+    debugger;
     e.preventDefault();
     var rowId;
     var rowNode;
-    var Price;
     var message = validation(0);
 
     if (InventoryType == "2") {
@@ -73,7 +76,7 @@ $('#addRow').on('click', function (e) {
         InventoryAdjustmentDatatable.row('.active').remove().draw(false);
 
         if (InventoryType == "1") {
-          var rowNode = InventoryAdjustmentDatatable.row.add([
+          rowNode = InventoryAdjustmentDatatable.row.add([
                 '<td>' + $("#FoodMenuId").val() + ' </td>',
                 $('#FoodMenuId').children("option:selected").text(),
                 '<td class="text-right">' + Qty + ' </td>',
@@ -87,12 +90,12 @@ $('#addRow').on('click', function (e) {
             ]).node().id = rowId;
         }
         else if (InventoryType == "2") {
-           var rowNode = InventoryAdjustmentDatatable.row.add([
+            rowNode = InventoryAdjustmentDatatable.row.add([
                 '<td>' + $("#IngredientId").val() + ' </td>',
-                $('#IngredientId').children("option:selected").text(),
+               $('#IngredientId').children("option:selected").text(),
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + Price + ' </td>',
-                '<td class="text-right">' + Total + ' </td>',
+                '<td class="text-right">' + TotalAmount + ' </td>',
                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" "></a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '">Delete</a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#IngredientId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
@@ -121,8 +124,8 @@ $('#addRow').on('click', function (e) {
             dataArr.push({
                 ingredientId: $("#IngredientId").val(),
                 quantity: $("#Quantity").val(),
-                price: $("#Price").toFixed(2),
-                totalAmount: $("#TotalAmount").toFixed(2),
+                price: $("#Price").val(),
+                totalAmount: $("#TotalAmount").val(),
                 inventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
                 ingredientName: $('#IngredientId').children("option:selected").text()
             });
@@ -364,16 +367,20 @@ function clearItem() {
 
 
 
-function GetFoodMenuLastPrice(foodMenuId) {
+function GetFoodMenuLastPrice(inventoryType, foodMenuId) {
+    var itemType;
+    if (inventoryType == 1) { itemType = 0; }
+    else { itemType = 1;}
+  
     $.ajax({
-        url: "/InventoryAdjustment/GetFoodMenuPurchasePrice",
-        data: { "foodMenuId": foodMenuId.value },
+        url: "/PurchaseFoodMenu/GetFoodMenuLastPrice",
+        data: { "itemType": itemType, "foodMenuId": foodMenuId.value },
         type: "GET",
         dataType: "text",
         success: function (data) {
             $("#Price").val('');
             var obj = JSON.parse(data);
-            $("#Price").val(parseFloat(obj.purchasePrice));
+            $("#Price").val(parseFloat(obj.unitPrice));
         },
         error: function (data) {
             alert(data);

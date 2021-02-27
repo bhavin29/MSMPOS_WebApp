@@ -76,7 +76,17 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-8 pr-2 pl-2">
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label class="control-label">Type</label>
+                                        <select Id="ItemType"
+                                                class="form-control" onchange="GetFoodMenuByItemType()">
+                                            <option value="0">Menu Item</option>
+                                            <option value="1">Stock Item</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 pr-2 pl-2">
                                     <div class="form-group">
                                         <label asp-for="FoodMenuList" class="control-label">Product</label>
                                         <select asp-for="FoodMenuId"
@@ -182,6 +192,9 @@
                                                     </td>
                                                     <td>
                                                         @item.PurchaseGRNId
+                                                    </td>
+                                                    <td>
+                                                        @item.ItemType
                                                     </td>
                                                     <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                         <div class="modal-dialog">

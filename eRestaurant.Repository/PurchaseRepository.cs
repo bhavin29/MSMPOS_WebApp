@@ -23,9 +23,9 @@ namespace RocketPOS.Repository
             List<PurchaseViewModel> purchaseViewModelList = new List<PurchaseViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, PurchaseId as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select Purchase.Id as Id, ReferenceNo as ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due " +
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 order by PurchaseDate, PurchaseId desc";
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 order by PurchaseDate, Id desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
 
@@ -38,7 +38,7 @@ namespace RocketPOS.Repository
             List<PurchaseModel> purchaseModelList = new List<PurchaseModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,PurchaseId as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=2 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
@@ -54,7 +54,7 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO [dbo].[Purchase] " +
-                             "  ([PurchaseId] " +
+                             "  ([ReferenceNo] " +
                              "  ,[InventoryType]  " +
                              "  ,[SupplierId]     " +
                              "  ,[StoreId]        " +
@@ -109,7 +109,7 @@ namespace RocketPOS.Repository
                                               "" + item.Quantity + "," +
                                               "" + item.Total + ",0," +
                                               "" + item.Total + "," +
-                                              "" + LoginInfo.Userid + ",0); SELECT CAST(PurchaseId as INT) from Purchase where id = " + result + "; ";
+                                              "" + LoginInfo.Userid + ",0); ";
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
                     }
@@ -283,7 +283,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT RIGHT('PO-' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(PurchaseId as int)),0) + 1), 12) FROM purchase where InventoryType=2;";
+                var query = $"SELECT RIGHT('PO-' + CONVERT(VARCHAR(8),ISNULL(MAX(Cast(ReferenceNo as int)),0) + 1), 12) FROM purchase where InventoryType=2;";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -328,10 +328,16 @@ namespace RocketPOS.Repository
             List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
-                            "pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount " +
-                            "from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
-                            "inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                var query = "select pin.Id as PurchaseId, " +
+                            " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                            " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
+                            " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
+                            " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount " +
+                            " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
+                            " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
+                            " left join Ingredient as I on pin.IngredientId = I.Id " +
+                           "where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseDetailsModel>(query).AsList();
             }
 
@@ -400,20 +406,38 @@ namespace RocketPOS.Repository
                     foreach (var item in purchaseModel.PurchaseDetails)
                     {
                         //Add Items In SupplierItem
-                        var supplierItemQuery = "BEGIN " +
-                                                "IF NOT EXISTS(SELECT * FROM SupplierItem WHERE SupplierId = " + purchaseModel.SupplierId + " AND FoodMenuId = " + item.FoodMenuId + ") " +
-                                                "BEGIN INSERT INTO SupplierItem(SupplierId, FoodMenuId, IngredientId) VALUES(" + purchaseModel.SupplierId + ", " + item.FoodMenuId + ", NuLL) " +
-                                                "END " +
-                                                "END";
-                        con.Execute(supplierItemQuery, null, sqltrans, 0, System.Data.CommandType.Text);
 
-                        var FoodmenuPurchaePriceUpdate = ""+
-                         " update foodmenu set PurchasePrice = " + item.UnitPrice +" Where id = " + item.FoodMenuId;
-                        con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
+                        if (item.ItemType == 0)
+                        {
+                            var supplierItemQuery = "BEGIN " +
+                                                    "IF NOT EXISTS(SELECT * FROM SupplierItem WHERE SupplierId = " + purchaseModel.SupplierId + " AND FoodMenuId = " + item.FoodMenuId + ") " +
+                                                    "BEGIN INSERT INTO SupplierItem(SupplierId, FoodMenuId, IngredientId) VALUES(" + purchaseModel.SupplierId + ", " + item.FoodMenuId + ", NuLL) " +
+                                                    "END " +
+                                                    "END";
+                            con.Execute(supplierItemQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                            var FoodmenuPurchaePriceUpdate = "" +
+                             " update foodmenu set PurchasePrice = " + item.UnitPrice + " Where id = " + item.FoodMenuId;
+                            con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
+                        else if (item.ItemType == 1)
+                        {
+                            var supplierItemQuery = "BEGIN " +
+                                                    "IF NOT EXISTS(SELECT * FROM SupplierItem WHERE SupplierId = " + purchaseModel.SupplierId + " AND IngredientId = " + item.FoodMenuId + ") " +
+                                                    "BEGIN INSERT INTO SupplierItem(SupplierId, FoodMenuId, IngredientId) VALUES(" + purchaseModel.SupplierId + ", NULL," + item.FoodMenuId + ") " +
+                                                    "END " +
+                                                    "END";
+                            con.Execute(supplierItemQuery, null, sqltrans, 0, System.Data.CommandType.Text);
+
+                            var FoodmenuPurchaePriceUpdate = "" +
+                             " update Ingredient set PurchasePrice = " + item.UnitPrice + " Where id = " + item.FoodMenuId;
+                            con.Execute(FoodmenuPurchaePriceUpdate, null, sqltrans, 0, System.Data.CommandType.Text);
+                        }
 
                         var queryDetails = "INSERT INTO [dbo].[PurchaseDetail]" +
                                               " ([PurchaseId]   " +
                                               " ,[FoodMenuId] " +
+                                              " ,[IngredientId] "+
                                               " ,[UnitPrice]    " +
                                               " ,[Qty]          " +
                                               " ,[GrossAmount]  " +
@@ -426,19 +450,28 @@ namespace RocketPOS.Repository
                                               " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
                                               "VALUES           " +
-                                              "(" + result + "," +
-                                              "" + item.FoodMenuId + "," +
-                                              "" + item.UnitPrice + "," +
-                                              "" + item.Quantity + "," +
-                                              "" + item.Total + "," +
-                                              "" + item.DiscountAmount + "," +
-                                              "" + item.DiscountPercentage + "," +
-                                              "" + item.TaxPercentage + "," +
-                                              "" + item.TaxAmount + "," +
-                                              "" + item.Total + "," +
-                                              "" + LoginInfo.Userid +","+
-                                              "   GetUtcDate(),    " +
-                                              "0);  SELECT SCOPE_IDENTITY();";
+                                              "(" + result + ",";
+                                                if (item.ItemType == 0)
+                                                {
+                                                    queryDetails = queryDetails + "" + item.FoodMenuId + ",NUll,";
+
+                                                }
+                                                else if (item.ItemType == 1)
+                                                {
+                                                    queryDetails = queryDetails + "NULL," + item.FoodMenuId + ",";
+
+                                                }
+                        queryDetails = queryDetails + "" + item.UnitPrice + "," +
+                                                "" + item.Quantity + "," +
+                                                "" + item.Total + "," +
+                                                "" + item.DiscountAmount + "," +
+                                                "" + item.DiscountPercentage + "," +
+                                                "" + item.TaxPercentage + "," +
+                                                "" + item.TaxAmount + "," +
+                                                "" + item.Total + "," +
+                                                "" + LoginInfo.Userid + "," +
+                                                "   GetUtcDate(),    " +
+                                                "0);  SELECT SCOPE_IDENTITY();";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -514,19 +547,27 @@ namespace RocketPOS.Repository
                         var queryDetails = string.Empty;
                         if (item.PurchaseId > 0)
                         {
-                            queryDetails = "Update [dbo].[PurchaseDetail] set " +
-                                                 " [FoodMenuId]  = " + item.FoodMenuId + "," +
-                                                 " [UnitPrice]   = " + item.UnitPrice + "," +
-                                                 " [Qty]        =  " + item.Quantity + "," +
-                                                 " [GrossAmount] = " + item.Total + "," +
-                                                 " [DiscountAmount] = " + item.DiscountAmount + "," +
-                                                 " [DiscountPercentage] = " + item.DiscountPercentage + "," +
-                                                 " [TaxPercentage] = " + item.TaxPercentage + "," +
-                                                 " [TaxAmount] = " + item.TaxAmount + "," +
-                                                 " [TotalAmount] = " + item.Total + "," +
-                                                 " [UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                                 " [DateUpdated] = GetUTCDate() " +
-                                                 " where id = " + item.PurchaseId + ";";
+                            queryDetails = "Update [dbo].[PurchaseDetail] set ";
+                            if (item.ItemType == 0)
+                            {
+                                queryDetails = queryDetails + " [FoodMenuId]  = " + item.FoodMenuId + ",[IngredientId] = null, ";
+                            }
+                            else if (item.ItemType == 1)
+                            {
+                                queryDetails = queryDetails + " [IngredientId]  = " + item.FoodMenuId + ",[FoodMenuId] = null, ";
+
+                            }
+                            queryDetails = queryDetails + " [UnitPrice]   = " + item.UnitPrice + "," +
+                                         " [Qty]        =  " + item.Quantity + "," +
+                                         " [GrossAmount] = " + item.Total + "," +
+                                         " [DiscountAmount] = " + item.DiscountAmount + "," +
+                                         " [DiscountPercentage] = " + item.DiscountPercentage + "," +
+                                         " [TaxPercentage] = " + item.TaxPercentage + "," +
+                                         " [TaxAmount] = " + item.TaxAmount + "," +
+                                         " [TotalAmount] = " + item.Total + "," +
+                                         " [UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                         " [DateUpdated] = GetUTCDate() " +
+                                         " where id = " + item.PurchaseId + ";";
                         }
                         else
                         {
@@ -638,19 +679,32 @@ namespace RocketPOS.Repository
             }
         }
 
-        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        public decimal GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 // var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId="+ foodMenuId + " order by id desc";
+                var query = "";
 
-                var query = " select top 1 UnitPrice from " +
-                         " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
-                         " union " +
-                         " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
-                         " order by PDid desc; ";
+                if (itemType == 0)
+                {
+                    query = " select top 1 UnitPrice from " +
+                             " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
+                             " union " +
+                             " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
+                             " order by PDid desc; ";
+                }
+                else if (itemType == 1)
+                {
+                    query = " select top 1 UnitPrice from " +
+                          " (select Id, '' as PDId,PurchasePrice as UnitPrice from Ingredient  where Id = " + foodMenuId +
+                          " union " +
+                          " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where IngredientId = " + foodMenuId + ") restuls " +
+                          " order by PDid desc; ";
+                }
+
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
@@ -670,7 +724,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id from Purchase where ReferenceNo='"+ referenceNo+"'";
+                var query = "select Id from Purchase where ReferenceNo='" + referenceNo + "'";
                 return con.QueryFirstOrDefault<int>(query);
             }
         }
@@ -679,7 +733,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "update Purchase set status=2 where id="+id;
+                var query = "update Purchase set status=2 where id=" + id;
                 return con.Execute(query, null, null, 0, System.Data.CommandType.Text);
             }
         }

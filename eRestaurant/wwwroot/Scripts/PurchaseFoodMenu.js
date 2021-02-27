@@ -8,8 +8,8 @@ var TaxAmtTotal = 0;
 var GTotal = 0;
 var Status = 0;
 
-
 $(document).ready(function () {
+    
     var supId = $("#SupplierId").val();
     if (supId != null && supId != 0) {
         GetSupplierDetailsById(supId);
@@ -35,16 +35,19 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5, 6, 10],
+                "targets": [5, 6, 10,11],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
-    $("#StoreId").focus();
+
     $("#SupplierId").select2();
    $("#FoodMenuId").select2();
     $("#StoreId").select2();
+
+//    GetFoodMenuByItemType();
+    $("#StoreId").focus();
  });
 
 $('#cancel').on('click', function (e) {
@@ -58,7 +61,6 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
-
     e.preventDefault();
     var message = validation(0);
     var Discount = 0;
@@ -66,18 +68,22 @@ $('#addRow').on('click', function (e) {
     var TaxPercentage = 0;
     var TaxAmount = 0;
     var foodMenuId = $("#FoodMenuId").val();
-    $.ajax({
-        url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
-        data: { "foodMenuId": foodMenuId },
-        async: false,
-        type: "GET",
-        dataType: "text",
-        success: function (data) {
-            var obj = JSON.parse(data);
-            TaxPercentage = obj.taxPercentage;
-            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
-        }
-    });
+    var itemType = $("#ItemType").val();
+
+    if (itemType == 0) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
+            data: { "foodMenuId": foodMenuId },
+            async: false,
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                var obj = JSON.parse(data);
+                TaxPercentage = obj.taxPercentage;
+                TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
+            }
+        });
+    }
 
     var Qty = parseFloat($("#Quantity").val()).toFixed(2);
     Discount = parseFloat($("#Discount").val()).toFixed(2);
@@ -115,8 +121,9 @@ $('#addRow').on('click', function (e) {
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" "></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
-            $("#PurchaseId").val()
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(' + $("#ItemType").val() + ', ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            $("#PurchaseId").val(),
+            $("#ItemType").val()
         ]).draw(false).nodes();
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
@@ -127,7 +134,8 @@ $('#addRow').on('click', function (e) {
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             total: Total,
-            purchaseId: $("#PurchaseId").val()
+            purchaseId: $("#PurchaseId").val(),
+            itemType: $("#ItemType").val()
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -149,7 +157,7 @@ $('#addRow').on('click', function (e) {
         $("#GrandTotal").val(parseFloat(GrandTotal).toFixed(2));
         DueAmount();
         clearItem();
-        $("#FoodMenuId").select2().focus();
+        $("#ItemType").focus();
 
     }
     else if (message != '') {
@@ -292,10 +300,11 @@ $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
 
-function deleteOrder(purchaseId, foodMenuId, rowId) {
+function deleteOrder(itemType, foodMenuId, rowId) {
     var id = foodMenuId;
+    debugger;
     for (var i = 0; i < dataArr.length; i++) {
-        if (dataArr[i].foodMenuId == id) {
+        if (dataArr[i].foodMenuId == id && dataArr[i].itemType == itemType) {
             TotalAmount = dataArr[i].total;
             GrandTotal -= TotalAmount;
             $("#GrandTotal").val(GrandTotal);
@@ -336,7 +345,8 @@ $(document).on('click', 'a.editItem', function (e) {
                     $("#UnitPrice").val(dataArr[i].unitPrice),
                     $("#Quantity").val(dataArr[i].quantity),
                     $("#Discount").val(dataArr[i].Discount),
-                    $("#PurchaseId").val(dataArr[i].purchaseId)
+                    $("#PurchaseId").val(dataArr[i].purchaseId),
+                    $("#ItemType").val(dataArr[i].itemType)
                 GrandTotal = $("#GrandTotal").val();
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
@@ -383,7 +393,7 @@ function validation(id) {
     }
     else {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
-            message = "Select foodMenu"
+            message = "Select Product"
             return message;
         }
         else if ($("#UnitPrice").val() == '' || $("#UnitPrice").val() == 0) {
@@ -395,8 +405,8 @@ function validation(id) {
             return message;
         }
         for (var i = 0; i < dataArr.length; i++) {
-            if ($("#FoodMenuId").val() == dataArr[i].foodMenuId) {
-                message = "FoodMenu already selected!"
+            if ($("#FoodMenuId").val() == dataArr[i].foodMenuId && $("#ItemType").val() == dataArr[i].itemType) {
+                message = "Product already selected!"
                 break;
             }
         }
@@ -405,13 +415,15 @@ function validation(id) {
 }
 
 function clearItem() {
-        $("#UnitPrice").val(''),
+    $("#UnitPrice").val(''),
         $("#Quantity").val('1'),
         $("#Discount").val(''),
         $("#Amount").val(''),
         $("#PurchaseId").val('0'),
-        $('#FoodMenuId').val(0).trigger('change')
+        $("#ItemType").val('0'),
+        $('#FoodMenuId').val(0).trigger('change');
 
+        GetFoodMenuByItemType();
  }
 
 function GetSupplierDetails(supplierId) {
@@ -427,6 +439,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#ItemType").val('0');
         },
         error: function (data) {
             alert(data);
@@ -447,6 +460,7 @@ function GetSupplierDetailsById(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#ItemType").val('0');
         },
         error: function (data) {
             alert(data);
@@ -467,6 +481,7 @@ $('#chkAllFoodMenu').change(function () {
                 for (var i = 0; i < obj.foodMenuList.length; ++i) {
                     $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
                 }
+                $("#ItemType").val('0');
             },
             error: function (data) {
                 alert(data);
@@ -492,9 +507,11 @@ function calculateColumn(index) {
 }
 
 function GetFoodMenuLastPrice(foodMenuId) {
+    var itemType = $("#ItemType").val();
+    debugger;
     $.ajax({
         url: "/PurchaseFoodMenu/GetFoodMenuLastPrice",
-        data: { "foodMenuId": foodMenuId.value },
+        data: { "itemType": itemType, "foodMenuId": foodMenuId.value  },
         type: "GET",
         dataType: "text",
         success: function (data) {
@@ -506,5 +523,47 @@ function GetFoodMenuLastPrice(foodMenuId) {
             alert(data);
         }
     });
+}
+
+
+function GetFoodMenuByItemType() {
+ 
+    var itemType = $("#ItemType").val();
+    if (itemType == 0) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetFoodMenuList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.foodMenuList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+    if (itemType == 1) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetIngredientList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.ingredientList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.ingredientList[i].value + '">' + obj.ingredientList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
 }
 

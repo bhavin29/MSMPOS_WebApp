@@ -34,11 +34,11 @@ $(document).ready(function () {
             }
         ]
     });
-    $("#FromStoreId").focus();
     $("#FromStoreId").select2();
     $("#ToStoreId").select2();
     $("#FoodMenuId").select2();
     $("#IngredientId").select2(); 
+    $("#FromStoreId").focus();
 });
 
 $('#cancel').on('click', function (e) {
@@ -108,8 +108,8 @@ $('#addRow').on('click', function (e) {
         if (InventoryType == "2") {
             dataArr.push({
                 ingredientId: $("#IngredientId").val(),
-                currentStock: $("#StockQty").val().toFixed(2),
-                quantity: $("#Quantity").val().toFixed(2),
+                currentStock: $("#StockQty").val(),
+                quantity: $("#Quantity").val(),
                 productUnit: $("#ProductUnit").val(),
                 //consumpationStatus: $("#ConsumpationStatus").val(),
                 InventoryTransferId: $("#InventoryTransferId").val(),
@@ -377,8 +377,7 @@ function clearItem() {
         //$("#ConsumpationStatus").val(''),
         $("#Quantity").val('1'),
         $("#InventoryTransferId").val('0')
-
-    $("#FoodMenuId").focus()
+        $("#FoodMenuId").focus()
 }
 
 

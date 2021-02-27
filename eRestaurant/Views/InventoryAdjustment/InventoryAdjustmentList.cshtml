@@ -14,8 +14,8 @@
                 <h5 class="card-title">Stock In</h5>
             </div>
             <div class="float-right">
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class="pull-right btn btn-primary">+ Stock In</a>
-                @*<div class="col-md-4"><a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="pull-right btn btn-primary">Add Inventory Ingredient Transfer</a></div>*@
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class="pull-right btn btn-primary">+ Menu Item</a>
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="pull-right btn btn-primary">+ Stock Item</a>
             </div>
         </div>
     </div>
@@ -79,12 +79,12 @@
                                             @Html.DisplayFor(modelItem => item.StoreName)
                                         </td>
                                         @*<td>
-                                            <div class="form-button-action">
-                                                <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                <label> / </label>
-                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                            </div>
-                                        </td>*@
+                                                <div class="form-button-action">
+                                                    <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                    <label> / </label>
+                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                </div>
+                                            </td>*@
                                         <td>
                                             <div class="form-button-action">
                                                 <a asp-action="InventoryAdjustment" asp-route-Id="@item.Id" asp-route-type="View">View</a>

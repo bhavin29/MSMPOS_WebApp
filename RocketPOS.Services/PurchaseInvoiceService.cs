@@ -166,9 +166,9 @@ namespace RocketPOS.Services
             return _iPurchaseInvoiceRepository.GetTaxByFoodMenuId(foodMenuId);
         }
 
-        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        public decimal GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
-            return _iPurchaseInvoiceRepository.GetFoodMenuLastPrice(foodMenuId);
+            return _iPurchaseInvoiceRepository.GetFoodMenuLastPrice(itemType,foodMenuId);
         }
 
         public PurchaseInvoiceModel GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId)

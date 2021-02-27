@@ -159,14 +159,17 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional from FoodMenu where  IsActive = 1 AND IsDeleted= 0 ";
+                var query = "select Id,FoodMenuName as [Name], PurchasePrice as Optional, 'F' as Optional1 from FoodMenu where  IsActive = 1 AND IsDeleted= 0 ";
 
                 if (foodmenuType != -1)
                 {
                     query = query + " AND FoodmenuType = " + foodmenuType;
                 }
 
-                query = query + " Order by FoodMenuName";
+                query = query + "order by[Name]";
+
+               // query = query + " union select Id, IngredientName as [Name], PurchasePrice as Optional, 'I' as Optional1 from Ingredient where IsActive = 1 AND IsDeleted = 0  ";
+
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

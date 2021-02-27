@@ -8,6 +8,7 @@ namespace RocketPOS.Models
 {
     public class PurchaseInvoiceModel
     {
+        public int ItemType { get; set; }
         public int Id { get; set; }
         public int InventoryType { get; set; }
         public int PurchaseOrderId { get; set; }
@@ -51,6 +52,7 @@ namespace RocketPOS.Models
     }
     public class PurchaseInvoiceDetailModel
     {
+        public int ItemType { get; set; }
         public int Id { get; set; }
         public int PurchaseInvoiceId { get; set; }
         public string FoodMenuName { get; set; }

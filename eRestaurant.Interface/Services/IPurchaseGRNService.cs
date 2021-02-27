@@ -21,7 +21,7 @@ namespace RocketPOS.Interface.Services
         int UpdatePurchaseGRNFoodMenu(PurchaseGRNModel purchaseGRNModel);
         string ReferenceNumberFoodMenu();
         decimal GetTaxByFoodMenuId(int foodMenuId);
-        decimal GetFoodMenuLastPrice(int foodMenuId);
+        decimal GetFoodMenuLastPrice(int itemType, int foodMenuId);
         PurchaseGRNModel GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId);
 
         int GetPurchaseIdByPOReference(string poReference);

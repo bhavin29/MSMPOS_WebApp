@@ -8,6 +8,7 @@ namespace RocketPOS.Models
 {
     public class PurchaseGRNModel
     {
+        public int ItemType { get; set; }
         public int Id { get; set; }
         public int InventoryType { get; set; }
         public int PurchaseOrderID { get; set; }
@@ -55,6 +56,7 @@ namespace RocketPOS.Models
 
     public class PurchaseGRNDetailModel
     {
+        public int ItemType { get; set; }
         public int Id { get; set; }
         public int PurchaseGRNId { get; set; }
         public int FoodMenuId { get; set; }

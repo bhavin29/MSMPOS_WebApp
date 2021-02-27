@@ -165,9 +165,9 @@ namespace RocketPOS.Services
             return _iPurchaseGRNRepository.GetTaxByFoodMenuId(foodMenuId);
         }
 
-        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        public decimal GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
-            return _iPurchaseGRNRepository.GetFoodMenuLastPrice(foodMenuId);
+            return _iPurchaseGRNRepository.GetFoodMenuLastPrice(itemType,foodMenuId);
         }
 
         public PurchaseGRNModel GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId)
@@ -262,10 +262,12 @@ namespace RocketPOS.Services
                                                 TaxAmount = purchasedetails.TaxAmount,
                                                 TotalAmount = purchasedetails.TotalAmount,
                                                 IngredientName = purchasedetails.IngredientName,
-                                                FoodMenuName = purchasedetails.FoodMenuName
+                                                FoodMenuName = purchasedetails.FoodMenuName,
+                                                ItemType = purchasedetails.ItemType
                                             }).ToList();
             }
             return model;
         }
+
     }
 }

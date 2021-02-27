@@ -60,20 +60,35 @@ namespace RocketPOS.Controllers.Master
 
             if (globalStatusModel.Id > 0)
             {
+                if (globalStatusModel.ModuleName == "0")
+                {
+                    ModelState.AddModelError("ModuleName", "Select module");
+                    globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
+                    return View(globalStatusModel);
+                }
                 var result = _iGlobalStatusService.UpdateGlobalStatus(globalStatusModel);
                 if (result == -1)
                 {
                     ModelState.AddModelError("GlobalStatusName", "GlobalStatus already exists");
+                    globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
                     return View(globalStatusModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("EditSuccss");
             }
             else
             {
+                if (globalStatusModel.ModuleName == "0")
+                {
+                    ModelState.AddModelError("ModuleName", "Select module");
+                    globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
+                    return View(globalStatusModel);
+                }
+
                 var result = _iGlobalStatusService.InsertGlobalStatus(globalStatusModel);
                 if (result == -1)
                 {
                     ModelState.AddModelError("GlobalStatusName", "GlobalStatus already exists");
+                    globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
                     return View(globalStatusModel);
                 }
                 ViewBag.Result = _locService.GetLocalizedHtmlString("SaveSuccess");

@@ -208,8 +208,16 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetFoodMenuList()
         {
             PurchaseModel purchaseModel = new PurchaseModel();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(1);
             return Json(new { purchaseModel.FoodMenuList });
+        }
+
+        [HttpGet]
+        public ActionResult GetIngredientList()
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
+            return Json(new { purchaseModel.IngredientList });
         }
 
         [HttpGet]
@@ -240,10 +248,10 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { TaxPercentage = taxPercentage });
         }
 
-        public ActionResult GetFoodMenuLastPrice(int foodMenuId)
+        public ActionResult GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
             decimal unitPrice = 0;
-            unitPrice = _iPurchaseService.GetFoodMenuLastPrice(foodMenuId);
+            unitPrice = _iPurchaseService.GetFoodMenuLastPrice(itemType, foodMenuId);
             return Json(new { UnitPrice = unitPrice });
         }
 

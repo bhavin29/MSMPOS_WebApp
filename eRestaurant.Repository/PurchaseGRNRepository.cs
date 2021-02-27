@@ -364,9 +364,15 @@ namespace RocketPOS.Repository
             List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseGRNId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
+                var query = " select pin.Id as PurchaseGRNId," +
+                            " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                            " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
+                            " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            " pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
                             " from purchaseGRN as P inner join PurchaseGRNDetail as PIN on P.id = pin.PurchaseGRNId " +
-                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseGRNId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                            " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
+                            " left join Ingredient as I on pin.IngredientId = I.Id " +
+                            " where P.id = " + purchaseGRNId + " and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
             }
 
@@ -468,19 +474,26 @@ namespace RocketPOS.Repository
                                              " ,[UserIdInserted]" +
                                              " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
-                                              "VALUES           " +
-                                              "(" + result + "," +
-                                              item.FoodMenuId + "," +
-                                              "null ," +
-                                              item.POQTY + "," +
-                                              item.GRNQTY + "," +
-                                              item.UnitPrice + "," +
-                                              item.GrossAmount + "," +
-                                              item.DiscountPercentage + "," +
-                                              item.DiscountAmount + "," +
-                                              item.TaxAmount + "," +
-                                              item.TotalAmount + "," +
-                                    LoginInfo.Userid + ",GetUTCDate(),0); SELECT CAST(ReferenceNumber as INT) from PurchaseGRN where id = " + result + "; ";
+                                              "VALUES (          " + result + ",";
+                        if (item.ItemType == 0)
+                        {
+                            queryDetails = queryDetails + "" + item.FoodMenuId + ",NUll,";
+
+                        }
+                        else if (item.ItemType == 1)
+                        {
+                            queryDetails = queryDetails + "NULL," + item.FoodMenuId + ",";
+
+                        }
+                        queryDetails = queryDetails + "" + item.POQTY + "," +
+                                      item.GRNQTY + "," +
+                                      item.UnitPrice + "," +
+                                      item.GrossAmount + "," +
+                                      item.DiscountPercentage + "," +
+                                      item.DiscountAmount + "," +
+                                      item.TaxAmount + "," +
+                                      item.TotalAmount + "," +
+                            LoginInfo.Userid + ",GetUTCDate(),0); SELECT CAST(ReferenceNumber as INT) from PurchaseGRN where id = " + result + "; ";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -554,19 +567,28 @@ namespace RocketPOS.Repository
                         if (item.PurchaseGRNId > 0)
                         {
                             queryDetails = "Update [dbo].[PurchaseGRNDetail] set " +
-                                             "[PurchaseGRNId] = " + purchaseModel.Id +
-                                              ",[FoodMenuId]  = " + item.FoodMenuId +
-                                              ",[POQty]  = " + item.POQTY +
-                                              ",[GRNQty]   = " + item.GRNQTY +
-                                              ",[UnitPrice]   = " + item.UnitPrice +
-                                              ",[GrossAmount]   = " + item.GrossAmount +
-                                              ",[DiscountPercentage] = " + item.DiscountPercentage +
-                                              ",[DiscountAmount]  = " + item.DiscountAmount +
-                                              ",[TaxAmount]   = " + item.TaxAmount +
-                                              ",[TotalAmount]  = " + item.TotalAmount +
-                                               " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
-                                                 " [DateUpdated] = GetUTCDate() " +
-                                                 " where id = " + item.PurchaseGRNId + ";";
+                                             "[PurchaseGRNId] = " + purchaseModel.Id;
+                            if (item.ItemType == 0)
+                            {
+                                queryDetails = queryDetails + " [FoodMenuId]  = " + item.FoodMenuId + ",[IngredientId] = null, ";
+                            }
+                            else if (item.ItemType == 1)
+                            {
+                                queryDetails = queryDetails + " [IngredientId]  = " + item.FoodMenuId + ",[FoodMenuId] = null, ";
+
+                            }
+                            queryDetails = queryDetails + " [UnitPrice]   = " + item.UnitPrice + "," +
+                              ",[POQty]  = " + item.POQTY +
+                              ",[GRNQty]   = " + item.GRNQTY +
+                              ",[UnitPrice]   = " + item.UnitPrice +
+                              ",[GrossAmount]   = " + item.GrossAmount +
+                              ",[DiscountPercentage] = " + item.DiscountPercentage +
+                              ",[DiscountAmount]  = " + item.DiscountAmount +
+                              ",[TaxAmount]   = " + item.TaxAmount +
+                              ",[TotalAmount]  = " + item.TotalAmount +
+                               " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
+                                 " [DateUpdated] = GetUTCDate() " +
+                                 " where id = " + item.PurchaseGRNId + ";";
                         }
                         else
                         {
@@ -586,10 +608,18 @@ namespace RocketPOS.Repository
                                                " ,[DateInserted]" +
                                                " ,[IsDeleted])   " +
                                                "VALUES           " +
-                                               "(" + purchaseModel.Id + "," +
-                                               item.FoodMenuId + "," +
-                                                 "null," +
-                                               item.POQTY + "," +
+                                               "(" + purchaseModel.Id + ",";
+                            if (item.ItemType == 0)
+                            {
+                                queryDetails = queryDetails + "" + item.FoodMenuId + ",NUll,";
+
+                            }
+                            else if (item.ItemType == 1)
+                            {
+                                queryDetails = queryDetails + "NULL," + item.FoodMenuId + ",";
+
+                            }
+                            queryDetails = queryDetails + item.POQTY + "," +
                                                item.GRNQTY + "," +
                                                item.UnitPrice + "," +
                                                item.GrossAmount + "," +
@@ -653,18 +683,33 @@ namespace RocketPOS.Repository
             }
         }
 
-        public decimal GetFoodMenuLastPrice(int foodMenuId)
+        public decimal GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //      var query = "select top 1 UnitPrice from PurchaseDetail where FoodMenuId=" + foodMenuId + " order by id desc";
-                var query = " select top 1 UnitPrice from " +
-                             " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
-                             " union " +
-                             " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
-                             " order by PDid desc; ";
+                var query = "";
+
+                if (itemType == 0)
+                {
+                    query = " select top 1 UnitPrice from " +
+                          " (select Id, '' as PDId,PurchasePrice as UnitPrice from foodmenu  where Id = " + foodMenuId +
+                          " union " +
+                          " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where FoodMenuId = " + foodMenuId + ") restuls " +
+                          " order by PDid desc; ";
+
+                }
+                else if (itemType == 1)
+                {
+                    query = " select top 1 UnitPrice from " +
+                                " (select Id, '' as PDId,PurchasePrice as UnitPrice from Ingredient  where Id = " + foodMenuId +
+                                " union " +
+                                " select '' as Id, Id asPDId, UnitPrice from PurchaseDetail where IngredientId = " + foodMenuId + ") restuls " +
+                                " order by PDid desc; ";
+                }
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
@@ -732,9 +777,16 @@ namespace RocketPOS.Repository
             List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseGRNId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
-                            " from purchaseGRN as P inner join PurchaseGRNDetail as PIN on P.id = pin.PurchaseGRNId " +
-                            " inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + PurchaseGRNId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                var query = " select pin.Id as PurchaseGRNId," +
+                         " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                         " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
+                         " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                         "  pin.UnitPrice as UnitPrice, pin.POQty,PIN.GRNQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
+                         " from purchaseGRN as P inner join PurchaseGRNDetail as PIN on P.id = pin.PurchaseGRNId " +
+                         " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
+                         " left join Ingredient as I on pin.IngredientId = I.Id " +
+                         " where P.id = " + PurchaseGRNId + " and pin.isdeleted = 0 and p.isdeleted = 0";
+
                 purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
             }
 

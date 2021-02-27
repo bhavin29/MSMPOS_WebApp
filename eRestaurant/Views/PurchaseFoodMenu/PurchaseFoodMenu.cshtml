@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Food Menu</label>
+                                        <input type="checkbox" id="chkAllFoodMenu" class="control-label"><label class="control-label"> Use All Item</label>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +98,17 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-7 pr-2 pl-2">
+                                <div class="col-md-1">
+                                    <div class="form-group">
+                                        <label class="control-label">Type</label>
+                                        <select Id="ItemType"
+                                                class="form-control" onchange="GetFoodMenuByItemType()">
+                                            <option value="0">Menu Item</option>
+                                            <option value="1">Stock Item</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 pr-2 pl-2">
                                     <div class="form-group">
                                         <label asp-for="FoodMenuList" class="control-label">Product</label>
                                         <select asp-for="FoodMenuId"
@@ -150,15 +160,15 @@
                                     <thead>
                                         <tr>
                                             <th style="width:0%">FoodMenuId</th>
-                                            <th style="width:30%">Food Menu</th>
-                                            <th style="width:5%" class="text-right">Qty</th>
+                                            <th style="width:40%">Food Menu</th>
+                                            <th style="width:10%" class="text-right">Qty</th>
                                             <th style="width:10%" class="text-right">Price</th>
                                             <th style="width:10%" class="text-right">Dis%</th>
                                             <th style="width:0%" class="text-right">Dis Amt</th>
                                             <th style="width:0%" class="text-right">Tax%</th>
                                             <th style="width:10%" class="text-right">Tax Amt</th>
                                             <th style="width:10%" class="text-right">Total</th>
-                                            <th style="width:5%" >Action</th>
+                                            <th style="width:10%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -197,13 +207,16 @@
                                                     <td class="text-right">
                                                         @item.Total.ToString("N")
                                                     </td>
-                                                    <td >
+                                                    <td>
                                                         <div class="form-button-action">
                                                             <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         @item.PurchaseId
+                                                    </td>
+                                                    <td>
+                                                        @item.ItemType
                                                     </td>
                                                 </tr>
                                                 <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

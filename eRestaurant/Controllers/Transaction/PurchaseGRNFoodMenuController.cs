@@ -58,7 +58,6 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
             if (purchaseId > 0)
             {
-
                 purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
                 if (purchaseModel != null)
                 {
@@ -77,6 +76,7 @@ namespace RocketPOS.Controllers.Transaction
                 else
                 {
                     purchaseModel.PurchaseGRNDate = DateTime.Now;
+                    purchaseModel.DeliveryDate = DateTime.Now;
                     purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
                 }
             }
@@ -237,7 +237,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetFoodMenuList()
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+            purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(1);
             return Json(new { purchaseModel.FoodMenuList });
         }
 
@@ -249,10 +249,10 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { TaxPercentage = taxPercentage });
         }
 
-        public ActionResult GetFoodMenuLastPrice(int foodMenuId)
+        public ActionResult GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
             decimal unitPrice = 0;
-            unitPrice = _iPurchaseGRNService.GetFoodMenuLastPrice(foodMenuId);
+            unitPrice = _iPurchaseGRNService.GetFoodMenuLastPrice(itemType,foodMenuId);
             return Json(new { UnitPrice = unitPrice });
         }
 

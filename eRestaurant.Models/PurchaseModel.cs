@@ -57,6 +57,8 @@ namespace RocketPOS.Models
    
     public class PurchaseDetailsModel
     {
+        public int ItemType { get; set; }
+
         public long PurchaseId { get; set; }
         public int ReferenceNo { get; set; }
         public int IngredientId { get; set; }

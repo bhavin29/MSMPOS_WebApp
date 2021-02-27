@@ -42,6 +42,16 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Type</label>
+                            <select Id="ItemType"
+                                    class="form-control" >
+                                <option value="0">Menu Item</option>
+                                <option value="1">Stock Item</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-2" style="margin:25px 0px">
                         <a id="btnLoadData" onclick="return loadInventoryStockList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
@@ -172,7 +182,7 @@
             debugger;
             $.ajaxSetup({ cache: false });
             $.ajax({
-                        url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
+                url: "/Report/GetInventoryStockList?supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val() + "&itemType=" + $("#ItemType").val(),
                         dataType: "json",
                         type: "GET",
                         success: function (data) {

@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace RocketPOS.Models
 {
-    public class GlobalStatusModel
+    public class GlobalStatusModel : IValidatableObject
     {
         public int Id { get; set; }
         
@@ -19,5 +19,11 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Enter Status Name")]
         public string StatusName { get; set; }
         public string StatusCode { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (ModuleName == "0")
+                yield return new ValidationResult("Select Module Name");
+        }
     }
 }

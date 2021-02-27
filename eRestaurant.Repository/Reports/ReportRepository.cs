@@ -26,7 +26,8 @@ namespace RocketPOS.Repository.Reports
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
+                var query = "";
+                 query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
                             " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                             " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
@@ -34,6 +35,15 @@ namespace RocketPOS.Repository.Reports
                             " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
                             " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId " +
                             " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <>0";
+
+                //query = "SELECT S.StoreName,INV.Id,I.IngredientName as FoodMenuName,IC.IngredientCategoryName as FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
+                //         " S.StoreName,INV.Id,I.Code as FoodMenuCode ,INV.StockQty,  " +
+                //         " I.PurchasePrice, (INV.StockQty * I.PurchasePrice) as Amount , U.Unitname, " +
+                //         " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,I.AlterQty" +
+                //         " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
+                //         " INNER JOIN IngredientCategory IC on IC.Id = I.IngredientCategoryId " +
+                //         " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = I.IngredientUnitId " +
+                //         " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }
@@ -48,7 +58,7 @@ namespace RocketPOS.Repository.Reports
             {
                 var query = " SELECT Convert(varchar(10), ID.DocDate, 103)as DocDate,ID.StoreId,DocType,DocTable,DocNumber,DocNumberId,DocNumberDetailId,SupplierId, " +
                             " StoreName,SupplierName,ID.FoodMenuId,ID.IngredientId,Reamrks,StockInQty,StockOutQty,BalanceQty " +
-                            " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and I.FoodmenuId = ID.FoodMenuid " +
+                            " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and (I.FoodmenuId = ID.FoodMenuid  or  I.IngredientID = ID.IngredientID) " +
                             " inner join Store S ON S.ID = ID.StoreID " +
                             " left join SUPPLIER SP on SP.Id = ID.SupplierId " +
                             " WHERE I.ID=" + id + "Order by ID.DocDate asc";
@@ -144,26 +154,45 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId)
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
-                            " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
-                            " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
-                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
-                            " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
-                            " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
-                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId ";
+                var query ="";
 
-                if (supplierId != 0)
+                if (itemType == 0) 
+                {
+                    query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
+                                " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                                " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
+                                " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
+                                " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
+                                " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
+                                " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId ";
+                }
+                else if (itemType == 1)
+                {
+                    query = "SELECT S.StoreName,INV.Id,I.IngredientName as FoodMenuName,IC.IngredientCategoryName as FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
+                             " S.StoreName,INV.Id,I.Code as FoodMenuCode ,INV.StockQty,  " +
+                             " I.PurchasePrice, (INV.StockQty * I.PurchasePrice) as Amount , U.Unitname, " +
+                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,I.AlterQty" +
+                             " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
+                             " INNER JOIN IngredientCategory IC on IC.Id = I.IngredientCategoryId " +
+                             " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = I.IngredientUnitId ";
+                         //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
+                }
+
+                if (supplierId != 0 && itemType==0)
                 {
                     query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
                 }
-                query = query + " where INV.StoreId = " + storeId;
+                 else if (supplierId != 0 && itemType == 1)
+                {
+                    query += "  inner join SupplierItem SI on SI.IngredientID = INV.IngredientID And SI.SupplierId = " + supplierId;
+                }                query = query + " where INV.StoreId = " + storeId;
 
-                query += "   ORDER BY  F.Foodmenuname,INV.StockQty ,F.foodmenutype desc ";
+                query += "   ORDER BY  Foodmenuname,INV.StockQty desc ";
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }

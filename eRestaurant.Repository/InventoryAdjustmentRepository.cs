@@ -109,7 +109,7 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentViewModel> inventoryAdjustmentModels = new List<InventoryAdjustmentViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes,U.Username " +
+                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
                               "FROM InventoryAdjustment IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
                                 "inner join [User] U on U.Id=IA.UserIdInserted " +
@@ -205,10 +205,10 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentViewModel> inventoryAdjustmentModels = new List<InventoryAdjustmentViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes,U.Username " +
+                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,convert(varchar(12),IA.EntryDate, 3) as [Date],IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes ,isnull(EE.Firstname,'') + ' '+  isnull(EE.lastname,'') as Username  " +
                               "FROM InventoryAdjustment IA left JOIN Employee E ON E.Id = IA.EmployeeId " +
                               "INNER JOIN Store S ON S.Id = IA.StoreId " +
-                                "inner join [User] U on U.Id=IA.UserIdInserted " +
+                                "inner join [User] U on U.Id=IA.UserIdInserted  inner join employee ee on ee.id = u.employeeid " +
                               "WHERE IA.IsDeleted = 0 " + 
                               //"And Convert(varchar(10),IA.EntryDate,103)  between '" + fromDate + "' and '" + toDate + "' order by IA.EntryDate desc;";
                                 " AND Convert(Date, IA.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
@@ -230,7 +230,7 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(ReferenceNumber),0) + 1 FROM InventoryAdjustment where isdeleted=0 ;";
+                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNumber)),0) + 1 FROM InventoryAdjustment where isdeleted=0 ;";
                 result = con.ExecuteScalar<long>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {

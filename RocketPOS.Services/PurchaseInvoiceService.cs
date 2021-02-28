@@ -40,7 +40,9 @@ namespace RocketPOS.Services
                              DeliveryDate = purchase.DeliveryDate,
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             POReferenceNo = purchase.POReferenceNo,
+                             PODate = purchase.PODate
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -58,7 +60,8 @@ namespace RocketPOS.Services
                                              TaxAmount = purchasedetails.TaxAmount,
                                              TotalAmount = purchasedetails.TotalAmount,
                                              IngredientName = purchasedetails.IngredientName,
-                                             FoodMenuName = purchasedetails.FoodMenuName
+                                             FoodMenuName = purchasedetails.FoodMenuName,
+                                             ItemType = purchasedetails.ItemType
                                          }).ToList();
             }
             return model;
@@ -113,7 +116,9 @@ namespace RocketPOS.Services
                              DeliveryDate = purchase.DeliveryDate,
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             POReferenceNo = purchase.POReferenceNo,
+                             PODate = purchase.PODate
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -193,7 +198,9 @@ namespace RocketPOS.Services
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
                              Notes = purchase.Notes,
-                             PurchaseStatus = purchase.PurchaseStatus
+                             PurchaseStatus = purchase.PurchaseStatus,
+                             POReferenceNo = purchase.POReferenceNo,
+                             PODate = purchase.PODate
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -212,7 +219,8 @@ namespace RocketPOS.Services
                                                     TaxAmount = purchasedetails.TaxAmount,
                                                     TotalAmount = purchasedetails.TotalAmount,
                                                     IngredientName = purchasedetails.IngredientName,
-                                                    FoodMenuName = purchasedetails.FoodMenuName
+                                                    FoodMenuName = purchasedetails.FoodMenuName,
+                                                    ItemType = purchasedetails.ItemType
                                                 }).ToList();
             }
             return model;
@@ -247,7 +255,9 @@ namespace RocketPOS.Services
                              Notes = purchase.Notes,
                              PurchaseStatus = purchase.PurchaseStatus,
                              StoreName=purchase.StoreName,
-                             SupplierName=purchase.SupplierName
+                             SupplierName=purchase.SupplierName,
+                             POReferenceNo = purchase.POReferenceNo,
+                             PODate = purchase.PODate
                          }).SingleOrDefault();
             if (model != null)
             {

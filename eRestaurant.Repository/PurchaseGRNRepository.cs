@@ -353,8 +353,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due,U.Username " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
+                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseGRNViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -385,8 +385,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseGRN.Id as Id,PurchaseGRN.PurchaseId, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due,U.Username " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
+                    "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
                     // " AND Convert(varchar(10), PurchaseGRNDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
                     " AND Convert(Date, PurchaseGRNDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 
@@ -732,9 +732,15 @@ namespace RocketPOS.Repository
             List<PurchaseGRNDetailModel> purchaseDetails = new List<PurchaseGRNDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select 0 AS PurchaseGRNId,PD.FoodMenuId,f.FoodMenuName,pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS GRNQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
-                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId inner join FoodMenu as f on PD.FoodMenuId = f.Id " +
-                            "Where P.InventoryType = 1 and P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                var query = "Select 0 AS PurchaseGRNId,"+
+                             " (case when PD.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                             " (case when PD.FoodMenuId is null then PD.IngredientId else PD.FoodMenuId end) as FoodMenuId, " +
+                             " (case when PD.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            "pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS GRNQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId " +
+                             " left join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                             " left join Ingredient as I on PD.IngredientId = I.Id " +
+                            "Where  P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
                 purchaseDetails = con.Query<PurchaseGRNDetailModel>(query).AsList();
             }
 
@@ -798,9 +804,9 @@ namespace RocketPOS.Repository
             List<PurchaseGRNModel> purchaseModelList = new List<PurchaseGRNModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseGRN.Id as Id, PurchaseGRN.StoreId,PurchaseGRN.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseGRNDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select P.Referenceno as POReferenceNo , P.PurchaseDate as PODate, PurchaseGRN.Id as Id, PurchaseGRN.StoreId,PurchaseGRN.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseGRNDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "PurchaseGRN.GrossAmount, PurchaseGRN.TaxAmount,PurchaseGRN.TotalAmount,PurchaseGRN.DueAmount as Due,PurchaseGRN.PaidAmount as Paid,PurchaseGRN.DeliveryNoteNumber ,PurchaseGRN.DeliveryDate ,PurchaseGRN.DriverName ,PurchaseGRN.VehicleNumber,PurchaseGRN.Notes,S.StoreName " +
-                      "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join Store S on PurchaseGRN.StoreId = s.Id where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 and PurchaseGRN.Id = " + PurchaseGRNId;
+                      "from PurchaseGRN  left JOIN PURCHASE P on P.Id = PurchaseGRN.Purchaseid inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join Store S on PurchaseGRN.StoreId = s.Id where PurchaseGRN.Isdeleted = 0 and PurchaseGRN.Id = " + PurchaseGRNId;
                 purchaseModelList = con.Query<PurchaseGRNModel>(query).AsList();
             }
             return purchaseModelList;

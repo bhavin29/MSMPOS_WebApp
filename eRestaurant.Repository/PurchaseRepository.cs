@@ -316,8 +316,8 @@ namespace RocketPOS.Repository
             {
                 var query = "select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     "Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
-                    "case when Purchase.Status = 5 then 'Invoice' when Purchase.Status = 4 then 'GRN' when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status,U.Username " +
-                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 order by PurchaseDate, Purchase.Id desc";
+                    "case when Purchase.Status = 5 then 'Invoice' when Purchase.Status = 4 then 'GRN' when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted  inner join employee e on e.id = u.employeeid  where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 order by PurchaseDate, Purchase.Id desc";
                 purchaseViewModelList = con.Query<PurchaseViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -337,7 +337,7 @@ namespace RocketPOS.Repository
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
                             " left join Ingredient as I on pin.IngredientId = I.Id " +
-                           "where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                           "where P.id = " + purchaseId + " and pin.isdeleted = 0 and p.isdeleted = 0";
                 purchaseDetails = con.Query<PurchaseDetailsModel>(query).AsList();
             }
 
@@ -632,8 +632,8 @@ namespace RocketPOS.Repository
             {
                 var query = " select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
                     " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
-                    " case when Purchase.Status = 5 then 'Invoice' when Purchase.Status = 4 then 'GRN'  when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status,U.Username " +
-                    " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted " +
+                    " case when Purchase.Status = 5 then 'Invoice' when Purchase.Status = 4 then 'GRN'  when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted  inner join employee e on e.id = u.employeeid " +
                     " where  Purchase.InventoryType=1 And Purchase.Isdeleted = 0 " +
                     " AND Convert(Date, PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
                 if (supplierId != 0)
@@ -757,10 +757,17 @@ namespace RocketPOS.Repository
             List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseId,pin.FoodMenuId as FoodMenuId,f.FoodMenuName,pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
-                            "pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount " +
-                            "from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
-                            "inner join FoodMenu as f on pin.FoodMenuId = f.Id where P.id = " + purchaseId + "and P.InventoryType=1 and pin.isdeleted = 0 and p.isdeleted = 0";
+                var query = "select pin.Id as PurchaseId, " +
+                            " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                            " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
+                            " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
+                            " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount " +
+                            " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
+                            " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
+                            " left join Ingredient as I on pin.IngredientId = I.Id " +
+                            "where P.id = " + purchaseId + " and pin.isdeleted = 0 and p.isdeleted = 0";
+ 
                 purchaseDetails = con.Query<PurchaseDetailsModel>(query).AsList();
             }
 

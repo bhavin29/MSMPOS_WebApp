@@ -39,16 +39,41 @@ namespace RocketPOS.Controllers.Transaction
                 _inventoryOpenigStockImports = new List<InventoryOpenigStockImport>();
             }
         }
-        public IActionResult Index(int? storeId, int? foodCategoryId)
+        public IActionResult Index(int? storeId, int? foodCategoryId,int? itemType)
         {
             InventoryModel inventoryModel = new InventoryModel();
-            inventoryModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+
+            if (itemType == 1)
+            {
+                inventoryModel.FoodCategoryList = _iDropDownService.GetIngredientCategoryList();
+            }
+            else
+            {
+                inventoryModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            }
+
             inventoryModel.StoreList = _iDropDownService.GetStoreList();
             if (Convert.ToInt32(storeId) > 0)
             {
-                inventoryModel.InventoryDetailList = _iInventoryService.GetInventoryDetailList(Convert.ToInt32(storeId), Convert.ToInt32(foodCategoryId));
+                inventoryModel.InventoryDetailList = _iInventoryService.GetInventoryDetailList(Convert.ToInt32(storeId), Convert.ToInt32(foodCategoryId), Convert.ToInt32(itemType));
             }
             return View(inventoryModel);
+        }
+
+        [HttpGet]
+        public ActionResult GetFoodMenuCategoryList()
+        {
+            InventoryModel inventoryModel = new InventoryModel();
+            inventoryModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            return Json(new { inventoryModel.FoodCategoryList });
+        }
+
+        [HttpGet]
+        public ActionResult GetIngredientCategoryList()
+        {
+            InventoryModel inventoryModel = new InventoryModel();
+            inventoryModel.FoodCategoryList = _iDropDownService.GetIngredientCategoryList();
+            return Json(new { inventoryModel.FoodCategoryList });
         }
 
         [HttpPost]
@@ -72,19 +97,19 @@ namespace RocketPOS.Controllers.Transaction
 
             if (result > 0)
             {
-                res = _iInventoryService.StockUpdate(Convert.ToInt32(inventoryDetails[0].StoreId), Convert.ToInt32(inventoryDetails[0].FoodMenuId));
+                res = _iInventoryService.StockUpdate(Convert.ToInt32(inventoryDetails[0].StoreId), Convert.ToInt32(inventoryDetails[0].FoodMenuId), Convert.ToInt32(inventoryDetails[0].ItemType));
             }
 
             return Json(new { result = result });
         }
 
         [HttpPost]
-        public JsonResult StockUpdate(int? storeId, int? foodmenuId)
+        public JsonResult StockUpdate(int? storeId, int? foodmenuId, int? itemType)
         {
             string result = "";
             if (Convert.ToInt32(storeId) > 0)
             {
-                result = _iInventoryService.StockUpdate(Convert.ToInt32(storeId), Convert.ToInt32(foodmenuId));
+                result = _iInventoryService.StockUpdate(Convert.ToInt32(storeId), Convert.ToInt32(foodmenuId), Convert.ToInt32(itemType));
             }
             return Json(new { result = result });
         }

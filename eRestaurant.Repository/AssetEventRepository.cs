@@ -25,8 +25,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = string.Empty;
-                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
-                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0  And AE.[Status] <> 4 ";
+                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
+                        " inner join [User] U On U.Id=AE.UserIdInserted  inner join employee e on e.id = u.employeeid  where AE.IsDeleted=0  And AE.[Status] <> 4 ";
                 assetEventList = con.Query<AssetEventViewModel>(query).AsList();
             }
             return assetEventList;
@@ -793,8 +793,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = string.Empty;
-                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status,U.Username,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
-                        " inner join [User] U On U.Id=AE.UserIdInserted where AE.IsDeleted=0   " +
+                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
+                        " inner join [User] U On U.Id=AE.UserIdInserted  inner join employee e on e.id = u.employeeid  where AE.IsDeleted=0   " +
                         " AND Convert(Date, AE.EventDateTime, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
                 //" AND Convert(Date, AE.ClosedDatetime, 103)  between Convert(Date, '" + toDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 

@@ -8,6 +8,7 @@ namespace RocketPOS.Models
 {
     public class InventoryModel
     {
+        public int ItemType { get; set; }
         public int FoodCategoryId { get; set; }
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
@@ -19,6 +20,7 @@ namespace RocketPOS.Models
 
     public class InventoryDetail
     {
+        public int ItemType { get; set; }
         public int Id { get; set; }
         public int StoreId { get; set; }
         public string FoodMenuCategoryName { get; set; }

@@ -28,9 +28,14 @@
                 </div>
                 <div class="col-xs-3">
                     <address>
-                        <strong>No#  </strong>@Model.ReferenceNo<br>
-                        <strong>Purchase GRN Date  :  </strong>@Model.PurchaseGRNDate.ToShortDateString()<br>
-                        <strong>Store Name  :  </strong>@Model.StoreName<br>
+                        <strong>GRN No#  </strong>@Model.ReferenceNo<br>
+                        <strong>Date  :  </strong>@Model.PurchaseGRNDate.ToShortDateString()<br>
+                        @if (Model.POReferenceNo != null)
+                        {
+                            <strong>PO No.: </strong>@Model.POReferenceNo<br>
+                            <strong>PO Date : </strong>@Model.PODate.ToShortDateString()<br>
+                        }
+                        <strong>Store :  </strong>@Model.StoreName<br>
                     </address>
                 </div>
             </div>
@@ -96,7 +101,7 @@
                                         </td>
                                     </tr>
                                 }
-                                </tbody>
+                            </tbody>
                         </table>
                     </div>
                     <div class="row mb-4">

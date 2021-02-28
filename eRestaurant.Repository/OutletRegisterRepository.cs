@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT " +
-                            " ORG.Id,ORG.OutletId,O.OutletName, ORG.UserId,U.Username,ORG.OpenDate,ORG.OpeningBalance, " +
+                            " ORG.Id,ORG.OutletId,O.OutletName, ORG.UserId ,U.Username ,ORG.OpenDate,ORG.OpeningBalance, " +
                             " ORG.TotalTransaction,ORG.TotalAmount,ORG.Balance,ORG.CloseDateTime, " +
                             " ORG.ApprovalUserId,UA.username as ApprovalUserNAme, ORG.ApprovalDateTime,ORG.ApprovalAmount,ORG.ApprovalNotes  " +
                             " FROM OutletRegister ORG " +

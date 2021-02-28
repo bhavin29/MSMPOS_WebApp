@@ -21,25 +21,47 @@ namespace RocketPOS.Repository
             _ConnectionString = ConnectionString;
         }
 
-        public List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId)
+        public List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId, int itemType)
         {
             List<InventoryDetail> inventoryDetail = new List<InventoryDetail>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT I.Id,I.StoreId,FMC.Id As FoodCategoryId,FMC.FoodMenuCategoryName,I.FoodMenuId,FM.FoodMenuName," +
-                            " (Case when I.PhysicalDatetime  is  null then Getdate() else I.PhysicalDatetime end) as PhysicalDatetime," +
-                            " I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
-                            "FROM dbo.Inventory I " +
-                            "Inner Join FoodMenu FM On FM.Id = I.FoodMenuId  " +
-                            "Inner Join FoodMenuCategory FMC On FMC.Id = FM.FoodCategoryId  " +
-                            "Where I.IsDeleted = 0  And I.StoreId = " + storeId;
-
-                if (foodCategoryId > 0)
+                var query = "";
+                if (itemType == 0)
                 {
-                    query += " And FMC.Id = " + foodCategoryId;
-                }
+                    query = "SELECT 0 as ItemType,I.Id,I.StoreId,FMC.Id As FoodCategoryId,FMC.FoodMenuCategoryName,I.FoodMenuId,FM.FoodMenuName," +
+                               " (Case when I.PhysicalDatetime  is  null then Getdate() else I.PhysicalDatetime end) as PhysicalDatetime," +
+                               " I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
+                               "FROM dbo.Inventory I " +
+                               "Inner Join FoodMenu FM On FM.Id = I.FoodMenuId  " +
+                               "Inner Join FoodMenuCategory FMC On FMC.Id = FM.FoodCategoryId  " +
+                               "Where I.IsDeleted = 0  And I.StoreId = " + storeId;
 
-                query += " Order by FMC.FoodMenuCategoryName,FM.FoodMenuName";
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And FMC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by FMC.FoodMenuCategoryName,FM.FoodMenuName";
+                }
+                else if (itemType == 1)
+                {
+                    query = "SELECT 1 as ItemType,I.Id,I.StoreId, " +
+                            " IGC.Id As FoodCategoryId, IGC.IngredientCategoryName as FoodMenuCategoryName,I.IngredientId as FoodMenuId,IG.IngredientName as FoodMenuName, " +
+                            " (Case when I.PhysicalDatetime is null then Getdate() else I.PhysicalDatetime end) as PhysicalDatetime, " +
+                            " I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
+                            " FROM dbo.Inventory I " +
+                            " Inner Join Ingredient IG On IG.Id = I.IngredientId " +
+                            " Inner Join IngredientCategory IGC On IGc.Id = IG.IngredientCategoryId "+
+                            " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And IGC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by IGC.IngredientCategoryName,IG.IngredientName";
+                }
 
                 inventoryDetail = con.Query<InventoryDetail>(query).ToList();
             }
@@ -70,12 +92,12 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public string StockUpdate(int storeId, int foodmenuId)
+        public string StockUpdate(int storeId, int foodmenuId, int itemType)
         {
             string result = "";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Exec InventoryPhysicalStock " + storeId + ", " + foodmenuId;
+                var query = "Exec InventoryPhysicalStock " + storeId + ", " + foodmenuId + "," + itemType;
                 result = con.Query(query).ToString();
             }
             return result;
@@ -105,7 +127,7 @@ namespace RocketPOS.Repository
 
         public int BulkImport(List<InventoryOpenigStockImport> inventoryOpenigStockImports)
         {
-   
+
             var copyParameters = new[]
              {
                         nameof(InventoryOpenigStockImport.StoreId),
@@ -124,9 +146,9 @@ namespace RocketPOS.Repository
                 }
             }
 
-           int result =  BulkImportUpdate(inventoryOpenigStockImports[0].ImportBatch);
+            int result = BulkImportUpdate(inventoryOpenigStockImports[0].ImportBatch);
 
-           string strResult= BulkImportOpeningReset();
+            string strResult = BulkImportOpeningReset();
 
             return result;
         }

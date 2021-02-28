@@ -353,8 +353,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,U.Username " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username " +
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -385,8 +385,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,U.Username " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username " +
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted inner join employee e on e.id = u.employeeid  where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
                     // " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
                     " AND Convert(Date, PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 
@@ -732,9 +732,15 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceDetailModel> purchaseDetails = new List<PurchaseInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "Select 0 AS PurchaseInvoiceId,PD.FoodMenuId,f.FoodMenuName,pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
-                            "From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId inner join FoodMenu as f on PD.FoodMenuId = f.Id " +
-                            "Where P.InventoryType = 1 and P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                var query = " Select 0 AS PurchaseInvoiceId," +
+                             " (case when PD.FoodMenuId is null then 1 else 0 end) as ItemType, " +
+                             " (case when PD.FoodMenuId is null then PD.IngredientId else PD.FoodMenuId end) as FoodMenuId, " +
+                             " (case when PD.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            " pd.UnitPrice,PD.Qty AS POQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                            " From Purchase P Inner join PurchaseDetail PD On P.Id = PD.PurchaseId " +
+                             " left join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                             " left join Ingredient as I on PD.IngredientId = I.Id " +
+                            " Where P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
                 purchaseDetails = con.Query<PurchaseInvoiceDetailModel>(query).AsList();
             }
 
@@ -777,9 +783,9 @@ namespace RocketPOS.Repository
             List<PurchaseInvoiceModel> purchaseModelList = new List<PurchaseInvoiceModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseInvoiceDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
+                var query = "select P.Referenceno as POReferenceNo, P.PurchaseDate as PODate, PurchaseInvoice.Id as Id, PurchaseInvoice.StoreId,PurchaseInvoice.EmployeeId,ReferenceNumber as ReferenceNo,PurchaseInvoiceDate ,Supplier.SupplierName, Supplier.Id as SupplierId," +
                       "PurchaseInvoice.GrossAmount, PurchaseInvoice.TaxAmount,PurchaseInvoice.TotalAmount,PurchaseInvoice.DueAmount as Due,PurchaseInvoice.PaidAmount as Paid,PurchaseInvoice.DeliveryNoteNumber ,PurchaseInvoice.DeliveryDate ,PurchaseInvoice.DriverName ,PurchaseInvoice.VehicleNumber,PurchaseInvoice.Notes,S.StoreName " +
-                      "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id Inner Join  Store S On S.Id=PurchaseInvoice.StoreId where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 and PurchaseInvoice.Id = " + purchaseInvoiceId;
+                      "from PurchaseInvoice left JOIN PURCHASE P on P.Id = PurchaseInvoice.Purchaseid inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id Inner Join  Store S On S.Id=PurchaseInvoice.StoreId where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 and PurchaseInvoice.Id = " + purchaseInvoiceId;
                 purchaseModelList = con.Query<PurchaseInvoiceModel>(query).AsList();
             }
             return purchaseModelList;

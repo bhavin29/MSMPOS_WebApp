@@ -59,7 +59,7 @@ namespace RocketPOS.Controllers.Transaction
             if (purchaseId > 0)
             {
                 purchaseModel = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
-                //purchaseModel.PurchaseInvoiceDate = DateTime.Now;
+                purchaseModel.DeliveryDate = DateTime.Now;
                 purchaseModel.ReferenceNo = _iPurchaseInvoiceService.ReferenceNumberFoodMenu().ToString();
             }
             else

@@ -85,8 +85,8 @@ namespace RocketPOS.Repository
             List<ProductionFormulaViewModel> productionFormulaList = new List<ProductionFormulaViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PF.Id,PF.FormulaName,PF.[BatchSize],PF.FoodmenuType,PF.IsActive,U.Username from ProductionFormula  PF " +
-                            " inner join [User] U On U.Id=PF.UserIdInserted where PF.IsDeleted=0 ";
+                var query = " select PF.Id,PF.FormulaName,PF.[BatchSize],PF.FoodmenuType,PF.IsActive ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  from ProductionFormula  PF " +
+                            " inner join [User] U On U.Id=PF.UserIdInserted  inner join employee e on e.id = u.employeeid  where PF.IsDeleted=0 ";
 
                 if (foodmenuType != 0)
                 {

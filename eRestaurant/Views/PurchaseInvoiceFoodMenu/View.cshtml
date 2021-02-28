@@ -28,9 +28,14 @@
                 </div>
                 <div class="col-xs-3">
                     <address>
-                        <strong>No#  </strong>@Model.ReferenceNo<br>
-                        <strong>Purchase Invoice Date  :  </strong>@Model.PurchaseInvoiceDate.ToShortDateString()<br>
-                        <strong>Store Name  :  </strong>@Model.StoreName<br>
+                        <strong>InvoiceNo#  </strong>@Model.ReferenceNo<br>
+                        <strong>Date  :  </strong>@Model.PurchaseInvoiceDate.ToShortDateString()<br>
+                        @if (Model.POReferenceNo != null)
+                        {
+                        <strong>PO No.: </strong>@Model.POReferenceNo<br>
+                        <strong>PO Date : </strong>@Model.PODate.ToShortDateString()<br>
+                        }
+                        <strong>Store :  </strong>@Model.StoreName<br>
                     </address>
                 </div>
             </div>

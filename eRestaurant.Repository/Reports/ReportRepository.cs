@@ -132,11 +132,12 @@ namespace RocketPOS.Repository.Reports
             {
                 string customerOrderDetail = string.Empty;
                 string customerOrderItems = string.Empty;
-                customerOrderDetail = "SELECT b.CustomerOrderId,b.Id As BillId,CO.SalesInvoiceNumber,B.BillDateTime,O.OutletName,U.Username,C.CustomerName,B.GrossAmount,B.TaxAmount,B.VatableAmount,CO.NonVatableAmount, B.Discount,B.ServiceCharge,B.TotalAmount,PM.PaymentMethodName,BD.BillAmount FROM Bill B  " +
+                customerOrderDetail = "SELECT b.CustomerOrderId,b.Id As BillId,CO.SalesInvoiceNumber,B.BillDateTime,O.OutletName,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username,C.CustomerName,B.GrossAmount,B.TaxAmount,B.VatableAmount,CO.NonVatableAmount, B.Discount,B.ServiceCharge,B.TotalAmount,PM.PaymentMethodName,BD.BillAmount FROM Bill B  " +
                               " INNER JOIN CustomerOrder CO ON B.CustomerOrderId = CO.Id " +
                               " INNER JOIN BillDetail BD ON B.Id = BD.BillId " +
                               " INNER JOIN Outlet O ON O.Id = B.OutletId " +
                               " INNER JOIN[User] U ON U.ID = B.UserIdInserted " +
+                              " inner join employee e on e.id = u.employeeid " +
                               " INNER JOIN Customer C ON C.Id = b.CustomerId " +
                               " INNER JOIN PaymentMethod PM ON PM.Id = BD.PaymentMethodId " +
                               " WHERE b.CustomerOrderId =  " + CustomerOrderId;
@@ -192,7 +193,14 @@ namespace RocketPOS.Repository.Reports
                     query += "  inner join SupplierItem SI on SI.IngredientID = INV.IngredientID And SI.SupplierId = " + supplierId;
                 }                query = query + " where INV.StoreId = " + storeId;
 
-                query += "   ORDER BY  Foodmenuname,INV.StockQty desc ";
+                if (itemType == 0)
+               {
+                    query += "   ORDER BY  F.Foodmenuname,INV.StockQty desc ";
+                }
+                else if (itemType == 1)
+                {
+                    query += "   ORDER BY  I.IngredientName,INV.StockQty desc ";
+                }
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
             }

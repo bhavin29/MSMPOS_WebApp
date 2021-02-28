@@ -14,9 +14,9 @@ namespace RocketPOS.Services
         {
             _iInventoryRepository = inventoryRepository;
         }
-        public List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId)
+        public List<InventoryDetail> GetInventoryDetailList(int storeId, int foodCategoryId, int itemType)
         {
-            return _iInventoryRepository.GetInventoryDetailList(storeId,foodCategoryId);
+            return _iInventoryRepository.GetInventoryDetailList(storeId,foodCategoryId, itemType);
         }
 
         public int UpdateInventoryDetailList(List<InventoryDetail> inventoryDetails)
@@ -24,9 +24,9 @@ namespace RocketPOS.Services
             return _iInventoryRepository.UpdateInventoryDetailList(inventoryDetails);
         }
 
-        public string StockUpdate(int storeId, int foodmenuId)
+        public string StockUpdate(int storeId, int foodmenuId, int itemType)
         {
-            return _iInventoryRepository.StockUpdate(storeId, foodmenuId);
+            return _iInventoryRepository.StockUpdate(storeId, foodmenuId, itemType);
         }
         public List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId)
         {
@@ -37,5 +37,6 @@ namespace RocketPOS.Services
         {
             return _iInventoryRepository.BulkImport(inventoryOpenigStockImports);
         }
+
     }
 }

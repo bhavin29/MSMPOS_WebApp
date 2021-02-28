@@ -61,7 +61,7 @@ namespace RocketPOS.Controllers.Transaction
                 purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
                 if (purchaseModel != null)
                 {
-                    purchaseModel.PurchaseGRNDate = DateTime.Now;
+                    purchaseModel.DeliveryDate = DateTime.Now;
                     purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
                 }
             }

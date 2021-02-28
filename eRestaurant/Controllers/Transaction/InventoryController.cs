@@ -121,7 +121,7 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryOpenigStockImport);
         }
 
-        public ActionResult ImportData(int storeId)
+        public ActionResult ImportData(int storeId,int itemType)
         {
             InventoryOpenigStockImport item = new InventoryOpenigStockImport();
             List<InventoryOpenigStockImport> ItemList = new List<InventoryOpenigStockImport>();
@@ -198,7 +198,7 @@ namespace RocketPOS.Controllers.Transaction
                                 }
                             }
                             sb.AppendLine("</tr>");
-                            ItemList.Add(new InventoryOpenigStockImport { ImportBatch = BatchId, StoreId = storeId, FoodmenuId = item.FoodmenuId, PhysicalStockQty = item.PhysicalStockQty });
+                            ItemList.Add(new InventoryOpenigStockImport { ItemType= itemType, ImportBatch = BatchId, StoreId = storeId, FoodmenuId = item.FoodmenuId, PhysicalStockQty = item.PhysicalStockQty });
                         }
                         sb.Append("</table>");
                         _inventoryOpenigStockImports = ItemList;
@@ -227,7 +227,7 @@ namespace RocketPOS.Controllers.Transaction
             List<InventoryOpenigStockImport> inventoryOpenigStockImports = new List<InventoryOpenigStockImport>();
 
             string sWebRootFolder = _hostingEnvironment.WebRootPath;
-            string sFileName = @"OpeningStock.xlsx";
+            string sFileName = @"MenuItem_OpeningStock.xlsx";
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
             FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
             var memory = new MemoryStream();
@@ -237,7 +237,7 @@ namespace RocketPOS.Controllers.Transaction
                 {
                     IWorkbook workbook;
                     workbook = new XSSFWorkbook();
-                    ISheet excelSheet = workbook.CreateSheet("OpeningStock");
+                    ISheet excelSheet = workbook.CreateSheet("MenuItem_OpeningStock");
                     IRow row = excelSheet.CreateRow(0);
                     row.CreateCell(0).SetCellValue("Menu Item Id");
                     row.CreateCell(1).SetCellValue("Menu Item Category");
@@ -245,7 +245,7 @@ namespace RocketPOS.Controllers.Transaction
                     row.CreateCell(3).SetCellValue("Physical Stock");
                 //    row.CreateCell(4).SetCellValue("Physical Stock Date");
 
-                    inventoryOpenigStockImports = _iInventoryService.GetInventoryOpeningStockByStore(storeId, categoryId);
+                    inventoryOpenigStockImports = _iInventoryService.GetInventoryOpeningStockByStore(storeId, categoryId,0);
 
                     int intRow = 1;
                     foreach (var item in inventoryOpenigStockImports)
@@ -273,6 +273,58 @@ namespace RocketPOS.Controllers.Transaction
             }
             return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
         }
+        public async Task<IActionResult> ExportIngredient(int storeId, int categoryId)
+        {
+            List<InventoryOpenigStockImport> inventoryOpenigStockImports = new List<InventoryOpenigStockImport>();
+
+            string sWebRootFolder = _hostingEnvironment.WebRootPath;
+            string sFileName = @"StockItem_OpeningStock.xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            try
+            {
+                using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+                {
+                    IWorkbook workbook;
+                    workbook = new XSSFWorkbook();
+                    ISheet excelSheet = workbook.CreateSheet("StockItem_OpeningStock");
+                    IRow row = excelSheet.CreateRow(0);
+                    row.CreateCell(0).SetCellValue("Stock Item Id");
+                    row.CreateCell(1).SetCellValue("Stock Item Category");
+                    row.CreateCell(2).SetCellValue("Stock Item");
+                    row.CreateCell(3).SetCellValue("Physical Stock");
+                    //    row.CreateCell(4).SetCellValue("Physical Stock Date");
+
+                    inventoryOpenigStockImports = _iInventoryService.GetInventoryOpeningStockByStore(storeId, categoryId,1);
+
+                    int intRow = 1;
+                    foreach (var item in inventoryOpenigStockImports)
+                    {
+                        row = excelSheet.CreateRow(intRow);
+                        row.CreateCell(0).SetCellValue(item.FoodmenuId);
+                        row.CreateCell(1).SetCellValue(item.FoodmenuCategoryname);
+                        row.CreateCell(2).SetCellValue(item.Foodmenuname);
+                        row.CreateCell(3).SetCellValue(item.PhysicalStockQty.ToString());
+                        //  row.CreateCell(4).SetCellValue(item.PhysicalDatetime.ToString("dd/mm/yyyy"));
+                        // row.CreateCell(4).SetCellValue("");
+                        intRow = intRow + 1;
+                    }
+                    workbook.Write(fs);
+                }
+                using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+            }
+            catch (Exception ex)
+            {
+                SystemLogs.Register(ex.Message);
+            }
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
+        }
+ 
         public ActionResult ProcessData(InventoryOpenigStockImport inv, int storeId, int categoryId)
         {
             int Result = _iInventoryService.BulkImport(_inventoryOpenigStockImports);

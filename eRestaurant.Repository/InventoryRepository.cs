@@ -103,22 +103,42 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId)
+        public List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId, int ItemType)
         {
             List<InventoryOpenigStockImport> inventoryOpenigStockImports = new List<InventoryOpenigStockImport>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select StoreId,FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty from inventory i " +
-                            " inner join foodmenu f on f.id = i.foodmenuid " +
-                            " inner join foodmenucategory fc on fc.id = f.foodcategoryid " +
-                            " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
-
-                if (foodCategoryId > 0)
+                var query = "";
+                if (ItemType == 0)
                 {
-                    query += " And FC.Id = " + foodCategoryId;
-                }
+                    query = " select StoreId,FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty from inventory i " +
+                                " inner join foodmenu f on f.id = i.foodmenuid " +
+                                " inner join foodmenucategory fc on fc.id = f.foodcategoryid " +
+                                " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
 
-                query += " Order by FoodMenuCategoryName,FoodMenuName";
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And FC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by FoodMenuCategoryName,FoodMenuName";
+                }
+                else if (ItemType == 1)
+                {
+                    query =" select StoreId,IngredientId as FoodmenuId,Ingredientcategoryname as foodmenucategoryname,Ingredientname as foodmenuname, " +
+                               " PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty " +
+                               " from inventory i " +
+                               " inner join Ingredient IG on IG.id = I.IngredientId " +
+                               " inner join Ingredientcategory IGC on IGC.id = IG.IngredientCategoryId " +
+                                " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And IGC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by Ingredientcategoryname,Ingredientname";
+                }
 
                 inventoryOpenigStockImports = con.Query<InventoryOpenigStockImport>(query).ToList();
             }
@@ -133,7 +153,8 @@ namespace RocketPOS.Repository
                         nameof(InventoryOpenigStockImport.StoreId),
                         nameof(InventoryOpenigStockImport.FoodmenuId),
                         nameof(InventoryOpenigStockImport.PhysicalStockQty),
-                        nameof(InventoryOpenigStockImport.ImportBatch)
+                        nameof(InventoryOpenigStockImport.ImportBatch),
+                        nameof(InventoryOpenigStockImport.ItemType)
                     };
 
             using (var sqlCopy = new SqlBulkCopy(_ConnectionString.Value.ConnectionString))
@@ -146,22 +167,33 @@ namespace RocketPOS.Repository
                 }
             }
 
-            int result = BulkImportUpdate(inventoryOpenigStockImports[0].ImportBatch);
+            int result = BulkImportUpdate(inventoryOpenigStockImports[0].ImportBatch,Convert.ToInt32(inventoryOpenigStockImports[0].ItemType));
 
             string strResult = BulkImportOpeningReset();
 
             return result;
         }
-        public int BulkImportUpdate(string importbatch)
+        public int BulkImportUpdate(string importbatch,int itemType)
         {
             int result = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty " +
-                            " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.Foodmenuid = T.foodmenuid " +
-                            " where T.importbatch = '" + importbatch + "' ";
+                var query = "";
+
+                if (itemType == 0)
+                {
+                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty " +
+                                " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.Foodmenuid = T.foodmenuid " +
+                                " where T.importbatch = '" + importbatch + "' ";
+                }
+                else if (itemType == 1)
+                {
+                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty " +
+                                " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.IngredientId = T.foodmenuid " +
+                                " where T.importbatch = '" + importbatch + "' ";
+                }
 
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)

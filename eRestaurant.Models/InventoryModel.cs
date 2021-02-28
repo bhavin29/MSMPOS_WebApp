@@ -38,6 +38,7 @@ namespace RocketPOS.Models
 
     public class InventoryOpenigStockImport
     {
+        public int ItemType { get; set; }
         public List<SelectListItem> StoreList { get; set; }
         public int StoreId { get; set; }
         public int FoodmenuId { get; set; }

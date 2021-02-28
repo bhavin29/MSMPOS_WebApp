@@ -28,9 +28,9 @@ namespace RocketPOS.Services
         {
             return _iInventoryRepository.StockUpdate(storeId, foodmenuId, itemType);
         }
-        public List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId)
+        public List<InventoryOpenigStockImport> GetInventoryOpeningStockByStore(int storeId, int foodCategoryId, int itemType)
         {
-            return _iInventoryRepository.GetInventoryOpeningStockByStore(storeId, foodCategoryId);
+            return _iInventoryRepository.GetInventoryOpeningStockByStore(storeId, foodCategoryId, itemType);
 
         }
         int IInventoryService.BulkImport(List<InventoryOpenigStockImport> inventoryOpenigStockImports)

@@ -12,12 +12,14 @@
     <div class="card">
         <div class="card-header container-fluid">
             <div class="row">
-                <div class="col-md-11">
+                <div class="col-md-9">
                     <h5 class="card-title">Opening Stock - Import</h5>
                 </div>
                 <div class="float-right">
-                    <input type="submit" name="Export" value="Download" id="btnExport"
+                    <input type="submit" name="Export" value="Menu Item - Download" id="btnExport"
                            class="btn btn-primary" asp-action="Export" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
+                    <input type="submit" name="ExportIngredient" value="Stock Item - Download" id="btnExportIngredient"
+                           class="btn btn-primary" asp-action="ExportIngredient" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
                 </div>
             </div>
         </div>
@@ -37,6 +39,14 @@
                                     <span asp-validation-for="StoreId" class="text-danger"></span>
                                 }
                             </div>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label">Item Type</label>
+                            <select id="ItemType"
+                                    class="form-control" onchange="GetFoodMenuByItemType()">
+                                <option value="0">Menu Item</option>
+                                <option value="1">Stock Item</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row pl-0">
@@ -105,7 +115,7 @@
             fdata.append(files[0].name, files[0]);
             $.ajax({
                 type: "POST",
-                url: "/Inventory/ImportData?storeId=" + $("#StoreId").val(),
+                url: "/Inventory/ImportData?storeId=" + $("#StoreId").val() + "&itemType=" + $("#ItemType").val(),
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("XSRF-TOKEN",
                         $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -121,7 +131,7 @@
                         $("#btnupload").attr("disabled", false);
                         $("#btnupload").val('Upload');
                         $("#divPrint").css('display', 'block');
-                  }
+                    }
                 },
                 error: function (e) {
                     $('#divPrint').html(e.responseText);
@@ -135,11 +145,18 @@
                 alert("Please select a store");
                 return false;
             }
+        });
+        $('#btnExportIngredient').on('click', function () {
+            var fileExtension = ['xls', 'xlsx'];
+            var filename = $('#fileupload').val();
+            if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
+                alert("Please select a store");
+                return false;
+            }
             //if (filename.length == 0) {
             //    alert("Please select a file then Import");
             //    return false;
             //}
         });
-
     });
 </script>

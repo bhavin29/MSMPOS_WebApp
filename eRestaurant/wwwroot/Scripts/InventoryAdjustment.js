@@ -50,7 +50,6 @@ $('#cancel').on('click', function (e) {
 });
 
 $('#addRow').on('click', function (e) {
-    debugger;
     e.preventDefault();
     var rowId;
     var rowNode;
@@ -313,6 +312,9 @@ function validation(id) {
             }
             else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
                 message = "Enter Quantity"
+            }
+            else if ($("#Price").val() == '' || $("#Price").val() == 0) {
+                message = "Enter Price"
             }
             //else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
             //    message = "Select Comsumption Status"

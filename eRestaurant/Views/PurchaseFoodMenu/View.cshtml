@@ -12,34 +12,34 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 @*<script>
-    function printDiv() {
-        var myStyle12 = '<style type="text/css">.invoice-title h2, .invoice-title h3 {display: inline-block;}.table > tbody > tr > .no-line {border - top: none;}</style>';
-        var myStyle1 = '<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />';
-        var myStyle2 = '<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js" />';
-        var myStyle3 = '<script src="//code.jquery.com/jquery-1.11.1.min.js" />';
-        var myStyle4 = '<link rel="stylesheet" href="https://localhost:44319/css/print.css" />';
+        function printDiv() {
+            var myStyle12 = '<style type="text/css">.invoice-title h2, .invoice-title h3 {display: inline-block;}.table > tbody > tr > .no-line {border - top: none;}</style>';
+            var myStyle1 = '<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />';
+            var myStyle2 = '<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js" />';
+            var myStyle3 = '<script src="//code.jquery.com/jquery-1.11.1.min.js" />';
+            var myStyle4 = '<link rel="stylesheet" href="https://localhost:44319/css/print.css" />';
 
-        var divToPrint = document.getElementById('DivIdToPrint');
-        var newWin = window.open('', 'Print-Window');
-        newWin.document.open();
-        newWin.document.write('<html><head>    ' + myStyle1 + myStyle2 + myStyle3 + myStyle4 +'</head><body>    ' + divToPrint.innerHTML + '</body></html> ');
-        newWin.document.close();
-       // setTimeout(function () { newWin.close(); }, 10);
-    }
-</script>*@
+            var divToPrint = document.getElementById('DivIdToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head>    ' + myStyle1 + myStyle2 + myStyle3 + myStyle4 +'</head><body>    ' + divToPrint.innerHTML + '</body></html> ');
+            newWin.document.close();
+           // setTimeout(function () { newWin.close(); }, 10);
+        }
+    </script>*@
 <!------ Include the above in your HEAD tag
     https://bootsnipp.com/snippets/9gjD
    https://plnkr.co/edit/lWk6Yd?preview ---------->
 
 <div id="CateringReport" class="container">
-    <div class="card-header">
+    <div class="row">
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
-                <h5 class="card-title">Purchase Orders</h5>
+                <h5 class="card-title">Purchase Order</h5>
             </div>
             @*<div class="float-right">
-                <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
-            </div>*@
+                    <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
+                </div>*@
         </div>
     </div>
     <div id="DivIdToPrint">
@@ -57,7 +57,7 @@
                             <strong></strong>@Model.SupplierEmail<br>
                         </address>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-xs-2 text-right">
                         <address>
                             <strong>Order No.: </strong>@Model.ReferenceNo<br>
                             <strong>Date : </strong>@Model.Date.ToShortDateString()<br>
@@ -74,13 +74,13 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         @*<div class="panel-heading">
-                            <h3 class="panel-title"><strong>Purchase Details</strong></h3>
-                        </div>*@
+                                <h3 class="panel-title"><strong>Purchase Details</strong></h3>
+                            </div>*@
                         <div class="panel-body">
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
-                                        <th style="width:25%">Menu Item</th>
+                                        <th style="width:25%">Product</th>
                                         <th style="width:8%" class="text-right">Price</th>
                                         <th style="width:8%" class="text-right">Qty </th>
                                         <th style="width:10%" class="text-right">Amount</th>
@@ -102,25 +102,25 @@
                                                 @item.FoodMenuName
                                             </td>
                                             <td class="text-right">
-                                                @item.UnitPrice
+                                                @item.UnitPrice.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.Quantity 
+                                                @item.Quantity.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.Total
+                                                @item.Total.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.TaxAmount
+                                                @item.TaxAmount.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.TaxPercentage
+                                                @item.TaxPercentage.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.DiscountAmount
+                                                @item.DiscountAmount.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.DiscountPercentage
+                                                @item.DiscountPercentage.ToString("0.00")
                                             </td>
                                         </tr>
                                     }
@@ -146,7 +146,9 @@
         <div class="row">
             <div class="col-md-12 ">
                 <div class="col-sm-6">
+                    @if (Model.Notes != null) {
                     <div><strong>Remakrs: </strong> @Model.Notes</div>
+                    }
                 </div>
             </div>
         </div>

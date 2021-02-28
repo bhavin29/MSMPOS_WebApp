@@ -166,7 +166,7 @@ namespace RocketPOS.Repository.Reports
                 {
                     query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
                                 " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
-                                " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
+                                " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.UnitShortName as Unitname," +
                                 " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
                                 " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
                                 " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
@@ -176,7 +176,7 @@ namespace RocketPOS.Repository.Reports
                 {
                     query = "SELECT S.StoreName,INV.Id,I.IngredientName as FoodMenuName,IC.IngredientCategoryName as FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
                              " S.StoreName,INV.Id,I.Code as FoodMenuCode ,INV.StockQty,  " +
-                             " I.PurchasePrice, (INV.StockQty * I.PurchasePrice) as Amount , U.Unitname, " +
+                             " I.PurchasePrice, (INV.StockQty * I.PurchasePrice) as Amount , U.UnitShortName as Unitname, " +
                              " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,I.AlterQty" +
                              " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
                              " INNER JOIN IngredientCategory IC on IC.Id = I.IngredientCategoryId " +

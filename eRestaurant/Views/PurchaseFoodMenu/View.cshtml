@@ -82,7 +82,7 @@
                                     <tr>
                                         <th style="width:25%">Product</th>
                                         <th style="width:8%" class="text-right">Price</th>
-                                        <th style="width:8%" class="text-right">Qty </th>
+                                        <th style="width:16%" class="text-right">Qty </th>
                                         <th style="width:10%" class="text-right">Amount</th>
                                         <th style="width:8%" class="text-right">Tax</th>
                                         <th style="width:8%" class="text-right">Tax %</th>
@@ -105,7 +105,7 @@
                                                 @item.UnitPrice.ToString("0.00")
                                             </td>
                                             <td class="text-right">
-                                                @item.Quantity.ToString("0.00")
+                                                @item.Quantity.ToString("0.00") @item.UnitName
                                             </td>
                                             <td class="text-right">
                                                 @item.Total.ToString("0.00")

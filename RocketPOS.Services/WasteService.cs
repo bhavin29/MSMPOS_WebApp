@@ -109,5 +109,18 @@ namespace RocketPOS.Services
         {
             return _iWasteRepository.GetIngredientPurchasePrice(id);
         }
+
+        public WasteModel GetViewWasteById(long wasteId)
+        {
+            List<WasteModel> wasteModel = new List<WasteModel>();
+            WasteModel model = new WasteModel();
+
+            model = _iWasteRepository.GetViewWasteById(wasteId).ToList().SingleOrDefault();
+            if (model != null)
+            {
+                model.WasteDetail = _iWasteRepository.GetViewWasteDetails(wasteId);
+            }
+            return model;
+        }
     }
 }

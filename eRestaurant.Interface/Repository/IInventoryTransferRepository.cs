@@ -17,5 +17,7 @@ namespace RocketPOS.Interface.Repository
         int DeleteInventoryTransferDetail(long id);
         long ReferenceNumber();
         decimal GetFoodMenuStock(int foodMenuId, int storeId);
+        List<InventoryTransferModel> GetViewInventoryTransferById(long id);
+        List<InventoryTransferDetailModel> GetViewInventoryTransferDetail(long id);
     }
 }

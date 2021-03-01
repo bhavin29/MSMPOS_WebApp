@@ -121,6 +121,40 @@ namespace RocketPOS.Repository
             return inventoryAdjustmentModels;
         }
 
+        public List<InventoryAdjustmentModel> GetViewInventoryAdjustmentById(long invAdjId)
+        {
+            List<InventoryAdjustmentModel> inventoryAdjustmentModels = new List<InventoryAdjustmentModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT IA.Id,IA.StoreId,S.StoreName,IA.InventoryType,IA.ReferenceNumber as ReferenceNo,IA.EntryDate as Date,IA.EmployeeId,E.LastName + E.FirstName as EmployeeName,  IA.Notes " +
+                              "FROM InventoryAdjustment IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
+                              "INNER JOIN Store S ON S.Id = IA.StoreId " +
+                              "WHERE IA.IsDeleted = 0 AND IA.Id = " + invAdjId;
+                inventoryAdjustmentModels = con.Query<InventoryAdjustmentModel>(query).AsList();
+            }
+            return inventoryAdjustmentModels;
+        }
+
+        public List<InventoryAdjustmentDetailModel> GetViewInventoryAdjustmentDetail(long invAdjId)
+        {
+            List<InventoryAdjustmentDetailModel> inventoryAdjustmentDetailModels = new List<InventoryAdjustmentDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.Price,IAI.Total AS TotalAmount, IAI.ConsumptionStatus as ConsumpationStatus, " +
+                             "  (case when IAI.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
+                             " FROM InventoryAdjustmentDetail IAI " +
+                             " INNER JOIN InventoryAdjustment IA ON IAI.InventoryAdjustmentId = IA.Id " +
+                             " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
+                             " LEFT JOIN FoodMenu FM ON  FM.Id = IAI.FoodMenuId " +
+                             " left join Units As UI On UI.Id = I.IngredientUnitId "+
+                             " left join Units As UF On UF.Id = FM.UnitsId "+
+                             " where IA.Id =" + invAdjId + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
+                inventoryAdjustmentDetailModels = con.Query<InventoryAdjustmentDetailModel>(query).AsList();
+            }
+
+            return inventoryAdjustmentDetailModels;
+        }
+
         public int InsertInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel)
         {
             int result = 0;

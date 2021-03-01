@@ -800,10 +800,13 @@ namespace RocketPOS.Repository
                             " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
                             " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
                             " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
-                            " pin.UnitPrice as UnitPrice, pin.POQty,PIN.InvoiceQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount " +
+                            " pin.UnitPrice as UnitPrice, pin.POQty,PIN.InvoiceQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount,pin.DiscountPercentage,pin.DiscountAmount, " +
+                            " (case when pin.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName " +
                             " from purchaseInvoice as P inner join PurchaseInvoiceDetail as PIN on P.id = pin.PurchaseInvoiceId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
                             " left join Ingredient as I on pin.IngredientId = I.Id " +
+                            " left join Units As UI On UI.Id = I.IngredientUnitId " +
+                            " left join Units As UF On UF.Id = F.UnitsId " +
                             " where P.id = " + purchaseInvoiceId + " and pin.isdeleted = 0 and p.isdeleted = 0";
 
                 purchaseDetails = con.Query<PurchaseInvoiceDetailModel>(query).AsList();

@@ -78,5 +78,6 @@ namespace RocketPOS.Models
         public decimal Quantity { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Total { get; set; }
+        public string UnitName { get; set; }
     }
 }

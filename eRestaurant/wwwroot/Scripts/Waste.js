@@ -72,8 +72,8 @@ $('#addRow').on('click', function (e) {
             '<td>' + $("#FoodMenuId").val() + '</td>',
             '<td>' + FoodMenuName + '</td>',
             '<td>' + $("#IngredientId").val() + '</td>',
-            '<td>' + IngredietnName + '</td>',
-            '<td class="text-right">' + Qty + ' </td>',
+            '<td>' + IngredietnName +'</td>',
+            '<td class="text-right">' + Qty + ' ' + $("#FoodMenuUnitName").text() + $("#IngredientUnitName").text() + ' </td>',
             '<td class="text-right">' + LossAmount + ' </td>',
             '<td>' + $("#WasteId").val() + '</td>',
             '<td><div class="form-button-action"><a href="#" data-toggle="modal" data-target="#myModal' + myModal + '">Delete</a></div></td > ' +
@@ -303,6 +303,7 @@ function DropdownValueChange(id) {
             $("#IngredientIdForLostAmount").val(value);
             //IngredientLostAmount = $('#IngredientIdForLostAmount').children("option:selected").text()
             GetIngredientPurchasePrice();
+            GetUnitNameByIngredientIdForWaste();
             IngredientLostAmount = IngredientPurchasePrice;
         }
         else {
@@ -317,6 +318,7 @@ function DropdownValueChange(id) {
             $("#FoodMenuIdForLostAmount").val(value);
             //FoodManuLostAmount = $('#FoodMenuIdForLostAmount').children("option:selected").text()
             GetFoodMenuPurchasePrice();
+            GetUnitNameByFoodMenuIdForWaste();
             FoodManuLostAmount = FoodMenuPurchasePrice;
         }
         else {
@@ -398,6 +400,8 @@ function clearItem() {
     IngredientLostAmount = 0;
     $('#FoodMenuId').val(0).trigger('change');
     $('#IngredientId').val(0).trigger('change');
+    $("#IngredientUnitName").text('');
+    $("#FoodMenuUnitName").text('');
 }
 
 
@@ -429,6 +433,39 @@ function GetFoodMenuPurchasePrice() {
             var obj = JSON.parse(data);
             FoodMenuPurchasePrice = obj.foodMenuPurchasePrice;
             FoodMenuPurchasePrice = parseFloat(FoodMenuPurchasePrice).toFixed(2);
+        }
+    });
+}
+
+
+function GetUnitNameByFoodMenuIdForWaste() {
+    $.ajax({
+        url: "/ProductionFormula/GetUnitNameByFoodMenuId?foodMenuId=" + $("#FoodMenuId").val(),
+        data: {},
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#FoodMenuUnitName").text(obj.unitName);
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
+}
+
+function GetUnitNameByIngredientIdForWaste() {
+    $.ajax({
+        url: "/FoodMenuIngredient/GetUnitNameByIngredientId?ingredientId=" + $("#IngredientId").val(),
+        data: {},
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#IngredientUnitName").text(obj.unitName);
+        },
+        error: function (data) {
+            alert(data);
         }
     });
 }

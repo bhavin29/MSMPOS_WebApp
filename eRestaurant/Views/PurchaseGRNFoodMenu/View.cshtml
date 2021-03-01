@@ -71,7 +71,7 @@
                                     <th style="width:25%">Product</th>
                                     <th style="width:8%" class="text-right">Price</th>
                                     <th style="width:8%" class="text-right">PO Qty </th>
-                                    <th style="width:8%" class="text-right">GRN Qty </th>
+                                    <th style="width:16%" class="text-right">GRN Qty </th>
                                     <th style="width:10%" class="text-right">Gross</th>
                                     <th style="width:8%" class="text-right">Tax</th>
                                     <th style="width:10%" class="text-right">Discount</th>
@@ -96,7 +96,7 @@
                                             @item.POQTY.ToString("0.00")
                                         </td>
                                         <td class="text-right">
-                                            @item.GRNQTY.ToString("0.00")
+                                            @item.GRNQTY.ToString("0.00") @item.UnitName
                                         </td>
                                         <td class="text-right">
                                             @item.GrossAmount.ToString("0.00")

@@ -60,18 +60,22 @@ namespace RocketPOS.Models
     }
     public class WasteDetailModel
     {
+        public int ItemType { get; set; }
         public long WasteIngredientId { get; set; }
         public long WasteId { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
+        public string FoodMenuUnitName { get; set; }
         public int IngredientId { get; set; }
 
         public string IngredientName { get; set; }
+        public string IngredientUnitName { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal Qty { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal LossAmount { get; set; }
         public bool IsDeleted { get; set; }
+        public string UnitName { get; set; }
     }
 }

@@ -197,5 +197,13 @@ namespace RocketPOS.Controllers.Transaction
             stockQty = _inventoryTransferService.GetFoodMenuStock(foodMenuId, storeId);
             return Json(new { StockQty = stockQty });
         }
+
+        public ActionResult View(long? id)
+        {
+            InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
+            long purchaseId = Convert.ToInt64(id);
+            inventoryTransferModel = _inventoryTransferService.GetViewInventoryTransferById(purchaseId);
+            return View(inventoryTransferModel);
+        }
     }
 }

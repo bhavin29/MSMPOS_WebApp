@@ -357,6 +357,40 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public List<InventoryTransferModel> GetViewInventoryTransferById(long id)
+        {
+            List<InventoryTransferModel> inventoryTransferModels = new List<InventoryTransferModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName, IA.ToStoreId ,SS.StoreName AS ToStoreName, " +
+                    " IA.ReferenceNumber as ReferenceNo, IA.EntryDate as [Date], IA.EmployeeId, E.LastName + E.FirstName as EmployeeName, " +
+                            "IA.Notes FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
+                            "INNER JOIN Store S ON S.Id = IA.ToStoreId " +
+                            "INNER JOIN Store SS ON SS.Id = IA.FromStoreId " +
+                            "WHERE IA.IsDeleted = 0 AND IA.Id = " + id;
+                inventoryTransferModels = con.Query<InventoryTransferModel>(query).AsList();
+            }
+            return inventoryTransferModels;
+        }
 
+        public List<InventoryTransferDetailModel> GetViewInventoryTransferDetail(long id)
+        {
+            List<InventoryTransferDetailModel> inventoryTransferDetailModels = new List<InventoryTransferDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus, IAI.CurrentStock, " +
+                             " (case when IAI.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
+                             " FROM InventoryTransferDetail IAI " +
+                             " INNER JOIN InventoryTransfer IA ON IAI.InventoryTransferId = IA.Id " +
+                             " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
+                             " LEFT JOIN FoodMenu FM ON FM.Id = IAI.FoodMenuId " +
+                             " left join Units As UI On UI.Id = I.IngredientUnitId "+
+                             " left join Units As UF On UF.Id = FM.UnitsId "+
+                             "WHERE IAI.InventoryTransferId= " + id + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
+                inventoryTransferDetailModels = con.Query<InventoryTransferDetailModel>(query).AsList();
+            }
+
+            return inventoryTransferDetailModels;
+        }
     }
 }

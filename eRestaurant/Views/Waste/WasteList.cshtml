@@ -59,9 +59,10 @@
                                     <th style="width:8%">@Html.DisplayName("Date")</th>
                                     <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
                                     <th style="width:8%">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%">@Html.DisplayName("Creator")</th>
                                     <th style="width:8%">@Html.DisplayName("Actions")</th>
                                     <th style="width:8%">@Html.DisplayName("View")</th>
-                            </thead>
+</thead>
                             <tfoot>
                                 <tr>
                                     <th style="width:8%">Number</th>
@@ -69,6 +70,7 @@
                                     <th style="width:8%">@Html.DisplayName("Date")</th>
                                     <th style="width:10%">@Html.DisplayName("Loss Amount")</th>
                                     <th style="width:8%">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%">@Html.DisplayName("Creator")</th>
                                     <th style="width:8%">@Html.DisplayName("Actions")</th>
                                     <th style="width:8%">@Html.DisplayName("View")</th>
                                 </tr>
@@ -78,46 +80,49 @@
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNumber)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.StoreName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.TotalLossAmount)
-                                        </td>
-                                        <td>
-                                            @if (Convert.ToInt32(item.WasteStatus) == 2)
-                                            {
-                                                <label>Approved</label>
-                                            }
-                                            else
-                                            {
-                                                <label>Created</label>
-                                            }
+                                <tr role="row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReferenceNumber)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StoreName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Wastedatetime, "{0:d}")
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.TotalLossAmount)
+                                    </td>
+                                    <td>
+                                        @if (Convert.ToInt32(item.WasteStatus) == 2)
+                                        {
+                                            <label>Approved</label>
+                                        }
+                                        else
+                                        {
+                                            <label>Created</label>
+                                        }
 
-                                        </td>
-                                        <td>
-                                            @if (Convert.ToInt32(item.WasteStatus) != 2)
-                                            {
-                                                <div class="form-button-action">
-                                                    <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                    <label> / </label>
-                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                                </div>
-                                            }
-                                        </td>
-                                        <td>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmployeeName)
+                                    </td>
+                                    <td>
+                                        @if (Convert.ToInt32(item.WasteStatus) != 2)
+                                        {
                                             <div class="form-button-action">
-                                                <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="View">View</a>
+                                                <a asp-action="Waste" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                <label> / </label>
+                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                             </div>
-                                        </td>
-                                    </tr>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                        </div>
+                                    </td>
+                                </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">

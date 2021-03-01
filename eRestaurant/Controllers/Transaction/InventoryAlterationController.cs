@@ -44,12 +44,14 @@ namespace RocketPOS.Controllers.Transaction
         }
 
 
-        public ActionResult InventoryAlteration(int? id)
+        public ActionResult InventoryAlteration(int? id, int? inventoryType)
         {
             InventoryAlterationModel inventoryAlterationModel = new InventoryAlterationModel();
             inventoryAlterationModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            inventoryAlterationModel.IngredientList = _iDropDownService.GetIngredientList();
             inventoryAlterationModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAlterationModel.ReferenceNo = _inventoryAlterationService.ReferenceNumberInventoryAlteration();
+            inventoryAlterationModel.InventoryType = Convert.ToInt32(inventoryType);
             return View(inventoryAlterationModel);
         }
 

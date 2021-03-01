@@ -43,7 +43,7 @@
                     }
                 </div>
                 <div class="col-md-2">
-                    <input id="load" onclick="return loadFoodMenuRateList();" type="submit" class="btn btn-outline-dark" value="Load" />
+                    <input id="load" onclick="return loadFoodMenuRateList();" type="submit"  class="btn btn-outline-dark" value="Load" />
                 </div>
                 <div class="col-md-2">
                     <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save Changes" />
@@ -149,7 +149,7 @@
 
         function loadFoodMenuRateList() {
             debugger;
-            window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val() + "&outletListId=" + $("#OutletListId").val();
+            window.location.href = "/FoodMenuRate/Index?foodCategoryId=" + $("#FoodCategoryId").val() + "&outletListId=" + $("#OutletListId").val() + "&flag=1";
         }
 
 
@@ -166,8 +166,8 @@
                     OutletName: "",
                     FoodMenuId: 0,
                     FoodMenuName: "",
-                    SalesPrice: $(tds[3]).find("#item_SalesPrice").val(),
-                    IsActive: $(tds[4]).find("#item_IsActive").is(":checked")
+                    SalesPrice: $(tds[4]).find("#item_SalesPrice").val(),
+                    IsActive: $(tds[5]).find("#item_IsActive").is(":checked")
                 });
                 foodMenuRate.push(foodMenu);
             });
@@ -188,6 +188,16 @@
                 }
             });
         }
+
+        //$('#FoodMenuRate').on('draw.dt', function () {
+        //    var value = $('.dataTables_filter input').val();
+        //    $("#saveFoodMenuRate").prop('disabled', true);
+        //    if (value.length > 3) {
+        //        alert(value);
+        //        $("#saveFoodMenuRate").prop('disabled', false);
+        //    } 
+        //});
+
 
 
     </script>

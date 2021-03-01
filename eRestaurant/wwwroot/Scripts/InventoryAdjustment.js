@@ -364,7 +364,7 @@ function clearItem() {
         $("#Price").val(''),
         $("#TotalAmount").val(''),
         $("#InventoryAdjustmentId").val('0'),
-        $("#IngredientId").val('0')
+        $('#IngredientId').val(0).trigger('change')
 }
 
 

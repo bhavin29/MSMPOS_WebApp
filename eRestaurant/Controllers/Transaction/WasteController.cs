@@ -201,5 +201,13 @@ namespace RocketPOS.Controllers.Transaction
             foodMenuPurchasePrice = _iWasteService.GetFoodMenuPurchasePrice(id);
             return Json(new { foodMenuPurchasePrice = foodMenuPurchasePrice });
         }
+
+        public ActionResult View(long? id)
+        {
+            WasteModel wasteModel = new WasteModel();
+            long wasteId = Convert.ToInt64(id);
+            wasteModel = _iWasteService.GetViewWasteById(wasteId);
+            return View(wasteModel);
+        }
     }
 }

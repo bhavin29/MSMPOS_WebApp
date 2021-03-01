@@ -75,6 +75,40 @@ namespace RocketPOS.Services
             return _inventoryAdjustmentRepository.GetInventoryAdjustmentList();
         }
 
+        public InventoryAdjustmentModel GetViewInventoryAdjustmentById(long invAdjId)
+        {
+            var model = (from inventory in _inventoryAdjustmentRepository.GetViewInventoryAdjustmentById(invAdjId).ToList()
+                         select new InventoryAdjustmentModel()
+                         {
+                             Id = inventory.Id,
+                             ReferenceNo = inventory.ReferenceNo,
+                             StoreId = inventory.StoreId,
+                             EmployeeId = inventory.EmployeeId,
+                             Date = inventory.Date,
+                             Notes = inventory.Notes,
+                             InventoryType = inventory.InventoryType,
+                             StoreName=inventory.StoreName
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.InventoryAdjustmentDetail = (from inventoryAdjDetail in _inventoryAdjustmentRepository.GetViewInventoryAdjustmentDetail(invAdjId)
+                                                   select new InventoryAdjustmentDetailModel()
+                                                   {
+                                                       InventoryAdjustmentId = inventoryAdjDetail.InventoryAdjustmentId,
+                                                       IngredientId = inventoryAdjDetail.IngredientId,
+                                                       Quantity = inventoryAdjDetail.Quantity,
+                                                       Price = inventoryAdjDetail.Price,
+                                                       TotalAmount = inventoryAdjDetail.TotalAmount,
+                                                       ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
+                                                       IngredientName = inventoryAdjDetail.IngredientName,
+                                                       FoodMenuId = inventoryAdjDetail.FoodMenuId,
+                                                       FoodMenuName = inventoryAdjDetail.FoodMenuName,
+                                                       UnitName = inventoryAdjDetail.UnitName
+                                                   }).ToList();
+            }
+            return model;
+        }
+
         public int InsertInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel)
         {
             return _inventoryAdjustmentRepository.InsertInventoryAdjustment(inventoryAdjustmentModel);

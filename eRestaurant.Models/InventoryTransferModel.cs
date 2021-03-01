@@ -57,5 +57,6 @@ namespace RocketPOS.Models
         public string ProductUnit { get; set; }
         [EnumDataType(typeof(TableStatus))]
         public ConsumpationStatus? ConsumpationStatus { get; set; }
+        public string UnitName { get; set; }
     }
 }

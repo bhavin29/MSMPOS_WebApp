@@ -96,5 +96,40 @@ namespace RocketPOS.Services
         {
             return _inventoryTransferRepository.GetFoodMenuStock(foodMenuId, storeId);
         }
+
+        public InventoryTransferModel GetViewInventoryTransferById(long id)
+        {
+            var model = (from inventory in _inventoryTransferRepository.GetViewInventoryTransferById(id).ToList()
+                         select new InventoryTransferModel()
+                         {
+                             Id = inventory.Id,
+                             ReferenceNo = inventory.ReferenceNo,
+                             FromStoreId = inventory.FromStoreId,
+                             ToStoreId = inventory.ToStoreId,
+                             EmployeeId = inventory.EmployeeId,
+                             Date = inventory.Date,
+                             Notes = inventory.Notes,
+                             InventoryType = inventory.InventoryType,
+                             FromStoreName = inventory.FromStoreName,
+                             ToStoreName = inventory.ToStoreName
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.InventoryTransferDetail = (from inventoryAdjDetail in _inventoryTransferRepository.GetViewInventoryTransferDetail(id)
+                                                 select new InventoryTransferDetailModel()
+                                                 {
+                                                     InventoryTransferId = inventoryAdjDetail.InventoryTransferId,
+                                                     IngredientId = inventoryAdjDetail.IngredientId,
+                                                     Quantity = inventoryAdjDetail.Quantity,
+                                                     ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
+                                                     CurrentStock = inventoryAdjDetail.CurrentStock,
+                                                     IngredientName = inventoryAdjDetail.IngredientName,
+                                                     FoodMenuId = inventoryAdjDetail.FoodMenuId,
+                                                     FoodMenuName = inventoryAdjDetail.FoodMenuName,
+                                                     UnitName = inventoryAdjDetail.UnitName
+                                                 }).ToList();
+            }
+            return model;
+        }
     }
 }

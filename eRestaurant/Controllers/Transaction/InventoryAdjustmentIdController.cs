@@ -52,7 +52,7 @@ namespace RocketPOS.Controllers.Transaction
                 newFromDate = DateTime.Now;
                 newToDate = DateTime.Now;
             }
- 
+
             inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
             return Json(new { InventoryAdjustment = inventoyAdjustmentViewModels });
         }
@@ -65,7 +65,7 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryAdjustmentModel);
         }
 
-        public ActionResult InventoryAdjustment(long? id, int? inventoryType,string type)
+        public ActionResult InventoryAdjustment(long? id, int? inventoryType, string type)
         {
             InventoryAdjustmentModel inventoryAdjustmentModel = new InventoryAdjustmentModel();
             if (id > 0)
@@ -199,6 +199,12 @@ namespace RocketPOS.Controllers.Transaction
             purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             return Json(new { purchaseModel.FoodMenuList });
         }
-
+        public ActionResult View(long? id)
+        {
+            InventoryAdjustmentModel inventoryAdjustmentModel = new InventoryAdjustmentModel();
+            long purchaseId = Convert.ToInt64(id);
+            inventoryAdjustmentModel = _inventoryAdjustmentService.GetViewInventoryAdjustmentById(purchaseId);
+            return View(inventoryAdjustmentModel);
+        }
     }
 }

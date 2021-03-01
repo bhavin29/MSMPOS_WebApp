@@ -20,5 +20,7 @@ namespace RocketPOS.Interface.Repository
 
         decimal GetFoodMenuPurchasePrice(int id);
         decimal GetIngredientPurchasePrice(int id);
+        List<WasteDetailModel> GetViewWasteDetails(long wasteId);
+        List<WasteModel> GetViewWasteById(long wasteId);
     }
 }

@@ -55,6 +55,7 @@ namespace RocketPOS.Repository
         {
             int result = 0;
             int foodMenuResult = 0;
+            string foodMenuId = "NULL", ingredientId = "NULL";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -64,6 +65,7 @@ namespace RocketPOS.Repository
                              " ,[EntryDate] " +
                              " ,[StoreId] " +
                              " ,[Notes] " +
+                             " ,[InventoryType] " +
                              " ,[UserIdInserted]  " +
                              " ,[DateInserted]   " +
                              " ,[IsDeleted])     " +
@@ -72,6 +74,7 @@ namespace RocketPOS.Repository
                              "   GetUtcDate()    " +
                              "  ,@StoreId, " +
                              "  @Notes, " +
+                              "  @InventoryType, " +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
@@ -82,9 +85,27 @@ namespace RocketPOS.Repository
 
                     foreach (var foodmenu in inventoryAlterationModel.InventoryAlterationDetails)
                     {
-                        var queryDetails = "INSERT INTO [dbo].[InventoryAlterationDetail]" +
+                        if (foodmenu.IngredientId == 0)
+                        {
+                            ingredientId = "NULL";
+                        }
+                        else
+                        {
+                            ingredientId = foodmenu.IngredientId.ToString();
+                        }
+
+                        if (foodmenu.FoodMenuId == 0)
+                        {
+                            foodMenuId = "NULL";
+                        }
+                        else
+                        {
+                            foodMenuId = foodmenu.FoodMenuId.ToString();
+                        }
+                            var queryDetails = "INSERT INTO [dbo].[InventoryAlterationDetail]" +
                                              "  ([InventoryAlterationId] " +
                                              " ,[FoodMenuId] " +
+                                             " ,[IngredientId] " +
                                              " ,[Qty] " +
                                              " ,[InventoryStockQty] " +
                                              " ,[Amount] " +
@@ -94,7 +115,8 @@ namespace RocketPOS.Repository
                                               " ,[IsDeleted])   " +
                                               "VALUES           " +
                                               "(" + result + "," +
-                                              foodmenu.FoodMenuId + "," +
+                                              foodMenuId + "," +
+                                              ingredientId + "," +
                                               foodmenu.Qty + "," +
                                               foodmenu.InventoryStockQty + "," +
                                               foodmenu.Amount + "," +

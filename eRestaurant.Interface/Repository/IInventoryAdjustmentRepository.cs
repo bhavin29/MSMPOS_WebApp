@@ -17,5 +17,8 @@ namespace RocketPOS.Interface.Repository
         int DeleteInventoryAdjustmentDetail(long invAdjId);
         long ReferenceNumber();
         decimal GetFoodMenuPurchasePrice(int foodMenuId);
+
+        List<InventoryAdjustmentModel> GetViewInventoryAdjustmentById(long invAdjId);
+        List<InventoryAdjustmentDetailModel> GetViewInventoryAdjustmentDetail(long invAdjId);
     }
 }

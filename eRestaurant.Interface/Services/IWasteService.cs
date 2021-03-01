@@ -22,5 +22,7 @@ namespace RocketPOS.Interface.Services
 
         decimal GetFoodMenuPurchasePrice(int id);
         decimal GetIngredientPurchasePrice(int id);
+
+        WasteModel GetViewWasteById(long wasteId);
     }
 }

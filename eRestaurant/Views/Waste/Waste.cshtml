@@ -107,6 +107,16 @@
                                                 <input class="form-control" type="hidden" id="WasteIngredientId" value="0" />
                                             </div>
                                         </div>
+                                        <div class="col-md-1 pr-2 pl-2">
+                                            <div class="form-group">
+                                                <label id="FoodMenuUnitName" class="control-label" style="margin-top: 28px" hidden="hidden"></label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pr-2 pl-2">
+                                            <div class="form-group">
+                                                <label id="IngredientUnitName" class="control-label" style="margin-top: 28px" hidden="hidden"></label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -143,16 +153,16 @@
                                                         @item.FoodMenuId
                                                     </td>
                                                     <td>
-                                                        @item.FoodMenuName
+                                                        @item.FoodMenuName 
                                                     </td>
                                                     <td>
                                                         @item.IngredientId
                                                     </td>
                                                     <td>
-                                                        @item.IngredientName
+                                                        @item.IngredientName 
                                                     </td>
                                                     <td class="text-right">
-                                                        @item.Qty
+                                                        @item.Qty @item.FoodMenuUnitName @item.IngredientUnitName
                                                     </td>
                                                     <td class="text-right">
                                                         @item.LossAmount

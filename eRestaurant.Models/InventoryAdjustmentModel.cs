@@ -52,7 +52,7 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
         [EnumDataType(typeof(TableStatus))]
-
+        public string UnitName { get; set; }
         public ConsumpationStatus? ConsumpationStatus { get; set; }
     }
 }

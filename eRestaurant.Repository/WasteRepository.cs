@@ -26,10 +26,12 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "SELECT distinct W.Id, W.StoreId,S.StoreName, W.ReferenceNumber, convert(varchar(12),W.WasteDateTime,3) as WasteDateTime," +
-                            " W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
+                            " W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus, isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as EmployeeName  " +
                             " FROM Waste W" +
                             " Inner Join WasteIngredient WI On W.Id=WI.WasteId " +
                             " INNER JOIN Store S ON W.StoreId = S.Id " +
+                            " inner join [User] U on U.Id=W.UserIdInserted  "+
+                            " inner join employee e on e.id = u.employeeid  "+
                             " WHERE W.IsDeleted = 0 ";
 
                 if (foodMenuId != 0)
@@ -283,8 +285,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
 
-                var query = " Select WI.Id As WasteIngredientId,WI.WasteId,WI.FoodMenuId,F.FoodMenuName,WI.IngredientId,I.IngredientName,Convert(Numeric(18,2),WI.ingredientqty) As Qty,WI.LossAmount  from WasteIngredient WI " +
-                            " left join FoodMenu F ON F.Id=WI.FoodMenuId left join Ingredient I On I.Id=WI.IngredientId " +
+                var query = " Select WI.Id As WasteIngredientId,WI.WasteId,WI.FoodMenuId,F.FoodMenuName,WI.IngredientId,I.IngredientName,Convert(Numeric(18,2),WI.ingredientqty) As Qty,WI.LossAmount,UF.UnitName As FoodMenuUnitName,UI.UnitName as IngredientUnitName  from WasteIngredient WI " +
+                            " left join FoodMenu F ON F.Id=WI.FoodMenuId left join Ingredient I On I.Id=WI.IngredientId left join Units UF On UF.Id=F.UnitsId Left Join Units UI On UI.Id=I.IngredientUnitId " +
                             " where WI.IsDeleted = 0 AND WI.WasteId= " + wasteId + ";";
                 purchaseDetails = con.Query<WasteDetailModel>(query).AsList();
             }
@@ -381,6 +383,40 @@ namespace RocketPOS.Repository
                 var query = " Select PurchasePrice From Ingredient Where IsDeleted=0 And Id=" + id;
                 return con.ExecuteScalar<decimal>(query);
             }
+        }
+
+        public List<WasteDetailModel> GetViewWasteDetails(long wasteId)
+        {
+            List<WasteDetailModel> wasteDetailModel = new List<WasteDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select (case when WI.FoodMenuId is null then 1 else 0 end) as ItemType, (case when WI.FoodMenuId is null then WI.IngredientId else WI.FoodMenuId end) as FoodMenuId,  " +
+                            " (case when WI.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName,  WI.Id As WasteIngredientId,WI.WasteId, " +
+                            " Convert(Numeric(18,2),WI.ingredientqty) As Qty,(case when WI.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName " +
+                            "  from WasteIngredient WI  left join FoodMenu F ON F.Id=WI.FoodMenuId left join Ingredient I On I.Id=WI.IngredientId " +
+                            " left join Units UF On UF.Id=F.UnitsId Left Join Units UI On UI.Id=I.IngredientUnitId  " +
+                            "  where WI.IsDeleted = 0 AND WI.WasteId=  " + wasteId;
+                wasteDetailModel = con.Query<WasteDetailModel>(query).AsList();
+            }
+            return wasteDetailModel;
+        }
+
+        public List<WasteModel> GetViewWasteById(long wasteId)
+        {
+            List<WasteModel> purchaseModelList = new List<WasteModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT W.Id, W.StoreId,S.StoreName, W.ReferenceNumber, W.WasteDateTime,W.TotalLossAmount,  W.ReasonForWaste, W.WasteStatus " +
+                            ",W.CreatedDatetime,W.ApprovedDateTime,UCreatedUser.Username As CreatedUserName,UApprovedUse.Username As ApprovedUserName " +
+                            " FROM Waste W " +
+                            " INNER JOIN Store S ON W.StoreId = S.Id " +
+                            " left join [User] UCreatedUser On UCreatedUser.Id = W.CreatedUserId " +
+                            " left join[User] UApprovedUse On UApprovedUse.Id = W.ApprovedUserId " +
+                            " WHERE W.IsDeleted = 0 AND W.Id = " + wasteId;
+
+                purchaseModelList = con.Query<WasteModel>(query).AsList();
+            }
+            return purchaseModelList;
         }
     }
 }

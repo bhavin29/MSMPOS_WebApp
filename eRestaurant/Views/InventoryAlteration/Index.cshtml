@@ -10,11 +10,13 @@
 <div class="card">
     <div class="card-header container-fluid">
         <div class="row">
-            <div class="col-md-11">
+            <div class="col-md-10">
                 <h5 class="card-title">Physical Stock</h5>
             </div>
             <div class="float-right">
-                <a asp-action="InventoryAlteration" class="pull-right btn btn-primary">Add</a>
+                @*<a asp-action="InventoryAlteration" class="pull-right btn btn-primary">Add</a>*@
+                <a asp-action="InventoryAlteration" asp-route-inventoryType="1" class=" btn btn-primary" style="margin-right:16px">+ Menu Item</a>
+                <a asp-action="InventoryAlteration" asp-route-inventoryType="2" class="btn btn-primary">+ Stock Item</a>
             </div>
         </div>
     </div>

@@ -266,7 +266,8 @@ namespace RocketPOS.Services
                                                 TotalAmount = purchasedetails.TotalAmount,
                                                 IngredientName = purchasedetails.IngredientName,
                                                 FoodMenuName = purchasedetails.FoodMenuName,
-                                                ItemType = purchasedetails.ItemType
+                                                ItemType = purchasedetails.ItemType,
+                                                UnitName = purchasedetails.UnitName
                                             }).ToList();
             }
             return model;

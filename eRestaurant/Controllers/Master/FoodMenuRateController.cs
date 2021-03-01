@@ -25,15 +25,14 @@ namespace RocketPOS.Controllers.Master
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
-        public IActionResult Index(int? outletListId, int? foodCategoryId)
+        public IActionResult Index(int? outletListId, int? foodCategoryId,int? flag)
         {
             FoodMenuRateModel foodMenuRateModel = new FoodMenuRateModel();
             foodMenuRateModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
             foodMenuRateModel.OutletList = _iDropDownService.GetOutletList();
-            // if (Convert.ToInt32(foodCategoryId) > 0)
+            if (Convert.ToInt32(flag) > 0)
             {
                 foodMenuRateModel.foodMenuRates = _iFoodMenuRateService.GetFoodMenuRateList(Convert.ToInt32(foodCategoryId), Convert.ToInt32(outletListId));
-
             }
             return View(foodMenuRateModel);
         }

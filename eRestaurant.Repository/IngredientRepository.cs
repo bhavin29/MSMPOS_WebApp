@@ -72,6 +72,11 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    //CREATE ENTRY INTO INVETORY AS STOCK 0.00
+                    query = " INSERT INTO INVENTORY (STOREID,IngredientId,STOCKQTY,USERIDINSERTED,ISDELETED)" +
+                            " Select S.ID as StoreId,FM.Id,0,1,0 from Ingredient FM CROSS JOIN STORE S " +
+                            " WHERE FM.ID =" + MaxId;
+                    result = con.Execute(query, ingredientModel, sqltrans, 0, System.Data.CommandType.Text);
                 }
                 else
                 {

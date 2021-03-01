@@ -184,13 +184,13 @@ namespace RocketPOS.Repository
 
                 if (itemType == 0)
                 {
-                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty " +
+                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty, physicaldatetime = GetDate() " +
                                 " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.Foodmenuid = T.foodmenuid " +
                                 " where T.importbatch = '" + importbatch + "' ";
                 }
                 else if (itemType == 1)
                 {
-                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty " +
+                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty, physicaldatetime = GetDate()  " +
                                 " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.IngredientId = T.foodmenuid " +
                                 " where T.importbatch = '" + importbatch + "' ";
                 }

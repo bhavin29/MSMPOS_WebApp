@@ -15,8 +15,9 @@
             </div>
             <div class="float-right">
                 @*<a asp-action="InventoryAlteration" class="pull-right btn btn-primary">Add</a>*@
-                <a asp-action="InventoryAlteration" asp-route-inventoryType="1" class=" btn btn-primary" style="margin-right:16px">+ Menu Item</a>
-                <a asp-action="InventoryAlteration" asp-route-inventoryType="2" class="btn btn-primary">+ Stock Item</a>
+                <a asp-action="InventoryAlteration" asp-route-inventoryType="1" class=" btn btn-primary" style="margin-right:16px">+ Menu</a>
+                <a asp-action="InventoryAlteration" asp-route-inventoryType="2" class="btn btn-primary" style="margin-right:16px">+ Stock</a>
+                <a asp-action="InventoryAlteration" asp-route-inventoryType="3" class="btn btn-primary">+ Asset</a>
             </div>
         </div>
     </div>
@@ -80,8 +81,9 @@
                                     <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Stock Qty")</th>*@
-                            </thead>
+</thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -90,36 +92,42 @@
                                     <th style="width:40%" rowspan="1" colspan="1">@Html.DisplayName("Menu Item")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Qty")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Stock Qty")</th>*@
-                            </tfoot>
+</tfoot>
                             <tbody>
                                 @foreach (var item in Model.InventoryAlterationViewList)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.StoreName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.EntryDate, "{0:d}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.Qty)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.Amount)
-                                        </td>
-                                        @*<td class="text-right">
-                                                @Html.DisplayFor(modelItem => item.InventoryStockQty)
-                                            </td>*@
-                                    </tr>
+                                <tr role="row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StoreName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EntryDate, "{0:d}")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.Qty)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="View" asp-route-Id="@item.InventoryAlterationId">View</a>
+                                        </div>
+                                    </td>
+                                    @*<td class="text-right">
+            @Html.DisplayFor(modelItem => item.InventoryStockQty)
+        </td>*@
+                                </tr>
                                 }
                             </tbody>
                         </table>

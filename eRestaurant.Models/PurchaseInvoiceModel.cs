@@ -28,6 +28,8 @@ namespace RocketPOS.Models
         public List<SelectListItem> IngredientList { get; set; }
         public int? FoodMenuId { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
+        public int? AssetItemId { get; set; }
+        public List<SelectListItem> AssetItemList { get; set; }
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
@@ -80,5 +82,7 @@ namespace RocketPOS.Models
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
         public string UnitName { get; set; }
+        public int AssetItemId { get; set; }
+        public string AssetItemName { get; set; }
     }
 }

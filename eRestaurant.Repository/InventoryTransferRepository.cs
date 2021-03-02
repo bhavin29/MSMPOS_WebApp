@@ -139,7 +139,7 @@ namespace RocketPOS.Repository
         {
             int result = 0;
             int detailResult = 0;
-            string foodMenuId = "NULL", ingredientId = "NULL";
+            string foodMenuId = "NULL", ingredientId = "NULL", assetItemId = "NULL";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -175,6 +175,15 @@ namespace RocketPOS.Repository
                             ingredientId = item.IngredientId.ToString();
                         }
 
+                        if (item.AssetItemId == 0)
+                        {
+                            assetItemId = "NULL";
+                        }
+                        else
+                        {
+                            assetItemId = item.AssetItemId.ToString();
+                        }
+
                         if (item.FoodMenuId == 0)
                         {
                             foodMenuId = "NULL";
@@ -185,11 +194,12 @@ namespace RocketPOS.Repository
                         }
 
                         var queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                              " (InventoryTransferId,IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdInserted,DateInserted,IsDeleted) " +
+                                              " (InventoryTransferId,IngredientId,FoodMenuId,AssetItemId,Qty,ConsumptionStatus,CurrentStock,UserIdInserted,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + ingredientId + "," +
                                               "" + foodMenuId + "," +
+                                              "" + assetItemId + "," +
                                               "" + item.Quantity + "," +
                                               "" + 1 + "," +
                                               "" + item.CurrentStock + "," +
@@ -242,7 +252,7 @@ namespace RocketPOS.Repository
         public int UpdateInventoryTransfer(InventoryTransferModel inventoryTransferModel)
         {
             int result = 0;
-            string foodMenuId = "NULL", ingredientId = "NULL";
+            string foodMenuId = "NULL", ingredientId = "NULL", assetItemId = "NULL";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -285,6 +295,15 @@ namespace RocketPOS.Repository
                             ingredientId = item.IngredientId.ToString();
                         }
 
+                        if (item.AssetItemId == 0)
+                        {
+                            assetItemId = "NULL";
+                        }
+                        else
+                        {
+                            assetItemId = item.AssetItemId.ToString();
+                        }
+
                         if (item.FoodMenuId == 0)
                         {
                             foodMenuId = "NULL";
@@ -299,6 +318,7 @@ namespace RocketPOS.Repository
                             queryDetails = "Update InventoryTransferDetail SET " +
                                 " IngredientId = " + ingredientId +
                                 " ,FoodMenuId = " + foodMenuId +
+                                " ,AssetItemId = " + assetItemId +
                                 " ,Qty = " + item.Quantity +
                                 " ,ConsumptionStatus = " + 1 +
                                 " ,CurrentStock = " + item.CurrentStock +
@@ -310,11 +330,12 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryTransferDetail" +
-                                                  " (InventoryTransferId, IngredientId,FoodMenuId,Qty,ConsumptionStatus,CurrentStock,UserIdUpdated,DateInserted,IsDeleted)   " +
+                                                  " (InventoryTransferId, IngredientId,FoodMenuId,AssetItemId,Qty,ConsumptionStatus,CurrentStock,UserIdUpdated,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryTransferModel.Id + "," +
                                                   "" + ingredientId + "," +
                                                   "" + foodMenuId + "," +
+                                                  "" + assetItemId + "," +
                                                   "" + item.Quantity + "," +
                                                   "" + 1 + "," +
                                                   "" + item.CurrentStock + "," +
@@ -378,14 +399,16 @@ namespace RocketPOS.Repository
             List<InventoryTransferDetailModel> inventoryTransferDetailModels = new List<InventoryTransferDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus, IAI.CurrentStock, " +
-                             " (case when IAI.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
+                var query = "SELECT IAI.Id AS InventoryTransferId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.ConsumptionStatus as ConsumpationStatus, IAI.CurrentStock,IAI.AssetItemId, AI.AssetItemName, " +
+                             " (case when IAI.FoodMenuId is null then (case when IAI.IngredientId is null then UA.UnitName else UI.UnitName end) else UF.UnitName end) as UnitName " +
                              " FROM InventoryTransferDetail IAI " +
                              " INNER JOIN InventoryTransfer IA ON IAI.InventoryTransferId = IA.Id " +
                              " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
                              " LEFT JOIN FoodMenu FM ON FM.Id = IAI.FoodMenuId " +
-                             " left join Units As UI On UI.Id = I.IngredientUnitId "+
+                             " LEFT JOIN AssetItem AI ON  AI.Id = IAI.AssetItemId "+
+                             " left join Units As UI On UI.Id = I.IngredientUnitId " +
                              " left join Units As UF On UF.Id = FM.UnitsId "+
+                             " left join Units As UA On UA.Id = AI.UnitId  "+
                              "WHERE IAI.InventoryTransferId= " + id + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
                 inventoryTransferDetailModels = con.Query<InventoryTransferDetailModel>(query).AsList();
             }

@@ -13,5 +13,8 @@ namespace RocketPOS.Interface.Services
         List<InventoryAlterationViewListModel> GetInventoryAlterationList(int storeId, DateTime fromDate, DateTime toDate, int foodMenuId);
 
         decimal GetInventoryStockQty(int storeId, int foodMenuId);
+        decimal GetInventoryStockQtyForIngredient(int storeId, int ingredientId);
+
+        InventoryAlterationModel GetViewInventoryAlterationById(long invAltId);
     }
 }

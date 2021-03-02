@@ -635,5 +635,23 @@ function GetFoodMenuByItemType() {
             }
         });
     }
+    if (itemType == 2) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetAssetItemList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.assetItemList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.assetItemList[i].value + '">' + obj.assetItemList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
 }
 

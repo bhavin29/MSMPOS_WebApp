@@ -508,7 +508,7 @@ function calculateColumn(index) {
 
 function GetFoodMenuLastPrice(foodMenuId) {
     var itemType = $("#ItemType").val();
-    debugger;
+    //debugger;
     $.ajax({
         url: "/PurchaseFoodMenu/GetFoodMenuLastPrice",
         data: { "itemType": itemType, "foodMenuId": foodMenuId.value  },
@@ -558,6 +558,25 @@ function GetFoodMenuByItemType() {
                 var obj = JSON.parse(data);
                 for (var i = 0; i < obj.ingredientList.length; ++i) {
                     $("#FoodMenuId").append('<option value="' + obj.ingredientList[i].value + '">' + obj.ingredientList[i].text + '</option>');
+                }
+            },
+            error: function (data) {
+                alert(data);
+            }
+        });
+    }
+
+    if (itemType == 2) {
+        $.ajax({
+            url: "/PurchaseFoodMenu/GetAssetItemList",
+            data: {},
+            type: "GET",
+            dataType: "text",
+            success: function (data) {
+                $("#FoodMenuId").empty();
+                var obj = JSON.parse(data);
+                for (var i = 0; i < obj.assetItemList.length; ++i) {
+                    $("#FoodMenuId").append('<option value="' + obj.assetItemList[i].value + '">' + obj.assetItemList[i].text + '</option>');
                 }
             },
             error: function (data) {

@@ -49,6 +49,7 @@ namespace RocketPOS.Controllers.Transaction
             InventoryAlterationModel inventoryAlterationModel = new InventoryAlterationModel();
             inventoryAlterationModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             inventoryAlterationModel.IngredientList = _iDropDownService.GetIngredientList();
+            inventoryAlterationModel.AssetItemList = _iDropDownService.GetAssetItemList();
             inventoryAlterationModel.StoreList = _iDropDownService.GetStoreList();
             inventoryAlterationModel.ReferenceNo = _inventoryAlterationService.ReferenceNumberInventoryAlteration();
             inventoryAlterationModel.InventoryType = Convert.ToInt32(inventoryType);
@@ -96,6 +97,22 @@ namespace RocketPOS.Controllers.Transaction
             decimal stockQty = 0;
             stockQty = _inventoryAlterationService.GetInventoryStockQty(storeId, foodMenuId);
             return Json(new { stockQty = stockQty });
+        }
+
+        [HttpGet]
+        public JsonResult GetInventoryStockQtyForIngredient(int storeId, int ingredientId)
+        {
+            decimal stockQty = 0;
+            stockQty = _inventoryAlterationService.GetInventoryStockQtyForIngredient(storeId, ingredientId);
+            return Json(new { stockQty = stockQty });
+        }
+
+        public ActionResult View(long? id)
+        {
+            InventoryAlterationModel inventoryAlterationModel = new InventoryAlterationModel();
+            long purchaseId = Convert.ToInt64(id);
+            inventoryAlterationModel = _inventoryAlterationService.GetViewInventoryAlterationById(purchaseId);
+            return View(inventoryAlterationModel);
         }
     }
 }

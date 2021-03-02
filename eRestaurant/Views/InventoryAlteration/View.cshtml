@@ -1,5 +1,5 @@
 ﻿@using Microsoft.Extensions.Localization;
-@model RocketPOS.Models.InventoryTransferModel
+@model RocketPOS.Models.InventoryAlterationModel
 @using  RocketPOS.Resources
 @inject LocService SharedLocalizer
 @section Styles {
@@ -20,7 +20,7 @@
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
                 <h5 class="card-title">
-                    Stock OUT
+                    Physical Stock
                 </h5>
             </div>
             @*<div class="float-right">
@@ -31,9 +31,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="invoice-title">
-                <h4>
-                    From: @Model.FromStoreName To: @Model.ToStoreName
-                </h4>
+                <h4>@Model.StoreName</h4>
             </div>
             <div class="row mb-4">
                 <div class="col-xs-9">
@@ -48,16 +46,15 @@
                 <div class="col-xs-3 text-right">
                     <address>
                         <strong>No: </strong>@Model.ReferenceNo<br>
-                        <strong>Date  :  </strong>@Model.Date.ToShortDateString()<br>
-                        @*<strong>From Store :  </strong>@Model.FromStoreName<br>
-                        <strong>To Store :  </strong>@Model.ToStoreName<br>*@
+                        <strong>Date  :  </strong>@Model.EntryDate.ToShortDateString()<br>
+                        @*<strong>Store :  </strong>@Model.StoreName<br>*@
                     </address>
                 </div>
             </div>
         </div>
     </div>
 
-    @if (Model.InventoryTransferDetail.Count > 0)
+    @if (Model.InventoryAlterationDetails.Count > 0)
     {
         <div class="row">
             <div class="col-md-12">
@@ -67,42 +64,32 @@
                             <thead>
                                 <tr>
                                     <th style="width:25%">Product</th>
+                                    <th style="width:8%" class="text-right">Price</th>
                                     <th style="width:8%" class="text-right">Qty </th>
-                                    <th style="width:10%" class="text-right">CurrentStock</th>
+                                    <th style="width:10%" class="text-right">InventoryStockQty</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model.InventoryTransferDetail)
+                                @foreach (var item in Model.InventoryAlterationDetails)
                                 {
-                                    var tm = "#myAModal" + item.InventoryTransferId;
-                                    var mid = "myAModal" + item.InventoryTransferId;
-                                    var rowId = "rowId" + item.InventoryTransferId;
-                                <tr id="@rowId">
-                                    @if (Model.InventoryType == 1)
-                                    {
+                                    var tm = "#myAModal" + item.InventoryAlterationId;
+                                    var mid = "myAModal" + item.InventoryAlterationId;
+                                    var rowId = "rowId" + item.InventoryAlterationId;
+                                    <tr id="@rowId">
+
                                         <td>
                                             @item.FoodMenuName
                                         </td>
-                                    }
-                                    @if (Model.InventoryType == 2)
-                                    {
-                                        <td>
-                                            @item.IngredientName
+                                        <td class="text-right">
+                                            @item.Amount.ToString("0.00")
                                         </td>
-                                    }
-                                    @if (Model.InventoryType == 3)
-                                    {
-                                        <td>
-                                            @item.AssetItemName
+                                        <td class="text-right">
+                                            @item.Qty.ToString("0.00") @item.UnitName
                                         </td>
-                                    }
-                                    <td class="text-right">
-                                        @item.Quantity.ToString("0.00") @item.UnitName
-                                    </td>
-                                    <td class="text-right">
-                                        @item.CurrentStock.ToString("0.00")
-                                    </td>
-                                </tr>
+                                        <td class="text-right">
+                                            @item.InventoryStockQty.ToString("0.00")
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                         </table>

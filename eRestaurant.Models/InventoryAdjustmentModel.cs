@@ -23,6 +23,8 @@ namespace RocketPOS.Models
         public List<SelectListItem> IngredientList { get; set; }
         public int? FoodMenuId { get; set; }
         public List<SelectListItem> FoodMenuList { get; set; }
+        public int? AssetItemId { get; set; }
+        public List<SelectListItem> AssetItemList { get; set; }
         [Required(ErrorMessage = "Select Date")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
@@ -54,5 +56,7 @@ namespace RocketPOS.Models
         [EnumDataType(typeof(TableStatus))]
         public string UnitName { get; set; }
         public ConsumpationStatus? ConsumpationStatus { get; set; }
+        public int AssetItemId { get; set; }
+        public string AssetItemName { get; set; }
     }
 }

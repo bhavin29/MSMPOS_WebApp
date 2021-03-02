@@ -140,14 +140,16 @@ namespace RocketPOS.Repository
             List<InventoryAdjustmentDetailModel> inventoryAdjustmentDetailModels = new List<InventoryAdjustmentDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.Price,IAI.Total AS TotalAmount, IAI.ConsumptionStatus as ConsumpationStatus, " +
-                             "  (case when IAI.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
+                var query = "SELECT IAI.Id as InventoryAdjustmentId,IAI.IngredientId,I.IngredientName,IAI.FoodMenuId, FM.FoodMenuName,IAI.Qty as Quantity,IAI.Price,IAI.Total AS TotalAmount, IAI.ConsumptionStatus as ConsumpationStatus,  IAI.AssetItemId, AI.AssetItemName, " +
+                             "  (case when IAI.FoodMenuId is null then (case when IAI.IngredientId is null then UA.UnitName else UI.UnitName end) else UF.UnitName end) as UnitName " +
                              " FROM InventoryAdjustmentDetail IAI " +
                              " INNER JOIN InventoryAdjustment IA ON IAI.InventoryAdjustmentId = IA.Id " +
                              " LEFT JOIN Ingredient I ON I.Id = IAI.IngredientId " +
                              " LEFT JOIN FoodMenu FM ON  FM.Id = IAI.FoodMenuId " +
-                             " left join Units As UI On UI.Id = I.IngredientUnitId "+
+                             " LEFT JOIN AssetItem AI ON  AI.Id = IAI.AssetItemId "+
+                             " left join Units As UI On UI.Id = I.IngredientUnitId " +
                              " left join Units As UF On UF.Id = FM.UnitsId "+
+                             " left join Units As UA On UA.Id = AI.UnitId  "+
                              " where IA.Id =" + invAdjId + " and IA.IsDeleted = 0 and IAI.IsDeleted = 0;";
                 inventoryAdjustmentDetailModels = con.Query<InventoryAdjustmentDetailModel>(query).AsList();
             }
@@ -159,7 +161,7 @@ namespace RocketPOS.Repository
         {
             int result = 0;
             int detailResult = 0;
-            string foodMenuId = "NULL", ingredientId = "NULL";
+            string foodMenuId = "NULL", ingredientId = "NULL", assetItemId = "NULL"; 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 if (LoginInfo.Userid == 0) LoginInfo.Userid = 1;
@@ -178,6 +180,15 @@ namespace RocketPOS.Repository
 
                     foreach (var item in inventoryAdjustmentModel.InventoryAdjustmentDetail)
                     {
+                        if (item.AssetItemId == 0)
+                        {
+                            assetItemId = "NULL";
+                        }
+                        else
+                        {
+                            assetItemId = item.AssetItemId.ToString();
+                        }
+
                         if (item.IngredientId==0)
                         {
                             ingredientId = "NULL";
@@ -200,11 +211,12 @@ namespace RocketPOS.Repository
                         }
 
                         var queryDetails = "INSERT INTO InventoryAdjustmentDetail" +
-                                              " (InventoryAdjustmentId,IngredientId,FoodMenuId,Qty,Price,Total ,ConsumptionStatus,UserIdInserted,DateInserted,IsDeleted) " +
+                                              " (InventoryAdjustmentId,IngredientId,FoodMenuId,AssetItemId,Qty,Price,Total ,ConsumptionStatus,UserIdInserted,DateInserted,IsDeleted) " +
                                               "VALUES           " +
                                               "(" + result + "," +
                                               "" + ingredientId + "," +
                                               "" + foodMenuId + "," +
+                                               "" + assetItemId + "," +
                                               "" + item.Quantity + "," +
                                               "" + item.Price + "," +
                                               "" + item.TotalAmount + "," +
@@ -279,7 +291,7 @@ namespace RocketPOS.Repository
         public int UpdateInventoryAdjustment(InventoryAdjustmentModel inventoryAdjustmentModel)
         {
             int result = 0;
-            string foodMenuId = "NULL", ingredientId = "NULL";
+            string foodMenuId = "NULL", ingredientId = "NULL", assetItemId = "NULL";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
@@ -315,7 +327,16 @@ namespace RocketPOS.Repository
                             consumptionId = 2;
                         }
                         */
-                        
+
+                        if (item.AssetItemId == 0)
+                        {
+                            assetItemId = "NULL";
+                        }
+                        else
+                        {
+                            assetItemId = item.AssetItemId.ToString();
+                        }
+
                         if (item.IngredientId == 0)
                         {
                             ingredientId = "NULL";
@@ -343,6 +364,7 @@ namespace RocketPOS.Repository
                             queryDetails = "Update InventoryAdjustmentDetail SET " +
                                                  " IngredientId = " + ingredientId +
                                                  " ,FoodMenuId = " + foodMenuId +
+                                                 " ,AssetItemId = " + assetItemId +
                                                  " ,Qty   = " + item.Quantity +
                                                  " ,Price   = " + item.Price +
                                                  " ,Total   = " + item.TotalAmount +
@@ -354,11 +376,12 @@ namespace RocketPOS.Repository
                         else
                         {
                             queryDetails = "INSERT INTO InventoryAdjustmentDetail" +
-                                                  " (InventoryAdjustmentId, IngredientId,FoodMenuId,Qty,Price,Total,ConsumptionStatus,UserIdInserted,DateInserted,IsDeleted)   " +
+                                                  " (InventoryAdjustmentId, IngredientId,FoodMenuId,AssetItemId,Qty,Price,Total,ConsumptionStatus,UserIdInserted,DateInserted,IsDeleted)   " +
                                                   "VALUES           " +
                                                   "(" + inventoryAdjustmentModel.Id + "," +
                                                   "" + ingredientId + "," +
                                                   "" + foodMenuId + "," +
+                                                  "" + assetItemId + "," +
                                                   "" + item.Quantity + "," +
                                                   "" + item.Price + "," +
                                                   "" + item.TotalAmount + "," +

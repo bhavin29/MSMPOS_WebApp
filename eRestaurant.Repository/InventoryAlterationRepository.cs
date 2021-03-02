@@ -23,8 +23,13 @@ namespace RocketPOS.Repository
             List<InventoryAlterationViewListModel> inventoryAlterationViewList = new List<InventoryAlterationViewListModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT IAD.Id,IA.Id as InventoryAlterationId,IA.ReferenceNo,IA.StoreId,S.StoreName,IAD.EntryDate,F.FoodMenuName,IAD.Qty,IAD.InventoryStockQty,IAD.Amount FROM InventoryAlteration IA " +
-                            " Inner Join Store S On S.Id = IA.StoreId Inner Join InventoryAlterationDetail IAD On IA.Id = IAD.InventoryAlterationId Inner Join FoodMenu F On F.Id = IAD.FoodMenuId " +
+                var query = " SELECT IAD.Id,IA.Id as InventoryAlterationId,IA.ReferenceNo,IA.StoreId,S.StoreName,IAD.EntryDate," +
+                            " (Case When IAD.Foodmenuid is null then IG.IngredientName else F.FoodMenuName end) as FoodMenuName," +
+                            " IAD.Qty,IAD.InventoryStockQty,IAD.Amount FROM InventoryAlteration IA " +
+                            " Inner Join Store S On S.Id = IA.StoreId " +
+                            " Inner Join InventoryAlterationDetail IAD On IA.Id = IAD.InventoryAlterationId " +
+                            " Left Join FoodMenu F On F.Id = IAD.FoodMenuId " +
+                            " Left Join Ingredient IG On IG.Id = IAD.IngredientId " +
                             " Where IA.IsDeleted = 0";
 
                 if (storeId != 0)

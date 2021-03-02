@@ -20,7 +20,7 @@
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
                 <h5 class="card-title">
-                    Stock In
+                    Stock IN
                 </h5>
             </div>
             @*<div class="float-right">
@@ -47,7 +47,7 @@
                     <address>
                         <strong>No: </strong>@Model.ReferenceNo<br>
                         <strong>Date  :  </strong>@Model.Date.ToShortDateString()<br>
-                        <strong>Store :  </strong>@Model.StoreName<br>
+                        @*<strong>Store :  </strong>@Model.StoreName<br>*@
                     </address>
                 </div>
             </div>
@@ -109,7 +109,10 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="col-sm-6 text-left">
+                @if (Model.Notes != null)
+                {
                 <div><strong>Notes : </strong> @Model.Notes</div>
+                }
             </div>
         </div>
     </div>

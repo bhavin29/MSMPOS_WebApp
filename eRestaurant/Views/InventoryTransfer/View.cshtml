@@ -20,7 +20,7 @@
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
                 <h5 class="card-title">
-                    Stock Out
+                    Stock OUT
                 </h5>
             </div>
             @*<div class="float-right">
@@ -31,7 +31,9 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="invoice-title">
-                @*<h4>@Model.FromStoreName</h4>*@
+                <h4>
+                    From: @Model.FromStoreName To: @Model.ToStoreName
+                </h4>
             </div>
             <div class="row mb-4">
                 <div class="col-xs-10">
@@ -47,8 +49,8 @@
                     <address>
                         <strong>No: </strong>@Model.ReferenceNo<br>
                         <strong>Date  :  </strong>@Model.Date.ToShortDateString()<br>
-                        <strong>From Store :  </strong>@Model.FromStoreName<br>
-                        <strong>To Store :  </strong>@Model.ToStoreName<br>
+                        @*<strong>From Store :  </strong>@Model.FromStoreName<br>
+                        <strong>To Store :  </strong>@Model.ToStoreName<br>*@
                     </address>
                 </div>
             </div>
@@ -106,7 +108,10 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="col-sm-6 text-left">
-                <div><strong>Notes : </strong> @Model.Notes</div>
+                @if (Model.Notes != null)
+                {
+                    <div><strong>Notes : </strong> @Model.Notes</div>
+                }
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@ namespace RocketPOS.Interface.Services.Reports
     public interface IReportService
     {
         List<InventoryReportModel> GetInventoryReport(InventoryReportParamModel inventoryReportParamModel);
-        List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId, int itemType);
+        List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId, int itemType, int active);
         List<InventoryDetailReportModel> GetInventoryDetailReport(InventoryReportParamModel inventoryReportParamModel, int id);
         List<PurchaseReportModel> GetPurchaseReport(DateTime fromDate, DateTime toDate);
         List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId);

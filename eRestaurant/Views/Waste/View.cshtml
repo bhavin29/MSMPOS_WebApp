@@ -20,7 +20,7 @@
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
                 <h5 class="card-title">
-                    Wastes
+                    Waste
                 </h5>
             </div>
             @*<div class="float-right">
@@ -103,6 +103,14 @@
         </div>
     }
     <div class="row">
+        <div class="col-sm-6 text-left">
+            @if (Model.ReasonForWaste != null)
+            {
+                <div><strong>Notes : </strong> @Model.ReasonForWaste</div>
+            }
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6">
             @if (Model.CreatedDatetime.ToShortDateString() == "01/01/0001")
             { }
@@ -119,8 +127,8 @@
             }
         </div>
     </div>
-
 </div>
+
 
 @section scripts{
     <partial name="_ValidationScriptsPartial" />

@@ -40,9 +40,9 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetPurchaseReport(fromDate,toDate);
         }
 
-        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId, int itemType)
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId, int itemType, int active)
         {
-            return _iReportRepository.GetInventoryStockList(supplierId, storeId, itemType);
+            return _iReportRepository.GetInventoryStockList(supplierId, storeId, itemType, active);
         }
 
         public List<DataHistorySyncReportModel> GetDataSyncHistoryReport()

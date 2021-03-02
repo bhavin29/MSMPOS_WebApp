@@ -155,7 +155,7 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType)
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType,int active)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -184,6 +184,13 @@ namespace RocketPOS.Repository.Reports
                          //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
                 }
 
+                if (itemType == 0 & active==0)
+                {
+                    query += " left join Outlet O on O.Storeid = S.Id " +
+                               " right join Foodmenurate FMR on FMR.Foodmenuid = F.Id and FMR.outletid = O.Id  and FMR.IsActive=1";
+                 }
+
+
                 if (supplierId != 0 && itemType==0)
                 {
                     query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
@@ -191,7 +198,9 @@ namespace RocketPOS.Repository.Reports
                  else if (supplierId != 0 && itemType == 1)
                 {
                     query += "  inner join SupplierItem SI on SI.IngredientID = INV.IngredientID And SI.SupplierId = " + supplierId;
-                }                query = query + " where INV.StoreId = " + storeId;
+                }               
+                
+                query = query + " where INV.StoreId = " + storeId;
 
                 if (itemType == 0)
                {

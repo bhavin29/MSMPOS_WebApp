@@ -49,11 +49,11 @@ namespace RocketPOS.Controllers.Reports
             return View(inventoryReportModel);
         }
         [HttpGet]
-        public JsonResult GetInventoryStockList(int supplierId, int storeId,int itemType)
+        public JsonResult GetInventoryStockList(int supplierId, int storeId,int itemType, int active)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
-            inventoryReportModel = _iReportService.GetInventoryStockList(supplierId, storeId, itemType);
+            inventoryReportModel = _iReportService.GetInventoryStockList(supplierId, storeId, itemType,active);
             return Json(new { InventoryStockList = inventoryReportModel });
         }
 

@@ -92,9 +92,9 @@ namespace RocketPOS.Services
             return _inventoryTransferRepository.UpdateInventoryTransfer(inventoryTransferModel);
         }
 
-        public decimal GetFoodMenuStock(int foodMenuId, int storeId)
+        public decimal GetFoodMenuStock(int foodMenuId, int storeId, int inventoryType)
         {
-            return _inventoryTransferRepository.GetFoodMenuStock(foodMenuId, storeId);
+            return _inventoryTransferRepository.GetFoodMenuStock(foodMenuId, storeId, inventoryType);
         }
 
         public InventoryTransferModel GetViewInventoryTransferById(long id)

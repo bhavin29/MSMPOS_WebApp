@@ -64,10 +64,11 @@
                                 {
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label asp-for="IngredientList" class="control-label">Ingredient</label>
+                                            <label asp-for="IngredientList" class="control-label">Product</label>
                                             <select asp-for="IngredientId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                    asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))"
+                                                    onchange="GetFoodMenuByStock(IngredientId,FromStoreId,2)">
                                             </select>
                                             <span asp-validation-for="IngredientId" class="text-danger"></span>
                                         </div>
@@ -81,7 +82,7 @@
                                             <select asp-for="FoodMenuId"
                                                     class="form-control"
                                                     asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))"
-                                                    onchange="GetFoodMenuStock(FoodMenuId,FromStoreId)">
+                                                    onchange="GetFoodMenuByStock(FoodMenuId,FromStoreId,1)">
                                             </select>
                                             <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                         </div>
@@ -179,12 +180,11 @@
                                                             <div class="form-button-action">
                                                                 @if (Model.InventoryType == 2)
                                                                 {
-                                                                    @*<a href="#" data-itemid="@item.IngredientId">Delete</a> <a href="#" data-toggle="modal" data-target="@tm"></a>*@
-                                                                    <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                                    <a href="#" data-itemid="@item.IngredientId">Delete</a><a href="#" data-toggle="modal" data-target="@tm"><i></i></a>
                                                                 }
                                                                 @if (Model.InventoryType == 1)
                                                                 {
-                                                                    <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
+                                                                    <a href="#" data-itemid="@item.FoodMenuId">Delete</a><a href="#" data-toggle="modal" data-target="@tm"><i></i></a>
                                                                 }
                                                             </div>
                                                         </td>
@@ -205,11 +205,11 @@
                                                                 <div class="modal-footer">
                                                                     @if (Model.InventoryType == 2)
                                                                     {
-                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(@item.IngredientId, @rowId)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
+                                                                        <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteOrder(2,@item.IngredientId, @rowId)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
                                                                     }
                                                                     @if (Model.InventoryType == 1)
                                                                     {
-                                                                        <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                        <a id="deleteBtn"    data-itemId="@item.FoodMenuId" onclick="deleteOrder(1,@item.FoodMenuId, @rowId)"  data-dismiss="modal" class="btn bg-danger mr-1">Delete</a>
                                                                     }
                                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                                 </div>

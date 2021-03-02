@@ -191,10 +191,10 @@ namespace RocketPOS.Controllers.Transaction
             return ErrorString;
         }
 
-        public ActionResult GetFoodMenuStock(int foodMenuId, int storeId)
+        public ActionResult GetFoodMenuStock(int foodMenuId, int storeId,int inventoryType)
         {
             decimal stockQty = 0;
-            stockQty = _inventoryTransferService.GetFoodMenuStock(foodMenuId, storeId);
+            stockQty = _inventoryTransferService.GetFoodMenuStock(foodMenuId, storeId, inventoryType);
             return Json(new { StockQty = stockQty });
         }
 

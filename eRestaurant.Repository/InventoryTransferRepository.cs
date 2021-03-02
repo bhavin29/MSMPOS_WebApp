@@ -341,7 +341,7 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public decimal GetFoodMenuStock(int foodMenuId, int storeId)
+        public decimal GetFoodMenuStock(int foodMenuId, int storeId,int inventoryType)
         {
             decimal result = 0;
 
@@ -349,8 +349,18 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = " SELECT StockQty from Foodmenu FM inner join Inventory I ON I.FoodMenuId = FM.Id " +
-                            " WHERE FM.Id = " + foodMenuId + "and StoreId = " + storeId + " AND I.ISDeleted = 0";
+
+                var query = "";
+
+                if (inventoryType == 1)
+                {
+                     query = " SELECT StockQty from Inventory WHERE FoodmenuId = " + foodMenuId + "and StoreId = " + storeId + " AND ISDeleted = 0";
+                }
+                else 
+                {
+                    query = " SELECT StockQty from Inventory WHERE IngredientId = " + foodMenuId + "and StoreId = " + storeId + " AND ISDeleted = 0";
+                }
+ 
                 result = con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
 

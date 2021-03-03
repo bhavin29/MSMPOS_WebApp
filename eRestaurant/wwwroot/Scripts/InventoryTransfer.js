@@ -37,7 +37,8 @@ $(document).ready(function () {
     $("#FromStoreId").select2();
     $("#ToStoreId").select2();
     $("#FoodMenuId").select2();
-    $("#IngredientId").select2(); 
+    $("#IngredientId").select2();
+    $("#AssetItemId").select2();
     $("#FromStoreId").focus();
 });
 
@@ -57,8 +58,11 @@ $('#addRow').on('click', function (e) {
     if (InventoryType == "2") {
         rowId = "rowId" + $("#IngredientId").val();
     }
-    if (InventoryType == 1) {
+    if (InventoryType == "1") {
         rowId = "rowId" + $("#FoodMenuId").val();
+    }
+    if (InventoryType == "3") {
+        rowId = "rowId" + $("#AssetItemId").val();
     }
 
     var Qty = $("#Quantity").val();
@@ -79,8 +83,8 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + ProductUnit + ' </td>',
                 '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#IngredientId").val() + '"></a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#IngredientId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(2, ' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteOrder(' + $("#IngredientId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
                 $("#InventoryTransferId").val()
             ]).node().id = rowId;
         }
@@ -92,14 +96,28 @@ $('#addRow').on('click', function (e) {
                 '<td class="text-right">' + CurrentStock + ' </td>',
                 '<td class="text-right">' + Qty + ' </td>',
                 '<td class="text-right">' + ProductUnit + ' </td>',
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '">Delete</a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '"></a></div></td > ' +
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '"></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
                 '<div class="modal fade" id=myModal' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(1, ' + $("#FoodMenuId").val() + ',' + rowId + ')"  class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(0, ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
                 $("#InventoryTransferId").val()
             ]).node().id = rowId;
         }
 
+        if (InventoryType == "3") {
+            rowNode = InventoryTransferDatatable.row.add([
+                '<td class="text-right">' + $("#AssetItemId").val() + ' </td>',
+                $('#AssetItemId').children("option:selected").text(),
+                '<td class="text-right">' + CurrentStock + ' </td>',
+                '<td class="text-right">' + Qty + ' </td>',
+                '<td class="text-right">' + ProductUnit + ' </td>',
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '"></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#AssetItemId").val() + '">Delete</a></div></td > ' +
+                '<div class="modal fade" id=myModal' + $("#AssetItemId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#AssetItemId").val() + '" onclick="deleteOrder(0, ' + $("#AssetItemId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                $("#InventoryTransferId").val()
+            ]).node().id = rowId;
+        }
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
         $(rowNode).find('td').eq(3).addClass('text-right');
@@ -130,6 +148,18 @@ $('#addRow').on('click', function (e) {
             });
         }
 
+        if (InventoryType == "3") {
+            dataArr.push({
+                assetItemId: $("#AssetItemId").val(),
+                currentStock: $("#StockQty").val(),
+                quantity: $("#Quantity").val(),
+                productUnit: $("#ProductUnit").val(),
+                //consumpationStatus: $("#ConsumpationStatus").val(),
+                InventoryTransferId: $("#InventoryTransferId").val(),
+                assetItemName: $('#AssetItemId').children("option:selected").text()
+            });
+        }
+
         clearItem();
         editDataArr = [];
 
@@ -139,6 +169,10 @@ $('#addRow').on('click', function (e) {
 
         if (InventoryType == "1") {
             $("#FoodMenuId").focus();
+        }
+
+        if (InventoryType == "3") {
+            $("#AssetItemId").focus();
         }
     }
     else if (message != '') {
@@ -235,12 +269,9 @@ $('#ok').click(function () {
 //    });
 //}
 
-function deleteOrder(iId, id, rowId) {
-    alert(1);
-
+function deleteOrder(id, rowId) {
     for (var i = 0; i < dataArr.length; i++) {
-
-        if (inventoryType == 2) {
+        if (InventoryType == "2") {
             if (dataArr[i].ingredientId == rowId) {
                 deletedId.push(dataArr[i].InventoryTransferId);
                 dataArr.splice(i, 1);
@@ -249,7 +280,7 @@ function deleteOrder(iId, id, rowId) {
                 $("#myModal" + id).modal('hide');
             }
         }
-        if (inventoryType == 1) {
+        if (InventoryType == "1") {
             if (dataArr[i].foodMenuId == rowId) {
                 deletedId.push(dataArr[i].inventoryTransferId);
                 dataArr.splice(i, 1);
@@ -258,8 +289,17 @@ function deleteOrder(iId, id, rowId) {
                 $("#myModal" + id).modal('hide');
             }
         }
+        if (InventoryType == "3") {
+            if (dataArr[i].assetItemId == rowId) {
+                deletedId.push(dataArr[i].inventoryTransferId);
+                dataArr.splice(i, 1);
+                InventoryTransferDatatable.row(i).remove().draw(false);
+                jQuery.noConflict();
+                $("#myModal" + id).modal('hide');
+            }
+        }
     }
-}
+};
 
 $(document).on('click', 'a.editItem', function (e) {
     if (!InventoryTransferDatatable.data().any() || InventoryTransferDatatable.data().row == null) {
@@ -295,6 +335,15 @@ $(document).on('click', 'a.editItem', function (e) {
             if (InventoryType == "1") {
                 if (dataArr[i].foodMenuId == id) {
                     $("#FoodMenuId").val(dataArr[i].foodMenuId),
+                        $("#Quantity").val(dataArr[i].quantity),
+                        //$("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
+                        $("#InventoryTransferId").val(dataArr[i].InventoryTransferId);
+                    editDataArr = dataArr.splice(i, 1);
+                }
+            }
+            if (InventoryType == "3") {
+                if (dataArr[i].assetItemId == id) {
+                    $("#AssetItemId").val(dataArr[i].assetItemId),
                         $("#Quantity").val(dataArr[i].quantity),
                         //$("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
                         $("#InventoryTransferId").val(dataArr[i].InventoryTransferId);
@@ -365,6 +414,24 @@ function validation(id) {
                         }
                     }
                 }
+                if (InventoryType == "3") {
+                    if ($("#AssetItemId").val() == '' || $("#AssetItemId").val() == '0') {
+                        message = "Select Product"
+                    }
+                    else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+                        message = "Enter Quantity"
+                    }
+                    //else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
+                    //    message = "Select Comsumption Status"
+                    //}
+
+                    for (var i = 0; i < dataArr.length; i++) {
+                        if ($("#AssetItemId").val() == dataArr[i].assetItemId) {
+                            message = "Asset already selected!"
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
@@ -373,22 +440,22 @@ function validation(id) {
 }
 
 function clearItem() {
-        $('#IngredientId').val(0).trigger('change'),
+    $('#IngredientId').val(0).trigger('change'),
         $('#FoodMenuId').val(0).trigger('change'),
         $("#CurrentStock").val('0'),
         $("#ProductUnit").val('0'),
         //$("#ConsumpationStatus").val(''),
         $("#Quantity").val('1'),
         $("#InventoryTransferId").val('0'),
-        $("#FoodMenuId").focus()
+        $("#FoodMenuId").focus(),
+        $('#AssetItemId').val(0).trigger('change')
 }
 
 
-function GetFoodMenuByStock(foodMenuId, storeId, inventoryType) {
-
+function GetFoodMenuStock(foodMenuId, storeId) {
     $.ajax({
         url: "/InventoryTransfer/GetFoodMenuStock",
-        data: { "foodMenuId": foodMenuId.value, "storeId": storeId.value, "inventoryType": inventoryType },
+        data: { "foodMenuId": foodMenuId.value, "storeId": storeId.value },
         type: "GET",
         dataType: "text",
         success: function (data) {

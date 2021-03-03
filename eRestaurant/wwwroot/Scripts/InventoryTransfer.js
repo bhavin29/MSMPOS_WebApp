@@ -37,7 +37,7 @@ $(document).ready(function () {
     $("#FromStoreId").select2();
     $("#ToStoreId").select2();
     $("#FoodMenuId").select2();
-    $("#IngredientId").select2();
+    $("#IngredientId").select2(); 
     $("#AssetItemId").select2(); 
     $("#FromStoreId").focus();
 });

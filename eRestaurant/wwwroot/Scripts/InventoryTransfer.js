@@ -38,7 +38,7 @@ $(document).ready(function () {
     $("#ToStoreId").select2();
     $("#FoodMenuId").select2();
     $("#IngredientId").select2();
-    $("#AssetItemId").select2();
+    $("#AssetItemId").select2(); 
     $("#FromStoreId").focus();
 });
 

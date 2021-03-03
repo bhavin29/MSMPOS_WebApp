@@ -452,10 +452,21 @@ function clearItem() {
 }
 
 
-function GetFoodMenuStock(foodMenuId, storeId) {
+function GetFoodMenuByStock(foodMenuId, storeId, inventoryType) {
+    if (inventoryType==1)
+            foodMenuId = $("#FoodMenuId").val();
+
+    if (inventoryType == 2)
+        foodMenuId = $("#IngredientId").val();
+
+    if (inventoryType == 3)
+        foodMenuId = $("#AssetItemId").val();
+
     $.ajax({
         url: "/InventoryTransfer/GetFoodMenuStock",
-        data: { "foodMenuId": foodMenuId.value, "storeId": storeId.value },
+        data: {
+            "foodMenuId": foodMenuId, "storeId": storeId.value, "inventoryType": inventoryType
+        },
         type: "GET",
         dataType: "text",
         success: function (data) {

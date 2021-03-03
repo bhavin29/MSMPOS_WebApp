@@ -377,11 +377,15 @@ namespace RocketPOS.Repository
                 {
                      query = " SELECT StockQty from Inventory WHERE FoodmenuId = " + foodMenuId + "and StoreId = " + storeId + " AND ISDeleted = 0";
                 }
-                else 
+                else if (inventoryType == 2)
                 {
                     query = " SELECT StockQty from Inventory WHERE IngredientId = " + foodMenuId + "and StoreId = " + storeId + " AND ISDeleted = 0";
                 }
- 
+                else
+                {
+                    query = " SELECT StockQty from Inventory WHERE AssetItemId = " + foodMenuId + "and StoreId = " + storeId + " AND ISDeleted = 0";
+                }
+
                 result = con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
 

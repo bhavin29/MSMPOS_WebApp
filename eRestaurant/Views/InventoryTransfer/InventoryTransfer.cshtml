@@ -67,7 +67,8 @@
                                             <label asp-for="IngredientList" class="control-label">Ingredient</label>
                                             <select asp-for="IngredientId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))">
+                                                    asp-items="@(new SelectList(Model.IngredientList, "Value", "Text"))"
+                                                    onchange="GetFoodMenuByStock(IngredientId,FromStoreId,2)">
                                             </select>
                                             <span asp-validation-for="IngredientId" class="text-danger"></span>
                                         </div>
@@ -81,7 +82,7 @@
                                             <select asp-for="FoodMenuId"
                                                     class="form-control"
                                                     asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))"
-                                                    onchange="GetFoodMenuStock(FoodMenuId,FromStoreId)">
+                                                    onchange="GetFoodMenuByStock(FoodMenuId,FromStoreId,1)">
                                             </select>
                                             <span asp-validation-for="FoodMenuId" class="text-danger"></span>
                                         </div>
@@ -94,7 +95,8 @@
                                             <label asp-for="AssetItemList" class="control-label">Asset</label>
                                             <select asp-for="AssetItemId"
                                                     class="form-control"
-                                                    asp-items="@(new SelectList(Model.AssetItemList, "Value", "Text"))">
+                                                    asp-items="@(new SelectList(Model.AssetItemList, "Value", "Text"))"
+                                                    onchange="GetFoodMenuByStock(AssetItemId,FromStoreId,3)">
                                             </select>
                                             <span asp-validation-for="AssetItemId" class="text-danger"></span>
                                         </div>

@@ -301,8 +301,9 @@ $('#ok').click(function () {
 });
 
 function deleteOrder(itemType, foodMenuId, rowId) {
-    var id = foodMenuId;
     debugger;
+
+    var id = foodMenuId;
     for (var i = 0; i < dataArr.length; i++) {
         if (dataArr[i].foodMenuId == id && dataArr[i].itemType == itemType) {
             TotalAmount = dataArr[i].total;

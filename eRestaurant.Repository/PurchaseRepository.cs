@@ -823,7 +823,7 @@ namespace RocketPOS.Repository
                           " order by PDid desc; ";
                 }
 
-                return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                    return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
 

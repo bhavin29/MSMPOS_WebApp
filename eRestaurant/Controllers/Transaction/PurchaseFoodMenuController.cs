@@ -221,6 +221,14 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
+        public ActionResult GetAssetItemList()
+        {
+            PurchaseModel purchaseModel = new PurchaseModel();
+            purchaseModel.AssetItemList = _iDropDownService.GetAssetItemList();
+            return Json(new { purchaseModel.AssetItemList });
+        }
+
+        [HttpGet]
         public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId)
         {
             List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();

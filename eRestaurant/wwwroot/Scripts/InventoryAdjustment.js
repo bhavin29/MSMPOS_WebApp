@@ -37,8 +37,10 @@ $(document).ready(function () {
     $("#StoreId").select2();
     $("#FoodMenuId").select2();
     $("#IngredientId").select2();
+    $("#AssetItemId").select2();
     $("#FoodMenuId").focus();
     $("#IngredientId").focus();
+    $("#AssetItemId").focus();
 
  });
 
@@ -60,6 +62,9 @@ $('#addRow').on('click', function (e) {
     }
     if (InventoryType == 1) {
         rowId = "rowId" + $("#FoodMenuId").val();
+    }
+    if (InventoryType == 3) {
+        rowId = "rowId" + $("#AssetItemId").val();
     }
 
     var Qty = $("#Quantity").val();
@@ -102,6 +107,20 @@ $('#addRow').on('click', function (e) {
                 $("#InventoryAdjustmentId").val()
             ]).node().id = rowId;
         }
+        else if (InventoryType == "3") {
+            rowNode = InventoryAdjustmentDatatable.row.add([
+                '<td>' + $("#AssetItemId").val() + ' </td>',
+                $('#AssetItemId').children("option:selected").text(),
+                '<td class="text-right">' + Qty + ' </td>',
+                '<td class="text-right">' + Price + ' </td>',
+                '<td class="text-right">' + TotalAmount + ' </td>',
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" "></a><a href="#"  data-toggle="modal" data-target="#myModal' + $("#AssetItemId").val() + '">Delete</a></div></td > ' +
+                '<div class="modal fade" id=myModal' + $("#AssetItemId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4></div><div class="modal-body">' +
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#AssetItemId").val() + '" onclick="deleteOrder(' + $("#AssetItemId").val() + ',' + rowId + ')" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                $("#InventoryAdjustmentId").val()
+            ]).node().id = rowId;
+        }
 
         InventoryAdjustmentDatatable.draw(false);
 
@@ -129,6 +148,16 @@ $('#addRow').on('click', function (e) {
                 ingredientName: $('#IngredientId').children("option:selected").text()
             });
         }
+        else if (InventoryType == "3") {
+            dataArr.push({
+                assetItemId: $("#AssetItemId").val(),
+                quantity: $("#Quantity").val(),
+                price: $("#Price").val(),
+                totalAmount: $("#TotalAmount").val(),
+                inventoryAdjustmentId: $("#InventoryAdjustmentId").val(),
+                assetItemName: $('#AssetItemId').children("option:selected").text()
+            });
+        }
   
         clearItem();
         editDataArr = [];
@@ -138,6 +167,9 @@ $('#addRow').on('click', function (e) {
         }
         if (InventoryType == "1") {
             $("#FoodMenuId").focus();
+        }
+        if (InventoryType == "3") {
+            $("#AssetItemId").focus();
         }
     }
     else if (message != '') {
@@ -242,6 +274,15 @@ function deleteOrder(id, rowId) {
                 $("#myModal" + id).modal('hide');
             }
         }
+        if (InventoryType == "3") {
+            if (dataArr[i].assetItemId == id) {
+                deletedId.push(dataArr[i].inventoryAdjustmentId);
+                dataArr.splice(i, 1);
+                InventoryAdjustmentDatatable.row(i).remove().draw(false);
+                jQuery.noConflict();
+                $("#myModal" + id).modal('hide');
+            }
+        }
     }
 };
 
@@ -278,6 +319,17 @@ $(document).on('click', 'a.editItem', function (e) {
             if (InventoryType == "1") {
                 if (dataArr[i].foodMenuId == id) {
                     $("#FoodMenuId").val(dataArr[i].foodMenuId),
+                        $("#Quantity").val(dataArr[i].quantity),
+                        $("#Price").val(dataArr[i].price),
+                        $("#TotalAmount").val(dataArr[i].totalAmount),
+                        //$("#ConsumpationStatus").val(dataArr[i].consumpationStatus),
+                        $("#InventoryAdjustmentId").val(dataArr[i].inventoryAdjustmentId);
+                    editDataArr = dataArr.splice(i, 1);
+                }
+            }
+            if (InventoryType == "3") {
+                if (dataArr[i].assetItemId == id) {
+                    $("#AssetItemId").val(dataArr[i].assetItemId),
                         $("#Quantity").val(dataArr[i].quantity),
                         $("#Price").val(dataArr[i].price),
                         $("#TotalAmount").val(dataArr[i].totalAmount),
@@ -352,6 +404,31 @@ function validation(id) {
                 }
             }
         }
+
+        if (InventoryType == "3") {
+            if ($("#AssetItemId").val() == '' || $("#AssetItemId").val() == '0') {
+                message = "Select Product"
+                $("#AssetItemId").focus();
+            }
+            else if ($("#Price").val() == '' || $("#Price").val() == 0) {
+                message = "Enter Price"
+                $("#Price").focus();
+            }
+            else if ($("#Quantity").val() == '' || $("#Quantity").val() == 0) {
+                message = "Enter Quantity"
+                $("#Quantity").focus();
+            }
+            //else if ($("#ConsumpationStatus").val() == '' || $("#ConsumpationStatus").val() == 0) {
+            //    message = "Select Comsumption Status"
+            //}
+
+            for (var i = 0; i < dataArr.length; i++) {
+                if ($("#AssetItemId").val() == dataArr[i].assetItemId) {
+                    message = "Asset already selected!"
+                    break;
+                }
+            }
+        }
     }
     return message;
 }
@@ -364,7 +441,8 @@ function clearItem() {
         $("#Price").val(''),
         $("#TotalAmount").val(''),
         $("#InventoryAdjustmentId").val('0'),
-        $('#IngredientId').val(0).trigger('change')
+        $('#IngredientId').val(0).trigger('change'),
+        $('#AssetItemId').val(0).trigger('change')
 }
 
 
@@ -372,7 +450,9 @@ function clearItem() {
 function GetFoodMenuLastPrice(inventoryType, foodMenuId) {
     var itemType;
     if (inventoryType == 1) { itemType = 0; }
-    else { itemType = 1;}
+    else if (inventoryType == 2)
+    { itemType = 1; }
+    else { itemType = 2; }
   
     $.ajax({
         url: "/PurchaseFoodMenu/GetFoodMenuLastPrice",

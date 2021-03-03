@@ -126,7 +126,9 @@ namespace RocketPOS.Services
                                                      IngredientName = inventoryAdjDetail.IngredientName,
                                                      FoodMenuId = inventoryAdjDetail.FoodMenuId,
                                                      FoodMenuName = inventoryAdjDetail.FoodMenuName,
-                                                     UnitName = inventoryAdjDetail.UnitName
+                                                     UnitName = inventoryAdjDetail.UnitName,
+                                                     AssetItemId = inventoryAdjDetail.AssetItemId,
+                                                     AssetItemName = inventoryAdjDetail.AssetItemName
                                                  }).ToList();
             }
             return model;

@@ -2,6 +2,7 @@
 var foodMenuDeletedId = [];
 var FoodMenuPurchasePrice = 0;
 var IngredientPurchasePrice = 0;
+var AssetItemPurchasePrice = 0;
 var InventoryType;
 $(document).ready(function () {
     $("#InventoryAlteration").validate();
@@ -26,8 +27,9 @@ $(document).ready(function () {
         ],
     });
     $("#StoreId").select2();
-    //$("#FoodMenuId").select2();
-    //$("#IngredientId").select2();
+    $("#FoodMenuId").select2();
+    $("#IngredientId").select2();
+    $("#AssetItemId").select2();
     $("#StoreId").focus();
  });
 
@@ -41,6 +43,10 @@ $('#addFoodMenuRow').on('click', function (e) {
     }
     if (InventoryType == 1) {
         rowId = "rowId" + $("#FoodMenuId").val();
+    }
+
+    if (InventoryType == 3) {
+        rowId = "rowId" + $("#AssetItemId").val();
     }
     
     var Qty = $("#Qty").val();
@@ -75,6 +81,20 @@ $('#addFoodMenuRow').on('click', function (e) {
             ]).node().id = rowId;
         }
 
+        if (InventoryType == "3") {
+            rowNode = FoodMenuTable.row.add([
+                $("#AssetItemId").val(),
+                $('#AssetItemId').children("option:selected").text(),
+                $("#Qty").val(),
+                $("#Amount").val(),
+                $("#InventoryStockQty").val(),
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
+                '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#AssetItemId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#AssetItemId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            ]).node().id = rowId;
+        }
+
         FoodMenuTable.draw(false);
 
         if (InventoryType == "1") {
@@ -97,6 +117,16 @@ $('#addFoodMenuRow').on('click', function (e) {
                 inventoryStockQty: $("#InventoryStockQty").val(),
                 amount: $("#Amount").val()
             });
+        } else if (InventoryType == "3") {
+            foodMenuDataArr.push({
+                id: $("#Id").val(),
+                inventoryAlterationId: $("#InventoryAlterationId").val(),
+                assetItemId: $("#AssetItemId").val(),
+                assetItemName: $('#AssetItemId').children("option:selected").text(),
+                qty: $("#Qty").val(),
+                inventoryStockQty: $("#InventoryStockQty").val(),
+                amount: $("#Amount").val()
+            });
         }
 
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -110,6 +140,9 @@ $('#addFoodMenuRow').on('click', function (e) {
         }
         if (InventoryType == "1") {
             $("#FoodMenuId").focus();
+        }
+        if (InventoryType == "3") {
+            $("#AssetItemId").focus();
         }
     }
     else if (message != '') {
@@ -137,6 +170,16 @@ function deleteFoodMenuOrder(id, foodMenuId, rowId) {
         if (InventoryType == "2") {
             if (foodMenuDataArr[i].ingredientId == foodMenuId) {
                 foodMenuDeletedId.push(foodMenuDataArr[i].ingredientId);
+                foodMenuDataArr.splice(i, 1);
+                FoodMenuTable.row(rowId).remove().draw(false);
+                jQuery.noConflict();
+                $("#myModal" + foodMenuId).modal('hide');
+            }
+        }
+
+        if (InventoryType == "3") {
+            if (foodMenuDataArr[i].assetItemId == foodMenuId) {
+                foodMenuDeletedId.push(foodMenuDataArr[i].assetItemId);
                 foodMenuDataArr.splice(i, 1);
                 FoodMenuTable.row(rowId).remove().draw(false);
                 jQuery.noConflict();
@@ -181,6 +224,15 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
             if (InventoryType == "2") {
                 if (foodMenuDataArr[i].ingredientId == id) {
                     $("#IngredientId").val(foodMenuDataArr[i].ingredientId);
+                    $("#Qty").val(foodMenuDataArr[i].qty);
+                    $("#Amount").val(foodMenuDataArr[i].amount);
+                    $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
+                    editFoodMenuDataArr = foodMenuDataArr.splice(i, 1);
+                }
+            }
+            if (InventoryType == "3") {
+                if (foodMenuDataArr[i].assetItemId == id) {
+                    $("#AssetItemId").val(foodMenuDataArr[i].assetItemId);
                     $("#Qty").val(foodMenuDataArr[i].qty);
                     $("#Amount").val(foodMenuDataArr[i].amount);
                     $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
@@ -233,6 +285,26 @@ function validation(id) {
                 }
             }
         }
+
+        if (InventoryType == "3") {
+            if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
+                message = "Select Store"
+            }
+
+            if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
+                message = "Select Quantity"
+            }
+            else if ($("#AssetItemId").val() == '' || $("#AssetItemId").val() == 0) {
+                message = "Select asset item"
+            }
+
+            for (var i = 0; i < foodMenuDataArr.length; i++) {
+                if ($("#AssetItemId").val() == foodMenuDataArr[i].assetItemId) {
+                    message = "Asset item already selected!"
+                    break;
+                }
+            }
+        }
     }
 
     if (id == 1) {
@@ -250,13 +322,14 @@ function validation(id) {
 }
 
 function clearFoodMenuItem() {
-    //$('#FoodMenuId').val(0).trigger('change');
+    $('#FoodMenuId').val(0).trigger('change');
     $("#Qty").val(parseFloat(1.00).toFixed(2));
     $("#InventoryStockQty").val(parseFloat(0.00).toFixed(2));
     $("#Amount").val('0');
     $('#FoodMenuId').val(0);
     $('#IngredientId').val(0);
-    //$('#IngredientId').val(0).trigger('change');
+    $('#IngredientId').val(0).trigger('change');
+    $('#AssetItemId').val(0).trigger('change');
 }
 
 
@@ -351,6 +424,9 @@ $("#Qty").change(function () {
     if (InventoryType == "2") {
         $("#Amount").val(parseFloat(IngredientPurchasePrice) * parseFloat($("#Qty").val()));
     }
+    if (InventoryType == "3") {
+        $("#Amount").val(parseFloat(AssetItemPurchasePrice) * parseFloat($("#Qty").val()));
+    }
 });
 
 function GetInventoryStockQty() {
@@ -367,9 +443,22 @@ function GetInventoryStockQty() {
     });
 }
 
+function GetInventoryStockQtyForIngredient() {
+    $.ajax({
+        url: "/InventoryAlteration/GetInventoryStockQtyForIngredient",
+        data: { "storeId": $("#StoreId").val(), "ingredientId": $("#IngredientId").val() },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            $("#InventoryStockQty").val(parseFloat(obj.stockQty).toFixed(2));
+        }
+    });
+}
 
 function GetIngredientPurchasePrice() {
-
+    GetInventoryStockQtyForIngredient();
     $.ajax({
         url: "/Waste/GetIngredientPurchasePrice",
         data: { "id": $("#IngredientId").val() },
@@ -381,6 +470,26 @@ function GetIngredientPurchasePrice() {
             IngredientPurchasePrice = obj.ingredientPurchasePrice;
             IngredientPurchasePrice = parseFloat(IngredientPurchasePrice).toFixed(2);
             $("#Amount").val(IngredientPurchasePrice);
+        }
+    });
+}
+
+function GetFoodMenuLastPrice(foodMenuId) {
+    var itemType = 2;
+    
+    $.ajax({
+        url: "/PurchaseInvoiceFoodMenu/GetFoodMenuLastPrice",
+        data: { "itemType": itemType, "foodMenuId": foodMenuId.value },
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            $("#UnitPrice").val('');
+            var obj = JSON.parse(data);
+            AssetItemPurchasePrice = parseFloat(obj.unitPrice);
+            $("#Amount").val(AssetItemPurchasePrice);
+        },
+        error: function (data) {
+            alert(data);
         }
     });
 }

@@ -83,6 +83,7 @@ namespace RocketPOS.Controllers.Transaction
             inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
             inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
+            inventoryTransferModel.AssetItemList = _iDropDownService.GetAssetItemList();
             inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             return View(inventoryTransferModel);
         }

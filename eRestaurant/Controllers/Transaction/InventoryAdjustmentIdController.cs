@@ -85,6 +85,7 @@ namespace RocketPOS.Controllers.Transaction
             ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
             inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
             inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
+            inventoryAdjustmentModel.AssetItemList = _iDropDownService.GetAssetItemList();
             inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
             return View(inventoryAdjustmentModel);
         }

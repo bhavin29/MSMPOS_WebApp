@@ -63,6 +63,18 @@
                                             </div>
                                         </div>
                                     }
+                                    @if (Model.InventoryType == 3)
+                                    {
+                                        <div class="col-md-4 pr-2 pl-0">
+                                            <div class="form-group">
+                                                <label asp-for="AssetItemList" class="control-label">Asset item</label>
+                                                <select asp-for="AssetItemId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.AssetItemList, "Value", "Text"))" onchange="return GetFoodMenuLastPrice(AssetItemId);">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
                                     <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
                                             <label class="control-label text-right">Quantity</label>
@@ -110,6 +122,11 @@
                                                             <th style="width:0%">FoodMenuId</th>
                                                             <th style="width:55%">Menu Item</th>
                                                         }
+                                                        @if (Model.InventoryType == 3)
+                                                        {
+                                                            <th style="width:0%">AssetItemId</th>
+                                                            <th style="width:55%">Asset Item</th>
+                                                        }
                                                         <th style="width:15%">Quantity</th>
                                                         <th style="width:15%">Amount</th>
                                                         <th style="width:15%">StockQty</th>
@@ -136,76 +153,100 @@
                                                                 mid = "myModal" + item.FoodMenuId;
                                                                 rowId = "rowId" + item.FoodMenuId;
                                                             }
-                                                            <tr id="@rowId">
+                                                            @if (Model.InventoryType == 3)
+                                                            {
+                                                                tm = "#myModal" + item.AssetItemId;
+                                                                mid = "myModal" + item.AssetItemId;
+                                                                rowId = "rowId" + item.AssetItemId;
+                                                            }
+                                                    <tr id="@rowId">
+                                                        @if (Model.InventoryType == 2)
+                                                        {
+                                                            <td>
+                                                                @item.IngredientId
+                                                            </td>
+                                                            <td>
+                                                                @item.IngredientName
+                                                            </td>
+                                                        }
+                                                        @if (Model.InventoryType == 1)
+                                                        {
+                                                            <td>
+                                                                @item.FoodMenuId
+                                                            </td>
+                                                            <td>
+                                                                @item.FoodMenuName
+                                                            </td>
+                                                        }
+                                                        @if (Model.InventoryType == 3)
+                                                        {
+                                                            <td>
+                                                                @item.AssetItemId
+                                                            </td>
+                                                            <td>
+                                                                @item.AssetItemName
+                                                            </td>
+                                                        }
+                                                        <td class="text-right">
+                                                            @item.Qty.ToString("N")
+                                                        </td>
+                                                        <td class="text-right">
+                                                            @item.Amount.ToString("N")
+                                                        </td>
+                                                        <td class="text-right">
+                                                            @item.InventoryStockQty.ToString("N")
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-button-action">
                                                                 @if (Model.InventoryType == 2)
                                                                 {
-                                                                    <td>
-                                                                        @item.IngredientId
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.IngredientName
-                                                                    </td>
+                                                                    <a href="#" data-itemid="@item.IngredientId" class="editFoodMenuItem">Edit</a>
+                                                                    <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                 }
                                                                 @if (Model.InventoryType == 1)
                                                                 {
-                                                                    <td>
-                                                                        @item.FoodMenuId
-                                                                    </td>
-                                                                    <td>
-                                                                        @item.FoodMenuName
-                                                                    </td>
+                                                                    <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a>
+                                                                    <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                 }
-                                                                <td class="text-right">
-                                                                    @item.Qty.ToString("N")
-                                                                </td>
-                                                                <td class="text-right">
-                                                                    @item.Amount.ToString("N")
-                                                                </td>
-                                                                <td class="text-right">
-                                                                    @item.InventoryStockQty.ToString("N")
-                                                                </td>
-                                                                <td>
-                                                                    <div class="form-button-action">
+                                                                @if (Model.InventoryType == 3)
+                                                                {
+                                                                    <a href="#" data-itemid="@item.AssetItemId" class="editFoodMenuItem">Edit</a>
+                                                                    <a href="#" data-itemid="@item.AssetItemId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                                }
+                                                                @*<a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
+        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>*@
+                                                            </div>
+                                                        </td>
+                                                        <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        @*<a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteFoodMenuOrder(@item.FoodMenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>*@
                                                                         @if (Model.InventoryType == 2)
                                                                         {
-                                                                            <a href="#" data-itemid="@item.IngredientId" class="editFoodMenuItem">Edit</a>
-                                                                            <a href="#" data-itemid="@item.IngredientId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                                            <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteFoodMenuOrder(@item.IngredientId,@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
                                                                         }
                                                                         @if (Model.InventoryType == 1)
                                                                         {
-                                                                            <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a>
-                                                                            <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                                                        }
-                                                                        @*<a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
-        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>*@
-                                                                    </div>
-                                                                </td>
-                                                                <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog">
-                                                                        <div class="modal-content">
-                                                                            <div class="modal-header">
-                                                                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                            </div>
-                                                                            <div class="modal-body">
-                                                                                @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                            </div>
-                                                                            <div class="modal-footer">
-                                                                                @*<a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteFoodMenuOrder(@item.FoodMenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>*@
-                                                                                @if (Model.InventoryType == 2)
-                                                                                {
-                                                                                <a id="deleteBtn" data-itemId="@item.IngredientId" onclick="deleteFoodMenuOrder(@item.IngredientId,@item.IngredientId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                                }
-                                                                                @if (Model.InventoryType == 1)
-                                                                                {
                                                                             <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteFoodMenuOrder(@item.FoodMenuId,@item.FoodMenuId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                                }
-                                                                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                                            </div>
-                                                                        </div>
+                                                                        }
+                                                                        @if (Model.InventoryType == 3)
+                                                                        {
+                                                                            <a id="deleteBtn" data-itemId="@item.AssetItemId" onclick="deleteFoodMenuOrder(@item.AssetItemId,@item.AssetItemId, @rowId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                                        }
+                                                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                                     </div>
                                                                 </div>
-                                                            </tr>
+                                                            </div>
+                                                        </div>
+                                                    </tr>
                                                         }
                                                     }
                                                 </tbody>

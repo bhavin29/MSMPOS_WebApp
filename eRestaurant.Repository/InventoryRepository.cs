@@ -63,6 +63,25 @@ namespace RocketPOS.Repository
                     query += " Order by IGC.IngredientCategoryName,IG.IngredientName";
                 }
 
+                else if (itemType == 2)
+                {
+                    query = "SELECT 1 as ItemType,I.Id,I.StoreId, " +
+                            " IGC.Id As FoodCategoryId, IGC.AssetCategoryName as FoodMenuCategoryName,I.AssetItemId as FoodMenuId,IG.AssetItemName as FoodMenuName, " +
+                            " (Case when I.PhysicalDatetime is null then Getdate() else I.PhysicalDatetime end) as PhysicalDatetime, " +
+                            " I.PhysicalStockQty,I.PhysicalIsLock,I.PhysicalStockINQty,I.PhysicalStockOutQty,I.OpeningQty " +
+                            " FROM dbo.Inventory I " +
+                            " Inner Join AssetItem IG On IG.Id = I.AssetItemId " +
+                            " Inner Join AssetCategory IGC On IGc.Id = IG.AssetCategoryId " +
+                            " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And IGC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by IGC.AssetCategoryName,IG.AssetItemName";
+                }
+
                 inventoryDetail = con.Query<InventoryDetail>(query).ToList();
             }
             return inventoryDetail;
@@ -114,7 +133,7 @@ namespace RocketPOS.Repository
                     query = " select StoreId,FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty from inventory i " +
                                 " inner join foodmenu f on f.id = i.foodmenuid " +
                                 " inner join foodmenucategory fc on fc.id = f.foodcategoryid " +
-                                " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+                                " Where F.IsActive=0 AND F.IsDeleted=0 AND I.IsDeleted = 0  And I.StoreId = " + storeId;
 
                     if (foodCategoryId > 0)
                     {
@@ -138,6 +157,22 @@ namespace RocketPOS.Repository
                     }
 
                     query += " Order by Ingredientcategoryname,Ingredientname";
+                }
+                else if (ItemType == 2)
+                {
+                    query = " select StoreId,AssetItemId as FoodmenuId,Assetcategoryname as foodmenucategoryname,AssetItemName as foodmenuname, " +
+                               " PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty " +
+                               " from inventory i " +
+                               " inner join AssetItem IG on IG.id = I.AssetItemId " +
+                               " inner join AssetCategory IGC on IGC.id = IG.AssetCategoryId " +
+                                " Where I.IsDeleted = 0  And I.StoreId = " + storeId;
+
+                    if (foodCategoryId > 0)
+                    {
+                        query += " And IGC.Id = " + foodCategoryId;
+                    }
+
+                    query += " Order by Assetcategoryname,AssetItemName";
                 }
 
                 inventoryOpenigStockImports = con.Query<InventoryOpenigStockImport>(query).ToList();
@@ -192,6 +227,12 @@ namespace RocketPOS.Repository
                 {
                     query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty, physicaldatetime = GetDate()  " +
                                 " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.IngredientId = T.foodmenuid " +
+                                " where T.importbatch = '" + importbatch + "' ";
+                }
+                else if (itemType == 2)
+                {
+                    query = " update I Set I.PhysicalStockQty = T.PhysicalStockQty, physicaldatetime = GetDate()  " +
+                                " from inventory I inner join [TempBulkOpeningStock] T  on I.Storeid = T.Storeid and I.AssetItemId = T.foodmenuid " +
                                 " where T.importbatch = '" + importbatch + "' ";
                 }
 

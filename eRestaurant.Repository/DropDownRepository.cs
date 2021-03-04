@@ -236,6 +236,16 @@ namespace RocketPOS.Repository
             return dropDownModels;
         }
 
+        public List<DropDownModel> GetAssetCategoryList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "Select Id,AssetCategoryName AS [Name] From AssetCategory Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
         public List<DropDownModel> GetCateringFoodMenuGlobalStatus()
         {
             List<DropDownModel> dropDownModels = new List<DropDownModel>();

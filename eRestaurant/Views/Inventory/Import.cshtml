@@ -12,7 +12,7 @@
     <div class="card">
         <div class="card-header container-fluid">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-7">
                     <h5 class="card-title">Opening Stock - Import</h5>
                 </div>
                 <div class="float-right">
@@ -20,6 +20,8 @@
                            class="btn btn-primary" asp-action="Export" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
                     <input type="submit" name="ExportIngredient" value="Stock Item - Download" id="btnExportIngredient"
                            class="btn btn-primary" asp-action="ExportIngredient" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
+                    <input type="submit" name="ExportAssetItem" value="Asset Item - Download" id="ExportAssetItem"
+                           class="btn btn-primary" asp-action="ExportAssetItem" asp-route-storeId="@Model.StoreId" asp-route-categoryId="0" />
                 </div>
             </div>
         </div>
@@ -46,6 +48,7 @@
                                     class="form-control" onchange="GetFoodMenuByItemType()">
                                 <option value="0">Menu Item</option>
                                 <option value="1">Stock Item</option>
+                                <option value="2">Asset Item</option>
                             </select>
                         </div>
                     </div>

@@ -28,6 +28,7 @@ namespace RocketPOS.Interface.Services
         List<SelectListItem> GetRawMaterialList();
 
         List<SelectListItem> GetAssetItemList();
+        List<SelectListItem> GetAssetCategoryList();
 
         List<SelectListItem> GetCateringFoodMenuGlobalStatus();
 

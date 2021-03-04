@@ -43,6 +43,7 @@
                             class="form-control" onchange="GetFoodMenuByItemType()">
                         <option value="0">Menu Item</option>
                         <option value="1">Stock Item</option>
+                        <option value="2">Asset Item</option>
                     </select>
                 </div>
                 <div class="col-md-1">
@@ -329,6 +330,25 @@
                     }
                 });
             }
+            if (itemType == 2) {
+                $.ajax({
+                    url: "/Inventory/GetAssetCategoryList",
+                    data: {},
+                    type: "GET",
+                    dataType: "text",
+                    success: function (data) {
+                        $("#FoodCategoryId").empty();
+                        var obj = JSON.parse(data);
+                        for (var i = 0; i < obj.foodCategoryList.length; ++i) {
+                            $("#FoodCategoryId").append('<option value="' + obj.foodCategoryList[i].value + '">' + obj.foodCategoryList[i].text + '</option>');
+                        }
+                    },
+                    error: function (data) {
+                        alert(data);
+                    }
+                });
+            }
+
         }
 
 

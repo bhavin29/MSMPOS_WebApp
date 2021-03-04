@@ -62,7 +62,16 @@ namespace RocketPOS.Repository
                     //CREATE ENTRY INTO INVENTORY WITH ALL FOODMENU WITH STOCKQTY AS 0.00
                     query = " INSERT INTO INVENTORY(STOREID, FOODMENUID, STOCKQTY, USERIDINSERTED, ISDELETED) " +
                             " Select S.Id,FM.Id,0,1,0 from FoodMenu FM Cross join STORE S Where S.Id = "+ MaxId;
+                    result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
 
+                    //CREATE ENTRY INTO INVENTORY WITH ALL INGREDIENT WITH STOCKQTY AS 0.00
+                    query = " INSERT INTO INVENTORY(STOREID, INGREDIENTid, STOCKQTY, USERIDINSERTED, ISDELETED) " +
+                            " Select S.Id,FM.Id,0,1,0 from INGREDIENT FM Cross join STORE S Where S.Id = " + MaxId;
+                    result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
+
+                    //CREATE ENTRY INTO INVENTORY WITH ALL ASSETITEM WITH STOCKQTY AS 0.00
+                    query = " INSERT INTO INVENTORY(STOREID, ASSETITEMid, STOCKQTY, USERIDINSERTED, ISDELETED) " +
+                            " Select S.Id,FM.Id,0,1,0 from ASSETITEM FM Cross join STORE S Where S.Id = " + MaxId;
                     result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
                 }
                 else

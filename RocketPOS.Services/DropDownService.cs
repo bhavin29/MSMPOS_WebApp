@@ -307,7 +307,7 @@ namespace RocketPOS.Services
             }
             return lstAssetItem;
         }
-
+ 
         public List<SelectListItem> GetCateringFoodMenuGlobalStatus()
         {
             List<SelectListItem> lstCateringFoodMenu = new List<SelectListItem>();
@@ -381,6 +381,21 @@ namespace RocketPOS.Services
                 }
             }
             return lstGlobalStatus;
+        }
+
+        public List<SelectListItem> GetAssetCategoryList()
+        {
+            List<SelectListItem> lstAssetItem = new List<SelectListItem>();
+            lstAssetItem.Add(new SelectListItem { Text = "Select", Value = "0" });
+            List<DropDownModel> lstAssetItemResult = _dropDownRepository.GetAssetCategoryList().ToList();
+            if (lstAssetItemResult != null && lstAssetItemResult.Count > 0)
+            {
+                foreach (var item in lstAssetItemResult)
+                {
+                    lstAssetItem.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return lstAssetItem;
         }
     }
 }

@@ -183,6 +183,17 @@ namespace RocketPOS.Repository.Reports
                              " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = I.IngredientUnitId ";
                          //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
                 }
+                else if (itemType == 2)
+                {
+                    query = "SELECT S.StoreName,INV.Id,I.AssetItemName as FoodMenuName,IC.AssetCategoryName as FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
+                             " S.StoreName,INV.Id,I.Code as FoodMenuCode ,INV.StockQty,  " +
+                             " 0 as PurchasePrice, (INV.StockQty * 1) as Amount , U.UnitShortName as Unitname, " +
+                             " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,0 as AlterQty" +
+                             " FROM inventory INV INNER JOIN AssetItem I ON INV.AssetItemId = I.Id " +
+                             " INNER JOIN AssetCategory IC on IC.Id = I.AssetCategoryId " +
+                             " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = I.UnitId ";
+                    //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
+                }
 
                 if (itemType == 0 & active==0)
                 {
@@ -198,8 +209,12 @@ namespace RocketPOS.Repository.Reports
                  else if (supplierId != 0 && itemType == 1)
                 {
                     query += "  inner join SupplierItem SI on SI.IngredientID = INV.IngredientID And SI.SupplierId = " + supplierId;
-                }               
-                
+                }
+                else if (supplierId != 0 && itemType == 1)
+                {
+                    query += "  inner join SupplierItem SI on SI.AssetItemId = INV.AssetItemId And SI.SupplierId = " + supplierId;
+                }
+
                 query = query + " where INV.StoreId = " + storeId;
 
                 if (itemType == 0)
@@ -209,6 +224,10 @@ namespace RocketPOS.Repository.Reports
                 else if (itemType == 1)
                 {
                     query += "   ORDER BY  I.IngredientName,INV.StockQty desc ";
+                }
+                else if (itemType == 2)
+                {
+                    query += "   ORDER BY  I.AssetItemName,INV.StockQty desc ";
                 }
 
                 inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();

@@ -7,6 +7,7 @@ var TaxPerTotal = 0;
 var TaxAmtTotal = 0;
 var GTotal = 0;
 var Status = 0;
+var RowNumber = 0;
 
 $(document).ready(function () {
     
@@ -35,12 +36,14 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5, 6, 10,11],
+                "targets": [5, 6, 10,11,12],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
+
+    RowNumber = dataArr.length ;
 
     $("#SupplierId").select2();
    $("#FoodMenuId").select2();
@@ -67,9 +70,11 @@ $('#addRow').on('click', function (e) {
     var DiscountAmount = 0;
     var TaxPercentage = 0;
     var TaxAmount = 0;
-    var foodMenuId = $("#FoodMenuId").val();
     var itemType = $("#ItemType").val();
+    var foodMenuId = $("#FoodMenuId").val();
+    var foodMenuIdSelect = $("#FoodMenuId").val();
 
+    debugger;
     if (itemType == 0) {
         $.ajax({
             url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
@@ -105,7 +110,6 @@ $('#addRow').on('click', function (e) {
         TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
       //  Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
     }
-
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
         var rowNode = PurchaseDatatable.row.add([
@@ -118,12 +122,13 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" "></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + RowNumber + '" "></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > '+
             '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(' + $("#ItemType").val() + ', ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + RowNumber + '" onclick="deleteOrder('+ RowNumber + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val(),
-            $("#ItemType").val()
+            $("#ItemType").val(),
+            RowNumber
         ]).draw(false).nodes();
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
@@ -135,7 +140,8 @@ $('#addRow').on('click', function (e) {
             taxPercentage: TaxPercentage,
             total: Total,
             purchaseId: $("#PurchaseId").val(),
-            itemType: $("#ItemType").val()
+            itemType: $("#ItemType").val(),
+            rowNumber: RowNumber
         });
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
@@ -158,6 +164,7 @@ $('#addRow').on('click', function (e) {
         DueAmount();
         clearItem();
         $("#ItemType").focus();
+        RowNumber += 1;
 
     }
     else if (message != '') {
@@ -300,19 +307,20 @@ $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
 
-function deleteOrder(itemType, foodMenuId, rowId) {
+function deleteOrder(rowId) {
     debugger;
 
-    var id = foodMenuId;
+
     for (var i = 0; i < dataArr.length; i++) {
-        if (dataArr[i].foodMenuId == id && dataArr[i].itemType == itemType) {
+        if (dataArr[i].rowNumber == rowId) {
             TotalAmount = dataArr[i].total;
             GrandTotal -= TotalAmount;
             $("#GrandTotal").val(GrandTotal);
             DueAmount();
             deletedId.push(dataArr[i].purchaseId);
             dataArr.splice(i, 1);
-            PurchaseDatatable.row(rowId).remove().draw(false);
+            PurchaseDatatable.row(i).remove().draw(false);
+            RowNumber -= 1;
             jQuery.noConflict();
             $("#myModal" + purchaseId).modal('hide');
         }

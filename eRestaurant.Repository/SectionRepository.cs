@@ -86,6 +86,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("Section");
                 }
                 else
                 {
@@ -121,6 +122,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("Section");
                 }
                 else
                 {

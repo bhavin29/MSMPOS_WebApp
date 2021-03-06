@@ -129,7 +129,9 @@ namespace RocketPOS.Repository
 
                     result = con.Execute(query, foodMenuModel, sqltrans, 0, System.Data.CommandType.Text);
 
-
+                    string output = commonRepository.SyncTableStatus("FoodMenu");
+                     output = commonRepository.SyncTableStatus("INVENTORY");
+                     output = commonRepository.SyncTableStatus("FOODMENURATE");
                 }
                 else
                 {
@@ -221,6 +223,7 @@ namespace RocketPOS.Repository
                         //  query = $"UPDATE FoodMenuRate SET FoodVatTaxId = " + foodMenuModel.FoodVatTaxId + " WHERE FoodmenuId = {foodMenuId};";
                         //  result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
 
+                        string output = commonRepository.SyncTableStatus("FoodMenu");
                     }
                     else
                     {

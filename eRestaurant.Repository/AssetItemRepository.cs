@@ -101,6 +101,8 @@ namespace RocketPOS.Repository
                             " WHERE FM.ID =" + MaxId;
                     result = con.Execute(query, assetItemModel, sqltrans, 0, System.Data.CommandType.Text);
 
+                    string output = commonRepository.SyncTableStatus("AssetItem");
+                    output = commonRepository.SyncTableStatus("Inventory");
                 }
                 else
                 {
@@ -140,7 +142,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
-
+                    string output = commonRepository.SyncTableStatus("AssetItem");
                 }
                 else
                 {

@@ -81,6 +81,8 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+
+                    string output= commonRepository.SyncTableStatus("Bank"); 
                 }
                 else
                 {
@@ -116,7 +118,8 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
-                }
+                    string output = commonRepository.SyncTableStatus("Bank");
+               }
                 else
                 {
                     sqltrans.Rollback();

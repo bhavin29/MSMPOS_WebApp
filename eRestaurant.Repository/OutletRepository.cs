@@ -76,6 +76,8 @@ namespace RocketPOS.Repository
                                  MaxId + ", FM.Id,FM.SalesPrice,FM.FoodVatTaxId,1 FROM FoodMenu FM WHERE isdeleted = 0 ";
 
                         result = con.Execute(query, outletModel, sqltrans, 0, System.Data.CommandType.Text);
+                        string output = commonRepository.SyncTableStatus("Outlet");
+                        output = commonRepository.SyncTableStatus("FOODMENURATE");
                     }
                     else
                     {
@@ -124,6 +126,7 @@ namespace RocketPOS.Repository
                     if (result > 0)
                     {
                         sqltrans.Commit();
+                        string output = commonRepository.SyncTableStatus("Outlet");
                     }
                     else
                     {

@@ -48,6 +48,7 @@ namespace RocketPOS.Repository
             List<FoodMenuRate> foodMenuRate = new List<FoodMenuRate>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
+                CommonRepository commonRepository = new CommonRepository(_ConnectionString);
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 foreach (var item in foodMenuRates)
@@ -58,6 +59,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("FoodMenuRate");
                 }
                 else
                 {

@@ -73,6 +73,9 @@ namespace RocketPOS.Repository
                     query = " INSERT INTO INVENTORY(STOREID, ASSETITEMid, STOCKQTY, USERIDINSERTED, ISDELETED) " +
                             " Select S.Id,FM.Id,0,1,0 from ASSETITEM FM Cross join STORE S Where S.Id = " + MaxId;
                     result = con.Execute(query, storeModel, sqltrans, 0, System.Data.CommandType.Text);
+
+                    string output = commonRepository.SyncTableStatus("Store");
+                     output = commonRepository.SyncTableStatus("INVENTORY");
                 }
                 else
                 {
@@ -105,6 +108,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("Store");
                 }
                 else
                 {

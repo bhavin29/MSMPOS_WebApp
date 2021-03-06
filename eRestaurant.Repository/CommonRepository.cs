@@ -115,5 +115,17 @@ namespace RocketPOS.Repository
             }
             return result;
         }
+        public string SyncTableStatus(string tableName)
+        {
+            string result = "";
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "update synctable set IsActive=1 where Tablename ='" + tableName + "'";
+
+                result = con.Query(query).ToString();
+
+            }
+            return result;
+        }
     }
 }

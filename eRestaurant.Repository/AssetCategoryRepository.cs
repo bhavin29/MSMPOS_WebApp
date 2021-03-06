@@ -82,6 +82,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("AssetCategory");
                 }
                 else
                 {
@@ -115,6 +116,7 @@ namespace RocketPOS.Repository
                 if (result > 0)
                 {
                     sqltrans.Commit();
+                    string output = commonRepository.SyncTableStatus("AssetCategory");
                 }
                 else
                 {

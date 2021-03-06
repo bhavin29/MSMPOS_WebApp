@@ -328,7 +328,7 @@ namespace RocketPOS.Repository
             List<PurchaseDetailsModel> purchaseDetails = new List<PurchaseDetailsModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select pin.Id as PurchaseId, " +
+                var query = "select pin.Id as PurchaseId, ROW_NUMBER() OVER(ORDER BY PIN.Id ASC)-1 AS RowNumber," +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then pin.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +

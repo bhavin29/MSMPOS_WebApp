@@ -73,8 +73,8 @@ $('#addRow').on('click', function (e) {
     var itemType = $("#ItemType").val();
     var foodMenuId = $("#FoodMenuId").val();
     var foodMenuIdSelect = $("#FoodMenuId").val();
+    var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
 
-    debugger;
     if (itemType == 0) {
         $.ajax({
             url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
@@ -122,14 +122,16 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + RowNumber + '" "></a><a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > '+
-            '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + recordid + '></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#ItemType").val()+ '' + $("#FoodMenuId").val() + '">Delete</a></div></td > '+
+            '<div class="modal fade" id="myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() +  '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + RowNumber + '" onclick="deleteOrder('+ RowNumber + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(\''+ recordid +'\')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val(),
             $("#ItemType").val(),
-            RowNumber
-        ]).draw(false).nodes();
+            recordid
+        ]).node().id = recordid;
+        PurchaseDatatable.draw(false);
+
         dataArr.push({
             foodMenuId: $("#FoodMenuId").val(),
             unitPrice: UnitPrice,
@@ -143,14 +145,14 @@ $('#addRow').on('click', function (e) {
             itemType: $("#ItemType").val(),
             rowNumber: RowNumber
         });
-        $(rowNode).find('td').eq(1).addClass('text-right');
-        $(rowNode).find('td').eq(2).addClass('text-right');
-        $(rowNode).find('td').eq(3).addClass('text-right');
-        $(rowNode).find('td').eq(4).addClass('text-right');
-        $(rowNode).find('td').eq(5).addClass('text-right');
-       // $(rowNode).find('td').eq(6).addClass('text-right');
-        //GrandTotal += $("#UnitPrice").val() * $("#Quantity").val();
-        //GrandTotal += Total;
+
+        var attRowNode = '#' + recordid;
+
+        $(attRowNode).find('td').eq(1).addClass('text-right');
+        $(attRowNode).find('td').eq(2).addClass('text-right');
+        $(attRowNode).find('td').eq(3).addClass('text-right');
+        $(attRowNode).find('td').eq(4).addClass('text-right');
+        $(attRowNode).find('td').eq(5).addClass('text-right');
 
         DisPerTotal = calculateColumn(3);
         //DisAmtTotal = calculateColumn(4);
@@ -306,26 +308,6 @@ $("#save").click(function () {
 $('#ok').click(function () {
     $("#aModal").modal('hide');
 });
-
-function deleteOrder(rowId) {
-    debugger;
-
-
-    for (var i = 0; i < dataArr.length; i++) {
-        if (dataArr[i].rowNumber == rowId) {
-            TotalAmount = dataArr[i].total;
-            GrandTotal -= TotalAmount;
-            $("#GrandTotal").val(GrandTotal);
-            DueAmount();
-            deletedId.push(dataArr[i].purchaseId);
-            dataArr.splice(i, 1);
-            PurchaseDatatable.row(i).remove().draw(false);
-            RowNumber -= 1;
-            jQuery.noConflict();
-            $("#myModal" + purchaseId).modal('hide');
-        }
-    }
-};
 
 $(document).on('click', 'a.editItem', function (e) {
     if (!PurchaseDatatable.data().any() || PurchaseDatatable.data().row == null) {
@@ -595,3 +577,23 @@ function GetFoodMenuByItemType() {
     }
 }
 
+function deleteOrder(rowId) {
+    var id;
+
+    for (var i = 0; i < dataArr.length; i++) {
+
+        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId; 
+
+        if (id == rowId) {
+            TotalAmount = dataArr[i].total;
+            GrandTotal -= TotalAmount;
+            $("#GrandTotal").val(GrandTotal);
+            DueAmount();
+            deletedId.push(dataArr[i].purchaseId);
+            dataArr.splice(i, 1);
+            PurchaseDatatable.row('#' + rowId).remove().draw(false);
+            jQuery.noConflict();
+            $("#myModal" + purchaseId).modal('hide');
+        }
+    }
+}

@@ -121,7 +121,8 @@ namespace RocketPOS.Services
                                              TaxPercentage = purchasedetails.TaxPercentage,
                                              Total = purchasedetails.Total,
                                              FoodMenuName = purchasedetails.FoodMenuName,
-                                             ItemType = purchasedetails.ItemType
+                                             ItemType = purchasedetails.ItemType,
+                                             RowNumber = purchasedetails.RowNumber
                                          }).ToList();
             }
             return model;

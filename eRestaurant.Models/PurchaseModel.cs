@@ -24,7 +24,7 @@ namespace RocketPOS.Models
         public List<SelectListItem> AssetItemList { get; set; }
         public int? EmployeeId { get; set; }
         public List<SelectListItem> EmployeeList { get; set; }
-        
+
         [Required(ErrorMessage = "Select Date")]
         [DataType(DataType.Date)]
         public DateTime Date { get; set; }
@@ -51,14 +51,16 @@ namespace RocketPOS.Models
         public string SupplierAddress1 { get; set; }
         public string SupplierAddress2 { get; set; }
         public string SupplierPhone { get; set; }
-        public bool IsSendEmail { get; set; }        
+        public bool IsSendEmail { get; set; }
         public List<PurchaseDetailsModel> PurchaseDetails { get; set; }
         public int[] DeletedId { get; set; }
         public string StoreName { get; set; }
     }
-   
+
     public class PurchaseDetailsModel
     {
+
+        public int RowNumber { get; set; }
         public int ItemType { get; set; }
 
         public long PurchaseId { get; set; }

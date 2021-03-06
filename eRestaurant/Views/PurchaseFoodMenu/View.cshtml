@@ -132,10 +132,10 @@
                                 <div class="col-sm-9">
                                 </div>
                                 <div class="col-sm-3 text-right">
-                                    <div><strong>Gross  : </strong>@Model.GrossAmount</div>
-                                    @*<div><strong>Discount  : </strong>@Model.DiscountAmount</div>*@
-                                    <div><strong>VAT    : </strong>@Model.TaxAmount</div>
-                                    <div><strong>Total  : </strong>@Model.GrandTotal</div>
+                                    <div><strong>Gross  : </strong>@Model.GrossAmount.ToString("0.00")</div>
+                                    @*<div><strong>Discount  : </strong>@Model.DiscountAmount.ToString("0.00")</div>*@
+                                    <div><strong>VAT    : </strong>@Model.TaxAmount.ToString("0.00")</div>
+                                    <div><strong>Total  : </strong>@Model.GrandTotal.ToString("0.00")</div>
                                 </div>
                             </div>
                         </div>

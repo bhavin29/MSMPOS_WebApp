@@ -64,7 +64,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.Date = DateTime.Now;
+                purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
@@ -119,7 +119,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        //purchaseModel.Date = DateTime.Now;
+                        //purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                         purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
 
                         string result = _iPurchaseService.InsertPurchaseFoodMenu(purchaseModel);
@@ -240,8 +240,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                newFromDate = DateTime.Now;
-                newToDate = DateTime.Now;
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
             purchaseViewModels = _iPurchaseService.PurchaseFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
@@ -316,7 +316,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.Date = DateTime.Now;
+                purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();

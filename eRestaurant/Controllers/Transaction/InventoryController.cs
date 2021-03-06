@@ -9,6 +9,7 @@ using NPOI.XSSF.UserModel;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -148,7 +149,7 @@ namespace RocketPOS.Controllers.Transaction
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
  
                 string newPath = Path.Combine(webRootPath, folderName);
-                string BatchId = DateTime.Now.ToString("MM/dd/yyyy HH:mm").Replace("/", "").Replace(" ", "").Replace(":", "").ToString() + _random.Next(1000).ToString();
+                string BatchId = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset).ToString("MM/dd/yyyy HH:mm").Replace("/", "").Replace(" ", "").Replace(":", "").ToString() + _random.Next(1000).ToString();
                 if (!Directory.Exists(newPath))
                 {
                     Directory.CreateDirectory(newPath);

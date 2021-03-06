@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +37,8 @@ namespace RocketPOS.Controllers.Transaction
             {
                 inventoryAlterationView.InventoryAlterationViewList = _inventoryAlterationService.GetInventoryAlterationList(Convert.ToInt32(storeId), Convert.ToDateTime(fromDate), Convert.ToDateTime(toDate), Convert.ToInt32(foodMenuId));
             }
-            inventoryAlterationView.FromDate = DateTime.Now;
-            inventoryAlterationView.ToDate = DateTime.Now;
+            inventoryAlterationView.FromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            inventoryAlterationView.ToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             inventoryAlterationView.StoreList = _iDropDownService.GetStoreList();
             inventoryAlterationView.FoodMenuList = _iDropDownService.GetFoodMenuList();
             return View(inventoryAlterationView);

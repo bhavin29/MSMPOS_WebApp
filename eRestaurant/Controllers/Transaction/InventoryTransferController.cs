@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Controllers.Transaction
 {
@@ -48,8 +49,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                newFromDate = DateTime.Now;
-                newToDate = DateTime.Now;
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
             inventoyTransferViewModels = _inventoryTransferService.GetInventoryTransferListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
             return Json(new { InventoryTransfer = inventoyTransferViewModels });
@@ -75,7 +76,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                inventoryTransferModel.Date = DateTime.Now;
+                inventoryTransferModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
                 inventoryTransferModel.InventoryType = Convert.ToInt32(inventoryType);
             }
@@ -124,7 +125,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        //inventoryTransferModel.Date = DateTime.Now;
+                        //inventoryTransferModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                         inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
                         int result = _inventoryTransferService.InsertInventoryTransfer(inventoryTransferModel);
                         if (result > 0)

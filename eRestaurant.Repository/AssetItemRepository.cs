@@ -128,6 +128,7 @@ namespace RocketPOS.Repository
                      "AssetItemName=@AssetItemName, " +
                      "ShortName=@ShortName, " +
                      "Code=@Code, " +
+                     "CostPrice=@CostPrice, " +
                      " Brandname = @Brandname," +
                      " Model =@Model ," +
                      "Notes=@Notes," +

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +47,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                newFromDate = DateTime.Now;
-                newToDate = DateTime.Now;
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
             asssetEventViewModel = _iAssetEventService.GetCateringListByStatus(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), statusId).ToList();
             return Json(new { AssetEventLists = asssetEventViewModel });
@@ -63,7 +64,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                assetEventModel.EventDatetime = DateTime.Now;
+                assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
             }
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
@@ -164,7 +165,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                assetEventModel.EventDatetime = DateTime.Now;
+                assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
             }
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();

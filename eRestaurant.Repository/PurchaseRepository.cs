@@ -876,16 +876,17 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select pin.Id as PurchaseId, " +
-                            " (case when pin.FoodMenuId is null then 1 else 0 end) as ItemType, " +
-                            " (case when pin.FoodMenuId is null then pin.IngredientId else pin.FoodMenuId end) as FoodMenuId, " +
-                            " (case when pin.FoodMenuId is null then I.Ingredientname else f.FoodMenuName end) as FoodMenuName, " +
+                            " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
+                            " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then pin.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId, " +
+                            " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
                             " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
                             " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount, " +
                             " (case when pin.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
                             " left join Ingredient as I on pin.IngredientId = I.Id " +
-                            " left join Units As UI On UI.Id = I.IngredientUnitId "+
+                            " left join AssetItem as AI on pin.AssetItemId = AI.Id  " +
+                            " left join Units As UI On UI.Id = I.IngredientUnitId " +
                             " left join Units As UF On UF.Id = F.UnitsId "+
                             " where P.id = " + purchaseId + " and pin.isdeleted = 0 and p.isdeleted = 0";
  

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Controllers.Transaction
 {
@@ -49,8 +50,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                newFromDate = DateTime.Now;
-                newToDate = DateTime.Now;
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
             inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
@@ -77,7 +78,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                inventoryAdjustmentModel.Date = DateTime.Now;
+                inventoryAdjustmentModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 inventoryAdjustmentModel.ReferenceNo = _inventoryAdjustmentService.ReferenceNumber().ToString();
                 inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
             }
@@ -125,7 +126,7 @@ namespace RocketPOS.Controllers.Transaction
                     }
                     else
                     {
-                        //inventoryAdjustmentModel.Date = DateTime.Now;
+                        //inventoryAdjustmentModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                         int result = _inventoryAdjustmentService.InsertInventoryAdjustment(inventoryAdjustmentModel);
                         if (result > 0)
                         {

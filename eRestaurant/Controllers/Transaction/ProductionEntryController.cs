@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Resources;
 using RocketPOS.Models;
+using RocketPOS.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,7 +69,7 @@ namespace RocketPOS.Controllers.Transaction
                 {
                     productionEntryModel = _iProductionEntryService.GetProductionFormulaById(Convert.ToInt32(productionFormulaId));
                 }
-                productionEntryModel.ProductionDate = DateTime.Now;
+                productionEntryModel.ProductionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
             }
             productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
@@ -82,7 +83,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             productionEntryModel = _iProductionEntryService.GetProductionFormulaById(id);
-            //  productionEntryModel.ProductionDate = DateTime.Now;
+            //  productionEntryModel.ProductionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             return Json(new { productionEntryModel = productionEntryModel });
         }
 
@@ -107,11 +108,11 @@ namespace RocketPOS.Controllers.Transaction
                     {
                         if (productionEntryModel.Status == 3)
                         {
-                            productionEntryModel.ProductionCompletionDate = DateTime.Now;
+                            productionEntryModel.ProductionCompletionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                         }
                         else
                         {
-                            productionEntryModel.ProductionCompletionDate = DateTime.Now;
+                            productionEntryModel.ProductionCompletionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                         }
                         result = _iProductionEntryService.UpdateProductionEntry(productionEntryModel);
                         if (result > 0)

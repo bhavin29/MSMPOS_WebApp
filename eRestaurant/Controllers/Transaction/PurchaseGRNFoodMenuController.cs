@@ -4,6 +4,7 @@ using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,7 +62,7 @@ namespace RocketPOS.Controllers.Transaction
                 purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
                 if (purchaseModel != null)
                 {
-                    purchaseModel.DeliveryDate = DateTime.Now;
+                    purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                     purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
                 }
             }
@@ -75,8 +76,8 @@ namespace RocketPOS.Controllers.Transaction
                 }
                 else
                 {
-                    purchaseModel.PurchaseGRNDate = DateTime.Now;
-                    purchaseModel.DeliveryDate = DateTime.Now;
+                    purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                     purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
                 }
             }
@@ -96,7 +97,7 @@ namespace RocketPOS.Controllers.Transaction
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
             purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
-            //purchaseModel.PurchaseGRNDate = DateTime.Now;
+            //purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
 
             string purchaseMessage = string.Empty;
             if (!ModelState.IsValid)
@@ -176,8 +177,8 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                newFromDate = DateTime.Now;
-                newToDate = DateTime.Now;
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
             purchaseViewModels = _iPurchaseGRNService.PurchaseGRNFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
@@ -274,7 +275,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.PurchaseGRNDate = DateTime.Now;
+                purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
             }
 

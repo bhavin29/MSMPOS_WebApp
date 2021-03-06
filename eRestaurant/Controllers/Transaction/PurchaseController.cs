@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Controllers.Transaction
 {
@@ -58,7 +59,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                purchaseModel.Date = DateTime.Now;
+                purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
             }
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();

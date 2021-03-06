@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Controllers.Transaction
 {
@@ -70,7 +71,7 @@ namespace RocketPOS.Controllers.Transaction
             }
             else
             {
-                wasteModel.WasteDateTime = DateTime.Now;
+                wasteModel.WasteDateTime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 wasteModel.ReferenceNumber = _iWasteService.ReferenceNumber().ToString();
             }
 

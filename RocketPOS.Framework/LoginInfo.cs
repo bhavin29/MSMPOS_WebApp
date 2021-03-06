@@ -45,5 +45,6 @@ namespace RocketPOS.Framework
         public static string EmailDisplayName = "";
         public static string FromEmailPassword = "";
         public static string PurchaseApprovalEmail = "";
+        public static int Timeoffset = 0;
     }
 }

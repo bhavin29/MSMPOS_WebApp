@@ -10,7 +10,7 @@ $(document).ready(function () {
     FoodMenuTable = $('#FoodMenuTable').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
-            { targets: [2,3,4], orderable: false, class: "text-right" }
+            { targets: [2, 3, 4], orderable: false, class: "text-right" }
         ],
         "paging": false,
         "bLengthChange": true,
@@ -31,27 +31,28 @@ $(document).ready(function () {
     $("#IngredientId").select2();
     $("#AssetItemId").select2();
     $("#StoreId").focus();
- });
+});
 
 
 $('#addFoodMenuRow').on('click', function (e) {
     e.preventDefault();
     var message = validation(0);
     var rowNode;
-    if (InventoryType == "2") {
-        rowId = "rowId" + $("#IngredientId").val();
-    }
-    if (InventoryType == 1) {
-        rowId = "rowId" + $("#FoodMenuId").val();
-    }
 
-    if (InventoryType == 3) {
-        rowId = "rowId" + $("#AssetItemId").val();
-    }
-    
-    var Qty = $("#Qty").val();
-    var Amount = $("#Amount").val();
     if (message == '') {
+        debugger;
+
+        if (InventoryType == "2") {
+            rowId = "rowId" + $("#IngredientId").val();
+        }
+        if (InventoryType == 1) {
+            rowId = "rowId" + $("#FoodMenuId").val();
+        }
+
+        if (InventoryType == 3) {
+            rowId = "rowId" + $("#AssetItemId").val();
+        }
+
         FoodMenuTable.row('.active').remove().draw(false);
 
         if (InventoryType == "1") {
@@ -107,7 +108,7 @@ $('#addFoodMenuRow').on('click', function (e) {
                 inventoryStockQty: $("#InventoryStockQty").val(),
                 amount: $("#Amount").val()
             });
-        } else if(InventoryType == "2") {
+        } else if (InventoryType == "2") {
             foodMenuDataArr.push({
                 id: $("#Id").val(),
                 inventoryAlterationId: $("#InventoryAlterationId").val(),
@@ -135,14 +136,14 @@ $('#addFoodMenuRow').on('click', function (e) {
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
 
-        if (InventoryType == "2") {
-            $("#IngredientId").focus();
-        }
         if (InventoryType == "1") {
-            $("#FoodMenuId").focus();
+            $('#FoodMenuId').val(0).trigger('change');
+        }
+        if (InventoryType == "2") {
+            $('#IngredientId').val(0).trigger('change');
         }
         if (InventoryType == "3") {
-            $("#AssetItemId").focus();
+            $('#AssetItemId').val(0).trigger('change');
         }
     }
     else if (message != '') {
@@ -212,9 +213,10 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
         }
         var id = $(this).attr('data-itemId');
         for (var i = 0; i < foodMenuDataArr.length; i++) {
+
             if (InventoryType == "1") {
                 if (foodMenuDataArr[i].foodMenuId == id) {
-                    $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
+                    $('#FoodMenuId').val(foodMenuDataArr[i].foodMenuId).trigger('change');
                     $("#Qty").val(foodMenuDataArr[i].qty);
                     $("#Amount").val(foodMenuDataArr[i].amount);
                     $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
@@ -223,7 +225,7 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
             }
             if (InventoryType == "2") {
                 if (foodMenuDataArr[i].ingredientId == id) {
-                    $("#IngredientId").val(foodMenuDataArr[i].ingredientId);
+                    $('#IngredientId').val(foodMenuDataArr[i].ingredientId).trigger('change');
                     $("#Qty").val(foodMenuDataArr[i].qty);
                     $("#Amount").val(foodMenuDataArr[i].amount);
                     $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
@@ -232,7 +234,7 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
             }
             if (InventoryType == "3") {
                 if (foodMenuDataArr[i].assetItemId == id) {
-                    $("#AssetItemId").val(foodMenuDataArr[i].assetItemId);
+                    $('#AssetItemId').val(foodMenuDataArr[i].assetItemId).trigger('change');
                     $("#Qty").val(foodMenuDataArr[i].qty);
                     $("#Amount").val(foodMenuDataArr[i].amount);
                     $("#InventoryStockQty").val(foodMenuDataArr[i].inventoryStockQty);
@@ -250,18 +252,18 @@ function validation(id) {
             if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
                 message = "Select Store"
             }
-
-            if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
+            else if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
                 message = "Select Quantity"
             }
             else if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == 0) {
                 message = "Select Menu item"
             }
-
-            for (var i = 0; i < foodMenuDataArr.length; i++) {
-                if ($("#FoodMenuId").val() == foodMenuDataArr[i].foodMenuId) {
-                    message = "Menu item already selected!"
-                    break;
+            else {
+                for (var i = 0; i < foodMenuDataArr.length; i++) {
+                    if ($("#FoodMenuId").val() == foodMenuDataArr[i].foodMenuId) {
+                        message = "Menu item already selected!"
+                        break;
+                    }
                 }
             }
         }
@@ -270,18 +272,18 @@ function validation(id) {
             if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
                 message = "Select Store"
             }
-
-            if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
+            else if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
                 message = "Select Quantity"
             }
             else if ($("#IngredientId").val() == '' || $("#IngredientId").val() == 0) {
                 message = "Select stock item"
             }
-
-            for (var i = 0; i < foodMenuDataArr.length; i++) {
-                if ($("#IngredientId").val() == foodMenuDataArr[i].foodMenuId) {
-                    message = "Stock item already selected!"
-                    break;
+            else {
+                for (var i = 0; i < foodMenuDataArr.length; i++) {
+                    if ($("#IngredientId").val() == foodMenuDataArr[i].foodMenuId) {
+                        message = "Stock item already selected!"
+                        break;
+                    }
                 }
             }
         }
@@ -290,18 +292,18 @@ function validation(id) {
             if ($("#StoreId").val() == '' || $("#StoreId").val() == '0') {
                 message = "Select Store"
             }
-
-            if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
+            else if ($("#Qty").val() == '' || $("#Qty").val() == '0') {
                 message = "Select Quantity"
             }
             else if ($("#AssetItemId").val() == '' || $("#AssetItemId").val() == 0) {
                 message = "Select asset item"
             }
-
-            for (var i = 0; i < foodMenuDataArr.length; i++) {
-                if ($("#AssetItemId").val() == foodMenuDataArr[i].assetItemId) {
-                    message = "Asset item already selected!"
-                    break;
+            else {
+                for (var i = 0; i < foodMenuDataArr.length; i++) {
+                    if ($("#AssetItemId").val() == foodMenuDataArr[i].assetItemId) {
+                        message = "Asset item already selected!"
+                        break;
+                    }
                 }
             }
         }
@@ -312,6 +314,7 @@ function validation(id) {
             var message = 'At least one menu item should be entered'
             return message;
         }
+
         if ($("#StoreId").val() == '') {
             message = "Select Store"
             $("#StoreId").focus();
@@ -322,14 +325,13 @@ function validation(id) {
 }
 
 function clearFoodMenuItem() {
-    $('#FoodMenuId').val(0).trigger('change');
     $("#Qty").val(parseFloat(1.00).toFixed(2));
     $("#InventoryStockQty").val(parseFloat(0.00).toFixed(2));
     $("#Amount").val('0');
-    $('#FoodMenuId').val(0);
-    $('#IngredientId').val(0);
+
     $('#IngredientId').val(0).trigger('change');
     $('#AssetItemId').val(0).trigger('change');
+    $('#FoodMenuId').val(0).trigger('change');
 }
 
 
@@ -432,7 +434,7 @@ $("#Qty").change(function () {
 function GetInventoryStockQty() {
     $.ajax({
         url: "/InventoryAlteration/GetInventoryStockQty",
-        data: { "storeId": $("#StoreId").val(), "foodMenuId": $("#FoodMenuId").val()},
+        data: { "storeId": $("#StoreId").val(), "foodMenuId": $("#FoodMenuId").val() },
         async: false,
         type: "GET",
         dataType: "text",
@@ -476,7 +478,7 @@ function GetIngredientPurchasePrice() {
 
 function GetFoodMenuLastPrice(foodMenuId) {
     var itemType = 2;
-    
+
     $.ajax({
         url: "/PurchaseInvoiceFoodMenu/GetFoodMenuLastPrice",
         data: { "itemType": itemType, "foodMenuId": foodMenuId.value },

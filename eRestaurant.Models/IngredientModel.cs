@@ -17,10 +17,16 @@ namespace RocketPOS.Models
         [Required(ErrorMessage = "Select Category")]
         public int? CategoryId { get; set; }
         public List<SelectListItem> IngredientCategoryList { get; set; }
+
         [Required(ErrorMessage = "Select Unit")]
         public int UnitId { get; set; }
         public List<SelectListItem> UnitList { get; set; }
         public string Unit { get; set; }
+
+        [Required(ErrorMessage = "Select Tax")]
+        public int TaxId { get; set; }
+        public List<SelectListItem> TaxList { get; set; }
+        public string Tax { get; set; }
         public decimal PurchasePrice { get; set; }
         [Required]
         [RegularExpression(@"[0-9]+(\.[0-9][0-9]?)?", ErrorMessage = "Enter valid amount")]

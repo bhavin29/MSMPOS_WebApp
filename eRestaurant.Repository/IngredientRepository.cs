@@ -24,12 +24,13 @@ namespace RocketPOS.Repository
             List<IngredientModel> ingredientModel = new List<IngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select ing.id,ing.IngredientName as IngredientName, category.IngredientCategoryName as Category," +
-                             "unit.UnitName as Unit, ing.IsActive , ing.IngredientCategoryId as CategoryId,ing.IngredientUnitId as UnitId" +
-                             ",ing.PurchasePrice, ing.SalesPrice, ing.AlterQty,ing.Code" +
+                var query =  " select ing.id,ing.IngredientName as IngredientName, category.IngredientCategoryName as Category," +
+                             " unit.UnitName as Unit, ing.IsActive , ing.IngredientCategoryId as CategoryId,ing.IngredientUnitId as UnitId" +
+                             " ,ing.PurchasePrice, ing.SalesPrice, ing.AlterQty,ing.Code,Ing.TaxId, T.Taxname as Tax " +
                              " from Ingredient as Ing inner join IngredientCategory as category " +
-                             "on ing.IngredientCategoryId = category.id and category.IsDeleted = 0 inner join Units as unit " +
-                             "on ing.IngredientUnitId = unit.Id and unit.IsDeleted = 0 where ing.IsDeleted = 0 order by ing.IngredientName asc";
+                             " on ing.IngredientCategoryId = category.id and category.IsDeleted = 0 inner join Units as unit  " +
+                             " on ing.IngredientUnitId = unit.Id inner join Tax as T ON T.Id = Ing.TaxId " +
+                             " and unit.IsDeleted = 0 where ing.IsDeleted = 0 order by ing.IngredientName asc";
                 ingredientModel = con.Query<IngredientModel>(query).ToList();
             }
             return ingredientModel;
@@ -59,6 +60,7 @@ namespace RocketPOS.Repository
                     "PurchasePrice," +
                     "SalesPrice," +
                     "AlterQty," +
+                    "TaxId," +
                     "IsActive) " +
                     "VALUES(" + MaxId + ",@IngredientName," +
                     " @Code," +
@@ -66,7 +68,9 @@ namespace RocketPOS.Repository
                     "@UnitId," +
                     "@PurchasePrice," +
                    "@SalesPrice," +
-                   "@AlterQty," + "@IsActive" + " ); SELECT CAST(SCOPE_IDENTITY() as INT); ";
+                   "@AlterQty," +
+                   "@TaxId," +
+                   "@IsActive" + " ); SELECT CAST(SCOPE_IDENTITY() as INT); ";
                 result = con.Execute(query, ingredientModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -112,6 +116,7 @@ namespace RocketPOS.Repository
                      "PurchasePrice = @PurchasePrice," +
                      "SalesPrice = @SalesPrice," +
                      "AlterQty = @AlterQty," +
+                     "TaxId = @TaxId," +
                      "IsActive = @IsActive WHERE Id = @Id ";
                 result = con.Execute(query, ingredientModel, sqltrans, 0, System.Data.CommandType.Text); ;
                 if (result > 0)

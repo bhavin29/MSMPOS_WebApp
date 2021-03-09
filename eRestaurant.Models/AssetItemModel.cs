@@ -19,9 +19,16 @@ namespace RocketPOS.Models
         public int AssetLocationId { get; set; }
         public string AssetLocationName { get; set; }
         public List<SelectListItem> AssetLocationList { get; set; }
+        [Required(ErrorMessage = "Select Unit")]
         public int UnitId { get; set; }
         public string UnitName { get; set; }
         public List<SelectListItem> UnitList { get; set; }
+
+        [Required(ErrorMessage = "Select Tax")]
+
+        public int TaxId { get; set; }
+        public List<SelectListItem> TaxList { get; set; }
+        public string Tax { get; set; }
         public string Brandname { get; set; }
         public string Model { get; set; }
         public string Picture { get; set; }

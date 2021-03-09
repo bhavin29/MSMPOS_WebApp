@@ -10,7 +10,7 @@ var Status = 0;
 var RowNumber = 0;
 
 $(document).ready(function () {
-    
+
     var supId = $("#SupplierId").val();
     if (supId != null && supId != 0) {
         GetSupplierDetailsById(supId);
@@ -36,22 +36,22 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [5, 6, 10,11,12],
+                "targets": [5, 6, 10, 11, 12],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
 
-    RowNumber = dataArr.length ;
+    RowNumber = dataArr.length;
 
     $("#SupplierId").select2();
-   $("#FoodMenuId").select2();
+    $("#FoodMenuId").select2();
     $("#StoreId").select2();
 
-//    GetFoodMenuByItemType();
+    //    GetFoodMenuByItemType();
     $("#StoreId").focus();
- });
+});
 
 $('#cancel').on('click', function (e) {
     e.preventDefault();
@@ -74,21 +74,20 @@ $('#addRow').on('click', function (e) {
     var foodMenuId = $("#FoodMenuId").val();
     var foodMenuIdSelect = $("#FoodMenuId").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
+    debugger;
+    $.ajax({
+        url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
+        data: { "foodMenuId": foodMenuId, "itemType": itemType },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            TaxPercentage = obj.taxPercentage;
+            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
+        }
+    });
 
-    if (itemType == 0) {
-        $.ajax({
-            url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
-            data: { "foodMenuId": foodMenuId },
-            async: false,
-            type: "GET",
-            dataType: "text",
-            success: function (data) {
-                var obj = JSON.parse(data);
-                TaxPercentage = obj.taxPercentage;
-                TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
-            }
-        });
-    }
 
     var Qty = parseFloat($("#Quantity").val()).toFixed(2);
     Discount = parseFloat($("#Discount").val()).toFixed(2);
@@ -108,7 +107,7 @@ $('#addRow').on('click', function (e) {
     }
     if (TaxPercentage > 0) {
         TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
-      //  Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+        //  Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
     }
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
@@ -122,10 +121,10 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
-            '<td><div class="form-button-action"><a href="#" data-itemId="' + recordid + '></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#ItemType").val()+ '' + $("#FoodMenuId").val() + '">Delete</a></div></td > '+
-            '<div class="modal fade" id="myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() +  '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<td><div class="form-button-action"><a href="#" data-itemId="' + recordid + '></a><a href="#" data-toggle="modal" data-target="#myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
+            '<div class="modal fade" id="myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(\''+ recordid +'\')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(\'' + recordid + '\')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseId").val(),
             $("#ItemType").val(),
             recordid
@@ -414,8 +413,8 @@ function clearItem() {
         $("#ItemType").val('0'),
         $('#FoodMenuId').val(0).trigger('change');
 
-        GetFoodMenuByItemType();
- }
+    GetFoodMenuByItemType();
+}
 
 function GetSupplierDetails(supplierId) {
     $.ajax({
@@ -502,7 +501,7 @@ function GetFoodMenuLastPrice(foodMenuId) {
     //debugger;
     $.ajax({
         url: "/PurchaseFoodMenu/GetFoodMenuLastPrice",
-        data: { "itemType": itemType, "foodMenuId": foodMenuId.value  },
+        data: { "itemType": itemType, "foodMenuId": foodMenuId.value },
         type: "GET",
         dataType: "text",
         success: function (data) {
@@ -518,7 +517,7 @@ function GetFoodMenuLastPrice(foodMenuId) {
 
 
 function GetFoodMenuByItemType() {
- 
+
     var itemType = $("#ItemType").val();
     if (itemType == 0) {
         $.ajax({
@@ -582,7 +581,7 @@ function deleteOrder(rowId) {
 
     for (var i = 0; i < dataArr.length; i++) {
 
-        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId; 
+        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId;
 
         if (id == rowId) {
             TotalAmount = dataArr[i].total;

@@ -152,9 +152,9 @@ namespace RocketPOS.Services
             return _iPurchaseRepository.ReferenceNumberFoodMenu();
         }
 
-        public decimal GetTaxByFoodMenuId(int foodMenuId)
+        public decimal GetTaxByFoodMenuId(int foodMenuId, int ItemType)
         {
-            return _iPurchaseRepository.GetTaxByFoodMenuId(foodMenuId);
+            return _iPurchaseRepository.GetTaxByFoodMenuId(foodMenuId, ItemType);
         }
 
         public decimal GetFoodMenuLastPrice(int itemType, int foodMenuId)

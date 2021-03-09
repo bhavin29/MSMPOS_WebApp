@@ -40,6 +40,7 @@ namespace RocketPOS.Controllers.Master
                 assetItemModel = _iAssetItemService.GetAssetItemById(Convert.ToInt32(id));
             }
             assetItemModel.UnitList = _iDropDownService.GetUnitList();
+            assetItemModel.TaxList = _iDropDownService.GetTaxList();
             return View(assetItemModel);
         }
 

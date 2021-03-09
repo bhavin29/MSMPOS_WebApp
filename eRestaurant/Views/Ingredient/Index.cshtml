@@ -29,14 +29,16 @@
                             <th rowspan="1" colspan="1">@Html.DisplayName("Stock item")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Stock Category")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Tax")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-                    </thead>
+</thead>
                     <tfoot>
                         <tr>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Category")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Unit")</th>
+                            <th rowspan="1" colspan="1">@Html.DisplayName("Tax")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
                         </tr>
@@ -46,34 +48,37 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                            <tr role="row">
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.IngredientName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Category)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Unit)
-                                </td>
-                                <td>
-                                    @if (item.IsActive == true)
-                                    {
-                                        @Html.DisplayName("True")
-                                    }
-                                    else
-                                    {
-                                        @Html.DisplayName("False")
-                                    }
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        <a asp-action="Ingredient"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
+                        <tr role="row">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IngredientName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Unit)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tax)
+                            </td>
+                            <td>
+                                @if (item.IsActive == true)
+                                {
+                                    @Html.DisplayName("True")
+                                }
+                                else
+                                {
+                                    @Html.DisplayName("False")
+                                }
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    <a asp-action="Ingredient" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                    <label> / </label>
+                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                </div>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -106,7 +111,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0,1, 2, 3] },
+                    exportOptions: { columns: [0,1, 2, 3,4] },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);

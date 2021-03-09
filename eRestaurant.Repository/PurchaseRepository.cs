@@ -776,15 +776,33 @@ namespace RocketPOS.Repository
             return result;
         }
 
-        public decimal GetTaxByFoodMenuId(int foodMenuId)
+        public decimal GetTaxByFoodMenuId(int foodMenuId, int itemType)
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "select  ISNULL(TaxPercentage,0) AS TaxPercentage from foodmenuRate fmr " +
-                            "Inner join tax t on t.Id = fmr.FoodVatTaxId " +
-                            "where fmr.FoodMenuId = " + foodMenuId + " And fmr.OutletId = 1"; // Need To Change OutLet Id Dynamic value 
+                var query="";
+                if (itemType == 0)
+                {
+                     query = "select  ISNULL(TaxPercentage,0) AS TaxPercentage from foodmenuRate fmr " +
+                                "Inner join tax t on t.Id = fmr.FoodVatTaxId " +
+                                "where fmr.FoodMenuId = " + foodMenuId + " And fmr.OutletId = 1"; // Need To Change OutLet Id Dynamic value
+                }
+                else if (itemType == 1)
+                {
+                    query = "select  ISNULL(TaxPercentage,0) AS TaxPercentage from Ingredient I " +
+                                "Inner join tax t on t.Id = I.TaxId " +
+                                "where I.Id = " + foodMenuId ; // Need To Change OutLet Id Dynamic value
+                }
+                else if (itemType == 2)
+                {
+                    query = "select  ISNULL(TaxPercentage,0) AS TaxPercentage from AssetItem AI " +
+                                "Inner join tax t on t.Id = AI.TaxId " +
+                                "where AI.Id = " + foodMenuId ; // Need To Change OutLet Id Dynamic value
+                }
+
+
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }

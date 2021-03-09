@@ -45,9 +45,11 @@ namespace RocketPOS.Repository
             AssetItemModel assetItemModel = new AssetItemModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName from AssetItem AI " +
+                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName,AI.TaxId,T.Taxname as Tax " +
+                            " from AssetItem AI " +
                             " Inner Join Units U ON U.Id = AI.UnitId " +
-                            " Where AI.IsDeleted = 0 And AI.Id = "+id;
+                            " Inner Join Tax T ON T.Id = AI.TaxId " +
+                            " Where AI.IsDeleted = 0 And AI.Id = " + id;
                 assetItemModel = con.Query<AssetItemModel>(query).FirstOrDefault();
             }
             return assetItemModel;
@@ -59,8 +61,9 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName from AssetItem AI " +
+                var query = " select AI.Id,AssetItemName,ShortName,Code,Brandname,Model,Picture,AI.Notes,CostPrice,AI.UnitId,U.UnitName,AI.TaxId,T.Taxname as Tax from AssetItem AI " +
                             " Inner Join Units U ON U.Id = AI.UnitId " +
+                            " Inner Join Tax T ON T.Id = AI.TaxId " +
                             " Where AI.IsDeleted = 0 ";
                 assetItemModel = con.Query<AssetItemModel>(query).ToList();
             }
@@ -84,10 +87,10 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO AssetItem " +
-                    "(AssetItemName, ShortName, Code, Brandname, Model, Notes,CostPrice,UnitId," +
+                    "(AssetItemName, ShortName, Code, Brandname, Model, Notes,CostPrice,UnitId,TaxId," +
                     " UserIdInserted,  DateInserted,IsDeleted) " +
                     "Values " +
-                    "(@AssetItemName, @ShortName,@Code, @Brandname, @Model,@Notes,@CostPrice,@UnitId," +
+                    "(@AssetItemName, @ShortName,@Code, @Brandname, @Model,@Notes,@CostPrice,@UnitId,@TaxId," +
                   LoginInfo.Userid + ",GetUtcDate(),0);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, assetItemModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -135,6 +138,7 @@ namespace RocketPOS.Repository
                      " Model =@Model ," +
                      "Notes=@Notes," +
                      "UnitId=@UnitId, " +
+                     "TaxId=@TaxId, " +
                      "[UserIdUpdated] = " + LoginInfo.Userid + " " +
                      ",[DateUpdated]  = GetUtcDate() WHERE Id = @Id;";
                 result = con.Execute(query, assetItemModel, sqltrans, 0, System.Data.CommandType.Text);

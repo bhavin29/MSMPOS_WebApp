@@ -41,10 +41,21 @@
                                                 <select asp-for="UnitId" class="form-control"
                                                         asp-items="@(new SelectList(Model.UnitList, "Value", "Text"))">
                                                 </select>
+                                                <span asp-validation-for="UnitId" class="text-danger"></span>
                                             }
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
+                                        <div class="form-group">
+                                            <label asp-for="TaxList" class="control-label">Tax</label>
+                                            @if (Model.TaxList != null)
+                                            {
+                                                <select asp-for="TaxId" class="form-control"
+                                                        asp-items="@(new SelectList(Model.TaxList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="TaxId" class="text-danger"></span>
+                                            }
+                                        </div>
                                         <div class="form-group">
                                             <label asp-for="CostPrice" class="control-label">Cost Price</label>
                                             <input asp-for="CostPrice" class="form-control" type="number" min="0" max="99999" />
@@ -60,6 +71,8 @@
                                             <input asp-for="Brandname" class="form-control" />
                                             <span asp-validation-for="Brandname" class="text-danger"></span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="Notes" class="control-label"></label>
                                             <textarea asp-for="Notes" class="form-control" rows="3"></textarea>

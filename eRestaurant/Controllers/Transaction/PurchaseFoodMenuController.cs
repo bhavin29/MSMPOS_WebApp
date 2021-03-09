@@ -249,10 +249,10 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public ActionResult GetTaxByFoodMenuId(int foodMenuId)
+        public ActionResult GetTaxByFoodMenuId(int foodMenuId,int itemType)
         {
             decimal taxPercentage = 0;
-            taxPercentage = _iPurchaseService.GetTaxByFoodMenuId(foodMenuId);
+            taxPercentage = _iPurchaseService.GetTaxByFoodMenuId(foodMenuId, itemType);
             return Json(new { TaxPercentage = taxPercentage });
         }
 

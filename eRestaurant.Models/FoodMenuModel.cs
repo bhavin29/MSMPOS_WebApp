@@ -17,8 +17,8 @@ namespace RocketPOS.Models
         public string FoodCategoryName { get; set; }
         public List<SelectListItem> FoodCategoryList { get; set; }
 
-        [DisplayName("Food Menu")]
-        [Required(ErrorMessage = "Enter Food Menu")]
+        [DisplayName("Menu Item")]
+        [Required(ErrorMessage = "Enter Menu Item")]
         public string FoodMenuName { get; set; }
 
         [DisplayName("Code")]
@@ -38,11 +38,11 @@ namespace RocketPOS.Models
         public string FoodVatTaxName { get; set; }
         public List<SelectListItem> FoodVatTaxList { get; set; }
 
-        [Required(ErrorMessage = "Select Foodmenu Type")]
+        [Required(ErrorMessage = "Select Menu Item Type")]
         [EnumDataType(typeof(FoodMenuType))]
-        [Range(1, 3, ErrorMessage = "Select Foodmenu Type")]
+        [Range(1, 4, ErrorMessage = "Select Menu Item Type")]
 
-        [DisplayName("FoodMenu Type")]
+        [DisplayName("Menu Item Type Type")]
         public FoodMenuType? FoodMenuType { get; set; }
         public List<SelectListItem> UnitsList { get; set; }
         public int UnitsId { get; set; }

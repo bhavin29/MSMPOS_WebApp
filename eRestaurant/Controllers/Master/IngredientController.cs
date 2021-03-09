@@ -45,14 +45,11 @@ namespace RocketPOS.Controllers
             {
                 int ingredientId = Convert.ToInt32(id);
                 ingredientModel = _iIngredientService.GetIngredientById(ingredientId);
-                ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
-                ingredientModel.UnitList = _iDropDownService.GetUnitList();
             }
-            else
-            {
-                ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
-                ingredientModel.UnitList = _iDropDownService.GetUnitList();
-            }
+ 
+            ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
+            ingredientModel.UnitList = _iDropDownService.GetUnitList();
+            ingredientModel.TaxList = _iDropDownService.GetTaxList();
             return View(ingredientModel);
         }
 
@@ -62,6 +59,7 @@ namespace RocketPOS.Controllers
         {
             ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
             ingredientModel.UnitList = _iDropDownService.GetUnitList();
+            ingredientModel.TaxList = _iDropDownService.GetTaxList();
             if (!ModelState.IsValid)
             {
                 string errorString = this.ValidationIngredient(ingredientModel);
@@ -117,6 +115,11 @@ namespace RocketPOS.Controllers
             if (string.IsNullOrEmpty(ingredientModel.UnitId.ToString()) || ingredientModel.UnitId == 0)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidUnit");
+                return ErrorString;
+            }
+            if (string.IsNullOrEmpty(ingredientModel.TaxId.ToString()) || ingredientModel.TaxId == 0)
+            {
+                ErrorString = _locService.GetLocalizedHtmlString("ValidTax");
                 return ErrorString;
             }
             if (string.IsNullOrEmpty(ingredientModel.SalesPrice.ToString()) || ingredientModel.SalesPrice == 0)

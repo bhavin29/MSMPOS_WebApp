@@ -71,7 +71,7 @@ namespace RocketPOS.Models
         public string FoodMenuName { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal UnitPrice { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:0.00}")]
         public decimal DiscountAmount { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal DiscountPercentage { get; set; }

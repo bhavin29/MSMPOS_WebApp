@@ -9,7 +9,7 @@ $(document).ready(function () {
     InventoryType = $("#InventoryType").val();
     FoodMenuTable = $('#FoodMenuTable').DataTable({
         columnDefs: [
-            { targets: [0], orderable: false, visible: false },
+            { targets: [0,6], orderable: false, visible: false },
             { targets: [2, 3, 4], orderable: false, class: "text-right" }
         ],
         "paging": false,
@@ -38,19 +38,18 @@ $('#addFoodMenuRow').on('click', function (e) {
     e.preventDefault();
     var message = validation(0);
     var rowNode;
-
+    var rowId;
     if (message == '') {
         debugger;
 
-        if (InventoryType == "2") {
-            rowId = "rowId" + $("#IngredientId").val();
-        }
         if (InventoryType == 1) {
-            rowId = "rowId" + $("#FoodMenuId").val();
+            rowId =  $("#FoodMenuId").val();
         }
-
-        if (InventoryType == 3) {
-            rowId = "rowId" + $("#AssetItemId").val();
+        else if (InventoryType == "2") {
+            rowId = $("#IngredientId").val();
+        }
+        else if (InventoryType == 3) {
+            rowId =  $("#AssetItemId").val();
         }
 
         FoodMenuTable.row('.active').remove().draw(false);
@@ -62,10 +61,11 @@ $('#addFoodMenuRow').on('click', function (e) {
                 $("#Qty").val(),
                 $("#Amount").val(),
                 $("#InventoryStockQty").val(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
-                '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + rowId + '></a><a href="#" data-toggle="modal" data-target="#myModal' + rowId + '">Delete</a></div></td > ' +
+                '<div class="modal fade" id="myModal' + rowId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#FoodMenuId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                rowId
             ]).node().id = rowId;
         }
         if (InventoryType == "2") {
@@ -75,24 +75,26 @@ $('#addFoodMenuRow').on('click', function (e) {
                 $("#Qty").val(),
                 $("#Amount").val(),
                 $("#InventoryStockQty").val(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#IngredientId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
-                '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#IngredientId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + rowId + '></a><a href="#" data-toggle="modal" data-target="#myModal' + rowId + '">Delete</a></div></td > ' +
+                '<div class="modal fade" id="myModal' + rowId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#IngredientId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#IngredientId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                rowId
             ]).node().id = rowId;
         }
 
         if (InventoryType == "3") {
             rowNode = FoodMenuTable.row.add([
-                $("#AssetItemId").val(),
+                    $("#AssetItemId").val(),
                 $('#AssetItemId').children("option:selected").text(),
                 $("#Qty").val(),
                 $("#Amount").val(),
                 $("#InventoryStockQty").val(),
-                '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#AssetItemId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
-                '<div class="modal fade" id=myModal0 tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                '<td><div class="form-button-action"><a href="#" data-itemId="' + rowId + '></a><a href="#" data-toggle="modal" data-target="#myModal' + rowId + '">Delete</a></div></td > ' +
+                '<div class="modal fade" id="myModal' + rowId + '" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
                 '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#AssetItemId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#AssetItemId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#AssetItemId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#AssetItemId").val() + ',' + rowId + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+                rowId
             ]).node().id = rowId;
         }
 
@@ -158,11 +160,12 @@ $('#addFoodMenuRow').on('click', function (e) {
 function deleteFoodMenuOrder(id, foodMenuId, rowId) {
 
     for (var i = 0; i < foodMenuDataArr.length; i++) {
+        debugger;
         if (InventoryType == "1") {
             if (foodMenuDataArr[i].foodMenuId == foodMenuId) {
                 foodMenuDeletedId.push(foodMenuDataArr[i].foodMenuId);
                 foodMenuDataArr.splice(i, 1);
-                FoodMenuTable.row(rowId).remove().draw(false);
+                FoodMenuTable.row('#'+rowId).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + foodMenuId).modal('hide');
             }
@@ -172,7 +175,7 @@ function deleteFoodMenuOrder(id, foodMenuId, rowId) {
             if (foodMenuDataArr[i].ingredientId == foodMenuId) {
                 foodMenuDeletedId.push(foodMenuDataArr[i].ingredientId);
                 foodMenuDataArr.splice(i, 1);
-                FoodMenuTable.row(rowId).remove().draw(false);
+                FoodMenuTable.row('#' + rowId).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + foodMenuId).modal('hide');
             }
@@ -182,7 +185,7 @@ function deleteFoodMenuOrder(id, foodMenuId, rowId) {
             if (foodMenuDataArr[i].assetItemId == foodMenuId) {
                 foodMenuDeletedId.push(foodMenuDataArr[i].assetItemId);
                 foodMenuDataArr.splice(i, 1);
-                FoodMenuTable.row(rowId).remove().draw(false);
+                FoodMenuTable.row('#' + rowId).remove().draw(false);
                 jQuery.noConflict();
                 $("#myModal" + foodMenuId).modal('hide');
             }

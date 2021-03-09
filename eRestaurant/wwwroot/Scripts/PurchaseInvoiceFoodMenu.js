@@ -39,7 +39,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [6, 7, 11,12,13],
+                "targets": [6, 7, 11, 12, 13],
                 "visible": false,
                 "searchable": false
             }
@@ -74,20 +74,18 @@ $('#addRow').on('click', function (e) {
     var itemType = $("#ItemType").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
 
-    if (itemType == 0) {
-        $.ajax({
-            url: "/PurchaseInvoiceFoodMenu/GetTaxByFoodMenuId",
-            data: { "foodMenuId": foodMenuId },
-            async: false,
-            type: "GET",
-            dataType: "text",
-            success: function (data) {
-                var obj = JSON.parse(data);
-                TaxPercentage = obj.taxPercentage;
-                TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
-            }
-        });
-    }
+    $.ajax({
+        url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
+        data: { "foodMenuId": foodMenuId, "itemType": itemType },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            TaxPercentage = obj.taxPercentage;
+            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
+        }
+    });
     var POQty = parseFloat($("#POQty").val()).toFixed(2);
     var InvoiceQty = parseFloat($("#InvoiceQty").val()).toFixed(2);
     DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
@@ -333,7 +331,7 @@ function deleteOrder(rowId) {
 
     for (var i = 0; i < dataArr.length; i++) {
 
-        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId; 
+        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId;
 
         if (id == rowId) {
 
@@ -461,7 +459,7 @@ function validation(id) {
 }
 
 function clearItem() {
-        $("#UnitPrice").val(''),
+    $("#UnitPrice").val(''),
         $("#POQty").val('1'),
         $("#InvoiceQty").val('1'),
         $("#DiscountPercentage").val(''),

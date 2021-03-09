@@ -12,7 +12,7 @@ var TotalAmount = 0
 var Status = 0;
 
 $(document).ready(function () {
-     var supId = $("#SupplierId").val();
+    var supId = $("#SupplierId").val();
 
     if (supId != null && supId != 0) {
         GetSupplierDetailsById(supId);
@@ -40,7 +40,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [ 6,7,11,12,13],
+                "targets": [6, 7, 11, 12, 13],
                 "visible": false,
                 "searchable": false
             }
@@ -74,20 +74,18 @@ $('#addRow').on('click', function (e) {
     var itemType = $("#ItemType").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
 
-    if (itemType == 0) {
-        $.ajax({
-            url: "/PurchaseGRNFoodMenu/GetTaxByFoodMenuId",
-            data: { "foodMenuId": foodMenuId },
-            async: false,
-            type: "GET",
-            dataType: "text",
-            success: function (data) {
-                var obj = JSON.parse(data);
-                TaxPercentage = obj.taxPercentage;
-                TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
-            }
-        });
-    }
+    $.ajax({
+        url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
+        data: { "foodMenuId": foodMenuId, "itemType": itemType },
+        async: false,
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            TaxPercentage = obj.taxPercentage;
+            TaxPercentage = parseFloat(TaxPercentage).toFixed(2);
+        }
+    });
 
     var POQty = parseFloat($("#POQty").val()).toFixed(2);
     var GRNQty = parseFloat($("#GRNQty").val()).toFixed(2);
@@ -132,9 +130,9 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + recordid + '"" ></a><a href="#" data-toggle="modal" data-target="#myModal' + + $("#ItemType").val() + '' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
-            '<div class="modal fade" id=myModal'  + $("#ItemType").val() + '' + $("#FoodMenuId").val()   + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+            '<div class="modal fade" id=myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(\'' + recordid +'\')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
+            'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteOrder(\'' + recordid + '\')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
             $("#PurchaseGRNId").val(),
             $("#ItemType").val(),
             recordid
@@ -194,7 +192,7 @@ function saveOrder(data) {
         type: 'POST',
         beforeSend: function (xhr) { xhr.setRequestHeader("XSRF-TOKEN", $('input:hidden[name="__RequestVerificationToken"]').val()); },
         url: 'PurchaseGRNFoodMenu',
-        data:data,
+        data: data,
         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
     });
 };
@@ -330,7 +328,7 @@ function deleteOrder(rowId) {
 
     for (var i = 0; i < dataArr.length; i++) {
 
-        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId; 
+        id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId;
 
         if (id == rowId) {
             Gross = dataArr[i].unitPrice * dataArr[i].grnqty;
@@ -385,7 +383,7 @@ $(document).on('click', 'a.editItem', function (e) {
                     $("#DiscountAmounts").val(dataArr[i].Discount),
                     $("#PurchaseGRNId").val(dataArr[i].purchaseId),
                     $("#ItemType").val(dataArr[i].itemType)
-               GrandTotal = $("#GrossAmount").val();
+                GrandTotal = $("#GrossAmount").val();
                 TotalAmount = dataArr[i].total;
                 GrandTotal -= TotalAmount;
                 $("#GrossAmount").val(GrandTotal);
@@ -456,14 +454,14 @@ function validation(id) {
 }
 
 function clearItem() {
-        $("#UnitPrice").val(''),
+    $("#UnitPrice").val(''),
         $("#POQty").val('1'),
         $("#GRNQty").val('1'),
         $("#DiscountPercentage").val(''),
         $("#PurchaseGRNId").val('0'),
         $("#ItemType").val('0'),
         $('#FoodMenuId').val(0).trigger('change')
-        GetFoodMenuByItemType();
+    GetFoodMenuByItemType();
 }
 
 function GetSupplierDetails(supplierId) {
@@ -581,19 +579,19 @@ function GetFoodMenuLastPrice(foodMenuId) {
 
 function GetPurchaseGRNbyPO(poReference) {
     poReference = $("#POReference").val();
-     $.ajax({
-         url: "/PurchaseGRNFoodMenu/GetPurchaseIdByPOReference",
-         data: { "poReference": poReference },
+    $.ajax({
+        url: "/PurchaseGRNFoodMenu/GetPurchaseIdByPOReference",
+        data: { "poReference": poReference },
         type: "GET",
         dataType: "text",
-         success: function (data) {
-             var obj = JSON.parse(data);
-             if (obj.purchaseId > 0) {
-                 window.location.href = "/PurchaseGRNFoodMenu/PurchaseGRNFoodMenu?purchaseId=" + obj.purchaseId;
-             }
-             else {
-                 alert("Reference Number Not Found!");
-             }
+        success: function (data) {
+            var obj = JSON.parse(data);
+            if (obj.purchaseId > 0) {
+                window.location.href = "/PurchaseGRNFoodMenu/PurchaseGRNFoodMenu?purchaseId=" + obj.purchaseId;
+            }
+            else {
+                alert("Reference Number Not Found!");
+            }
         },
         error: function (data) {
             alert(data);

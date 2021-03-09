@@ -131,6 +131,7 @@
                                                         <th style="width:15%">Amount</th>
                                                         <th style="width:15%">StockQty</th>
                                                         <th style="width:15%">Action</th>
+                                                        <th style="width:15%"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -140,24 +141,24 @@
                                                         {
                                                             var tm = string.Empty;
                                                             var mid = string.Empty;
-                                                            var rowId = string.Empty;
+                                                            var rowId =0;
                                                             @if (Model.InventoryType == 2)
                                                             {
                                                                 tm = "#myModal" + item.IngredientId;
                                                                 mid = "myModal" + item.IngredientId;
-                                                                rowId = "rowId" + item.IngredientId;
+                                                                rowId =  item.IngredientId;
                                                             }
                                                             @if (Model.InventoryType == 1)
                                                             {
                                                                 tm = "#myModal" + item.FoodMenuId;
                                                                 mid = "myModal" + item.FoodMenuId;
-                                                                rowId = "rowId" + item.FoodMenuId;
+                                                                rowId =  item.FoodMenuId;
                                                             }
                                                             @if (Model.InventoryType == 3)
                                                             {
                                                                 tm = "#myModal" + item.AssetItemId;
                                                                 mid = "myModal" + item.AssetItemId;
-                                                                rowId = "rowId" + item.AssetItemId;
+                                                                rowId =  item.AssetItemId;
                                                             }
                                                     <tr id="@rowId">
                                                         @if (Model.InventoryType == 2)
@@ -213,9 +214,10 @@
                                                                     <a href="#" data-itemid="@item.AssetItemId" class="editFoodMenuItem">Edit</a>
                                                                     <a href="#" data-itemid="@item.AssetItemId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                 }
-                                                                @*<a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
-        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>*@
                                                             </div>
+                                                        </td>
+                                                        <td class="text-right">
+                                                            @rowId
                                                         </td>
                                                         <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">

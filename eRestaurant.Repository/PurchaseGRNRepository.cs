@@ -384,9 +384,9 @@ namespace RocketPOS.Repository
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseGRN.Id as Id,PurchaseGRN.PurchaseId, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select PurchaseGRN.Id as Id,PurchaseGRN.PurchaseId, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName,S.Storename," +
                     "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid inner join store S on S.Id = PurchaseGRN.StoreId  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0  " +
                     // " AND Convert(varchar(10), PurchaseGRNDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
                     " AND Convert(Date, PurchaseGRNDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 

@@ -53,7 +53,8 @@
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
@@ -65,7 +66,8 @@
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:35%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
@@ -78,45 +80,48 @@
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SupplierName)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.GrandTotal)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Username)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Status)
-                                        </td>
-                                        <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
-                                                <label> / </label>
-                                                <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
-                                                <label> / </label>
-                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="form-button-action">
-                                                <a asp-action="View" asp-route-Id="@item.Id" >View</a>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <tr role="row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.SupplierName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StoreName)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.GrandTotal)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Username)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Status)
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
+                                            <label> / </label>
+                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                            <label> / </label>
+                                            <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                        </div>
+                                    </td>
+                                </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -178,6 +183,7 @@
                             { "data": "referenceNo", "name": "Number", "autoWidth": true },
                             { "data": "date", "name": "Date", "autoWidth": true },
                             { "data": "supplierName", "name": "Supplier", "autoWidth": true },
+                            { "data": "storeName", "name": "StoreName", "autoWidth": true },
                             { "data": "grandTotal", "name": "Amount", "autoWidth": true, className: "text-right" },
                             { "data": "username", "name": "Username", "autoWidth": true },
                             { "data": "status", "name": "Status", "autoWidth": true },

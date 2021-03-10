@@ -67,6 +67,7 @@ namespace RocketPOS.Controllers.Transaction
                 assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
             }
+            assetEventModel.StoreList= _iDropDownService.GetStoreList();
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
             assetEventModel.FoodMenuList = _iDropDownService.GetProductionFormulaFoodMenuList();
             assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
@@ -168,6 +169,7 @@ namespace RocketPOS.Controllers.Transaction
                 assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
             }
+            assetEventModel.StoreList = _iDropDownService.GetStoreList();
             assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
             assetEventModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             assetEventModel.IngredientList = _iDropDownService.GetIngredientList();

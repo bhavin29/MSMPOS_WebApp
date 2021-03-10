@@ -35,12 +35,12 @@ namespace RocketPOS.Repository
                             " Left join Tax T On T.Id = FM.FoodVatTaxId " +
                             " WHERE FM.IsDeleted = 0 ";
 
-                if (categoryid != -1)
+                if (categoryid != 0)
                 {
                     query += "AND FM.FoodCategoryId = "+ categoryid ;
                 }
 
-                if (foodmenutype != -1)
+                if (foodmenutype != 0)
                 {
                     query += "AND FM.FoodMenuType = " + foodmenutype;
                 }

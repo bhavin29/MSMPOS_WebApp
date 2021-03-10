@@ -71,6 +71,34 @@ namespace RocketPOS.Repository
             }
             return Int16.Parse(result);
         }
+        public int GetValidateReference(string TableName, string ColumnName, string Value, string Rowid)
+        {
+            List<ReferenceTable> referenceTables= new List<ReferenceTable>();
+            referenceTables.Add(new ReferenceTable ( "Outlet", "CustomerOrder", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Outlet", "CustomerOrder", "OutletId"));
+
+            string result = ""; string query = "";int validate = 0;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+  
+                foreach( var item in referenceTables) 
+                {
+                    if (item.TableName == TableName)
+                    {
+                        query = "SELECT Count(*) FROM " + item.ReferenceTableName.ToString() + " WHERE IsDeleted=0 AND " + item.ReferenceColumnName + "= " + Rowid;
+                        result = con.ExecuteScalar<string>(query);
+
+                        if (result != null)
+                        {
+                            validate = 1;
+                        }
+                    }
+
+                }
+            }
+            return validate;
+        }
         public string InventoryPush(string docType,int id)
         {
             string result = "";
@@ -127,5 +155,21 @@ namespace RocketPOS.Repository
             }
             return result;
         }
+
+
     }
+
+    public class ReferenceTable
+    {
+        public string TableName { get; set; }
+        public string ReferenceTableName { get; set; }
+        public string ReferenceColumnName { get; set; }
+        public ReferenceTable(string _TableName, string _ReferenceTableName, string _ReferenceColumnName)
+        {
+            this.TableName = _TableName;
+            this.ReferenceTableName = _ReferenceTableName;
+            this.ReferenceColumnName = _ReferenceColumnName;
+        }
+    }
+
 }

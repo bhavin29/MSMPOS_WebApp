@@ -54,23 +54,25 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:50%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-                            </thead>
+</thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("ReferenceNo")</th>*@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:50%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:30%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-                            </tfoot>
+</tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
@@ -89,6 +91,9 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.SupplierName)
                                         </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
                                         <td class="text-right">
                                             @Html.DisplayFor(modelItem => item.GrandTotal, "{0:N}")
                                         </td>
@@ -96,12 +101,12 @@
                                             @Html.DisplayFor(modelItem => item.Username)
                                         </td>
                                         @*<td>
-                                            <div class="form-button-action">
-                                                <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                <label> / </label>
-                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                            </div>
-                                        </td>*@
+                                                <div class="form-button-action">
+                                                    <a asp-action="PurchaseInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                                                    <label> / </label>
+                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                </div>
+                                            </td>*@
                                         <td>
                                             <div class="form-button-action">
                                                 <a asp-action="View" asp-route-Id="@item.Id">View</a>
@@ -170,7 +175,8 @@
                             //{ "data": "poReferenceNo", "name": "POReferenceNo", "autoWidth": true },
                             { "data": "date", "name": "Created On", "autoWidth": true },
                             { "data": "supplierName", "name": "Store", "autoWidth": true },
-                            { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true, className: "text-right" },
+                            { "data": "storeName", "name": "StoreName", "autoWidth": true },
+                             { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true, className: "text-right" },
                             { "data": "username", "name": "Username", "autoWidth": true },
                             //{
                             //    data: null,

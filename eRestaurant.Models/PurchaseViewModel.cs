@@ -18,6 +18,7 @@ namespace RocketPOS.Models
         public int UserId { get; set; }
         public string Username { get; set; }
         public string Status { get; set; }
+        public string StoreName { get; set; }
         public List<PurchaseDetailsModel> purchaseDetails { get; set; }
     }
 }

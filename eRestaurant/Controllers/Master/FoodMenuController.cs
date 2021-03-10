@@ -28,11 +28,11 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
         }
 
-        public ActionResult Index(int? readymade,int? categoryid,int? foodmenutype)
+        public ActionResult Index(int? readymade, int? categoryid, int? foodmenutype)
         {
 
             List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
-            if (categoryid!=null && foodmenutype !=null)
+            if (categoryid != null && foodmenutype != null)
             {
                 foodMenuModel = _iFoodMenuService.GetFoodMenuList(Convert.ToInt32(categoryid), Convert.ToInt32(foodmenutype)).ToList();
             }

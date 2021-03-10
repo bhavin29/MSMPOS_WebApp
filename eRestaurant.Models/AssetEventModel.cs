@@ -64,6 +64,9 @@ namespace RocketPOS.Models
         public string AssetItemName { get; set; }
         public List<SelectListItem> AssetItemList { get; set; }
 
+        public int StoreId { get; set; }
+        public List<SelectListItem> StoreList { get; set; }
+        public string StoreName { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
         public List<SelectListItem> IngredientList { get; set; }

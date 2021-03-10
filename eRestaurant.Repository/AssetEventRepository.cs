@@ -25,7 +25,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = string.Empty;
-                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime FROM AssetEvent  AE  " +
+                query = " SELECT AE.Id,AE.ReferenceNo,AE.EventName,AE.Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,Convert(Varchar(12),AE.EventDateTime,3) AS EventDateTime,Convert(varchar(12),AE.ClosedDatetime,3) As ClosedDatetime, StoreId FROM AssetEvent  AE  " +
                         " inner join [User] U On U.Id=AE.UserIdInserted  inner join employee e on e.id = u.employeeid  where AE.IsDeleted=0  And AE.[Status] <> 4 ";
                 assetEventList = con.Query<AssetEventViewModel>(query).AsList();
             }
@@ -37,7 +37,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = " Select AE.Id,ReferenceNo,EventType,EventName,EventDatetime,AE.DateInserted,EventPlace,ContactPersonName,ContactPersonNumber,AllocationDatetime,ReturnDatetime,ClosedDatetime,FoodGrossAmount,FoodDiscountAmount,FoodNetAmount,FoodVatAmount,FoodTaxAmount,IngredientNetAmount,AssetItemNetAmount,MissingTotalAmount,Status, " +
-                            " UserCreated.Username As CreatedByUser,UserAllocated.Username As AllocatedByUser,UserReturned.Username As ReturnedByUser,UserClosed.Username As ClosedByUser " +
+                            " UserCreated.Username As CreatedByUser,UserAllocated.Username As AllocatedByUser,UserReturned.Username As ReturnedByUser,UserClosed.Username As ClosedByUser, AE.StoreId " +
                             " From AssetEvent  AE " +
                             " left join [User] UserCreated On AE.CreatedUserId=UserCreated.Id " +
                             " left join [User] UserAllocated On AE.AllocatedUserId=UserAllocated.Id " +
@@ -129,9 +129,10 @@ namespace RocketPOS.Repository
                              " ,[FoodNetAmount] " +
                              " ,[FoodVatAmount] " +
                              " ,[FoodTaxAmount] " +
-                             " ,[FoodTaxAmount] " +
+                             " ,[MissingTotalAmount] " +
                              " ,[IngredientNetAmount] " +
                              " ,[AssetItemNetAmount] " +
+                             " ,[StoreId] " +
                              " ,[Status] " +
                              "  ,[UserIdInserted]  " +
                              "  ,[CreatedUserId]  " +
@@ -153,6 +154,7 @@ namespace RocketPOS.Repository
                              " ,@MissingTotalAmount " +
                              " ,@IngredientNetAmount " +
                              " ,@AssetItemNetAmount " +
+                             " ,@StoreId " +
                              " ,@Status, " +
                              "" + LoginInfo.Userid + "," +
                              "" + LoginInfo.Userid + "," +
@@ -296,7 +298,8 @@ namespace RocketPOS.Repository
                             ",MissingTotalAmount = @MissingTotalAmount " +
                             ",IngredientNetAmount = @IngredientNetAmount " +
                             ",AssetItemNetAmount = @AssetItemNetAmount " +
-                            ",FoodNetAmount = @FoodNetAmount ";
+                            ",FoodNetAmount = @FoodNetAmount "+
+                            ",StoreId = @StoreId ";
 
                 if (assetEventModel.Status == 2)
                 {

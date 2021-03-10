@@ -741,9 +741,9 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = " select Purchase.Id as Id,  ReferenceNo, convert(varchar(12),PurchaseDate, 3) as [Date],Supplier.SupplierName," +
-                    " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, " +
+                    " Purchase.GrandTotal as GrandTotal,Purchase.DueAmount as Due, S.StoreName," +
                     " case when Purchase.Status = 5 then 'Invoice' when Purchase.Status = 4 then 'GRN'  when Purchase.Status = 3 then 'Rejected' when  Purchase.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
-                    " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted  inner join employee e on e.id = u.employeeid " +
+                    " from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join [User] U on U.Id=Purchase.UserIdInserted  inner join employee e on e.id = u.employeeid inner join store S on S.Id = Purchase.StoreId" +
                     " where  Purchase.InventoryType=1 And Purchase.Isdeleted = 0 " +
                     " AND Convert(Date, PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
                 if (supplierId != 0)

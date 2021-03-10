@@ -26,11 +26,6 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="FoodMenuCode" class="control-label">Menu Item Code</label>
-                                            <input asp-for="FoodMenuCode" class="form-control" />
-                                            <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
                                             <label asp-for="FoodMenuName" class="control-label">Menu Item</label>
                                             <input asp-for="FoodMenuName" class="form-control" />
                                             <span asp-validation-for="FoodMenuName" class="text-danger"></span>
@@ -44,13 +39,13 @@
                                                 </select>
                                             }
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="PurchasePrice" class="control-label">Purchase Price</label>
                                             <input asp-for="PurchasePrice" class="form-control" type="number" min="0" max="99999" />
                                             <span asp-validation-for="PurchasePrice" class="text-danger"></span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="SalesPrice" class="control-label">Sales Price</label>
                                             <input asp-for="SalesPrice" class="form-control" type="number" min="0" max="99999" />
@@ -70,13 +65,15 @@
                                             <input asp-for="Position" type="number" min="0" max="99999" class="form-control" />
                                             <span asp-validation-for="Position" class="text-danger"></span>
                                         </div>
+                                        <div class="form-group">
+                                            <label asp-for="FoodMenuType" class="control-label">Menu Item Type</label>
+                                            <select asp-for="FoodMenuType" class="form-control" asp-items="Html.GetEnumSelectList<FoodMenuType>()">
+                                                <option selected="selected" value="">Select</option>
+                                            </select>
+                                            <span asp-validation-for="FoodMenuType" class="text-danger"></span>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 col-lg-4">
-                                        <label asp-for="FoodMenuType" class="control-label">Menu Item Type</label>
-                                        <select asp-for="FoodMenuType" class="form-control" asp-items="Html.GetEnumSelectList<FoodMenuType>()">
-                                            <option selected="selected" value="">Select</option>
-                                        </select>
-                                        <span asp-validation-for="FoodMenuType" class="text-danger"></span>
                                         <div class="form-group">
                                             <label asp-for="Notes" class="control-label"></label>
                                             <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
@@ -88,6 +85,11 @@
                                             @if (Model.Id > 0)
                                             {
 
+                                                <div class="form-group">
+                                                    <label asp-for="FoodMenuCode" class="control-label">Menu Item Code</label>
+                                                    <input asp-for="FoodMenuCode" class="form-control" />
+                                                    <span asp-validation-for="FoodMenuCode" class="text-danger"></span>
+                                                </div>
                                                 <div class="form-group">
                                                     <label asp-for="IsActive" class="control-label" style="margin: 10px 0 0 0px"></label>
                                                     <input asp-for="IsActive" class="form-check-input" style="margin: 12Px 0 0 24px" />

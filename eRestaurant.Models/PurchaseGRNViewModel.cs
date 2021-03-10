@@ -8,6 +8,7 @@ namespace RocketPOS.Models
     public class PurchaseGRNViewModel
     {
         public int Id { get; set; }
+        public string StoreName { get; set; }
         public int PurchaseId { get; set; }
         public string ReferenceNo { get; set; }
      

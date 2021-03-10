@@ -9,6 +9,7 @@ namespace RocketPOS.Models
     public class PurchaseInvoiceViewModel
     {
         public int Id { get; set; }
+        public string StoreName { get; set; }
         public string ReferenceNo { get; set; }
         public string POReferenceNo { get; set; }
         public string Date { get; set; }

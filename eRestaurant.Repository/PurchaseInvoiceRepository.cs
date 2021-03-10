@@ -385,8 +385,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username " +
-                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted inner join employee e on e.id = u.employeeid  where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username, S.Storename " +
+                    "from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted inner join employee e on e.id = u.employeeid  inner join store S on S.Id = PurchaseInvoice.StoreId where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 " +
                     // " AND Convert(varchar(10), PurchaseInvoiceDate, 103)  between '" + fromDate + "' and '" + toDate + "'";
                     " AND Convert(Date, PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 

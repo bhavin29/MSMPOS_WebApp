@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     AssetEventItem = $('#AssetEventItem').DataTable({
         "columnDefs": [
-            { targets: [0, 1], visible: false },
+            { targets: [0, 1,3], visible: false },
             { targets: [3, 4, 5], class: "text-right" },
         ],
         "paging": false,
@@ -55,7 +55,7 @@ $(document).ready(function () {
 
     AssetIngredientItem = $('#AssetIngredientItem').DataTable({
         columnDefs: [
-            { targets: [1, 2], visible: false },
+            { targets: [1, 2,4], visible: false },
             { targets: [3, 4, 5], class: "text-right" },
         ],
         "paging": false,
@@ -120,6 +120,8 @@ $('#addRowItem').on('click', function (e) {
             alert(data);
         }
     });
+    debugger;
+    GetFoodMenuByStock($("#AssetItemId").val(),1, 3);
 
     AssetItemCostPrice = parseFloat($("#AssetItemCostPrice").val()).toFixed(2);
 
@@ -449,6 +451,9 @@ $('#addRowIngredient').on('click', function (e) {
 
     var IngredientCostPrice;
     var IngredientTotalPrice = 0;
+
+    GetFoodMenuByStock($("#IngredientId").val(), 1, 2);
+
 
     IngredientCostPrice = parseFloat($("#AssetIngredientCostPrice").val()).toFixed(2);
 
@@ -1379,4 +1384,26 @@ function calculateMissingTotal() {
         }
     });
     return total;
+}
+
+
+function GetFoodMenuByStock(foodMenuId, storeId, inventoryType) {
+    debugger;
+    $.ajax({
+        url: "/InventoryTransfer/GetFoodMenuStock",
+        data: {
+            "foodMenuId": foodMenuId, "storeId": storeId.value, "inventoryType": inventoryType
+        },
+        type: "GET",
+        dataType: "text",
+        success: function (data) {
+            $("#StockQty").val('');
+            var obj = JSON.parse(data);
+            $("#StockQty").val(parseFloat(obj.stockQty));
+            $("#IngredientStockQty").val(parseFloat(obj.stockQty));
+        },
+        error: function (data) {
+            alert(data);
+        }
+    });
 }

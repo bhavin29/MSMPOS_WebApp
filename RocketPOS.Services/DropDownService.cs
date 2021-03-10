@@ -231,7 +231,7 @@ namespace RocketPOS.Services
         {
             List<SelectListItem> lstCategory = new List<SelectListItem>();
 
-            lstCategory.Add(new SelectListItem { Text = "Select", Value = "0" });
+            lstCategory.Add(new SelectListItem { Text = "Select", Value = String.Empty });
             List<DropDownModel> lstCategoryResult = _dropDownRepository.GetTaxList().ToList();
             if (lstCategoryResult != null && lstCategoryResult.Count > 0)
             {
@@ -386,7 +386,7 @@ namespace RocketPOS.Services
         public List<SelectListItem> GetAssetCategoryList()
         {
             List<SelectListItem> lstAssetItem = new List<SelectListItem>();
-            lstAssetItem.Add(new SelectListItem { Text = "Select", Value = "0" });
+            lstAssetItem.Add(new SelectListItem { Text = "Select", Value = string.Empty });
             List<DropDownModel> lstAssetItemResult = _dropDownRepository.GetAssetCategoryList().ToList();
             if (lstAssetItemResult != null && lstAssetItemResult.Count > 0)
             {
@@ -396,6 +396,21 @@ namespace RocketPOS.Services
                 }
             }
             return lstAssetItem;
+        }
+
+        public List<SelectListItem> GetWebRoleList()
+        {
+            List<SelectListItem> lstWebRole = new List<SelectListItem>();
+            lstWebRole.Add(new SelectListItem { Text = "Select", Value = string.Empty });
+            List<DropDownModel> lstWebRoleResult = _dropDownRepository.GetWebRoleList().ToList();
+            if (lstWebRoleResult != null && lstWebRoleResult.Count > 0)
+            {
+                foreach (var item in lstWebRoleResult)
+                {
+                    lstWebRole.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return lstWebRole;
         }
     }
 }

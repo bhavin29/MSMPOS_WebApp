@@ -25,10 +25,14 @@ namespace RocketPOS.Models
         public List<SelectListItem> UnitList { get; set; }
 
         [Required(ErrorMessage = "Select Tax")]
-
         public int TaxId { get; set; }
-        public List<SelectListItem> TaxList { get; set; }
         public string Tax { get; set; }
+        public List<SelectListItem> TaxList { get; set; }
+
+        [Required(ErrorMessage = "Select Asset Category")]
+        public int AssetCategoryId { get; set; }
+        public string AssetCategoryName { get; set; }
+        public List<SelectListItem> AssetCategoryList { get; set; }
         public string Brandname { get; set; }
         public string Model { get; set; }
         public string Picture { get; set; }

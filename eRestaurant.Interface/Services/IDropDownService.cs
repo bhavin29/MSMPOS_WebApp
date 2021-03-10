@@ -38,5 +38,7 @@ namespace RocketPOS.Interface.Services
         List<SelectListItem> GetAssetLocationList();
         List<SelectListItem> GetGlobalStatusList();
 
+        List<SelectListItem> GetWebRoleList();
+
     }
 }

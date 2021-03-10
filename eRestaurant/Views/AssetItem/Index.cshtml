@@ -51,6 +51,9 @@
                                 @Html.DisplayName("Cost Price")
                             </th>
                             <th>
+                                @Html.DisplayName("Asset Category")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Action")
                             </th>
                         </tr>
@@ -80,6 +83,9 @@
                             </th>
                             <th>
                                 @Html.DisplayName("Cost Price")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Asset Category")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -116,6 +122,9 @@
                             </td>
                             <td class="text-right">
                                 @Html.DisplayFor(modelItem => item.CostPrice)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AssetCategoryName)
                             </td>
                             <td>
                                 <div class="form-button-action">
@@ -159,7 +168,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2, 3, 4, 5,6,7], rows: ':visible' },
+                    exportOptions: { columns: [0, 1, 2, 3, 4, 5,6,7,8], rows: ':visible' },
                     format: {
                         body: function (data, row, column, node) {
                             if ($(data).is("input")) {

@@ -41,6 +41,7 @@ namespace RocketPOS.Controllers.Master
             }
             assetItemModel.UnitList = _iDropDownService.GetUnitList();
             assetItemModel.TaxList = _iDropDownService.GetTaxList();
+            assetItemModel.AssetCategoryList = _iDropDownService.GetAssetCategoryList();
             return View(assetItemModel);
         }
 

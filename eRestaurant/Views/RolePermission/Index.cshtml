@@ -1,0 +1,223 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.RolePermissionModel;
+
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Role Permission");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("RolePermission");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="card-title">Role Permission</h5>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-1">
+                    <label asp-for="WebRoleList" class="control-label pl-2">Web Role</label>
+                </div>
+                <div class="col-md-3">
+                    @if (Model != null)
+                    {
+                        <select asp-for="WebRolesId" class="form-control"
+                                asp-items="@(new SelectList(Model.WebRoleList, "Value", "Text"))">
+                        </select>
+                    }
+                </div>
+                <div class="col-md-2">
+                    <input id="load" onclick="return loadWebPageRolesList();" type="submit" class="btn btn-outline-dark" value="Load" />
+                </div>
+                <div class="col-md-2">
+                    <input id="saveWebPageRoles" onclick="return UpdateWebPageRolesList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="@SharedLocalizer.GetLocalizedHtmlString("RolePermission")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead>
+                        <tr>
+                            <th style="width:0%"></th>
+                            <th style="width:0%"></th>
+                            <th style="width:0%"></th>
+                            <th style="width:30%">Page Name</th>
+                            <th style="width:15%">Add  <input type="checkbox" id="selectAddAll" /></th>
+                            <th style="width:15%">Edit <input type="checkbox" id="selectEditAll" /></th>
+                            <th style="width:15%">Delete <input type="checkbox" id="selectDeleteAll" /></th>
+                            <th style="width:15%">View <input type="checkbox" id="selectViewAll" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.WebRolePages != null)
+                        {
+                            @foreach (var item in Model.WebRolePages)
+                            {
+                        <tr role="row">
+                            <td>
+                                <input asp-for="@item.Id" class="form-control" type="hidden" />
+                            </td>
+                            <td>
+                                <input asp-for="@item.PagesId" class="form-control" type="hidden" />
+                            </td>
+                            <td>
+                                <input asp-for="@item.WebRolesId" class="form-control" type="hidden" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PageName)
+                            </td>
+                            <td>
+                                <input asp-for="@item.Add" type="checkbox" class="form-check-input addcheckboxes" style="margin: 5Px 0 0 0px" />
+                            </td>
+                            <td>
+                                <input asp-for="@item.Edit" type="checkbox" class="form-check-input editcheckboxes" style="margin: 5Px 0 0 0px" />
+                            </td>
+                            <td>
+                                <input asp-for="@item.Delete" type="checkbox" class="form-check-input deletecheckboxes" style="margin: 5Px 0 0 0px" />
+                            </td>
+                            <td>
+                                <input asp-for="@item.View" type="checkbox" class="form-check-input viewcheckboxes" style="margin: 5Px 0 0 0px" />
+                            </td>
+                        </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            RolePermission = $('#@dataTableName').DataTable({
+                dom: 'Bfrtip',
+                "buttons": [{
+                    extend: 'excel',
+                    exportOptions: { columns: [3, 4, 5,6,7] },
+                    format: {
+                            body: function (data, row, column, node) {
+                                if (column == 0) {
+                                    return data;
+                                }
+                                else if(column == 1) {
+                                    return $(data).text();
+                                }
+                                else if ($(data).is("input"))  {
+                                    return $(data).val();
+                                }
+                                else {
+                                    return data;
+                                }
+                            }
+                    },
+                    filename: function () {
+                        var d = new Date();
+                        var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                        var n = d.getTime();
+                        return 'Role_Permission_' + date + '_' + n;
+                            },
+                        }],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 250,
+                        "lengthMenu": [
+                            [250, 500, 1000, 2000],
+                            ['250', '500', '1000', '2000']
+                        ],
+            });
+        });
+
+        function loadWebPageRolesList() {
+            window.location.href = "/RolePermission/Index?webRoleId=" + $("#WebRolesId").val();
+        }
+
+
+        function UpdateWebPageRolesList() {
+
+            var rolePermission = new Array();
+
+            $("#RolePermission tbody tr").each(function () {
+                var tds = $(this).find("td");
+
+                var webPageRole = ({
+                    Id: parseInt($(tds[0]).find("#item_Id").val()),
+                    PagesId: parseInt($(tds[1]).find("#item_PagesId").val()),
+                    WebRolesId: $("#WebRolesId").val(),
+                    Add: $(tds[4]).find("#item_Add").is(":checked"),
+                    Edit: $(tds[5]).find("#item_Edit").is(":checked"),
+                    Delete: $(tds[6]).find("#item_Delete").is(":checked"),
+                    View: $(tds[7]).find("#item_View").is(":checked")
+                });
+                rolePermission.push(webPageRole);
+            });
+
+            var jsonstr = JSON.stringify(rolePermission);
+            $.ajax({
+                dataType: "text",
+                type: "post",
+                url: "/RolePermission/UpdateRolePermissionList",
+                data: { 'rolePermission': jsonstr},
+                timeout: 0,
+                success: function (response) {
+                    window.location.href = "/RolePermission/Index";
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+        $(function () {
+            $('#selectAddAll').click(function () {
+                if (this.checked) {
+                    $(".addcheckboxes").prop("checked", true);
+                } else {
+                    $(".addcheckboxes").prop("checked", false);
+                }
+            });
+
+            $('#selectEditAll').click(function () {
+                if (this.checked) {
+                    $(".editcheckboxes").prop("checked", true);
+                } else {
+                    $(".editcheckboxes").prop("checked", false);
+                }
+            });
+
+            $('#selectDeleteAll').click(function () {
+                if (this.checked) {
+                    $(".deletecheckboxes").prop("checked", true);
+                } else {
+                    $(".deletecheckboxes").prop("checked", false);
+                }
+            });
+
+            $('#selectViewAll').click(function () {
+                if (this.checked) {
+                    $(".viewcheckboxes").prop("checked", true);
+                } else {
+                    $(".viewcheckboxes").prop("checked", false);
+                }
+            });
+        });
+
+    </script>
+}
+

@@ -296,7 +296,18 @@ namespace RocketPOS.Repository
             List<DropDownModel> dropDownModels = new List<DropDownModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT Distinct(ModuleName) As [Name]  FROM [RocketPOS].[dbo].[GlobalStatus] Where IsDeleted=0";
+                var query = "SELECT Distinct(ModuleName) As [Name]  FROM [dbo].[GlobalStatus] Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
+
+        public List<DropDownModel> GetWebRoleList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT Id,WebRoleName As [Name]  FROM WebRole Where IsDeleted=0";
                 dropDownModels = con.Query<DropDownModel>(query).ToList();
             }
             return dropDownModels;

@@ -200,6 +200,10 @@ namespace RocketPOS
             services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<IGlobalStatusRepository, GlobalStatusRepository>();
             services.AddScoped<IGlobalStatusService, GlobalStatusService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+            services.AddScoped<IRolePermissionService, RolePermissionService>();
             services.AddHttpClient();
         }
 

@@ -30,6 +30,9 @@
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th>
+                                @Html.DisplayName("Asset Category")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Asset Item")
                             </th>
                             <th>
@@ -49,9 +52,6 @@
                             </th>
                             <th>
                                 @Html.DisplayName("Cost Price")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Asset Category")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -64,6 +64,9 @@
                                 @Html.DisplayNameFor(model => model.Code)
                             </th>
                             <th>
+                                @Html.DisplayName("Asset Category")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Asset Item")
                             </th>
                             <th>
@@ -83,9 +86,6 @@
                             </th>
                             <th>
                                 @Html.DisplayName("Cost Price")
-                            </th>
-                            <th>
-                                @Html.DisplayName("Asset Category")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -101,6 +101,9 @@
                         <tr>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Code)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AssetCategoryName)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.AssetItemName)
@@ -122,9 +125,6 @@
                             </td>
                             <td class="text-right">
                                 @Html.DisplayFor(modelItem => item.CostPrice)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetCategoryName)
                             </td>
                             <td>
                                 <div class="form-button-action">

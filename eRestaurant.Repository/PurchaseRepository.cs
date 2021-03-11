@@ -76,7 +76,7 @@ namespace RocketPOS.Repository
                              "   @StoreId,         " +
                              "   @EmployeeId,         " +
                              "   @Date,    " +
-                             "   @GrandTotal,     " +
+                             "   @GrossAmount,     " +
                              "   0,       " +
                              "   @GrandTotal,      " +
                              "   @Paid,      " +
@@ -301,7 +301,7 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
-                      " Supplier.SupplierAddress1,Supplier.SupplierAddress2,Supplier.SupplierPhone,Supplier.SupplierEmail," +
+                      " Supplier.SupplierAddress1,Supplier.SupplierAddress2,Supplier.SupplierPhone,Supplier.SupplierEmail,Purchase.VatableAmount,Purchase.NonVatableAmount," +
                       "Purchase.GrossAmount,Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
@@ -332,7 +332,7 @@ namespace RocketPOS.Repository
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then pin.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
-                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
+                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.TotalAmount as Total, " +
                             " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount, pin.VatableAmount,pin.NonVatableAmount  " +
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
@@ -390,7 +390,7 @@ namespace RocketPOS.Repository
                              "   @StoreId,         " +
                              "   @EmployeeId,         " +
                              "   @Date,    " +
-                             "   @GrandTotal,     " +
+                             "   (@GrandTotal - @TaxAmount),     " +
                              "   @DiscountAmount,     " +
                              "   @TaxAmount,       " +
                              "   @GrandTotal,      " +
@@ -489,7 +489,7 @@ namespace RocketPOS.Repository
                                                 }
                         queryDetails = queryDetails + "" + item.UnitPrice + "," +
                                                 "" + item.Quantity + "," +
-                                                "" + item.Total + "," +
+                                                "" + (item.Total - item.TaxAmount) + "," +
                                                 "" + item.DiscountAmount + "," +
                                                 "" + item.DiscountPercentage + "," +
                                                 "" + item.TaxPercentage + "," +
@@ -547,7 +547,7 @@ namespace RocketPOS.Repository
                               "  ,[EmployeeId]  = @EmployeeId" +
                               "  ,[InventoryType]  = @InventoryType" +
                               "  ,[PurchaseDate] = @Date  " +
-                              "  ,[GrossAmount]  =  @GrandTotal  " +
+                              "  ,[GrossAmount]  =  (@GrandTotal - @TaxAmount)  " +
                               "  ,[DiscountAmount]  =  @DiscountAmount  " +
                               "  ,[TaxAmount]  =  @TaxAmount  " +
                               "  ,[GrandTotal]  = @GrandTotal   " +
@@ -594,7 +594,7 @@ namespace RocketPOS.Repository
                             }
                             queryDetails = queryDetails + " [UnitPrice]   = " + item.UnitPrice + "," +
                                          " [Qty]        =  " + item.Quantity + "," +
-                                         " [GrossAmount] = " + item.Total + "," +
+                                         " [GrossAmount] = " + (item.Total - item.TaxAmount) + "," +
                                          " [DiscountAmount] = " + item.DiscountAmount + "," +
                                          " [DiscountPercentage] = " + item.DiscountPercentage + "," +
                                          " [TaxPercentage] = " + item.TaxPercentage + "," +
@@ -718,7 +718,7 @@ namespace RocketPOS.Repository
                             }
                             queryDetails = queryDetails + "" + item.UnitPrice + "," +
                                                     "" + item.Quantity + "," +
-                                                    "" + item.Total + "," +
+                                                    "" + (item.Total - item.TaxAmount) + "," +
                                                     "" + item.DiscountAmount + "," +
                                                     "" + item.DiscountPercentage + "," +
                                                     "" + item.TaxPercentage + "," +

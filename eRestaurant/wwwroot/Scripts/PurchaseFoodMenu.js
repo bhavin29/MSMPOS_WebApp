@@ -39,7 +39,7 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [4,6, 9,10, 12,13,14],
+                "targets": [4,6,9,10 ,12,13,14],
                 "visible": false,
                 "searchable": false
             }
@@ -97,17 +97,16 @@ $('#addRow').on('click', function (e) {
     var Qty = parseFloat($("#Quantity").val()).toFixed(2);
     var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
     var Total = parseFloat($("#UnitPrice").val() * $("#Quantity").val()).toFixed(2);
-    DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
+    DiscountPercentage = parseFloat($("#Discount").val()).toFixed(2);
 
     Qty = getNum(Qty);
     DiscountPercentage = getNum(DiscountPercentage);
     TaxPercentage = getNum(TaxPercentage);
     UnitPrice = getNum(UnitPrice);
     Total = getNum(Total);
-
+    debugger;
     if (DiscountPercentage > 0) {
         DiscountAmount = ((parseFloat(Total) * parseFloat(DiscountPercentage)) / 100).toFixed(2);
-        DisAmtTotal = parseFloat(parseFloat(DiscountAmount) + parseFloat($("#DiscountAmount").val())).toFixed(2);
         Total = (parseFloat(Total) - parseFloat(DiscountAmount)).toFixed(2);
     }
     else {
@@ -126,7 +125,7 @@ $('#addRow').on('click', function (e) {
     }
 
     if (TaxAmount > 0) {
-        Vatable = parseFloat(Total).toFixed(2);
+        Vatable = (parseFloat(Total) - parseFloat(TaxAmount)).toFixed(2);
     }
     else {
         Nonvatable = parseFloat(Total).toFixed(2);
@@ -161,12 +160,12 @@ $('#addRow').on('click', function (e) {
             unitPrice: UnitPrice,
             quantity: Qty,
             discountAmount: DiscountAmount,
-            discountPercentage: Discount,
+            discountPercentage: DiscountPercentage,
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             total: Total,
-            VatableAmount: Vatable,
-            NonvatableAmount: Nonvatable,
+            vatableAmount: Vatable,
+            nonVatableAmount: Nonvatable,
             purchaseId: $("#PurchaseId").val(),
             itemType: $("#ItemType").val(),
             rowNumber: RowNumber
@@ -209,7 +208,6 @@ $('#addRow').on('click', function (e) {
 });
 
 function saveOrder(data) {
-    alert(2);
     return $.ajax({
         dataType: 'json',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -224,8 +222,6 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
         var message = validation(1);
-        alert(1);
-        debugger;
         if (message == '') {
             $("#purchase").on("submit", function (e) {
                 e.preventDefault();
@@ -490,6 +486,7 @@ function GetSupplierDetailsById(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $('#TaxType').attr('checked', obj.taxType);
             $("#ItemType").val('0');
         },
         error: function (data) {
@@ -635,35 +632,53 @@ function GetFoodMenuByItemType() {
 
 function deleteOrder(rowId) {
     var id;
+    var DisAmtTotal = 0;
+    var TaxAmountTotal = 0;
+    var VatableTotal = 0;
+    var NonvatableTotal = 0;
+    var TotalAmount = 0;
+    var GrossAmount = 0;
 
     for (var i = 0; i < dataArr.length; i++) {
 
         id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId;
 
         if (id == rowId) {
-            TotalAmount = dataArr[i].total;
-            GrandTotal -= TotalAmount;
-            $("#GrandTotal").val(GrandTotal);
             DueAmount();
             deletedId.push(dataArr[i].purchaseId);
             dataArr.splice(i, 1);
             PurchaseDatatable.row('#' + rowId).remove().draw(false);
             jQuery.noConflict();
-            $("#myModal" + purchaseId).modal('hide');
         }
     }
+
+    DisAmtTotal = calculateDiscountColumn(4);
+    TaxAmountTotal = CalculateArray('TaxAmount');
+    VatableTotal = CalculateArray('VatableAmount');
+    NonvatableTotal = CalculateArray('NonvatableAmount');
+    TotalAmount = CalculateArray('Total');
+    GrossAmount = TotalAmount - TaxAmountTotal;
+
+    $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
+    $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
+    $("#GrandTotal").val(parseFloat(TotalAmount).toFixed(2));
+    $("#VatableAmount").val(parseFloat(VatableTotal).toFixed(2));
+    $("#NonVatableAmount").val(parseFloat(NonvatableTotal).toFixed(2));
+
+    $("#myModal" + purchaseId).modal('hide');
+
 }
 
 function CalculateArray(columnname) {
     var Total = 0;
     if (columnname == "VatableAmount") {
         for (var i = 0; i < dataArr.length; i++) {
-            Total = (parseFloat(Total) + parseFloat(dataArr[i].VatableAmount)).toFixed(2);
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].vatableAmount)).toFixed(2);
         }
     }
     else if (columnname == "NonvatableAmount") {
         for (var i = 0; i < dataArr.length; i++) {
-            Total = (parseFloat(Total) + parseFloat(dataArr[i].NonvatableAmount)).toFixed(2);
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].nonVatableAmount)).toFixed(2);
         }
     }
     else if (columnname == "TaxAmount") {

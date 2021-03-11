@@ -127,8 +127,8 @@ $('#addRow').on('click', function (e) {
     }
 
     if (TaxAmount > 0) {
-        Vatable = parseFloat(Total).toFixed(2);
-    }
+        Vatable = (parseFloat(Total) - parseFloat(TaxAmount)).toFixed(2);
+     }
     else {
         Nonvatable = parseFloat(Total).toFixed(2);
     }
@@ -170,8 +170,8 @@ $('#addRow').on('click', function (e) {
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             totalAmount: Total,
-            VatableAmount: Vatable,
-            NonvatableAmount: Nonvatable,
+            vatableAmount: Vatable,
+            nonVatableAmount: Nonvatable,
             purchaseInvoiceId: $("#PurchaseInvoiceId").val(),
             purchaseStatus: $("#PurchaseStatus").val(),
             itemType: $("#ItemType").val(),
@@ -352,10 +352,12 @@ $('#ok').click(function () {
 
 function deleteOrder(rowId) {
     var id;
-
-    GrossAmount = $("#GrossAmount").val();
-    TaxAmountTotal = $("#TaxAmount").val();
-    TotalAmount = $("#TotalAmount").val();
+    var DisAmtTotal = 0;
+    var TaxAmountTotal = 0;
+    var VatableTotal = 0;
+    var NonvatableTotal = 0;
+    var TotalAmount = 0;
+    var GrossAmount = 0;
 
     for (var i = 0; i < dataArr.length; i++) {
 
@@ -363,30 +365,27 @@ function deleteOrder(rowId) {
 
         if (id == rowId) {
 
-            var Gross = dataArr[i].unitPrice * dataArr[i].invoiceQty;
-            var Tax = dataArr[i].taxAmount;
-            var Total = dataArr[i].totalAmount;
-            GrossAmount -= Gross;
-            TaxAmountTotal -= Tax;
-            TotalAmount -= Total;
-
-            $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
-            $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
-            $("#TotalAmount").val(parseFloat(TotalAmount).toFixed(2));
-
             deletedId.push(dataArr[i].purchaseInvoiceId);
             dataArr.splice(i, 1);
             PurchaseDatatable.row('#' + rowId).remove().draw(false);
             jQuery.noConflict();
-            $("#myModal" + purchaseId).modal('hide');
         }
     }
 
-    VatableTotal = calculateColumn(14);
-    NonvatableTotal = calculateColumn(15);
+    DisAmtTotal = calculateDiscountColumn(4);
+    TaxAmountTotal = CalculateArray('TaxAmount');
+    VatableTotal = CalculateArray('VatableAmount');
+    NonvatableTotal = CalculateArray('NonvatableAmount');
+    TotalAmount = CalculateArray('Total');
+    GrossAmount = TotalAmount - TaxAmountTotal;
 
+    $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
+    $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
+    $("#GrandTotal").val(parseFloat(TotalAmount).toFixed(2));
     $("#VatableAmount").val(parseFloat(VatableTotal).toFixed(2));
-    $("#NonvatableAmount").val(parseFloat(NonvatableTotal).toFixed(2));
+    $("#NonVatableAmount").val(parseFloat(NonvatableTotal).toFixed(2));
+
+    $("#myModal" + purchaseId).modal('hide');
 };
 
 $(document).on('click', 'a.editItem', function (e) {
@@ -714,12 +713,22 @@ function CalculateArray(columnname) {
     var Total = 0;
     if (columnname == "VatableAmount") {
         for (var i = 0; i < dataArr.length; i++) {
-            Total = (parseFloat(Total) + parseFloat(dataArr[i].VatableAmount)).toFixed(2);
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].vatableAmount)).toFixed(2);
         }
     }
     else if (columnname == "NonvatableAmount") {
         for (var i = 0; i < dataArr.length; i++) {
-            Total = (parseFloat(Total) + parseFloat(dataArr[i].NonvatableAmount)).toFixed(2);
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].nonVatableAmount)).toFixed(2);
+        }
+    }
+    else if (columnname == "TaxAmount") {
+        for (var i = 0; i < dataArr.length; i++) {
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].taxAmount)).toFixed(2);
+        }
+    }
+    else if (columnname == "Total") {
+        for (var i = 0; i < dataArr.length; i++) {
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].totalAmount)).toFixed(2);
         }
     }
 

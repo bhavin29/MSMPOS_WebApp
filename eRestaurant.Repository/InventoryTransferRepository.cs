@@ -397,7 +397,7 @@ namespace RocketPOS.Repository
             List<InventoryTransferModel> inventoryTransferModels = new List<InventoryTransferModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As FromStoreName, IA.ToStoreId ,SS.StoreName AS ToStoreName, " +
+                var query = "SELECT IA.Id,IA.InventoryType,IA.FromStoreId,S.StoreName As ToStoreName, IA.ToStoreId ,SS.StoreName AS FromStoreName, " +
                     " IA.ReferenceNumber as ReferenceNo, IA.EntryDate as [Date], IA.EmployeeId, E.LastName + E.FirstName as EmployeeName, " +
                             "IA.Notes FROM [InventoryTransfer] IA LEFT JOIN Employee E ON E.Id = IA.EmployeeId " +
                             "INNER JOIN Store S ON S.Id = IA.ToStoreId " +

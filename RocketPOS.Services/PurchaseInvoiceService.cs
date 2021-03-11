@@ -200,7 +200,9 @@ namespace RocketPOS.Services
                              Notes = purchase.Notes,
                              PurchaseStatus = purchase.PurchaseStatus,
                              POReferenceNo = purchase.POReferenceNo,
-                             PODate = purchase.PODate
+                             PODate = purchase.PODate,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -220,7 +222,9 @@ namespace RocketPOS.Services
                                                     TotalAmount = purchasedetails.TotalAmount,
                                                     IngredientName = purchasedetails.IngredientName,
                                                     FoodMenuName = purchasedetails.FoodMenuName,
-                                                    ItemType = purchasedetails.ItemType
+                                                    ItemType = purchasedetails.ItemType,
+                                                    VatableAmount = purchasedetails.VatableAmount,
+                                                    NonVatableAmount = purchasedetails.NonVatableAmount
                                                 }).ToList();
             }
             return model;

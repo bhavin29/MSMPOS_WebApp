@@ -913,7 +913,7 @@ namespace RocketPOS.Repository
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then pin.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
-                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
+                            " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.TotalAmount as Total, " +
                             " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount, " +
                             " (case when pin.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName, pin.VatableAmount,pin.NonVatableAmount "+
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +

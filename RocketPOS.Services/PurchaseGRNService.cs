@@ -191,7 +191,9 @@ namespace RocketPOS.Services
                              DeliveryDate = purchase.DeliveryDate,
                              DriverName = purchase.DriverName,
                              VehicleNumber = purchase.VehicleNumber,
-                             Notes = purchase.Notes
+                             Notes = purchase.Notes,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -210,7 +212,9 @@ namespace RocketPOS.Services
                                                 TotalAmount = purchasedetails.TotalAmount,
                                                 IngredientName = purchasedetails.IngredientName,
                                                 FoodMenuName = purchasedetails.FoodMenuName,
-                                                ItemType = purchasedetails.ItemType
+                                                ItemType = purchasedetails.ItemType,
+                                                VatableAmount = purchasedetails.VatableAmount,
+                                                NonVatableAmount = purchasedetails.NonVatableAmount
                                             }).ToList();
             }
             return model;

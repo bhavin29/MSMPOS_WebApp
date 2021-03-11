@@ -73,6 +73,7 @@ $('#addRow').on('click', function (e) {
     var foodMenuId = $("#FoodMenuId").val();
     var itemType = $("#ItemType").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
+    var taxType = $("#TaxType").val();
 
     $.ajax({
         url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
@@ -166,7 +167,9 @@ $('#addRow').on('click', function (e) {
         DisAmtTotal = calculateColumn(4);
         TaxAmountTotal = calculateColumn(5);
         GrossAmount = calculateGross();
-        TotalAmount = GrossAmount - DisAmtTotal;
+        TotalAmount = GrossAmount  - DisAmtTotal;
+
+        GrossAmount = TotalAmount - TaxAmountTotal
 
         $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
         $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
@@ -477,6 +480,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#TaxType").val(obj.taxType);
             $("#ItemType").val('0');
         },
         error: function (data) {

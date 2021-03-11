@@ -5524,3 +5524,63 @@
 2021-03-10 14:07:22.6748 Info Adding target FileTarget(Name=alldata)
 2021-03-10 14:07:22.6985 Info Adding target FileTarget(Name=otherFile-web)
 2021-03-10 14:07:22.8446 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 15:30:12.5192 Info Message Template Auto Format enabled
+2021-03-10 15:30:12.6129 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 15:30:12.8271 Info Adding target FileTarget(Name=alldata)
+2021-03-10 15:30:12.8676 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 15:30:13.0285 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 15:42:10.0362 Info Message Template Auto Format enabled
+2021-03-10 15:42:10.1391 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 15:42:10.3612 Info Adding target FileTarget(Name=alldata)
+2021-03-10 15:42:10.3867 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 15:42:10.5499 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 19:46:57.1674 Info Message Template Auto Format enabled
+2021-03-10 19:46:57.2704 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 19:46:57.5452 Info Adding target FileTarget(Name=alldata)
+2021-03-10 19:46:57.6218 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 19:46:57.8410 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 20:48:16.5884 Info Message Template Auto Format enabled
+2021-03-10 20:48:16.6488 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 20:48:16.8052 Info Adding target FileTarget(Name=alldata)
+2021-03-10 20:48:16.8302 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 20:48:17.0207 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 20:50:25.5355 Info Message Template Auto Format enabled
+2021-03-10 20:50:25.5874 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 20:50:25.7750 Info Adding target FileTarget(Name=alldata)
+2021-03-10 20:50:25.7922 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 20:50:25.8802 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 20:52:44.4312 Info Message Template Auto Format enabled
+2021-03-10 20:52:44.4724 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 20:52:44.6357 Info Adding target FileTarget(Name=alldata)
+2021-03-10 20:52:44.6545 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 20:52:44.7834 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 21:03:55.4797 Info Message Template Auto Format enabled
+2021-03-10 21:03:55.5429 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 21:03:55.7816 Info Adding target FileTarget(Name=alldata)
+2021-03-10 21:03:55.8049 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 21:03:55.9960 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 22:00:39.9695 Info Message Template Auto Format enabled
+2021-03-10 22:00:40.0776 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 22:00:40.4294 Info Adding target FileTarget(Name=alldata)
+2021-03-10 22:00:40.4852 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 22:00:40.6614 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 22:25:06.9465 Info Message Template Auto Format enabled
+2021-03-10 22:25:07.1228 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 22:25:07.3642 Info Adding target FileTarget(Name=alldata)
+2021-03-10 22:25:07.4071 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 22:25:07.5294 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 22:54:45.6958 Info Message Template Auto Format enabled
+2021-03-10 22:54:45.8700 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 22:54:46.3035 Info Adding target FileTarget(Name=alldata)
+2021-03-10 22:54:46.3687 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 22:54:46.5116 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 22:59:09.7097 Info Message Template Auto Format enabled
+2021-03-10 22:59:09.8535 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 22:59:10.2299 Info Adding target FileTarget(Name=alldata)
+2021-03-10 22:59:10.2974 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 22:59:10.4689 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config
+2021-03-10 23:04:53.4804 Info Message Template Auto Format enabled
+2021-03-10 23:04:53.5285 Info Loading assembly: NLog.Web.AspNetCore
+2021-03-10 23:04:53.7598 Info Adding target FileTarget(Name=alldata)
+2021-03-10 23:04:53.7888 Info Adding target FileTarget(Name=otherFile-web)
+2021-03-10 23:04:53.9087 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Debug\netcoreapp3.0\nlog.config

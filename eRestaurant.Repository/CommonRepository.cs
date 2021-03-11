@@ -81,8 +81,7 @@ namespace RocketPOS.Repository
             string result = ""; string query = "";int validate = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-  
-                foreach( var item in referenceTables) 
+                  foreach( var item in referenceTables) 
                 {
                     if (item.TableName == TableName)
                     {

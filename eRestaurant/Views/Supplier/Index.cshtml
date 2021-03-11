@@ -43,6 +43,9 @@
                                 @Html.DisplayNameFor(model => model.City)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.TaxType)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
                             </th>
                             <th>@Html.DisplayName("Action")</th>
@@ -64,6 +67,9 @@
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.City)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TaxType)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
@@ -91,6 +97,16 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td>
+                                @if (item.TaxType == true)
+                                {
+                                    @Html.DisplayName("True")
+                                }
+                                else
+                                {
+                                    @Html.DisplayName("False")
+                                }
                             </td>
                             <td>
                                 @if (item.IsActive == true)
@@ -145,7 +161,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2, 3,4,5] },
+                    exportOptions: { columns: [0, 1, 2, 3,4,5,6] },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);

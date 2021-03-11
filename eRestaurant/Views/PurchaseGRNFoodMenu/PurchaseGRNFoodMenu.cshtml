@@ -44,11 +44,12 @@
                                                     onchange="GetSupplierDetails(SupplierId)">
                                             </select>
                                             <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                            <input class="form-control" type="hidden" id="TaxType" />
                                         </div>
                                     </div>
                                     <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label class="control-label">Reference</label>
+                                            <label class="control-label">PO#</label>
                                             <input type="text" id="POReference" class="form-control" />
                                         </div>
                                     </div>
@@ -142,6 +143,7 @@
                                             <th style="width:0%" class="text-right">Dis Amt</th>
                                             <th style="width:0%" class="text-right">Tax%</th>
                                             <th style="width:8%" class="text-right">Tax Amt</th>
+                                            <th style="width:10%" class="text-right">Gross</th>
                                             <th style="width:10%" class="text-right">Total</th>
                                             <th style="width:10%">Action</th>
                                             <th style="width:0%" class="text-center">Id</th>
@@ -157,69 +159,72 @@
                                                 var tm = "#myModal" + item.ItemType + item.FoodMenuId;
                                                 var mid = "myModal" + item.ItemType + item.FoodMenuId;
                                                 var rowId = item.ItemType + "rowId" + item.FoodMenuId;
-                                                <tr id="@rowId">
-                                                    <td>
-                                                        @item.FoodMenuId
-                                                    </td>
-                                                    <td>
-                                                        @item.FoodMenuName
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.POQTY.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.GRNQTY.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.UnitPrice.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.DiscountPercentage.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.DiscountAmount.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.TaxAmount.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.TaxAmount.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-right">
-                                                        @item.TotalAmount.ToString("0.00")
-                                                    </td>
-                                                    <td class="text-left">
-                                                        <div class="form-button-action">
-                                                            <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
+                                        <tr id="@rowId">
+                                            <td>
+                                                @item.FoodMenuId
+                                            </td>
+                                            <td>
+                                                @item.FoodMenuName
+                                            </td>
+                                            <td class="text-right">
+                                                @item.POQTY.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.GRNQTY.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.UnitPrice.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountPercentage.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxPercentage.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.GrossAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TotalAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-left">
+                                                <div class="form-button-action">
+                                                    <a href="#" data-itemid="@item.FoodMenuId"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                @item.PurchaseGRNId
+                                            </td>
+                                            <td>
+                                                @item.ItemType
+                                            </td>
+                                            <td>
+                                                @rowId
+                                            </td>
+                                            <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                                                         </div>
-                                                    </td>
-                                                    <td>
-                                                        @item.PurchaseGRNId
-                                                    </td>
-                                                    <td>
-                                                        @item.ItemType
-                                                    </td>
-                                                    <td>
-                                                        @rowId
-                                                    </td>
-                                                    <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.ItemType + 'rowId' + @item.FoodMenuId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
-                                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                                                </div>
-                                                            </div>
+                                                        <div class="modal-body">
+                                                            @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <a id="deleteBtn" data-itemId="@item.FoodMenuId" onclick="deleteOrder(@item.ItemType + 'rowId' + @item.FoodMenuId)" class="btn bg-danger mr-1" data-dismiss="modal">Delete</a>
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
-                                                </tr>
+                                                </div>
+                                            </div>
+                                        </tr>
                                             }
                                         }
                                     </tbody>

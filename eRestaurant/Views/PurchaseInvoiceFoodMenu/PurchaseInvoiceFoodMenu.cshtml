@@ -45,6 +45,7 @@
                                                     onchange="GetSupplierDetails(SupplierId)">
                                             </select>
                                             <span asp-validation-for="SupplierId" class="text-danger"></span>
+                                            <input class="form-control" type="hidden" id="TaxType" />
                                         </div>
                                     </div>
                                     <div class="col-md-1 pr-2 pl-2">
@@ -80,7 +81,7 @@
                                             <div class="form-group">
                                                 <label class="control-label">Type</label>
                                                 <select Id="ItemType"
-                                                        class="form-control" onchange="GetFoodMenuByItemType()">
+                                                        class="form-control" onchange="GetFoodMenuByItemType(ItemType)">
                                                     <option value="0">Menu Item</option>
                                                     <option value="1">Stock Item</option>
                                                     <option value="2">Asset Item</option>

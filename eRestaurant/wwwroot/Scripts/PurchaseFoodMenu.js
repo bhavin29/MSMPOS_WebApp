@@ -88,7 +88,6 @@ $('#addRow').on('click', function (e) {
         }
     });
 
-
     var Qty = parseFloat($("#Quantity").val()).toFixed(2);
     Discount = parseFloat($("#Discount").val()).toFixed(2);
     var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
@@ -429,6 +428,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#TaxType").val(obj.taxType);
             $("#ItemType").val('0');
         },
         error: function (data) {

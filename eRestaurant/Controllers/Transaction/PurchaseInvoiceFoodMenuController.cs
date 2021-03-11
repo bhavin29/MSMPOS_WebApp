@@ -217,7 +217,7 @@ namespace RocketPOS.Controllers.Transaction
             PurchaseInvoiceModel purchaseModel = new PurchaseInvoiceModel();
             purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuListBySupplier(supplierId);
             supplierModel = _iSupplierService.GetSupplierById(supplierId);
-            return Json(new { email = supplierModel.SupplierEmail, purchaseModel.FoodMenuList });
+            return Json(new { email = supplierModel.SupplierEmail, taxType = supplierModel.TaxType, purchaseModel.FoodMenuList });
         }
 
         [HttpGet]

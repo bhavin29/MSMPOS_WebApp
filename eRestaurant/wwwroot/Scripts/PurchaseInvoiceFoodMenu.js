@@ -73,6 +73,7 @@ $('#addRow').on('click', function (e) {
     var foodMenuId = $("#FoodMenuId").val();
     var itemType = $("#ItemType").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
+    var taxType = $("#TaxType").val();
 
     $.ajax({
         url: "/PurchaseFoodMenu/GetTaxByFoodMenuId",
@@ -99,7 +100,7 @@ $('#addRow').on('click', function (e) {
     TaxPercentage = getNum(TaxPercentage);
     UnitPrice = getNum(UnitPrice);
     Total = getNum(Total);
-
+    debugger;
     if (DiscountPercentage > 0) {
         DiscountAmount = ((parseFloat(Total) * parseFloat(DiscountPercentage)) / 100).toFixed(2);
         DisAmtTotal = parseFloat(parseFloat(DiscountAmount) + parseFloat($("#DiscountAmount").val())).toFixed(2);
@@ -109,10 +110,18 @@ $('#addRow').on('click', function (e) {
         DiscountAmount = parseFloat(0).toFixed(2);
     }
 
+    alert(taxType);
+
     if (TaxPercentage > 0) {
-        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
-        // Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+        if (taxType == 'false') {
+            TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
+        }
+        else {
+            TaxAmount = (parseFloat(Total) - ((parseFloat(Total) / (100 + parseFloat(TaxPercentage)  )) * 100));
+        }
     }
+    TaxAmount = TaxAmount.toFixed(2);
+
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
 
@@ -162,10 +171,12 @@ $('#addRow').on('click', function (e) {
         $(attRowNode).find('td').eq(5).addClass('text-right');
         $(attRowNode).find('td').eq(6).addClass('text-right');
 
-        DisAmtTotal = calculateColumn(4);
+        DisAmtTotal = calculateDiscountColumn(4);
         TaxAmountTotal = calculateColumn(5);
         GrossAmount = calculateGross();
         TotalAmount = GrossAmount - DisAmtTotal;
+
+        GrossAmount = TotalAmount - TaxAmountTotal
 
         $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
         $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
@@ -482,6 +493,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
+            $("#TaxType").val(obj.taxType);
             $("#ItemType").val('0');
         },
         error: function (data) {
@@ -548,13 +560,32 @@ function calculateColumn(index) {
     return total;
 }
 
+function calculateDiscountColumn(index) {
+    var totaldis = 0.00,discount=0;
+    $('#purchaseOrderDetails tbody tr').each(function () {
+        var value = parseFloat($('td', this).eq(4).text());// disc%
+        var value2 = parseFloat($('td', this).eq(2).text());//qty
+        var value3 = parseFloat($('td', this).eq(3).text());//price
+
+        if (!isNaN(value)) {
+            discount = (((parseFloat(value2) * parseFloat(value3)) * parseFloat(value)) / 100).toFixed(2);
+            totaldis = (parseFloat(totaldis) + parseFloat(discount));
+        }
+    });
+    return totaldis;
+}
+
+
+
+
+
 function calculateGross() {
     var total = 0;
     $('#purchaseOrderDetails tbody tr').each(function () {
         var Invoiceqty = parseFloat($('td', this).eq(2).text());
         var Price = parseFloat($('td', this).eq(3).text());
         if (!isNaN(Price)) {
-            total += (Invoiceqty * Price);
+            total += (parseFloat(Invoiceqty) * parseFloat(Price));
         }
 
 
@@ -604,10 +635,9 @@ function GetPurchaseInvoicebyPO(poReference) {
     });
 }
 
-function GetFoodMenuByItemType() {
+function GetFoodMenuByItemType(itemType) {
 
-    var itemType = $("#ItemType").val();
-    if (itemType == 0) {
+    if (itemType.value == 0) {
         $.ajax({
             url: "/PurchaseFoodMenu/GetFoodMenuList",
             data: {},
@@ -625,7 +655,7 @@ function GetFoodMenuByItemType() {
             }
         });
     }
-    if (itemType == 1) {
+    if (itemType.value == 1) {
         $.ajax({
             url: "/PurchaseFoodMenu/GetIngredientList",
             data: {},
@@ -643,7 +673,7 @@ function GetFoodMenuByItemType() {
             }
         });
     }
-    if (itemType == 2) {
+    if (itemType.value == 2) {
         $.ajax({
             url: "/PurchaseFoodMenu/GetAssetItemList",
             data: {},

@@ -45,12 +45,12 @@
                                                     onchange="GetSupplierDetails(SupplierId)">
                                             </select>
                                             <span asp-validation-for="SupplierId" class="text-danger"></span>
-                                            <input class="form-control" type="hidden" id="TaxType" />
+                                            <input type="checkbox" disabled="disabled" class="form-check-input" id="TaxType" />
                                         </div>
                                     </div>
                                     <div class="col-md-1 pr-2 pl-2">
                                         <div class="form-group">
-                                            <label class="control-label">Reference</label>
+                                            <label class="control-label">PO#</label>
                                             <input type="text" id="POReference" class="form-control" />
                                         </div>
                                     </div>
@@ -139,12 +139,14 @@
                                                     <th style="width:8%" class="text-right">PO Qty</th>
                                                     <th style="width:8%" class="text-right">Received Qty</th>
                                                     <th style="width:8%" class="text-right">Price</th>
-                                                    <th style="width:8%" class="text-right">Disc%</th>
-                                                    <th style="width:0%" class="text-right">Disc Amt</th>
+                                                    <th style="width:0%" class="text-right">Disc%</th>
+                                                    <th style="width:8%" class="text-right">Disc Amt</th>
                                                     <th style="width:0%" class="text-right">Tax%</th>
                                                     <th style="width:8%" class="text-right">Tax Amt</th>
                                                     <th style="width:10%" class="text-right">Total</th>
-                                                    <th style="width:8%" >Action</th>
+                                                    <th style="width:0%" class="text-center"></th>
+                                                    <th style="width:0%" class="text-center"></th>
+                                                    <th style="width:8%">Action</th>
                                                     <th style="width:0%" class="text-center">Id</th>
                                                     <th style="width:0%" class="text-center"></th>
                                                     <th style="width:0%" class="text-center"></th>
@@ -189,7 +191,13 @@
                                                     <td class="text-right">
                                                         @item.TotalAmount.ToString("0.00")
                                                     </td>
-                                                    <td >
+                                                    <td>
+                                                        @item.VatableAmount
+                                                    </td>
+                                                    <td>
+                                                        @item.NonVatableAmount
+                                                    </td>
+                                                    <td>
                                                         <div class="form-button-action">
                                                             <a href="#" data-itemid="@item.FoodMenuId" class="btn btn-link  editItem"></a><a href="#" data-toggle="modal" data-target="@tm">Delete<i></i></a>
                                                         </div>
@@ -268,6 +276,14 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group form-inline fc-left">
+                                                        <div class="col-md-1 pr-2 pl-2">
+                                                            <label asp-for="VatableAmount" class="control-label">Vatable </label>
+                                                            <input asp-for="VatableAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                                        </div>
+                                                        <div class="col-md-1 pr-2 pl-2">
+                                                            <label asp-for="NonVatableAmount" class="control-label">NonVatable </label>
+                                                            <input asp-for="NonVatableAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">
+                                                        </div>
                                                         <div class="col-md-1 pr-2 pl-2">
                                                             <label asp-for="GrossAmount" class="control-label">Gross Amount</label>
                                                             <input asp-for="GrossAmount" style="width:80px" disabled="disabled" class="form-control input-full text-right">

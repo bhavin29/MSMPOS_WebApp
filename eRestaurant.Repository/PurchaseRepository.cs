@@ -333,7 +333,7 @@ namespace RocketPOS.Repository
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then pin.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId, " +
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
                             " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
-                            " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount " +
+                            " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount, pin.VatableAmount,pin.NonVatableAmount  " +
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
                             " left join Ingredient as I on pin.IngredientId = I.Id " +
@@ -376,6 +376,8 @@ namespace RocketPOS.Repository
                              "  ,[GrandTotal]     " +
                              "  ,[PaidAmount]     " +
                              "  ,[DueAmount]      " +
+                             "  ,[VatableAmount]      " +
+                             "  ,[NonVatableAmount]      " +
                              "  ,[Notes]          " +
                              "  ,[Status]          " +
                              "  ,[UserIdInserted]  " +
@@ -394,10 +396,12 @@ namespace RocketPOS.Repository
                              "   @GrandTotal,      " +
                              "   @Paid,      " +
                              "   @Due,       " +
+                             "   @VatableAmount,      " +
+                             "   @NonVatableAmount,      " + 
                              "   @Notes," +
                              "   @Status," +
                              "" + LoginInfo.Userid + "," +
-                             "   GetUtcDate(),    " +
+                             "   GetUtcDate(),    " +   
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
                 result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -461,6 +465,8 @@ namespace RocketPOS.Repository
                                               " ,[TaxPercentage]  " +
                                               " ,[TaxAmount]    " +
                                               " ,[TotalAmount]  " +
+                                             "  ,[VatableAmount]      " +
+                                             "  ,[NonVatableAmount]      " +
                                               " ,[UserIdInserted]" +
                                               " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
@@ -489,6 +495,8 @@ namespace RocketPOS.Repository
                                                 "" + item.TaxPercentage + "," +
                                                 "" + item.TaxAmount + "," +
                                                 "" + item.Total + "," +
+                                                "" + item.VatableAmount + "," +
+                                                "" + item.NonVatableAmount + "," +
                                                 "" + LoginInfo.Userid + "," +
                                                 "   GetUtcDate(),    " +
                                                 "0);  SELECT SCOPE_IDENTITY();";
@@ -545,6 +553,8 @@ namespace RocketPOS.Repository
                               "  ,[GrandTotal]  = @GrandTotal   " +
                               "  ,[PaidAmount] = @Paid    " +
                               "  ,[DueAmount] =  @Due    " +
+                              "  ,[VatableAmount] = @VatableAmount     " +
+                              "  ,[NonVatableAmount] = @NonVatableAmount      " +
                               "  ,[Notes] =  @Notes    " +
                               "  ,[Status] =  @Status    " +
                               "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
@@ -590,6 +600,8 @@ namespace RocketPOS.Repository
                                          " [TaxPercentage] = " + item.TaxPercentage + "," +
                                          " [TaxAmount] = " + item.TaxAmount + "," +
                                          " [TotalAmount] = " + item.Total + "," +
+                                         " [VatableAmount] = " + item.VatableAmount + "," +
+                                         " [NonVatableAmount] = " + item.NonVatableAmount + "," +
                                          " [UserIdUpdated] = " + LoginInfo.Userid + "," +
                                          " [DateUpdated] = GetUTCDate() " +
                                          " where id = " + item.PurchaseId + ";";
@@ -682,6 +694,8 @@ namespace RocketPOS.Repository
                                               " ,[TaxPercentage]  " +
                                               " ,[TaxAmount]    " +
                                               " ,[TotalAmount]  " +
+                                              "  ,[VatableAmount]      " +
+                                              "  ,[NonVatableAmount]      " +
                                               " ,[UserIdInserted]" +
                                               " ,[DateInserted]" +
                                               " ,[IsDeleted])   " +
@@ -710,7 +724,9 @@ namespace RocketPOS.Repository
                                                     "" + item.TaxPercentage + "," +
                                                     "" + item.TaxAmount + "," +
                                                     "" + item.Total + "," +
-                                                    "" + LoginInfo.Userid + "," +
+                                                     "" + item.VatableAmount + "," +
+                                                    "" + item.NonVatableAmount + "," +
+                                                     "" + LoginInfo.Userid + "," +
                                                     "   GetUtcDate(),    " +
                                                     "0);";
                         }
@@ -881,7 +897,7 @@ namespace RocketPOS.Repository
             {
                 var query = "select Purchase.Id as Id, Purchase.StoreId,Purchase.EmployeeId,ReferenceNo as ReferenceNo,PurchaseDate as [Date],Supplier.SupplierName, Supplier.Id as SupplierId," +
                       " Supplier.SupplierAddress1,Supplier.SupplierAddress2,Supplier.SupplierPhone,Supplier.SupplierEmail," +
-                      "Purchase.GrossAmount,Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted,S.StoreName " +
+                      " Purchase.VatableAmount,Purchase.NonVatableAmount, Purchase.GrossAmount,Purchase.GrandTotal as GrandTotal,Purchase.DiscountAmount as DiscountAmount,Purchase.TaxAmount as TaxAmount,Purchase.DueAmount as Due,Purchase.PaidAmount as Paid,Purchase.Notes,Purchase.Status,Purchase.DateInserted,S.StoreName " +
                       "from Purchase inner join Supplier on Purchase.SupplierId = Supplier.Id inner join Store S on S.Id=Purchase.StoreId where Purchase.InventoryType=1 And Purchase.Isdeleted = 0 and Purchase.Id = " + purchaseId;
                 purchaseModelList = con.Query<PurchaseModel>(query).AsList();
             }
@@ -899,7 +915,7 @@ namespace RocketPOS.Repository
                             " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
                             " pin.UnitPrice as UnitPrice, pin.Qty as Quantity, pin.GrossAmount as Total, " +
                             " pin.DiscountAmount,pin.DiscountPercentage,pin.TaxPercentage,pin.TaxAmount, " +
-                            " (case when pin.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName "+
+                            " (case when pin.FoodMenuId is null then UI.UnitName else UF.UnitName end) as UnitName, pin.VatableAmount,pin.NonVatableAmount "+
                             " from purchase as P inner join PurchaseDetail as PIN on P.id = pin.PurchaseId " +
                             " left join FoodMenu as f on pin.FoodMenuId = f.Id " +
                             " left join Ingredient as I on pin.IngredientId = I.Id " +

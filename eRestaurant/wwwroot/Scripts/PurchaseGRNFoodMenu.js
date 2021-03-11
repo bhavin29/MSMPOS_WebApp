@@ -40,13 +40,14 @@ $(document).ready(function () {
             }
             ,
             {
-                "targets": [6, 7, 11, 12, 13],
+                "targets": [5,7,10,11,13,14,15],
                 "visible": false,
                 "searchable": false
             }
         ]
     });
 
+    $('#TaxType').hide();
     $("#StoreId").focus();
     $("#StoreId").select2();
     $("#SupplierId").select2();
@@ -70,6 +71,10 @@ $('#addRow').on('click', function (e) {
     var DiscountAmount = 0;
     var TaxPercentage = 0;
     var TaxAmount = 0;
+    var Vatable = 0;
+    var Nonvatable = 0;
+    var VatableTotal = 0;
+    var NonvatableTotal = 0;
     var foodMenuId = $("#FoodMenuId").val();
     var itemType = $("#ItemType").val();
     var recordid = $("#ItemType").val() + 'rowId' + $("#FoodMenuId").val();
@@ -90,11 +95,10 @@ $('#addRow').on('click', function (e) {
 
     var POQty = parseFloat($("#POQty").val()).toFixed(2);
     var GRNQty = parseFloat($("#GRNQty").val()).toFixed(2);
-    DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
-
     var UnitPrice = parseFloat($("#UnitPrice").val()).toFixed(2);
     var Total = parseFloat($("#UnitPrice").val() * $("#GRNQty").val()).toFixed(2);
-    debugger;
+    DiscountPercentage = parseFloat($("#DiscountPercentage").val()).toFixed(2);
+
     POQty = getNum(POQty);
     GRNQty = getNum(GRNQty);
     DiscountPercentage = getNum(DiscountPercentage);
@@ -111,10 +115,24 @@ $('#addRow').on('click', function (e) {
         DiscountAmount = parseFloat(0).toFixed(2);
     }
 
+    var TaxTypeVaule = +$('#TaxType').is(':checked')
     if (TaxPercentage > 0) {
-        TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
-        // Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+        if (TaxTypeVaule == 1) {
+            TaxAmount = (parseFloat(Total) - ((parseFloat(Total) / (100 + parseFloat(TaxPercentage))) * 100)).toFixed(2);
+        }
+        else {
+            TaxAmount = ((parseFloat(Total) * parseFloat(TaxPercentage)) / 100).toFixed(2);
+            Total = (parseFloat(Total) + parseFloat(TaxAmount)).toFixed(2);
+        }
     }
+
+    if (TaxAmount > 0) {
+        Vatable = parseFloat(Total).toFixed(2);
+    }
+    else {
+        Nonvatable = parseFloat(Total).toFixed(2);
+    }
+
 
     if (message == '') {
         PurchaseDatatable.row('.active').remove().draw(false);
@@ -130,6 +148,8 @@ $('#addRow').on('click', function (e) {
             '<td class="text-right">' + TaxPercentage + ' </td>',
             '<td class="text-right">' + TaxAmount + ' </td>',
             '<td class="text-right">' + Total + ' </td>',
+            '<td class="text-right">' + Vatable + ' </td>',
+            '<td class="text-right">' + Nonvatable + ' </td>',
             '<td><div class="form-button-action"><a href="#" data-itemId="' + recordid + '"" ></a><a href="#" data-toggle="modal" data-target="#myModal' + + $("#ItemType").val() + '' + $("#FoodMenuId").val() + '">Delete</a></div></td > ' +
             '<div class="modal fade" id=myModal' + $("#ItemType").val() + '' + $("#FoodMenuId").val() + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
@@ -151,6 +171,8 @@ $('#addRow').on('click', function (e) {
             taxAmount: TaxAmount,
             taxPercentage: TaxPercentage,
             totalAmount: Total,
+            VatableAmount: Vatable,
+            NonvatableAmount: Nonvatable,
             purchaseGRNId: $("#PurchaseGRNId").val(),
             itemType: $("#ItemType").val()
         });
@@ -164,16 +186,18 @@ $('#addRow').on('click', function (e) {
         $(attRowNode).find('td').eq(5).addClass('text-right');
         $(attRowNode).find('td').eq(6).addClass('text-right');
 
-        DisAmtTotal = calculateColumn(4);
+        DisAmtTotal = calculateDiscountColumn(4);
         TaxAmountTotal = calculateColumn(5);
-        GrossAmount = calculateGross();
-        TotalAmount = GrossAmount  - DisAmtTotal;
-
-        GrossAmount = TotalAmount - TaxAmountTotal
+        VatableTotal = CalculateArray('VatableAmount');
+        NonvatableTotal = CalculateArray('NonvatableAmount');
+        TotalAmount = calculateColumn(6);
+        GrossAmount = TotalAmount - TaxAmountTotal;
 
         $("#GrossAmount").val(parseFloat(GrossAmount).toFixed(2));
         $("#TaxAmount").val(parseFloat(TaxAmountTotal).toFixed(2));
-        $("#TotalAmount").val(parseFloat(TotalAmount).toFixed(2));
+        $("#GrandTotal").val(parseFloat(TotalAmount).toFixed(2));
+        $("#VatableAmount").val(parseFloat(VatableTotal).toFixed(2));
+        $("#NonVatableAmount").val(parseFloat(NonvatableTotal).toFixed(2));
 
         DueAmount();
         clearItem();
@@ -217,6 +241,8 @@ $(function () {
                     GrossAmount: $("#GrossAmount").val(),
                     TaxAmount: $("#TaxAmount").val(),
                     TotalAmount: $("#TotalAmount").val(),
+                    VatableAmount: $("#VatableAmount").val(),
+                    NonVatableAmount: $("#NonVatableAmount").val(),
                     DeliveryNoteNumber: $("#DeliveryNoteNumber").val(),
                     DeliveryDate: $("#DeliveryDate").val(),
                     PurchaseGRNDate: $("#PurchaseGRNDate").val(),
@@ -328,7 +354,6 @@ function deleteOrder(rowId) {
     TaxAmountTotal = $("#TaxAmount").val();
     TotalAmount = $("#TotalAmount").val();
 
-
     for (var i = 0; i < dataArr.length; i++) {
 
         id = dataArr[i].itemType + 'rowId' + dataArr[i].foodMenuId;
@@ -353,6 +378,12 @@ function deleteOrder(rowId) {
             $("#myModal" + purchaseId).modal('hide');
         }
     }
+
+    VatableTotal = calculateColumn(14);
+    NonvatableTotal = calculateColumn(15);
+
+    $("#VatableAmount").val(parseFloat(VatableTotal).toFixed(2));
+    $("#NonvatableAmount").val(parseFloat(NonvatableTotal).toFixed(2));
 };
 
 $(document).on('click', 'a.editItem', function (e) {
@@ -462,9 +493,24 @@ function clearItem() {
         $("#GRNQty").val('1'),
         $("#DiscountPercentage").val(''),
         $("#PurchaseGRNId").val('0'),
-        $("#ItemType").val('0'),
+   //     $("#ItemType").val('0'),
         $('#FoodMenuId').val(0).trigger('change')
-    GetFoodMenuByItemType();
+   // GetFoodMenuByItemType();
+}
+
+function calculateDiscountColumn(index) {
+    var totaldis = 0.00, discount = 0;
+    $('#purchaseOrderDetails tbody tr').each(function () {
+        var value = parseFloat($('td', this).eq(4).text());// disc%
+        var value2 = parseFloat($('td', this).eq(2).text());//qty
+        var value3 = parseFloat($('td', this).eq(3).text());//price
+
+        if (!isNaN(value)) {
+            discount = (((parseFloat(value2) * parseFloat(value3)) * parseFloat(value)) / 100).toFixed(2);
+            totaldis = (parseFloat(totaldis) + parseFloat(discount));
+        }
+    });
+    return totaldis;
 }
 
 function GetSupplierDetails(supplierId) {
@@ -480,7 +526,7 @@ function GetSupplierDetails(supplierId) {
                 $("#FoodMenuId").append('<option value="' + obj.foodMenuList[i].value + '">' + obj.foodMenuList[i].text + '</option>');
             }
             $("#SupplierEmail").val(obj.email);
-            $("#TaxType").val(obj.taxType);
+            $('#TaxType').attr('checked', obj.taxType);
             $("#ItemType").val('0');
         },
         error: function (data) {
@@ -663,3 +709,18 @@ function GetFoodMenuByItemType() {
     }
 }
 
+function CalculateArray(columnname) {
+    var Total = 0;
+    if (columnname == "VatableAmount") {
+        for (var i = 0; i < dataArr.length; i++) {
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].VatableAmount)).toFixed(2);
+        }
+    }
+    else if (columnname == "NonvatableAmount") {
+        for (var i = 0; i < dataArr.length; i++) {
+            Total = (parseFloat(Total) + parseFloat(dataArr[i].NonvatableAmount)).toFixed(2);
+       }
+    }
+
+    return Total;
+}

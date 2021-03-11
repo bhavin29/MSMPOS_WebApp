@@ -78,7 +78,7 @@ namespace RocketPOS.Controllers.Transaction
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel, string Cancel)
-        {
+        {   
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();

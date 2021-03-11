@@ -31,6 +31,11 @@ namespace RocketPOS.Models
         public int? AssetItemId { get; set; }
         public List<SelectListItem> AssetItemList { get; set; }
         public int? EmployeeId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal VatableAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal NonVatableAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public List<SelectListItem> EmployeeList { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal GrossAmount { get; set; }
@@ -81,6 +86,10 @@ namespace RocketPOS.Models
         public decimal TaxAmount { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
         public decimal TotalAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal VatableAmount { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
+        public decimal NonVatableAmount { get; set; }
         public string UnitName { get; set; }
         public int AssetItemId { get; set; }
         public string AssetItemName { get; set; }

@@ -247,8 +247,10 @@ namespace RocketPOS.Services
                              SupplierName = purchase.SupplierName,
                              StoreName= purchase.StoreName,
                              POReferenceNo = purchase.POReferenceNo,
-                             PODate = purchase.PODate
-                         }).SingleOrDefault();
+                             PODate = purchase.PODate,
+                                 VatableAmount = purchase.VatableAmount,
+                                 NonVatableAmount = purchase.NonVatableAmount
+                             }).SingleOrDefault();
             if (model != null)
             {
                 model.PurchaseGRNDetails = (from purchasedetails in _iPurchaseGRNRepository.GetViewPurchaseGRNFoodMenuDetails(purchaseGRNId)
@@ -267,7 +269,9 @@ namespace RocketPOS.Services
                                                 IngredientName = purchasedetails.IngredientName,
                                                 FoodMenuName = purchasedetails.FoodMenuName,
                                                 ItemType = purchasedetails.ItemType,
-                                                UnitName = purchasedetails.UnitName
+                                                UnitName = purchasedetails.UnitName,
+                                                VatableAmount = purchasedetails.VatableAmount,
+                                                NonVatableAmount = purchasedetails.NonVatableAmount
                                             }).ToList();
             }
             return model;

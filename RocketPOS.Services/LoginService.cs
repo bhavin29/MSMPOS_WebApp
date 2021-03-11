@@ -22,5 +22,10 @@ namespace RocketPOS.Services
         {
             return _ILoginReportsitory.GetLogin(userNamem, password);
         }
+
+        public List<UserPageRolePermissionModel> GetUserPageRolePermission(int webRoleId)
+        {
+            return _ILoginReportsitory.GetUserPageRolePermission(webRoleId);
+        }
     }
 }

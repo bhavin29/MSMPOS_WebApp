@@ -27,12 +27,12 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"select U.Id ,U.Username ,U.RoletypeId,E.LastName,E.FirstName,C.ClientName,C.Address1,C.Address2,C.Email,C.Phone,C.Logo,C.WebSite,C.ReceiptPrefix,C.OrderPrefix,C.OpenTime, "+
+                var query = $"select U.Id ,U.Username ,U.RoletypeId,U.WebRoleId,E.LastName,E.FirstName,C.ClientName,C.Address1,C.Address2,C.Email,C.Phone,C.Logo,C.WebSite,C.ReceiptPrefix,C.OrderPrefix,C.OpenTime, " +
                             "C.CloseTime,C.CurrencyId,C.TimeZone,C.Header,C.Footer,C.Footer1,C.Footer2,C.Footer3,C.Footer4, C.MainWindowSettings,C.HeaderMarqueeText,C.DeliveryList,C.DiscountList,C.Powerby,C.TaxInclusive, C.IsItemOverright,C.VATLabel,C.PINLabel,C.Timeoffset " +
                             "From[User] U INNER JOIN Employee E On E.Id = U.EmployeeId CROSS JOIN Client C " +
-                            "where[Username] = '" + userName +"' and[Password] = '"+ Password + "' and RoleTypeId in (1, 2); ";
+                            "where[Username] = '" + userName + "' and[Password] = '" + Password + "' and RoleTypeId in (1, 2); ";
                 loginModel = con.QueryFirstOrDefault<LoginModel>(query, null, sqltrans, 0, System.Data.CommandType.Text);
-                if (loginModel!=null)
+                if (loginModel != null)
                 {
                     sqltrans.Commit();
                 }
@@ -40,6 +40,18 @@ namespace RocketPOS.Repository
                 { sqltrans.Rollback(); }
             }
             return loginModel;
+        }
+
+        public List<UserPageRolePermissionModel> GetUserPageRolePermission(int webRoleId)
+        {
+            List<UserPageRolePermissionModel> userPageRolePermissionModel = new List<UserPageRolePermissionModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = $" SELECT WRP.PagesId,P.PageName,WRP.[Add],WRP.Edit,WRP.[Delete],WRP.[View] " +
+                            " FROM WebRolePages WRP Inner Join Pages P On P.Id=WRP.PagesId Where WebRolesId= " + webRoleId;
+                userPageRolePermissionModel = con.Query<UserPageRolePermissionModel>(query).ToList();
+            }
+            return userPageRolePermissionModel;
         }
     }
 }

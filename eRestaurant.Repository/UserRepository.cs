@@ -26,7 +26,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT U.Id,(E.Lastname + ' ' + E.Firstname) as EmployeeName,EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,LastLogin,LastLogout,IPAdress,Counter,U.IsActive "+
+                var query = "SELECT U.Id,(E.Lastname + ' ' + E.Firstname) as EmployeeName,EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,LastLogin,LastLogout,IPAdress,Counter,U.IsActive,U.WebRoleId "+
                             "FROM [User] U INNER JOIN Employee E ON U.EmployeeId = E.Id WHERE U.IsDeleted = 0 " +
                             "ORDER BY UserName ";
                 UserModel = con.Query<UserModel>(query).ToList();
@@ -54,9 +54,9 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //LastLogin,LastLogout,
 
-                var query = "INSERT INTO [User] (Id,EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,IPAdress,Counter,IsActive) " +
+                var query = "INSERT INTO [User] (Id,EmployeeId,OutletId,Username,Password,ThumbToken,RoleTypeId,IPAdress,Counter,IsActive,WebRoleId) " +
                            "Values"+
-                           "  (" + MaxId + ",@EmployeeId,@OutletId,@Username,@Password,@ThumbToken,@RoleTypeId,@IPAdress,@Counter,@IsActive); " +
+                           "  (" + MaxId + ",@EmployeeId,@OutletId,@Username,@Password,@ThumbToken,@RoleTypeId,@IPAdress,@Counter,@IsActive,@WebRoleId); " +
                             "SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, UserModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -90,7 +90,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 //LastLogin=@LastLogin,LastLogout=@LastLogout,
                 var query = "UPDATE [User] SET EmployeeId=@EmployeeId,OutletId=@OutletId,Username=@Username,Password=@Password,ThumbToken=@ThumbToken," +
-                    "RoleTypeId=@RoleTypeId,IPAdress=@IPAdress,Counter=@Counter,IsActive=@IsActive " +
+                    "RoleTypeId=@RoleTypeId,IPAdress=@IPAdress,Counter=@Counter,IsActive=@IsActive,WebRoleId=@WebRoleId " +
                      "WHERE Id = @Id;";
                 result = con.Execute(query, UserModel, sqltrans, 0, System.Data.CommandType.Text);
 

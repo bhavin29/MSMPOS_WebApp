@@ -11,5 +11,7 @@ namespace RocketPOS.Interface.Services
 
         ClientModel GetEmailSettings();
         int UpdateEmailSettings(ClientModel clientModel);
+
+        void GetPageWiseRoleRigths(string pageName);
     }
 }

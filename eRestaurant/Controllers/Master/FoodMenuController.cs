@@ -17,20 +17,22 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IFoodMenuService _iFoodMenuService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, ICommonService iCommonService ,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iFoodMenuService = foodMenuService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index(int? readymade, int? categoryid, int? foodmenutype)
         {
-
+            _iCommonService.GetPageWiseRoleRigths("FoodMenu");
             List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
             if (categoryid != null && foodmenutype != null)
             {
@@ -42,15 +44,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult FoodMenu(int? id)
         {
             FoodMenuModel foodMenuModel = new FoodMenuModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit==true)
             {
-                int foodMenuId = Convert.ToInt32(id);
-                foodMenuModel = _iFoodMenuService.GetFoodMenueById(foodMenuId);
+                if (id > 0)
+                {
+                    int foodMenuId = Convert.ToInt32(id);
+                    foodMenuModel = _iFoodMenuService.GetFoodMenueById(foodMenuId);
+                }
+                foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+                foodMenuModel.FoodVatTaxList = _iDropDownService.GetTaxList();
+                foodMenuModel.UnitsList = _iDropDownService.GetUnitList();
+                return View(foodMenuModel);
             }
-            foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
-            foodMenuModel.FoodVatTaxList = _iDropDownService.GetTaxList();
-            foodMenuModel.UnitsList = _iDropDownService.GetUnitList();
-            return View(foodMenuModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -101,9 +110,15 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iFoodMenuService.DeleteFoodMenu(id);
-
-            return RedirectToAction(nameof(Index));
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iFoodMenuService.DeleteFoodMenu(id);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         private string ValidationFoodMenu(FoodMenuModel foodMenuModel)

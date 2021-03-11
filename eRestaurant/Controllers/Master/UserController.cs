@@ -44,7 +44,7 @@ namespace RocketPOS.Controllers.Master
             }
             userModel.EmployeeList = _iDropDownService.GetEmployeeList();
             userModel.OutletList = _iDropDownService.GetOutletList();
-
+            userModel.WebRoleList= _iDropDownService.GetWebRoleList();
             return View(userModel);
         }
 

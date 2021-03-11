@@ -45,7 +45,9 @@ namespace RocketPOS.Models
         public bool IsActive { get; set; }
        int UserID { get; set; }
 
-
+        public int WebRoleId { get; set; }
+        public string WebRoleName { get; set; }
+        public List<SelectListItem> WebRoleList { get; set; }
         public UserModel()
         {
             IsActive = true;

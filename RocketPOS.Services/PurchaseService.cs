@@ -104,7 +104,9 @@ namespace RocketPOS.Services
                              SupplierAddress2 = purchase.SupplierAddress2,
                              SupplierPhone = purchase.SupplierPhone,
                              SupplierEmail = purchase.SupplierEmail,
-                             GrossAmount=purchase.GrossAmount
+                             GrossAmount=purchase.GrossAmount,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount,
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -122,7 +124,9 @@ namespace RocketPOS.Services
                                              Total = purchasedetails.Total,
                                              FoodMenuName = purchasedetails.FoodMenuName,
                                              ItemType = purchasedetails.ItemType,
-                                             RowNumber = purchasedetails.RowNumber
+                                             RowNumber = purchasedetails.RowNumber,
+                                             VatableAmount = purchasedetails.VatableAmount,
+                                             NonVatableAmount = purchasedetails.NonVatableAmount,
                                          }).ToList();
             }
             return model;

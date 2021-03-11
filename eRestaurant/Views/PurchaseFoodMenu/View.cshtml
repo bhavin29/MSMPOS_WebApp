@@ -81,14 +81,14 @@
                                 <thead>
                                     <tr>
                                         <th style="width:25%">Product</th>
-                                        <th style="width:8%" class="text-right">Price</th>
-                                        <th style="width:16%" class="text-right">Qty </th>
+                                        <th style="width:10%" class="text-right">Price</th>
+                                        <th style="width:8%" class="text-right">Qty </th>
                                         <th style="width:10%" class="text-right">Amount</th>
                                         <th style="width:8%" class="text-right">Tax</th>
                                         <th style="width:8%" class="text-right">Tax %</th>
-                                        <th style="width:10%" class="text-right">Discount</th>
-                                        <th style="width:10%" class="text-right">Discount %</th>
-
+                                        <th style="width:8%" class="text-right">Discount</th>
+                                        <th style="width:8%" class="text-right">Discount %</th>
+                                        <th style="width:15%" class="text-right">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,32 +97,35 @@
                                         var tm = "#myAModal" + item.PurchaseId;
                                         var mid = "myAModal" + item.PurchaseId;
                                         var rowId = "rowId" + item.PurchaseId;
-                                        <tr id="@rowId">
-                                            <td>
-                                                @item.FoodMenuName
-                                            </td>
-                                            <td class="text-right">
-                                                @item.UnitPrice.ToString("0.00")
-                                            </td>
-                                            <td class="text-right">
-                                                @item.Quantity.ToString("0.00") @item.UnitName
-                                            </td>
-                                            <td class="text-right">
-                                                @item.Total.ToString("0.00")
-                                            </td>
-                                            <td class="text-right">
-                                                @item.TaxAmount.ToString("0.00")
-                                            </td>
-                                            <td class="text-right">
-                                                @item.TaxPercentage.ToString("0.00")
-                                            </td>
-                                            <td class="text-right">
-                                                @item.DiscountAmount.ToString("0.00")
-                                            </td>
-                                            <td class="text-right">
-                                                @item.DiscountPercentage.ToString("0.00")
-                                            </td>
-                                        </tr>
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.FoodMenuName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.UnitPrice.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.Quantity.ToString("0.00") @item.UnitName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.Total.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TaxAmount.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TaxPercentage.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountAmount.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountPercentage.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.Total.ToString("0.00")
+                                        </td>
+                                    </tr>
                                     }
                                 </tbody>
                             </table>

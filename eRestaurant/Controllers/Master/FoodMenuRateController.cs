@@ -65,6 +65,5 @@ namespace RocketPOS.Controllers.Master
             return RedirectToAction("FoodMenu", "FoodMenu", new { id = id });
         }
 
-
     }
 }

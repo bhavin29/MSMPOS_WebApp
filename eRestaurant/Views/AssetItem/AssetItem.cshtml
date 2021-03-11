@@ -57,6 +57,16 @@
                                             }
                                         </div>
                                         <div class="form-group">
+                                            <label asp-for="AssetCategoryList" class="control-label">Asset Category</label>
+                                            @if (Model.AssetCategoryList != null)
+                                            {
+                                                <select asp-for="AssetCategoryId" class="form-control"
+                                                        asp-items="@(new SelectList(Model.AssetCategoryList, "Value", "Text"))">
+                                                </select>
+                                                <span asp-validation-for="AssetCategoryId" class="text-danger"></span>
+                                            }
+                                        </div>
+                                        <div class="form-group">
                                             <label asp-for="CostPrice" class="control-label">Cost Price</label>
                                             <input asp-for="CostPrice" class="form-control" type="number" min="0" max="99999" />
                                             <span asp-validation-for="CostPrice" class="text-danger"></span>
@@ -66,13 +76,13 @@
                                             <input asp-for="Model" class="form-control" />
                                             <span asp-validation-for="Model" class="text-danger"></span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="Brandname" class="control-label"></label>
                                             <input asp-for="Brandname" class="form-control" />
                                             <span asp-validation-for="Brandname" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
                                             <label asp-for="Notes" class="control-label"></label>
                                             <textarea asp-for="Notes" class="form-control" rows="3"></textarea>

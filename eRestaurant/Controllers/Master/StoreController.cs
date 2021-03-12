@@ -14,20 +14,25 @@ namespace RocketPOS.Controllers.Master
     {
 
         private readonly IStoreService _istoreService;
+        private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public StoreController(IStoreService storeService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public StoreController(IStoreService storeService, ICommonService commonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _istoreService = storeService;
+            _iCommonService = commonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
 
         }
         
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
-
+            if (noDelete != null)
+            {
+                ViewBag.NoDelete = "Can not delete reference available.";
+            }
             List<StoreModel> storeModel = new List<StoreModel>();
             try
             {
@@ -100,9 +105,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _istoreService.DeleteStore(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Store", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _istoreService.DeleteStore(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationStore(StoreModel storeModel)

@@ -15,23 +15,28 @@ namespace RocketPOS.Controllers.Master
     public class OutletController : Controller
     {
         private readonly IOutletService _iOutletService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public OutletController(IOutletService iOutletService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public OutletController(IOutletService iOutletService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iOutletService = iOutletService;
+            _iCommonService = iCommonService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<OutletModel> outletModels = new List<OutletModel>();
             outletModels = _iOutletService.GetOutletList().ToList();
-
+            if (noDelete != null)
+            {
+                ViewBag.NoDelete = "Can not delete reference available.";
+            }
             return View(outletModels);
         }
 
@@ -72,7 +77,7 @@ namespace RocketPOS.Controllers.Master
                 if (result == -1)
                 {
                     ViewBag.Result = _locService.GetLocalizedHtmlString("Store is already allocated to other outlet!");
-                    ViewBag.UpdateError= _locService.GetLocalizedHtmlString("UpdateError");
+                    ViewBag.UpdateError = _locService.GetLocalizedHtmlString("UpdateError");
                     return View(outletModel);
                 }
                 else
@@ -99,9 +104,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iOutletService.DeleteOutlet(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Outlet", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iOutletService.DeleteOutlet(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationOutlet(OutletModel outletModel)

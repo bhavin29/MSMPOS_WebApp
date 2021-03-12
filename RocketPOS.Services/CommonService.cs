@@ -29,6 +29,11 @@ namespace RocketPOS.Services
             UserRolePermissionForPage.View = UserRolePermissionModel.userRolePermissionModels.SingleOrDefault(x => x.PageName == pageName).View;
         }
 
+        public int GetValidateReference(string TableName, string Rowid)
+        {
+            return _iCommonRepository.GetValidateReference(TableName, Rowid);
+        }
+
         public int InsertErrorLog(ErrorModel errorModel)
         {
             return _iCommonRepository.InsertErrorLog(errorModel);

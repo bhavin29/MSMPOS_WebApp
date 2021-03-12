@@ -369,8 +369,8 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select PurchaseInvoice.Id as Id, PurchaseInvoice.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseInvoiceDate, 3) as [Date],Supplier.SupplierName," +
-                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username " +
-                    ", PurchaseInvoice.VatableAmount,PurchaseInvoice.NonVatableAmount  from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
+                    "PurchaseInvoice.TotalAMount AS GrandTotal,PurchaseInvoice.DueAmount as Due,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username, S.Storename  " +
+                    ", PurchaseInvoice.VatableAmount,PurchaseInvoice.NonVatableAmount  from PurchaseInvoice inner join Supplier on PurchaseInvoice.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseInvoice.UserIdInserted  inner join employee e on e.id = u.employeeid   inner join store S on S.Id = PurchaseInvoice.StoreId  where PurchaseInvoice.InventoryType=1 And PurchaseInvoice.Isdeleted = 0 order by PurchaseInvoiceDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -395,7 +395,7 @@ namespace RocketPOS.Repository
 
             return purchaseDetails;
         }
-        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId)
+        public List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId, int storeId)
         {
             List<PurchaseInvoiceViewModel> purchaseViewModels = new List<PurchaseInvoiceViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -410,7 +410,11 @@ namespace RocketPOS.Repository
                 {
                     query += " And PurchaseInvoice.SupplierId= " + supplierId;
                 }
-                query += "   order by PurchaseInvoice.id desc";
+                if (storeId != 0)
+                {
+                    query += " And PurchaseInvoice.StoreId= " + storeId;
+                }
+                query += "   order by PurchaseInvoice.PurchaseInvoiceDate, PurchaseInvoice.id desc";
 
                 purchaseViewModels = con.Query<PurchaseInvoiceViewModel>(query).AsList();
             }

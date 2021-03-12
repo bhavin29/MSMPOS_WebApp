@@ -39,6 +39,72 @@
                                                 </select>
                                             }
                                         </div>
+
+                                        <button type="button" id="open" class="btn btn-primary pull-right" value="open modal" data-toggle="modal" data-target="#exampleModal">Add Unit</button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Unit</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @*<div class="modal-body">
+                                                        <div class="page-inner">
+                                                            <div class="page-header"></div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="card">
+                                                                        <div class="card-header">
+                                                                            <h5>Unit</h5>
+                                                                        </div>*@
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Unit</label>
+                                                                    <input id="IngredientUnitName" type="text" class="form-control" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Short Name</label>
+                                                                    <input id="UnitShortName" type="text" class="form-control" />
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Precision</label>
+                                                                    <select id="UnitPrecision" class="form-control">
+                                                                        <option value="">Select</option>
+                                                                        <option value="1">0</option>
+                                                                        <option value="1">1</option>
+                                                                        <option value="2">2</option>
+                                                                        <option value="3">3</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label">Notes</label>
+                                                                    <textarea id="UnitNotes" class="form-control" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    @*</div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>*@
+                                                    <div class="modal-footer">
+                                                        @*<button type="button" id="addUnit" value="Save" class="btn btn-primary">Save</button>*@
+                                                        <button type="button" id="save" class="btn btn-primary">Save</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label asp-for="PurchasePrice" class="control-label">Purchase Price</label>
                                             <input asp-for="PurchasePrice" class="form-control" type="number" min="0" max="99999" />
@@ -243,11 +309,53 @@
 @section Scripts{
     <script>
         $('#save').click(function () {
-            window.location.href = "Index";
+            if ($('#IngredientUnitName').val() == '') {
+                alert('Please add Unit Name');
+                return false;
+            }
+            if ($('#UnitShortName').val() == '') {
+                alert('Please add Unit Short Name');
+                return false;
+            }
+            if ($('#UnitPrecision').val() == 0 || $('#UnitPrecision').val() == '') {
+                alert('Please Select Unit Precision');
+                return false;
+            }
+
+                var ingredientUniModel = ({
+                    IngredientUnitName: $('#IngredientUnitName').val(),
+                    UnitShortName: $('#UnitShortName').val(),
+                    UnitPrecision: $('#UnitPrecision').val(),
+                    Notes: $('#UnitNotes').val()
+                });
+
+            var jsonstr = JSON.stringify(ingredientUniModel);
+            $.ajax({
+                dataType: "json",
+                type: "post",
+                url: "/FoodMenu/AddUnit",
+                data: { 'ingredientUniModel': ingredientUniModel },
+                timeout: 0,
+                success: function (response) {
+                    if (response.result == -1) {
+                        alert('Unit name already exists');
+                    }
+                    else {
+                        window.location.href = "/FoodMenu/FoodMenu";
+                    }
+                },
+                error: function (err) {
+
+                }
+            });
         });
         $('#OK').click(function () {
             $("#FoodMenu").prev().focus();
             $("#vModal").modal('hide');
+        });
+
+        $('#open').click(function () {
+            $("#div_modal").modal('show');
         });
     </script>
     <partial name="_ValidationScriptsPartial" />

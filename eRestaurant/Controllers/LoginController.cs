@@ -34,8 +34,13 @@ namespace RocketPOS.Controllers
                     loginModel = _iLoginService.GetLogin(userName, password);
                     if (loginModel != null)
                     {
+                        List<UserPageRolePermissionModel> userPageRolePermissionModels = _iLoginService.GetUserPageRolePermission(loginModel.WebRoleId);
+                        if (userPageRolePermissionModels.Count > 0)
+                        {
+                            MergeRolePermission(userPageRolePermissionModels);
+                        }
                         MergeLogin(loginModel);
-                            return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
@@ -89,11 +94,27 @@ namespace RocketPOS.Controllers
                 LoginInfo.FromEmailAddress = loginModel.FromEmailAddress;
                 LoginInfo.EmailDisplayName = loginModel.EmailDisplayName;
                 LoginInfo.FromEmailPassword = loginModel.FromEmailPassword;
+                LoginInfo.WebRoleId = loginModel.WebRoleId;
 
             }
             catch (Exception ex)
             {
                 SystemLogs.Register(ex.Message);
+            }
+        }
+
+        public void MergeRolePermission(List<UserPageRolePermissionModel> userPageRolePermissionModels)
+        {
+            UserRolePermissionModel.userRolePermissionModels = new List<UserRolePermissionList>();
+            foreach (var item in userPageRolePermissionModels)
+            {
+                UserRolePermissionList userRolePermissionList = new UserRolePermissionList();
+                userRolePermissionList.PageName = item.PageName;
+                userRolePermissionList.Add = item.Add;
+                userRolePermissionList.Edit = item.Edit;
+                userRolePermissionList.Delete = item.Delete;
+                userRolePermissionList.View = item.View;
+                UserRolePermissionModel.userRolePermissionModels.Add(userRolePermissionList);
             }
         }
     }

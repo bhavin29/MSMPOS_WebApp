@@ -42,11 +42,17 @@
                                     </div>
                                     <div class="col-md-6 col-lg-4">
                                         <div class="form-group">
-                                            <label asp-for="RoleTypeId" class="control-label">Role</label>
+                                            <label asp-for="RoleTypeId" class="control-label">User Type</label>
                                             <select asp-for="RoleTypeId" class="form-control" asp-items="Html.GetEnumSelectList<RoleType>()">
                                                 <option selected="selected" value="">Select</option>
                                             </select>
                                             <span asp-validation-for="RoleTypeId" class="text-danger" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="WebRoleList" class="control-label">Web Role</label>
+                                            <select asp-for="WebRoleId" class="form-control"
+                                                    asp-items="@(new SelectList(Model.WebRoleList, "Value", "Text"))">
+                                            </select>
                                         </div>
                                         @if (Model != null)
                                         {

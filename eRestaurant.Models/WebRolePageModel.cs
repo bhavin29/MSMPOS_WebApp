@@ -23,4 +23,14 @@ namespace RocketPOS.Models
         public bool Delete { get; set; }
         public bool View { get; set; }
     }
+
+    public class UserPageRolePermissionModel
+    {
+        public int PagesId { get; set; }
+        public string PageName { get; set; }
+        public bool Add { get; set; }
+        public bool Edit { get; set; }
+        public bool Delete { get; set; }
+        public bool View { get; set; }
+    }
 }

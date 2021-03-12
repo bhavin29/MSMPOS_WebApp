@@ -3,6 +3,7 @@ using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace RocketPOS.Services
@@ -18,6 +19,14 @@ namespace RocketPOS.Services
         public ClientModel GetEmailSettings()
         {
             return _iCommonRepository.GetEmailSettings();
+        }
+
+        public void GetPageWiseRoleRigths(string pageName)
+        {
+            UserRolePermissionForPage.Add = UserRolePermissionModel.userRolePermissionModels.SingleOrDefault(x => x.PageName == pageName).Add;
+            UserRolePermissionForPage.Edit = UserRolePermissionModel.userRolePermissionModels.SingleOrDefault(x => x.PageName == pageName).Edit;
+            UserRolePermissionForPage.Delete = UserRolePermissionModel.userRolePermissionModels.SingleOrDefault(x => x.PageName == pageName).Delete;
+            UserRolePermissionForPage.View = UserRolePermissionModel.userRolePermissionModels.SingleOrDefault(x => x.PageName == pageName).View;
         }
 
         public int InsertErrorLog(ErrorModel errorModel)

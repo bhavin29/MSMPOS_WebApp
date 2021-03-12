@@ -191,6 +191,14 @@
                 } else {
                     $(".addcheckboxes").prop("checked", false);
                 }
+
+                if ($('#selectEditAll').prop("checked") == true || $('#selectDeleteAll').prop("checked") == true ) {
+                    $('#selectViewAll').prop("checked", true);
+                    $(".viewcheckboxes").prop("checked", true);
+                } else {
+                    $('#selectViewAll').prop("checked", this.checked);
+                    $(".viewcheckboxes").prop("checked", this.checked);
+                }
             });
 
             $('#selectEditAll').click(function () {
@@ -198,6 +206,14 @@
                     $(".editcheckboxes").prop("checked", true);
                 } else {
                     $(".editcheckboxes").prop("checked", false);
+                }
+
+                if ($('#selectAddAll').prop("checked") == true || $('#selectDeleteAll').prop("checked") == true) {
+                    $('#selectViewAll').prop("checked", true);
+                    $(".viewcheckboxes").prop("checked", true);
+                } else {
+                    $('#selectViewAll').prop("checked", this.checked);
+                    $(".viewcheckboxes").prop("checked", this.checked);
                 }
             });
 
@@ -207,6 +223,14 @@
                 } else {
                     $(".deletecheckboxes").prop("checked", false);
                 }
+
+                if ($('#selectAddAll').prop("checked") == true || $('#selectEditAll').prop("checked") == true) {
+                    $('#selectViewAll').prop("checked", true);
+                    $(".viewcheckboxes").prop("checked", true);
+                } else {
+                    $('#selectViewAll').prop("checked", this.checked);
+                    $(".viewcheckboxes").prop("checked", this.checked);
+                }
             });
 
             $('#selectViewAll').click(function () {
@@ -214,6 +238,33 @@
                     $(".viewcheckboxes").prop("checked", true);
                 } else {
                     $(".viewcheckboxes").prop("checked", false);
+                }
+            });
+
+            $('.addcheckboxes').on('click', function () {
+                if ($(this).parent().siblings().find('.editcheckboxes').prop("checked") == true || $(this).parent().siblings().find('.deletecheckboxes').prop("checked") == true) {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', true);
+                }
+                else {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', this.checked);
+                }
+            });
+
+            $('.editcheckboxes').on('click', function () {
+                if ($(this).parent().siblings().find('.addcheckboxes').prop("checked") == true || $(this).parent().siblings().find('.deletecheckboxes').prop("checked") == true) {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', true);
+                }
+                else {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', this.checked);
+                }
+            });
+
+            $('.deletecheckboxes').on('click', function () {
+                if ($(this).parent().siblings().find('.addcheckboxes').prop("checked") == true || $(this).parent().siblings().find('.editcheckboxes').prop("checked") == true) {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', true);
+                }
+                else {
+                    $(this).parent().siblings().find('.viewcheckboxes').prop('checked', this.checked);
                 }
             });
         });

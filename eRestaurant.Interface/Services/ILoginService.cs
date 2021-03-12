@@ -11,5 +11,6 @@ namespace RocketPOS.Interface.Services
     public interface ILoginService
     {
         LoginModel GetLogin(string userName, string Password);
+        List<UserPageRolePermissionModel> GetUserPageRolePermission(int webRoleId);
     }
 }

@@ -14,7 +14,10 @@
                 <h5 class="card-title">Purchase Orders</h5>
             </div>
             <div class="float-right">
-                <a asp-action="PurchaseFoodMenu" class="btn btn-primary float-sm-left ">Create PO</a>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="PurchaseFoodMenu" class="btn btn-primary float-sm-left ">Create PO</a>
+                }
             </div>
         </div>
     </div>
@@ -80,48 +83,57 @@
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                <tr role="row">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.SupplierName)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.StoreName)
-                                    </td>
-                                    <td class="text-right">
-                                        @Html.DisplayFor(modelItem => item.GrandTotal)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Username)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
-                                            <label> / </label>
-                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
-                                            <label> / </label>
-                                            <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            <a asp-action="View" asp-route-Id="@item.Id">View</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.SupplierName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                @if (UserRolePermissionForPage.Edit == true)
+                                                {
+                                                    <a asp-action="PurchaseFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
+                                                    <label> / </label>
+                                                }
+                                                @if (UserRolePermissionForPage.Delete == true)
+                                                {
+                                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                                <label> / </label>
+                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                @if (UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -194,11 +206,19 @@
                                         return '';
                                     }
                                     else {
-                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=Edit">Edit</a>' +
-                                            ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                        var editDelete='';
+                                         if ("@UserRolePermissionForPage.Edit" == "True")
+                                         {
+                                             editDelete = '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseFoodmenu/' + row.id + '?type=Edit">Edit</a> / '
+                                        }
+                                        if ("@UserRolePermissionForPage.Delete" == "True")
+                                        {
+                                            editDelete+=' <a href="#" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
                                             '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                                'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                        }
+                                        return editDelete;
                                     }
                                 },
                             },
@@ -220,7 +240,9 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseFoodmenu/View/' + row.id + '">View</a></div>'
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/View/' + row.id + '">View</a></div>'
+                                    }
                                 },
                             },
                         ],

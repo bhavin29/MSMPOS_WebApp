@@ -40,6 +40,14 @@
                         </div>
                     </div>
                     <div class="col-md-2">
+                        <div class="form-group">
+                            <select Id="StoreId"
+                                    class="form-control">
+                                <option value="">Select Store</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
@@ -172,7 +180,9 @@
             $("#fromDate").val(tdate);
             $("#toDate").val(tdate);
             $("#SupplierId").select2();
+            $("#StoreId").select2();
             GetSupplierList();
+            GetStoreList();
             PurchaseFood = $('#@dataTableName').DataTable();
             loadPurchaseList();
 
@@ -181,7 +191,7 @@
         function loadPurchaseList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/PurchaseFoodmenu/PurchaseFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&supplierId=" + $("#SupplierId").val(),
+                url: "/PurchaseFoodmenu/PurchaseFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&supplierId=" + $("#SupplierId").val() + "&storeId=" + $("#StoreId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
@@ -256,7 +266,7 @@
                         "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,
-                        "ordering": true,
+                        "ordering": false,
                         "autoWidth": false,
                         "orderCellsTop": true,
                         "stateSave": false,
@@ -298,6 +308,25 @@
                     var obj = JSON.parse(data);
                     for (var i = 0; i < obj.supplierList.length; ++i) {
                         $("#SupplierId").append('<option value="' + obj.supplierList[i].value + '">' + obj.supplierList[i].text + '</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        function GetStoreList() {
+            $.ajax({
+                url: "/Report/GetStoreList",
+                data: {},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#StoreId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.storeList.length; ++i) {
+                        $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
                     }
                 },
                 error: function (data) {

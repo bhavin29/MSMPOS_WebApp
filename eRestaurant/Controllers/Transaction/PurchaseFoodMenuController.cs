@@ -247,7 +247,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId)
+        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId,int storeId)
         {
             List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
             DateTime newFromDate, newToDate;
@@ -262,7 +262,7 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
-            purchaseViewModels = _iPurchaseService.PurchaseFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
+            purchaseViewModels = _iPurchaseService.PurchaseFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId, storeId).ToList();
             return Json(new { PurchaseFoodMenu = purchaseViewModels });
         }
 

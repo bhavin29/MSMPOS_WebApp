@@ -10,5 +10,6 @@ namespace RocketPOS.Interface.Repository
         int InsertErrorLog(ErrorModel errorModel);
         ClientModel GetEmailSettings();
         int UpdateEmailSettings(ClientModel clientModel);
+        int GetValidateReference(string TableName, string Rowid);
     }
 }

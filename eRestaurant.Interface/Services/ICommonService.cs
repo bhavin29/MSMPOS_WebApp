@@ -13,5 +13,7 @@ namespace RocketPOS.Interface.Services
         int UpdateEmailSettings(ClientModel clientModel);
 
         void GetPageWiseRoleRigths(string pageName);
+
+        int GetValidateReference(string TableName, string Rowid);
     }
 }

@@ -71,12 +71,19 @@ namespace RocketPOS.Repository
             }
             return Int16.Parse(result);
         }
-        public int GetValidateReference(string TableName, string ColumnName, string Value, string Rowid)
+        public int GetValidateReference(string TableName,string Rowid)
         {
             List<ReferenceTable> referenceTables= new List<ReferenceTable>();
             referenceTables.Add(new ReferenceTable ( "Outlet", "CustomerOrder", "OutletId"));
             referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Outlet", "CustomerOrder", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Outlet", "Bill", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Outlet", "Customer", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Outlet", "FoodMenu", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Store", "Inventory", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "InventoryAdjustment", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "PurchaseGRN", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "PurchaseInvoice", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "Purchase", "StoreId"));
 
             string result = ""; string query = "";int validate = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))

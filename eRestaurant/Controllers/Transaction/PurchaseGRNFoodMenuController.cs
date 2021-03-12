@@ -166,7 +166,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId)
+        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId,int storeId)
         {
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             DateTime newFromDate, newToDate;
@@ -181,7 +181,7 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
-            purchaseViewModels = _iPurchaseGRNService.PurchaseGRNFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId).ToList();
+            purchaseViewModels = _iPurchaseGRNService.PurchaseGRNFoodMenuListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), supplierId, storeId).ToList();
             return Json(new { PurchaseGRNFoodMenu = purchaseViewModels });
         }
         public ActionResult Delete(int id)

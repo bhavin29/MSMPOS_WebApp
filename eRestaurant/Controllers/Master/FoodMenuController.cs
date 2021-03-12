@@ -16,14 +16,16 @@ namespace RocketPOS.Controllers.Master
     public class FoodMenuController : Controller
     {
         private readonly IFoodMenuService _iFoodMenuService;
+        private readonly IIngredientUnitService _iIngredientUnitService;
         private readonly IDropDownService _iDropDownService;
         private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public FoodMenuController(IFoodMenuService foodMenuService, IDropDownService idropDownService, ICommonService iCommonService ,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuController(IFoodMenuService foodMenuService, IIngredientUnitService iIngredientUnitService,IDropDownService idropDownService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iFoodMenuService = foodMenuService;
+            _iIngredientUnitService = iIngredientUnitService;
             _iDropDownService = idropDownService;
             _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
@@ -44,7 +46,7 @@ namespace RocketPOS.Controllers.Master
         public ActionResult FoodMenu(int? id)
         {
             FoodMenuModel foodMenuModel = new FoodMenuModel();
-            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit==true)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
                 if (id > 0)
                 {
@@ -143,6 +145,17 @@ namespace RocketPOS.Controllers.Master
             FoodMenuModel foodMenuModel = new FoodMenuModel();
             foodMenuModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
             return Json(new { FoodCategoryList = foodMenuModel.FoodCategoryList });
+        }
+
+        [HttpPost]
+        public ActionResult AddUnit(IngredientUnitModel ingredientUniModel)
+        {
+            var result = _iIngredientUnitService.InsertIngredientUnit(ingredientUniModel);
+            if (result == -1)
+            {
+                return Json(new { result = -1 });
+            }
+            return Json(new { result = true});
         }
     }
 }

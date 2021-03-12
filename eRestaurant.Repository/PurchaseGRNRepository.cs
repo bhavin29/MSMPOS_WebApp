@@ -368,9 +368,9 @@ namespace RocketPOS.Repository
             List<PurchaseGRNViewModel> purchaseViewModelList = new List<PurchaseGRNViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName," +
+                var query = "select PurchaseGRN.Id as Id, PurchaseGRN.ReferenceNumber as ReferenceNo, convert(varchar(12),PurchaseGRNDate, 3) as [Date],Supplier.SupplierName,S.Storename," +
                     "PurchaseGRN.TotalAMount,PurchaseGRN.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
-                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
+                    "from PurchaseGRN inner join Supplier on PurchaseGRN.SupplierId = Supplier.Id inner join [User] U on U.Id=PurchaseGRN.UserIdInserted  inner join employee e on e.id = u.employeeid  inner join store S on S.Id = PurchaseGRN.StoreId  where PurchaseGRN.InventoryType=1 And PurchaseGRN.Isdeleted = 0 order by PurchaseGRNDate, PurchaseId desc";
                 purchaseViewModelList = con.Query<PurchaseGRNViewModel>(query).AsList();
             }
             return purchaseViewModelList;
@@ -395,7 +395,7 @@ namespace RocketPOS.Repository
             return purchaseDetails;
         }
 
-        public List<PurchaseGRNViewModel> PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId)
+        public List<PurchaseGRNViewModel> PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId, int storeId)
         {
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -410,7 +410,12 @@ namespace RocketPOS.Repository
                 {
                     query += " And PurchaseGRN.SupplierId= " + supplierId;
                 }
-                query += "  order by PurchaseGRN.id desc";
+
+                if (storeId != 0)
+                {
+                    query += " And PurchaseGRN.StoreId= " + storeId;
+                }
+                query += "  order by PurchaseGRN.PurchaseGRNDate, PurchaseGRN.id desc";
 
                 purchaseViewModels = con.Query<PurchaseGRNViewModel>(query).AsList();
             }

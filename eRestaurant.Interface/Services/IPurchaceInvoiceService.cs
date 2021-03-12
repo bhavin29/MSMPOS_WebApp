@@ -16,7 +16,7 @@ namespace RocketPOS.Interface.Services
         string ReferenceNumber();
         PurchaseInvoiceModel GetPurchaseInvoiceFoodMenuById(long purchaseInvoiceId);
         List<PurchaseInvoiceViewModel> GetPurchaseInvoiceFoodMenuList();
-        List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId);
+        List<PurchaseInvoiceViewModel> PurchaseInvoiceFoodMenuListByDate(string fromDate, string toDate, int supplierId, int storeId);
         int InsertPurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseInvoiceModel);
         int UpdatePurchaseInvoiceFoodMenu(PurchaseInvoiceModel purchaseInvoiceModel);
         string ReferenceNumberFoodMenu();

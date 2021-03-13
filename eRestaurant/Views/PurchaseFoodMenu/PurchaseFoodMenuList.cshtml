@@ -63,30 +63,30 @@
                             <thead>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
+                                    <th style="width:14%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
-                                    <th style="width:20%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Supplier")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
-                                    <th style="width:15%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
-                            </tfoot>
-                            <tbody>
+                                    <th style="width:14%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
+                                    /tfoot>
+<tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
@@ -210,7 +210,7 @@
                             { "data": "username", "name": "Username", "autoWidth": true },
                             { "data": "status", "name": "Status", "autoWidth": true },
                             {
-                                data: null,
+                                data: "",
                                 mRender: function (data, type, row) {
                                     if (row.status == 'GRN' || row.status == 'Invoice') {
                                         return '';
@@ -235,33 +235,37 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
+                                    var invoiceGRN = "";
                                     if (row.status == 'GRN') {
-                                        return ' <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                        invoiceGRN= ' <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
                                     }
                                     else if (row.status == 'Invoice') {
-                                        return '';
+                                        invoiceGRN= '';
                                     }
                                     else {
-                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
+                                        invoiceGRN= '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
                                             ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
                                     }
+                                    return invoiceGRN;
                                     },
                             },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
+                                    var view = '';
                                     if ("@UserRolePermissionForPage.View" == "True") {
-                                        return '<div class="form-button-action"><a href="/PurchaseFoodmenu/View/' + row.id + '">View</a></div>'
+                                        view= '<div class="form-button-action"><a href="/PurchaseFoodmenu/View/' + row.id + '">View</a></div>'
                                     }
+                                    return view;
                                 },
                             },
                         ],
                         columnDefs: [
                             {
-                                targets: [3],
+                                targets: [4],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
-                              { targets: [6], orderable: false}
+                              { targets: [7,8,9], orderable: false}
                         ],
                         "bLengthChange": true,
                         "bInfo": true,

@@ -77,8 +77,7 @@ namespace RocketPOS.Repository
             referenceTables.Add(new ReferenceTable ( "Outlet", "CustomerOrder", "OutletId"));
             referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
             referenceTables.Add(new ReferenceTable("Outlet", "Bill", "OutletId"));
-            referenceTables.Add(new ReferenceTable("Outlet", "Customer", "OutletId"));
-            referenceTables.Add(new ReferenceTable("Outlet", "FoodMenu", "OutletId"));
+            referenceTables.Add(new ReferenceTable("Outlet", "FoodMenuRate", "OutletId"));
             referenceTables.Add(new ReferenceTable("Store", "Inventory", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "InventoryAdjustment", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "PurchaseGRN", "StoreId"));

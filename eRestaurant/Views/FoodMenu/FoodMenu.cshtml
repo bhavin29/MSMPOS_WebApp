@@ -31,7 +31,8 @@
                                             <span asp-validation-for="FoodMenuName" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
-                                            <label asp-for="UnitsList" class="control-label">Unit</label>
+                                            <label asp-for="UnitsList" class="control-label">Unit </label>
+                                            <button type="button" id="open" class="btn btn-outline-dark" value="open modal" data-toggle="modal" data-target="#exampleModal"> + </button>
                                             @if (Model.UnitsList != null)
                                             {
                                                 <select asp-for="UnitsId" class="form-control"
@@ -39,8 +40,6 @@
                                                 </select>
                                             }
                                         </div>
-
-                                        <button type="button" id="open" class="btn btn-primary pull-right" value="open modal" data-toggle="modal" data-target="#exampleModal">Add Unit</button>
                                         <!-- Modal -->
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">

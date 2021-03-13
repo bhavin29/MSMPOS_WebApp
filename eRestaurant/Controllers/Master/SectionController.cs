@@ -12,21 +12,27 @@ namespace RocketPOS.Controllers.Master
 {
     public class SectionController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly ISectionService _iSectionService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public SectionController(ISectionService iSectionService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public SectionController(ISectionService iSectionService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iSectionService = iSectionService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<SectionModel> sectionModel = new List<SectionModel>();
             sectionModel = _iSectionService.GetSectionList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(sectionModel);
         }
 
@@ -82,8 +88,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iSectionService.DeleteSection(id);
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Section", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iSectionService.DeleteSection(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationSection(SectionModel sectionModel)

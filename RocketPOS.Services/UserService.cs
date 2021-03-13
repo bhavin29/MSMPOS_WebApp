@@ -43,5 +43,9 @@ namespace RocketPOS.Services
             return _IUserReportsitory.DeleteUser(UserID);
         }
 
+        public object DeleteOutlet(int id)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

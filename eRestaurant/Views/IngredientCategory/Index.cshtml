@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <br/>
+    <br />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
@@ -65,35 +65,35 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.RawMaterialType)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IngredientCategoryName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Notes)
-                            </td>
-                            <td>
-                                @if (item.IsActive == true)
-                                {
-                                    @Html.DisplayName("True")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("False")
-                                }
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="IngredientCategory" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RawMaterialType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IngredientCategoryName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Notes)
+                                </td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="IngredientCategory" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -118,6 +118,34 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="bModal" tabindex="-1" role="dialog" aria-labelledby="bModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="bModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" onclick="@("window.location.href='" + @Url.Action("Index", "IngredientCategory") + "'");" />
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $("#bModal").modal('show');
+        </script>
+
+    }
+}
+
 
 @section Scripts {
     <script>

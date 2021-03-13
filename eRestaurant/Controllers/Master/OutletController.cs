@@ -35,7 +35,7 @@ namespace RocketPOS.Controllers.Master
             outletModels = _iOutletService.GetOutletList().ToList();
             if (noDelete != null)
             {
-                ViewBag.NoDelete = "Can not delete reference available.";
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
             }
             return View(outletModels);
         }
@@ -105,7 +105,7 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Outlet", id.ToString());
+            result = _iCommonService.GetValidateReference("Outlet", id.ToString());     
             if (result > 0)
             {
                 return RedirectToAction(nameof(Index), new { noDelete = result });

@@ -14,23 +14,28 @@ namespace RocketPOS.Controllers.Master
 {
     public class UserController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IUserService _iUserService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public UserController(IUserService userService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public UserController(IUserService userService, ICommonService iCommonService,IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iUserService = userService;
-            _iDropDownService = idropDownService;
+            _iDropDownService = idropDownService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<UserModel> userModel = new List<UserModel>();
             userModel = _iUserService.GetUserList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(userModel);
         }
 
@@ -92,12 +97,23 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iUserService.DeleteUser(id);
 
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("User", id.ToString());
+            if (result > 0)
+            {
+
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            
+            else
+            { 
+                    var deletedid = _iUserService.DeleteOutlet(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
-
-        private string ValidationUser(UserModel userModel)
+    
+    private string ValidationUser(UserModel userModel)
         {
             string ErrorString = string.Empty;
             if (string.IsNullOrEmpty(userModel.Username))

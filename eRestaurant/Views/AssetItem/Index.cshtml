@@ -24,7 +24,7 @@
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
                 <table id="@SharedLocalizer.GetLocalizedHtmlString("AssetItem")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
-                    <thead >
+                    <thead>
                         <tr role="row>
                             <th>
                                 @Html.DisplayNameFor(model => model.Code)
@@ -98,42 +98,42 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Code)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetCategoryName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.AssetItemName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ShortName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UnitName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Tax)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Brandname)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Model)
-                            </td>
-                            <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.CostPrice)
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="AssetItem" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Code)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssetCategoryName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AssetItemName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ShortName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UnitName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Tax)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Brandname)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Model)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.CostPrice)
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="AssetItem" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -160,6 +160,33 @@
 </div>
 <br />
 <br />
+<div class="modal fade" id="bModal" tabindex="-1" role="dialog" aria-labelledby="bModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="bModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" onclick="@("window.location.href='" + @Url.Action("Index", "AssetItem") + "'");" />
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $("#bModal").modal('show');
+        </script>
+
+    }
+}
 
 @section Scripts {
     <script>

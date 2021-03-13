@@ -12,20 +12,25 @@ namespace RocketPOS.Controllers.Master
 {
     public class AssetCategoryController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IAssetCategoryService _iAssetCategoryService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public AssetCategoryController(IAssetCategoryService iAssetCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public AssetCategoryController(IAssetCategoryService iAssetCategoryService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
-            _iAssetCategoryService = iAssetCategoryService;
+            _iAssetCategoryService = iAssetCategoryService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<AssetCategoryModel> assetCategoryModel = new List<AssetCategoryModel>();
             assetCategoryModel = _iAssetCategoryService.GetAssetCategoryList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(assetCategoryModel);
         }
 
@@ -69,8 +74,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iAssetCategoryService.DeleteAssetCategory(id);
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("AssetCategory", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iAssetCategoryService.DeleteAssetCategory(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

@@ -12,23 +12,28 @@ namespace RocketPOS.Controllers.Master
 {
     public class AssetItemController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IAssetItemService _iAssetItemService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public AssetItemController(IAssetItemService assetItemService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public AssetItemController(IAssetItemService assetItemService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
-            _iAssetItemService = assetItemService;
+            _iAssetItemService = assetItemService; _iCommonService = iCommonService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<AssetItemModel> assetItemModel = new List<AssetItemModel>();
             assetItemModel = _iAssetItemService.GetAssetItemList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(assetItemModel);
         }
 
@@ -74,8 +79,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iAssetItemService.DeleteAssetItem(id);
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("AssetItem", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iAssetItemService.DeleteAssetItem(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

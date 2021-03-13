@@ -14,21 +14,27 @@ namespace RocketPOS.Controllers.Master
 {
     public class PaymentMethodController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IPaymentMethodService _iPaymentMethodService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public PaymentMethodController(IPaymentMethodService paymentMethod, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public PaymentMethodController(IPaymentMethodService paymentMethod, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iPaymentMethodService = paymentMethod;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<PaymentMethodModel> paymentMethodModel = new List<PaymentMethodModel>();
             paymentMethodModel = _iPaymentMethodService.GetPaymentMethodList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(paymentMethodModel);
         }
 
@@ -84,9 +90,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iPaymentMethodService.DeletePaymentMethod(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("PaymentMethod", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iPaymentMethodService.DeletePaymentMethod(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationPaymentMethod(PaymentMethodModel paymentMethodModel)

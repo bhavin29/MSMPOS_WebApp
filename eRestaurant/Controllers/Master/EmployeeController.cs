@@ -14,21 +14,26 @@ namespace RocketPOS.Controllers.Master
 {
     public class EmployeeController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IEmployeeService _iemployeeService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public EmployeeController(IEmployeeService employeeService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public EmployeeController(IEmployeeService employeeService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
-            _iemployeeService = employeeService;
+            _iemployeeService = employeeService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<EmployeeModel> employeeList = new List<EmployeeModel>();
             employeeList = _iemployeeService.GetEmployeeList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(employeeList);
         }
 
@@ -85,9 +90,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iemployeeService.DeleteEmployee(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Employee", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iemployeeService.DeleteEmployee(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationEmployee(EmployeeModel employeeModel)

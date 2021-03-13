@@ -18,5 +18,6 @@ namespace RocketPOS.Interface.Services
         int UpdateUser(UserModel userModel);
 
         int DeleteUser(int userID);
+        object DeleteOutlet(int id);
     }
 }

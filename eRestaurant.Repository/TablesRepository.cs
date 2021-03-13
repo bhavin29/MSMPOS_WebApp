@@ -47,7 +47,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO Tables (Id,TableName,OutletId,PersonCapacity,TableIcon,Status,IsActive)" +
                             "VALUES ( "+ MaxId + 
-                            "@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status,@IsActive);" +
+                            ",@TableName,@OutletId,@PersonCapacity,@TableIcon,@Status,@IsActive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, TablesModel, sqltrans, 0, System.Data.CommandType.Text);
 

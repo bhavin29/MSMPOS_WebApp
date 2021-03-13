@@ -12,24 +12,29 @@ namespace RocketPOS.Controllers.Master
 {
     public class TaxController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly ITaxService _iTaxService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public TaxController(ITaxService iTaxService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public TaxController(ITaxService iTaxService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iTaxService = iTaxService;
-            _sharedLocalizer = sharedLocalizer;
+            _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<TaxModel> taxModel = new List<TaxModel>();
             taxModel = _iTaxService.GetTaxList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(taxModel);
         }
-
+            
         public ActionResult Tax(int? id)
         {
             TaxModel taxModel = new TaxModel();
@@ -82,8 +87,18 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iTaxService.DeleteTax(id);
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Tax", id.ToString());
+            if (result > 0)
+            {
+
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iTaxService.DeleteTax(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationTax(TaxModel taxModel)
@@ -98,3 +113,4 @@ namespace RocketPOS.Controllers.Master
         }
     }
 }
+    

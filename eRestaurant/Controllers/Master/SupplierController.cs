@@ -15,21 +15,27 @@ namespace RocketPOS.Controllers.Master
 {
     public class SupplierController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly ISupplierService _iSupplierService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public SupplierController(ISupplierService supplierService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public SupplierController(ISupplierService supplierService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iSupplierService = supplierService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<SupplierModel> supplierList = new List<SupplierModel>();
             supplierList = _iSupplierService.GetSupplierList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(supplierList);
         }
 
@@ -87,9 +93,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iSupplierService.DeleteSupplier(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Supplier", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iSupplierService.DeleteSupplier(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationSupplier(SupplierModel supplierModel)

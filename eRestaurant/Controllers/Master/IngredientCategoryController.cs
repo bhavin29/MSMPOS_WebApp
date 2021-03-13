@@ -14,25 +14,30 @@ namespace RocketPOS.Controllers.Master
 {
     public class IngredientCategoryController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IIngredientCategoryService _iIngredientCategoryService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public IngredientCategoryController(IIngredientCategoryService ingredientCategoryService, IDropDownService idropDownService,
+        public IngredientCategoryController(IIngredientCategoryService ingredientCategoryService, ICommonService iCommonService,IDropDownService idropDownService,
   IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iIngredientCategoryService = ingredientCategoryService;
-            _iDropDownService = idropDownService;
+            _iDropDownService = idropDownService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         // GET: IngredientCategoryController
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<IngredientCategoryModel> ingredientCategoryList = new List<IngredientCategoryModel>();
             ingredientCategoryList = _iIngredientCategoryService.GetIngredientCategoryList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(ingredientCategoryList);
         }
 
@@ -95,9 +100,17 @@ namespace RocketPOS.Controllers.Master
         // GET: IngredientCategory/Delete/5
         public ActionResult Delete(int id)
         {
-            var deletedid = _iIngredientCategoryService.DeleteIngredientCategory(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("IngredientCategory", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iIngredientCategoryService.DeleteIngredientCategory(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationIngredientCategory(IngredientCategoryModel ingredientCategoryModel)

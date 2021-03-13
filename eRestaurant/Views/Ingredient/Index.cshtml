@@ -1,12 +1,12 @@
 ﻿@using Microsoft.Extensions.Localization;
 @model IEnumerable<RocketPOS.Models.IngredientModel>
 
-    @using  RocketPOS.Resources
-    @inject LocService SharedLocalizer
-    @{
-        ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
-        var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
-    }
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("Ingredient");
+}
 
 <div class="card">
     <div class="card-header container-fluid">
@@ -32,7 +32,7 @@
                             <th rowspan="1" colspan="1">@Html.DisplayName("Tax")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("IsActive")</th>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Action")</th>
-</thead>
+                    </thead>
                     <tfoot>
                         <tr>
                             <th rowspan="1" colspan="1">@Html.DisplayName("Ingredient Name")</th>
@@ -48,37 +48,37 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr role="row">
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IngredientName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Unit)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Tax)
-                            </td>
-                            <td>
-                                @if (item.IsActive == true)
-                                {
-                                    @Html.DisplayName("True")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("False")
-                                }
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="Ingredient" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr role="row">
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IngredientName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Category)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Tax)
+                                </td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a asp-action="Ingredient" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -103,9 +103,37 @@
         </div>
     </div>
 </div>
-          
-    @section Scripts {
-        <script>
+<div class="modal fade" id="bModal" tabindex="-1" role="dialog" aria-labelledby="bModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="bModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+                @ViewBag.Result
+            </div>
+            <div class="modal-footer">
+                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" onclick="@("window.location.href='" + @Url.Action("Index", "Ingredient") + "'");" />
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (ViewBag.Result != null)
+    {
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script type="text/javascript">
+            $("#bModal").modal('show');
+        </script>
+
+    }
+}
+
+
+@section Scripts {
+    <script>
         $(document).ready(function () {
             table = $('#@dataTableName').DataTable({
                 dom: 'Bfrtip',
@@ -133,6 +161,6 @@
                         ],
             });
         });
-        </script>
-    }
+    </script>
+}
 

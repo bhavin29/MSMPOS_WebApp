@@ -12,23 +12,28 @@ namespace RocketPOS.Controllers.Master
 {
     public class GlobalStatusController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IGlobalStatusService _iGlobalStatusService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public GlobalStatusController(IGlobalStatusService iGlobalStatusService, IDropDownService iDropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public GlobalStatusController(IGlobalStatusService iGlobalStatusService, ICommonService iCommonService, IDropDownService iDropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
-            _iGlobalStatusService = iGlobalStatusService;
+            _iGlobalStatusService = iGlobalStatusService; _iCommonService = iCommonService;
             _iDropDownService = iDropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<GlobalStatusModel> globalStatusModel = new List<GlobalStatusModel>();
             globalStatusModel = _iGlobalStatusService.GetGlobalStatusList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(globalStatusModel);
         }
 
@@ -99,8 +104,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iGlobalStatusService.DeleteGlobalStatus(id);
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("GlobalStatus", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iGlobalStatusService.DeleteGlobalStatus(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationGlobalStatus(GlobalStatusModel globalStatusModel)

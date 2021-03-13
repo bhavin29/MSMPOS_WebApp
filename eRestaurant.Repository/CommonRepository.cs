@@ -59,22 +59,22 @@ namespace RocketPOS.Repository
             return Int16.Parse(result);
         }
 
-        public int GetValidateUnique(string TableName,string ColumnName,string Value, string Rowid)
+        public int GetValidateUnique(string TableName, string ColumnName, string Value, string Rowid)
         {
-            string result ="";
+            string result = "";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                string query = "SELECT * FROM " + TableName.ToString() + " WHERE IsDeleted=0 AND LTRIM(RTRIM(" + ColumnName + "))= LTRIM(RTRIM('" + Value +"')) AND Id <> " + Rowid ;
+                string query = "SELECT * FROM " + TableName.ToString() + " WHERE IsDeleted=0 AND LTRIM(RTRIM(" + ColumnName + "))= LTRIM(RTRIM('" + Value + "')) AND Id <> " + Rowid;
                 result = con.ExecuteScalar<string>(query);
 
                 result = result != null ? result : "0";
             }
             return Int16.Parse(result);
         }
-        public int GetValidateReference(string TableName,string Rowid)
+        public int GetValidateReference(string TableName, string Rowid)
         {
-            List<ReferenceTable> referenceTables= new List<ReferenceTable>();
-            referenceTables.Add(new ReferenceTable ( "Outlet", "CustomerOrder", "OutletId"));
+            List<ReferenceTable> referenceTables = new List<ReferenceTable>();
+            referenceTables.Add(new ReferenceTable("Outlet", "CustomerOrder", "OutletId"));
             referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
             referenceTables.Add(new ReferenceTable("Outlet", "Bill", "OutletId"));
             referenceTables.Add(new ReferenceTable("Outlet", "FoodMenuRate", "OutletId"));
@@ -83,11 +83,30 @@ namespace RocketPOS.Repository
             referenceTables.Add(new ReferenceTable("Store", "PurchaseGRN", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "PurchaseInvoice", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "Purchase", "StoreId"));
+ 
+            referenceTables.Add(new ReferenceTable("AssetCategory", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("AssetItem", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Bank", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Employee", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("FoodMenuCategory", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("GlobalStatus", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("IngredientCategory", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Ingredient", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("IngredientUnit", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("PaymentMethod", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("RawMaterial", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("RewardSetup", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Role", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Section", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Supplier", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Tables", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Tax", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("User", "Purchase", "StoreId"));
 
-            string result = ""; string query = "";int validate = 0;
+            string result = ""; string query = ""; int validate = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                  foreach( var item in referenceTables) 
+                foreach (var item in referenceTables)
                 {
                     if (item.TableName == TableName)
                     {
@@ -104,7 +123,7 @@ namespace RocketPOS.Repository
             }
             return validate;
         }
-        public string InventoryPush(string docType,int id)
+        public string InventoryPush(string docType, int id)
         {
             string result = "";
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))

@@ -14,21 +14,26 @@ namespace RocketPOS.Controllers.Master
 {
     public class FoodMenuCategoryController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IFoodMenuCatagoryService _ifoodMenuCatagoryService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _ifoodMenuCatagoryService = ifoodMenuCatagoryService;
-            _sharedLocalizer = sharedLocalizer;
+            _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<FoodMenuCatagoryModel> foodMenuCategoryModel = new List<FoodMenuCatagoryModel>();
             foodMenuCategoryModel = _ifoodMenuCatagoryService.GetFoodCategoryList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(foodMenuCategoryModel);
          }
 
@@ -85,9 +90,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _ifoodMenuCatagoryService.DeleteFoodMenuCatagory(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("FoodMenuCategory", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _ifoodMenuCatagoryService.DeleteFoodMenuCatagory(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationFoodMenuCategory(FoodMenuCatagoryModel foodMenuCategoryModel)

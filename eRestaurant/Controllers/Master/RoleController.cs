@@ -12,21 +12,27 @@ namespace RocketPOS.Controllers.Master
 {
     public class RoleController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IRoleService _iRoleService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public RoleController(IRoleService iRoleService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public RoleController(IRoleService iRoleService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iRoleService = iRoleService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<RoleModel> roleModel = new List<RoleModel>();
             roleModel = _iRoleService.GetRoleList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(roleModel);
         }
 
@@ -82,7 +88,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iRoleService.DeleteRole(id);
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Role", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iRoleService.DeleteRole(id);
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Index));
         }
 

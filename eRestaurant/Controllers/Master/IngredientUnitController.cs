@@ -14,21 +14,27 @@ namespace RocketPOS.Controllers.Master
 {
     public class IngredientUnitController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IIngredientUnitService _iIngredientUnitService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public IngredientUnitController(IIngredientUnitService ingredientUnitService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public IngredientUnitController(IIngredientUnitService ingredientUnitService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iIngredientUnitService = ingredientUnitService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<IngredientUnitModel> ingredientUniList = new List<IngredientUnitModel>();
             ingredientUniList = _iIngredientUnitService.GetIngredientUnitList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(ingredientUniList);
  
         }
@@ -85,9 +91,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iIngredientUnitService.DeleteIngredientUnit(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("IngredientUnit", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iIngredientUnitService.DeleteIngredientUnit(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationIngredientUnit(IngredientUnitModel ingredientUnitModel)

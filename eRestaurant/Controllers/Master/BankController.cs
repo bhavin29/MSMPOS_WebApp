@@ -14,21 +14,25 @@ namespace RocketPOS.Controllers.Master
 {
     public class BankController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IBankService _iBankService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
-
-        public BankController(IBankService iBankService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public BankController(IBankService iBankService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iBankService = iBankService;
-            _sharedLocalizer = sharedLocalizer;
+            _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<BankModel> bankList = new List<BankModel>();
             bankList = _iBankService.GetBankList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(bankList);
         }
 
@@ -87,9 +91,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iBankService.DeleteBank(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Bank", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iBankService.DeleteBank(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationBank(BankModel bankModel)

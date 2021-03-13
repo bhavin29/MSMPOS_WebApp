@@ -14,23 +14,29 @@ namespace RocketPOS.Controllers.Master
 {
     public class TablesController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly ITablesService _iTablesService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public TablesController(ITablesService tableService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public TablesController(ITablesService tableService, ICommonService iCommonService,IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iTablesService = tableService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<TablesModel> tableList = new List<TablesModel>();
             tableList = _iTablesService.GetTablesList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(tableList);
         }
 
@@ -78,9 +84,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iTablesService.DeleteTables(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Tables", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iTablesService.DeleteTables(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationTables(TablesModel tablesModel)

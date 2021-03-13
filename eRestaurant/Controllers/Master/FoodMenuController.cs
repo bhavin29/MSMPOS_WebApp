@@ -15,16 +15,16 @@ namespace RocketPOS.Controllers.Master
 {
     public class FoodMenuController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IFoodMenuService _iFoodMenuService;
         private readonly IIngredientUnitService _iIngredientUnitService;
         private readonly IDropDownService _iDropDownService;
-        private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public FoodMenuController(IFoodMenuService foodMenuService, IIngredientUnitService iIngredientUnitService,IDropDownService idropDownService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuController(IFoodMenuService foodMenuService, ICommonService iCommonService,IIngredientUnitService iIngredientUnitService,IDropDownService idropDownService,  IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
-            _iFoodMenuService = foodMenuService;
+            _iFoodMenuService = foodMenuService; _iCommonService = iCommonService;
             _iIngredientUnitService = iIngredientUnitService;
             _iDropDownService = idropDownService;
             _iCommonService = iCommonService;

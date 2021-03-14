@@ -26,24 +26,17 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
 
         }
-        
+
         public ActionResult Index(int? noDelete)
         {
+            List<StoreModel> storeModel = new List<StoreModel>();
+            storeModel = _istoreService.GetStoreList().ToList();
             if (noDelete != null)
             {
-                ViewBag.NoDelete = "Can not delete reference available.";
-            }
-            List<StoreModel> storeModel = new List<StoreModel>();
-            try
-            {
-                storeModel = _istoreService.GetStoreList().ToList();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Store",ex.Message.ToString());
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
             }
             return View(storeModel);
-          }
+        }
 
         public ActionResult Store(int? id)
         {
@@ -56,7 +49,7 @@ namespace RocketPOS.Controllers.Master
                     storeModel = _istoreService.GetStoreById(storeId);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("Store", ex.Message.ToString());
             }

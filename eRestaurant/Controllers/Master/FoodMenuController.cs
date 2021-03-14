@@ -32,11 +32,15 @@ namespace RocketPOS.Controllers.Master
             _locService = locService;
         }
 
-        public ActionResult Index(int? readymade, int? categoryid, int? foodmenutype)
+        public ActionResult Index(int? readymade, int? categoryid, int? foodmenutype, int? noDelete)
         {
             _iCommonService.GetPageWiseRoleRigths("FoodMenu");
             List<FoodMenuModel> foodMenuModel = new List<FoodMenuModel>();
-            if (categoryid != null && foodmenutype != null)
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
+            else if (categoryid != null && foodmenutype != null)
             {
                 foodMenuModel = _iFoodMenuService.GetFoodMenuList(Convert.ToInt32(categoryid), Convert.ToInt32(foodmenutype)).ToList();
             }
@@ -114,8 +118,17 @@ namespace RocketPOS.Controllers.Master
         {
             if (UserRolePermissionForPage.Delete == true)
             {
-                var deletedid = _iFoodMenuService.DeleteFoodMenu(id);
-                return RedirectToAction(nameof(Index));
+                int result = 0;
+                result = _iCommonService.GetValidateReference("Foodmenu", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iFoodMenuService.DeleteFoodMenu(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {

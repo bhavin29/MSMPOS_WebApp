@@ -15,21 +15,26 @@ namespace RocketPOS.Controllers.Master
 {
     public class CustomerController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly ICustomerService _iCustomerService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public CustomerController(ICustomerService customerService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public CustomerController(ICustomerService customerService, IStringLocalizer<RocketPOSResources> sharedLocalizer, ICommonService iCommonService, LocService locService)
         {
-            _iCustomerService = customerService;
+            _iCustomerService = customerService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? noDelete)
         {
             List<CustomerModel> customerList = new List<CustomerModel>();
             customerList = _iCustomerService.GetCustomerList().ToList();
+            if (noDelete != null)
+            {
+                ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
+            }
             return View(customerList);
         }
 
@@ -85,9 +90,17 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iCustomerService.DeleteCustomer(id);
-
-            return RedirectToAction(nameof(Index));
+            int result = 0;
+            result = _iCommonService.GetValidateReference("Customer", id.ToString());
+            if (result > 0)
+            {
+                return RedirectToAction(nameof(Index), new { noDelete = result });
+            }
+            else
+            {
+                var deletedid = _iCustomerService.DeleteCustomer(id);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private string ValidationCustomer(CustomerModel customerModel)

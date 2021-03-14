@@ -89,7 +89,7 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Role", id.ToString());
+            result = _iCommonService.GetValidateReference("WebRole", id.ToString());
             if (result > 0)
             {
                 return RedirectToAction(nameof(Index), new { noDelete = result });

@@ -75,33 +75,74 @@ namespace RocketPOS.Repository
         {
             List<ReferenceTable> referenceTables = new List<ReferenceTable>();
             referenceTables.Add(new ReferenceTable("Outlet", "CustomerOrder", "OutletId"));
-            referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
             referenceTables.Add(new ReferenceTable("Outlet", "Bill", "OutletId"));
             referenceTables.Add(new ReferenceTable("Outlet", "FoodMenuRate", "OutletId"));
+ 
+            referenceTables.Add(new ReferenceTable("Store", "Outlet", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "Inventory", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "InventoryTransfer", "ToStoreId"));
+            referenceTables.Add(new ReferenceTable("Store", "InventoryTransfer", "FromStoreId"));
             referenceTables.Add(new ReferenceTable("Store", "InventoryAdjustment", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "PurchaseGRN", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "PurchaseInvoice", "StoreId"));
             referenceTables.Add(new ReferenceTable("Store", "Purchase", "StoreId"));
+
+            referenceTables.Add(new ReferenceTable("AssetCategory", "AssetItem", "AssetCategoryId"));
+
+            referenceTables.Add(new ReferenceTable("AssetItem", "InventoryTransferDetail", "AssetItemId"));
+            referenceTables.Add(new ReferenceTable("AssetItem", "InventoryAdjustmentDetail", "AssetItemId"));
+            referenceTables.Add(new ReferenceTable("AssetItem", "PurchaseGRNDetail", "AssetItemId"));
+            referenceTables.Add(new ReferenceTable("AssetItem", "PurchaseInvoiceDetail", "AssetItemId"));
+            referenceTables.Add(new ReferenceTable("AssetItem", "PurchaseDetail", "AssetItemId"));
+
+            referenceTables.Add(new ReferenceTable("FoodMenuCategory", "Foodmenu", "FoodCategoryId"));
+
+            referenceTables.Add(new ReferenceTable("Foodmenu", "FoodmenuRate", "FoodmenuId"));
+            referenceTables.Add(new ReferenceTable("Foodmenu", "InventoryTransferDetail", "FoodmenuId"));
+            referenceTables.Add(new ReferenceTable("Foodmenu", "InventoryAdjustmentDetail", "FoodmenuId"));
+            referenceTables.Add(new ReferenceTable("Foodmenu", "PurchaseGRNDetail", "FoodmenuId"));
+            referenceTables.Add(new ReferenceTable("Foodmenu", "PurchaseInvoiceDetail", "FoodmenuId"));
+            referenceTables.Add(new ReferenceTable("Foodmenu", "PurchaseDetail", "FoodmenuId"));
+
+            referenceTables.Add(new ReferenceTable("IngredientCategory", "Ingredient", "IngredientCategoryId"));
+
+            referenceTables.Add(new ReferenceTable("Ingredient", "InventoryTransferDetail", "IngredientId"));
+            referenceTables.Add(new ReferenceTable("Ingredient", "InventoryAdjustmentDetail", "IngredientId"));
+            referenceTables.Add(new ReferenceTable("Ingredient", "PurchaseGRNDetail", "IngredientId"));
+            referenceTables.Add(new ReferenceTable("Ingredient", "PurchaseInvoiceDetail", "IngredientId"));
+            referenceTables.Add(new ReferenceTable("Ingredient", "PurchaseDetail", "IngredientId"));
+
+            referenceTables.Add(new ReferenceTable("IngredientUnit", "Foodmenu", "UnitsId"));
+            referenceTables.Add(new ReferenceTable("IngredientUnit", "Ingredient", "IngredientUnitId"));
+            referenceTables.Add(new ReferenceTable("IngredientUnit", "AssetItem", "UnitId"));
  
-            referenceTables.Add(new ReferenceTable("AssetCategory", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("AssetItem", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Bank", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Employee", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("FoodMenuCategory", "Purchase", "StoreId"));
+            referenceTables.Add(new ReferenceTable("Supplier", "PurchaseGRN", "SupplierId"));
+            referenceTables.Add(new ReferenceTable("Supplier", "PurchaseInvoice", "SupplierId"));
+            referenceTables.Add(new ReferenceTable("Supplier", "Purchase", "SupplierId"));
+
+            referenceTables.Add(new ReferenceTable("Tax", "Foodmenu", "FoodVatTaxId"));
+            referenceTables.Add(new ReferenceTable("Tax", "Ingredient", "TaxId"));
+            referenceTables.Add(new ReferenceTable("Tax", "AssetItem", "TaxId"));
+
+            referenceTables.Add(new ReferenceTable("Customer", "CustomerOrder", "CustomerId"));
+
+            referenceTables.Add(new ReferenceTable("Employee", "[User]", "EmployeeId"));
+
             referenceTables.Add(new ReferenceTable("GlobalStatus", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("IngredientCategory", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Ingredient", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("IngredientUnit", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("PaymentMethod", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("RawMaterial", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("RewardSetup", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Role", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Section", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Supplier", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Tables", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("Tax", "Purchase", "StoreId"));
-            referenceTables.Add(new ReferenceTable("User", "Purchase", "StoreId"));
+
+            referenceTables.Add(new ReferenceTable("PaymentMethod", "BillDetail", "PaymentMethodId"));
+
+            referenceTables.Add(new ReferenceTable("RawMaterial", "ingredientcategory", "RawMaterialId"));
+
+            referenceTables.Add(new ReferenceTable("WebRole", "[User]", "WebRoleId"));
+
+            referenceTables.Add(new ReferenceTable("Tables", "CustomerOrder", "TableId"));
+
+            //          referenceTables.Add(new ReferenceTable("RewardSetup", "Purchase", "StoreId"));
+            //            referenceTables.Add(new ReferenceTable("Bank", "Purchase", "StoreId"));
+            //referenceTables.Add(new ReferenceTable("Section", "Purchase", "StoreId"));
+
+            referenceTables = referenceTables.Where(x => x.TableName.Contains(TableName)).ToList();
 
             string result = ""; string query = ""; int validate = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -113,7 +154,7 @@ namespace RocketPOS.Repository
                         query = "SELECT Count(*) FROM " + item.ReferenceTableName.ToString() + " WHERE IsDeleted=0 AND " + item.ReferenceColumnName + "= " + Rowid;
                         result = con.ExecuteScalar<string>(query);
 
-                        if (result != null)
+                        if (result != "0")
                         {
                             validate = 1;
                         }

@@ -50,7 +50,8 @@
                             <th style="width:0%"></th>
                             <th style="width:0%"></th>
                             <th style="width:0%"></th>
-                            <th style="width:30%">Page Name</th>
+                            <th style="width:30%">Module</th>
+                            <th style="width:30%">Logical Page Name</th>
                             <th style="width:15%">Add  <input type="checkbox" id="selectAddAll" /></th>
                             <th style="width:15%">Edit <input type="checkbox" id="selectEditAll" /></th>
                             <th style="width:15%">Delete <input type="checkbox" id="selectDeleteAll" /></th>
@@ -73,7 +74,10 @@
                                 <input asp-for="@item.WebRolesId" class="form-control" type="hidden" />
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.PageName)
+                                @Html.DisplayFor(modelItem => item.Module)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LogicalPageName)
                             </td>
                             <td>
                                 <input asp-for="@item.Add" type="checkbox" class="form-check-input addcheckboxes" style="margin: 5Px 0 0 0px" />
@@ -105,7 +109,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [3, 4, 5,6,7] },
+                    exportOptions: { columns: [3, 4, 5,6,7,8] },
                     format: {
                             body: function (data, row, column, node) {
                                 if (column == 0) {
@@ -160,10 +164,10 @@
                     Id: parseInt($(tds[0]).find("#item_Id").val()),
                     PagesId: parseInt($(tds[1]).find("#item_PagesId").val()),
                     WebRolesId: $("#WebRolesId").val(),
-                    Add: $(tds[4]).find("#item_Add").is(":checked"),
-                    Edit: $(tds[5]).find("#item_Edit").is(":checked"),
-                    Delete: $(tds[6]).find("#item_Delete").is(":checked"),
-                    View: $(tds[7]).find("#item_View").is(":checked")
+                    Add: $(tds[5]).find("#item_Add").is(":checked"),
+                    Edit: $(tds[6]).find("#item_Edit").is(":checked"),
+                    Delete: $(tds[7]).find("#item_Delete").is(":checked"),
+                    View: $(tds[8]).find("#item_View").is(":checked")
                 });
                 rolePermission.push(webPageRole);
             });

@@ -17,6 +17,8 @@ namespace RocketPOS.Models
         public int Id { get; set; }
         public int PagesId { get; set; }
         public string PageName { get; set; }
+        public string Module { get; set; }
+        public string LogicalPageName { get; set; }
         public int WebRolesId { get; set; }
         public bool Add { get; set; }
         public bool Edit { get; set; }

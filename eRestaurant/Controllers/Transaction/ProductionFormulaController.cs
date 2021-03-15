@@ -32,10 +32,16 @@ namespace RocketPOS.Controllers.Transaction
             if (TempData["foodMenuType"] == null)
             {
                 TempData["foodMenuType"] = 2;
+                foodMenuType = 2;
             }
             else if (foodMenuType != null)
             {
                 TempData["foodMenuType"] = foodMenuType;
+            }
+            else if (foodMenuType == null)
+            {
+                TempData["foodMenuType"] = 2;
+                foodMenuType = 2;
             }
             List<ProductionFormulaViewModel> productionFormulaViewModels = new List<ProductionFormulaViewModel>();
             productionFormulaViewModels = _iProductionFormulaService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));

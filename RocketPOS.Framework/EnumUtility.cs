@@ -104,7 +104,7 @@ namespace RocketPOS.Framework
         [Display(Name = "On the spot")]
         OnTheSpot = 2,
         [Display(Name = "Production")]
-        Other = 3,
+        Production = 3,
         [Display(Name = "Catering")]
         Catering = 4,
     }

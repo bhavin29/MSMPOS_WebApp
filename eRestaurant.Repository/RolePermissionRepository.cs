@@ -26,10 +26,10 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var queryWithRecords = "Select WRP.Id ,P.Id as PagesId,P.PageName,P.Module,P.LogicalPageName, WRP.WebRolesId,ISNULL(WRP.[Add],0) As [Add],ISNULL(WRP.[Edit],0) As [Edit],ISNULL(WRP.[Delete],0) As [Delete],ISNULL(WRP.[View],0) As [View] From Pages P " +
-                            "Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id Where WRP.WebRolesId =  " + webRoleId +
+                            "Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id Where WRP.WebRolesId =  " + webRoleId + " And P.IsDeleted=0 " + 
                             " union " +
                             " Select  0 AS Id ,P.Id as PagesId,P.PageName,P.Module,P.LogicalPageName,Null AS WebRolesId,0 As [Add],0 As [Edit],0 As [Delete],0 As [View] From Pages P  " +
-                            " Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id where P.Id Not in (Select  P.Id From Pages P Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id Where WRP.WebRolesId =" + webRoleId + ") ";
+                            " Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id where P.Id Not in (Select  P.Id From Pages P Left Join  WebRolePages WRP ON  WRP.PagesId = P.Id Where WRP.WebRolesId =" + webRoleId + ") And P.IsDeleted=0 ";
                 webRolePageModel = con.Query<WebRolePageModel>(queryWithRecords).ToList();
 
                 //if (webRolePageModel.Count <= 0)

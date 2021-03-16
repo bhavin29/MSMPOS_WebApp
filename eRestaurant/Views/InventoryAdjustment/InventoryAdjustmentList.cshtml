@@ -11,12 +11,23 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-9">
-                <h5 class="card-title">Stock In</h5>
+                @if (ViewBag.ConsumptionStatus == 1)
+                {
+                    <h5 class="card-title">
+                        Stock IN
+                    </h5>
+                }
+                else
+                {
+                    <h5 class="card-title">
+                        Stock Out
+                    </h5>
+                }
             </div>
             <div class="float-right">
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" class=" btn btn-primary" style="margin-right:16px">+ Menu</a>
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="2" class="btn btn-primary" style="margin-right:16px">+ Stock</a>
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="3" class="btn btn-primary">+ Asset</a>
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class=" btn btn-primary" style="margin-right:16px">+ Menu</a>
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="2" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary" style="margin-right:16px">+ Stock</a>
+                <a asp-action="InventoryAdjustment" asp-route-inventoryType="3" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary">+ Asset</a>
             </div>
         </div>
     </div>
@@ -136,7 +147,7 @@
         function loadAdjustmentList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/InventoryAdjustment/InventoryAdjustmentListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val(),
+                url: "/InventoryAdjustment/InventoryAdjustmentListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val()+"&consumptionStatus="+@ViewBag.ConsumptionStatus,
                 dataType: "json",
                 type: "GET",
                 success: function (data) {

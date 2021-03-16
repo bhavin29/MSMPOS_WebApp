@@ -12,6 +12,7 @@
                     <div class="col-md-12">
                         <h5>Create Stock-In</h5>
                         <input asp-for="InventoryType" hidden="hidden" class="form-control" />
+                        <input asp-for="ConsumptionStatus" hidden="hidden" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -278,7 +279,7 @@
                                 {
                                     <input id="saveOrder" type="submit" class="btn btn-primary" value="Save" />
                                 }
-                                <a href='@Url.Action("InventoryAdjustmentList", "InventoryAdjustment")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                <a href='@Url.Action("InventoryAdjustmentList", "InventoryAdjustment", new { consumptionStatus = Model.ConsumptionStatus })' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                             </div>
                         </form>
                     </div>

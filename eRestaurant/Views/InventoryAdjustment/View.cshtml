@@ -19,9 +19,19 @@
     <div class="row">
         <div style="background-color:#F7F7F7">
             <div class="col-md-11">
-                <h5 class="card-title">
-                    Stock IN
-                </h5>
+
+                @if (Model.ConsumptionStatus == 1)
+                {
+                    <h5 class="card-title">
+                        Stock IN
+                    </h5>
+                }
+                else
+                {
+                    <h5 class="card-title">
+                        Stock Out
+                    </h5>
+                }
             </div>
             @*<div class="float-right">
                     <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
@@ -75,35 +85,35 @@
                                     var tm = "#myAModal" + item.InventoryAdjustmentId;
                                     var mid = "myAModal" + item.InventoryAdjustmentId;
                                     var rowId = "rowId" + item.InventoryAdjustmentId;
-                                <tr id="@rowId">
-                                    @if (Model.InventoryType == 1)
-                                    {
-                                        <td>
-                                            @item.FoodMenuName
+                                    <tr id="@rowId">
+                                        @if (Model.InventoryType == 1)
+                                        {
+                                            <td>
+                                                @item.FoodMenuName
+                                            </td>
+                                        }
+                                        @if (Model.InventoryType == 2)
+                                        {
+                                            <td>
+                                                @item.IngredientName
+                                            </td>
+                                        }
+                                        @if (Model.InventoryType == 3)
+                                        {
+                                            <td>
+                                                @item.AssetItemName
+                                            </td>
+                                        }
+                                        <td class="text-right">
+                                            @item.Price.ToString("0.00")
                                         </td>
-                                    }
-                                    @if (Model.InventoryType == 2)
-                                    {
-                                        <td>
-                                            @item.IngredientName
+                                        <td class="text-right">
+                                            @item.Quantity.ToString("0.00") @item.UnitName
                                         </td>
-                                    }
-                                    @if (Model.InventoryType == 3)
-                                    {
-                                        <td>
-                                            @item.AssetItemName
+                                        <td class="text-right">
+                                            @item.TotalAmount.ToString("0.00")
                                         </td>
-                                    }
-                                    <td class="text-right">
-                                        @item.Price.ToString("0.00")
-                                    </td>
-                                    <td class="text-right">
-                                        @item.Quantity.ToString("0.00") @item.UnitName
-                                    </td>
-                                    <td class="text-right">
-                                        @item.TotalAmount.ToString("0.00")
-                                    </td>
-                                </tr>
+                                    </tr>
                                 }
                             </tbody>
                         </table>
@@ -117,7 +127,7 @@
             <div class="col-sm-6 text-left">
                 @if (Model.Notes != null)
                 {
-                <div><strong>Notes : </strong> @Model.Notes</div>
+                    <div><strong>Notes : </strong> @Model.Notes</div>
                 }
             </div>
         </div>

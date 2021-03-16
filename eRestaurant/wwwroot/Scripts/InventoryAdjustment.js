@@ -203,6 +203,7 @@ $(function () {
                     Id: $("#Id").val(),
                     ReferenceNo: $("#ReferenceNo").val(),
                     InventoryType: InventoryType,
+                    ConsumptionStatus: $("#ConsumptionStatus").val(),
                     StoreId: $("#StoreId").val(),
                     EmployeeId: $("#EmployeeId").val(),
                     Date: $("#Date").val(),
@@ -246,7 +247,7 @@ $(function () {
 });
 
 $("#save").click(function () {
-    window.location.href = "/InventoryAdjustment/InventoryAdjustmentList";
+    window.location.href = "/InventoryAdjustment/InventoryAdjustmentList?consumptionStatus=" + $("#ConsumptionStatus").val();
 });
 
 $('#ok').click(function () {

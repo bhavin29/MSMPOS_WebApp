@@ -45,6 +45,7 @@ namespace RocketPOS.Services
                              Date = inventory.Date,
                              Notes = inventory.Notes,
                              InventoryType = inventory.InventoryType,
+                             ConsumptionStatus = inventory.ConsumptionStatus,
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -56,7 +57,7 @@ namespace RocketPOS.Services
                                              Quantity = inventoryAdjDetail.Quantity,
                                              Price = inventoryAdjDetail.Price,
                                              TotalAmount = inventoryAdjDetail.TotalAmount,
-                                             ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
+                                             ConsumptionStatus = inventoryAdjDetail.ConsumptionStatus,
                                              IngredientName = inventoryAdjDetail.IngredientName,
                                              FoodMenuId = inventoryAdjDetail.FoodMenuId,
                                              FoodMenuName = inventoryAdjDetail.FoodMenuName
@@ -70,9 +71,9 @@ namespace RocketPOS.Services
             return _inventoryAdjustmentRepository.GetInventoryAdjustmentDetail(invAdjId);
         }
 
-        public List<InventoryAdjustmentViewModel> GetInventoryAdjustmentList()
+        public List<InventoryAdjustmentViewModel> GetInventoryAdjustmentList(int consumptionStatus)
         {
-            return _inventoryAdjustmentRepository.GetInventoryAdjustmentList();
+            return _inventoryAdjustmentRepository.GetInventoryAdjustmentList(consumptionStatus);
         }
 
         public InventoryAdjustmentModel GetViewInventoryAdjustmentById(long invAdjId)
@@ -87,7 +88,8 @@ namespace RocketPOS.Services
                              Date = inventory.Date,
                              Notes = inventory.Notes,
                              InventoryType = inventory.InventoryType,
-                             StoreName=inventory.StoreName
+                             ConsumptionStatus = inventory.ConsumptionStatus,
+                             StoreName =inventory.StoreName
                          }).SingleOrDefault();
             if (model != null)
             {
@@ -99,7 +101,7 @@ namespace RocketPOS.Services
                                                        Quantity = inventoryAdjDetail.Quantity,
                                                        Price = inventoryAdjDetail.Price,
                                                        TotalAmount = inventoryAdjDetail.TotalAmount,
-                                                       ConsumpationStatus = inventoryAdjDetail.ConsumpationStatus,
+                                                       ConsumptionStatus = inventoryAdjDetail.ConsumptionStatus,
                                                        IngredientName = inventoryAdjDetail.IngredientName,
                                                        FoodMenuId = inventoryAdjDetail.FoodMenuId,
                                                        FoodMenuName = inventoryAdjDetail.FoodMenuName,
@@ -116,9 +118,9 @@ namespace RocketPOS.Services
             return _inventoryAdjustmentRepository.InsertInventoryAdjustment(inventoryAdjustmentModel);
         }
 
-        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(string fromDate, string toDate)
+        public List<InventoryAdjustmentViewModel> InventoryAdjustmentListByDate(string fromDate, string toDate,int consumptionStatus)
         {
-            return _inventoryAdjustmentRepository.InventoryAdjustmentListByDate(fromDate, toDate);
+            return _inventoryAdjustmentRepository.InventoryAdjustmentListByDate(fromDate, toDate, consumptionStatus);
         }
 
         public long ReferenceNumber()

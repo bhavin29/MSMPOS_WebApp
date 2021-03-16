@@ -77,12 +77,15 @@
                                 <span>Purchase Invoices</span>
                             </a>
                             @*<hr />
-                                <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
-                                    <span>Invoices</span>
-                                </a>*@
+        <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
+            <span>Invoices</span>
+        </a>*@
                             <hr />
-                            <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-action="InventoryAdjustmentList">
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-route-consumptionStatus="1" asp-action="InventoryAdjustmentList">
                                 <span>Stock In</span>
+                            </a>
+                            <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-route-consumptionStatus="2" asp-action="InventoryAdjustmentList">
+                                <span>Stock Out</span>
                             </a>
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryTransfer" asp-action="InventoryTransferList">
                                 <span>Stock Transfer</span>

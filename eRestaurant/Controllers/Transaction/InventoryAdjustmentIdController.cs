@@ -31,15 +31,16 @@ namespace RocketPOS.Controllers.Transaction
             _locService = locService;
         }
 
-        public ActionResult InventoryAdjustmentList()
+        public ActionResult InventoryAdjustmentList(int consumptionStatus)
         {
+            ViewBag.ConsumptionStatus = consumptionStatus;
             List<InventoryAdjustmentViewModel> inventoyAdjustmentViewModels = new List<InventoryAdjustmentViewModel>();
-            inventoyAdjustmentViewModels = _inventoryAdjustmentService.GetInventoryAdjustmentList().ToList();
+            inventoyAdjustmentViewModels = _inventoryAdjustmentService.GetInventoryAdjustmentList(consumptionStatus).ToList();
             return View(inventoyAdjustmentViewModels);
         }
 
         [HttpGet]
-        public JsonResult InventoryAdjustmentListByDate(string fromDate, string toDate)
+        public JsonResult InventoryAdjustmentListByDate(string fromDate, string toDate, int consumptionStatus)
         {
             List<InventoryAdjustmentViewModel> inventoyAdjustmentViewModels = new List<InventoryAdjustmentViewModel>();
             DateTime newFromDate, newToDate;
@@ -54,7 +55,7 @@ namespace RocketPOS.Controllers.Transaction
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
-            inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy")).ToList();
+            inventoyAdjustmentViewModels = _inventoryAdjustmentService.InventoryAdjustmentListByDate(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), consumptionStatus).ToList();
             return Json(new { InventoryAdjustment = inventoyAdjustmentViewModels });
         }
 
@@ -66,7 +67,7 @@ namespace RocketPOS.Controllers.Transaction
             return View(inventoryAdjustmentModel);
         }
 
-        public ActionResult InventoryAdjustment(long? id, int? inventoryType, string type)
+        public ActionResult InventoryAdjustment(long? id, int? inventoryType, int? consumptionStatus, string type)
         {
             InventoryAdjustmentModel inventoryAdjustmentModel = new InventoryAdjustmentModel();
             if (id > 0)
@@ -81,6 +82,7 @@ namespace RocketPOS.Controllers.Transaction
                 inventoryAdjustmentModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 inventoryAdjustmentModel.ReferenceNo = _inventoryAdjustmentService.ReferenceNumber().ToString();
                 inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
+                inventoryAdjustmentModel.ConsumptionStatus = Convert.ToInt32(consumptionStatus);
             }
             inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
             ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();

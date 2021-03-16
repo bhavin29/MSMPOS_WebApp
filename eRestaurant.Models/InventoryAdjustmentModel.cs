@@ -32,7 +32,8 @@ namespace RocketPOS.Models
         public int InventoryType { get; set; }
 
         [EnumDataType(typeof(TableStatus))]
-        public ConsumpationStatus? ConsumpationStatus { get; set; }
+        //public ConsumpationStatus? ConsumpationStatus { get; set; }
+        public int ConsumptionStatus { get; set; }
         public List<InventoryAdjustmentDetailModel> InventoryAdjustmentDetail { get; set; }
 
         public int[] DeletedId { get; set; }
@@ -55,7 +56,8 @@ namespace RocketPOS.Models
         public decimal TotalAmount { get; set; }
         [EnumDataType(typeof(TableStatus))]
         public string UnitName { get; set; }
-        public ConsumpationStatus? ConsumpationStatus { get; set; }
+        //public ConsumpationStatus? ConsumpationStatus { get; set; }
+        public int ConsumptionStatus { get; set; }
         public int AssetItemId { get; set; }
         public string AssetItemName { get; set; }
     }

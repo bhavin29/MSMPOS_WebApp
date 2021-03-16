@@ -17,7 +17,7 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public TaxController(ITaxService iTaxService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public TaxController(ITaxService iTaxService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iTaxService = iTaxService;
             _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
@@ -26,6 +26,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Tax");
             List<TaxModel> taxModel = new List<TaxModel>();
             taxModel = _iTaxService.GetTaxList().ToList();
             if (noDelete != null)
@@ -34,16 +35,23 @@ namespace RocketPOS.Controllers.Master
             }
             return View(taxModel);
         }
-            
+
         public ActionResult Tax(int? id)
         {
             TaxModel taxModel = new TaxModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                taxModel = _iTaxService.GetTaxById(Convert.ToInt32(id));
-            }
+                if (id > 0)
+                {
+                    taxModel = _iTaxService.GetTaxById(Convert.ToInt32(id));
+                }
 
-            return View(taxModel);
+                return View(taxModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -88,16 +96,23 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Tax", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
+                result = _iCommonService.GetValidateReference("Tax", id.ToString());
+                if (result > 0)
+                {
 
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iTaxService.DeleteTax(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iTaxService.DeleteTax(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 
@@ -113,4 +128,3 @@ namespace RocketPOS.Controllers.Master
         }
     }
 }
-    

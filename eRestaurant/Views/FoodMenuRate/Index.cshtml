@@ -46,8 +46,11 @@
                     <input id="load" onclick="return loadFoodMenuRateList();" type="submit"  class="btn btn-outline-dark" value="Load" />
                 </div>
                 <div class="col-md-2">
-                    <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save Changes" />
-                </div>
+                    @if (@UserRolePermissionForPage.Add == true || @UserRolePermissionForPage.Edit == true)
+                    {
+                        <input id="saveFoodMenuRate" onclick="return UpdateFoodMenuRateList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                    }
+                    </div>
             </div>
         </div>
     </div>

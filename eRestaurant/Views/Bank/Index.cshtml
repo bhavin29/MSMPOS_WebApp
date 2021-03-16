@@ -14,7 +14,10 @@
                 <h5 class="card-title">Banks</h5>
             </div>
             <div class="float-right">
-                <a asp-action="Bank" class="btn btn-primary float-sm-left ">Add</a>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="Bank" class="btn btn-primary float-sm-left ">Add</a>
+                }
             </div>
         </div>
     </div>
@@ -76,9 +79,15 @@
 
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="Bank" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                        <label> / </label>
-                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        @if (@UserRolePermissionForPage.Edit == true)
+                                        {
+                                            <a asp-action="Bank" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                            <label> / </label>
+                                        }
+                                        @if (@UserRolePermissionForPage.Delete == true)
+                                        {
+                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        }
                                     </div>
 
                                 </td>

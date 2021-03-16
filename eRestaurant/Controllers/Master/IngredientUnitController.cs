@@ -29,6 +29,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("IngredientUnit");
             List<IngredientUnitModel> ingredientUniList = new List<IngredientUnitModel>();
             ingredientUniList = _iIngredientUnitService.GetIngredientUnitList().ToList();
             if (noDelete != null)
@@ -36,19 +37,26 @@ namespace RocketPOS.Controllers.Master
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
             }
             return View(ingredientUniList);
- 
+
         }
 
         public ActionResult IngredientUnit(int? id)
         {
             IngredientUnitModel ingredientUniList = new IngredientUnitModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int ingredientUnitId = Convert.ToInt32(id);
-                ingredientUniList = _iIngredientUnitService.GetIngredientUnitById(ingredientUnitId);
-            }
+                if (id > 0)
+                {
+                    int ingredientUnitId = Convert.ToInt32(id);
+                    ingredientUniList = _iIngredientUnitService.GetIngredientUnitById(ingredientUnitId);
+                }
 
-            return View(ingredientUniList);
+                return View(ingredientUniList);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -92,15 +100,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("IngredientUnit", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("IngredientUnit", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iIngredientUnitService.DeleteIngredientUnit(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iIngredientUnitService.DeleteIngredientUnit(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

@@ -14,20 +14,22 @@ namespace RocketPOS.Controllers.Master
 {
     public class ExpenseCategoryController : Controller
     {
-
+        private readonly ICommonService _iCommonService;
         private readonly IExpsenseCategoryService _iexpsenseCategoryService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public ExpenseCategoryController(IExpsenseCategoryService expsenseCategoryService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public ExpenseCategoryController(IExpsenseCategoryService expsenseCategoryService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iexpsenseCategoryService = expsenseCategoryService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("ExpenseCategory");
             List<ExpsenseCategoryModel> expenseCategoryModel = new List<ExpsenseCategoryModel>();
             expenseCategoryModel = _iexpsenseCategoryService.GetExpsenseCategoryList().ToList();
             return View(expenseCategoryModel);
@@ -38,14 +40,21 @@ namespace RocketPOS.Controllers.Master
         public ActionResult ExpenseCategory(int? id)
         {
             ExpsenseCategoryModel expenseCategoryModel = new ExpsenseCategoryModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int expenseCAtegoryId = Convert.ToInt32(id);
-                expenseCategoryModel = _iexpsenseCategoryService.GetExpsenseCategoryById(expenseCAtegoryId);
+                if (id > 0)
+                {
+                    int expenseCAtegoryId = Convert.ToInt32(id);
+                    expenseCategoryModel = _iexpsenseCategoryService.GetExpsenseCategoryById(expenseCAtegoryId);
 
+                }
+
+                return View(expenseCategoryModel);
             }
-
-            return View(expenseCategoryModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -78,11 +87,18 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iexpsenseCategoryService.DeleteExpsenseCategory(id);
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iexpsenseCategoryService.DeleteExpsenseCategory(id);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
-        
+
         private string ValidationExpenseCategory(ExpsenseCategoryModel expenseCategoryModel)
         {
             string ErrorString = string.Empty;

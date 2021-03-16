@@ -35,7 +35,10 @@
                     <input id="load" onclick="return loadWebPageRolesList();" type="submit" class="btn btn-outline-dark" value="Load" />
                 </div>
                 <div class="col-md-2">
-                    <input id="saveWebPageRoles" onclick="return UpdateWebPageRolesList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                    @if (@UserRolePermissionForPage.Edit == true || @UserRolePermissionForPage.Add == true)
+                    {
+                        <input id="saveWebPageRoles" onclick="return UpdateWebPageRolesList();" type="submit" class="btn btn-primary" value="Save Changes" />
+                    }
                 </div>
             </div>
         </div>
@@ -63,35 +66,35 @@
                         {
                             @foreach (var item in Model.WebRolePages)
                             {
-                        <tr role="row">
-                            <td>
-                                <input asp-for="@item.Id" class="form-control" type="hidden" />
-                            </td>
-                            <td>
-                                <input asp-for="@item.PagesId" class="form-control" type="hidden" />
-                            </td>
-                            <td>
-                                <input asp-for="@item.WebRolesId" class="form-control" type="hidden" />
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Module)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.LogicalPageName)
-                            </td>
-                            <td>
-                                <input asp-for="@item.Add" type="checkbox" class="form-check-input addcheckboxes" style="margin: 5Px 0 0 0px" />
-                            </td>
-                            <td>
-                                <input asp-for="@item.Edit" type="checkbox" class="form-check-input editcheckboxes" style="margin: 5Px 0 0 0px" />
-                            </td>
-                            <td>
-                                <input asp-for="@item.Delete" type="checkbox" class="form-check-input deletecheckboxes" style="margin: 5Px 0 0 0px" />
-                            </td>
-                            <td>
-                                <input asp-for="@item.View" type="checkbox" class="form-check-input viewcheckboxes" style="margin: 5Px 0 0 0px" />
-                            </td>
-                        </tr>
+                                <tr role="row">
+                                    <td>
+                                        <input asp-for="@item.Id" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.PagesId" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.WebRolesId" class="form-control" type="hidden" />
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Module)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.LogicalPageName)
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.Add" type="checkbox" class="form-check-input addcheckboxes" style="margin: 5Px 0 0 0px" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.Edit" type="checkbox" class="form-check-input editcheckboxes" style="margin: 5Px 0 0 0px" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.Delete" type="checkbox" class="form-check-input deletecheckboxes" style="margin: 5Px 0 0 0px" />
+                                    </td>
+                                    <td>
+                                        <input asp-for="@item.View" type="checkbox" class="form-check-input viewcheckboxes" style="margin: 5Px 0 0 0px" />
+                                    </td>
+                                </tr>
                             }
                         }
                     </tbody>

@@ -14,22 +14,26 @@ namespace RocketPOS.Controllers.Transaction
     public class AssetEventController : Controller
     {
         private readonly IAssetEventService _iAssetEventService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
         public AssetEventController(IAssetEventService assetEventService,
              IDropDownService idropDownService,
+             ICommonService iCommonService,
              IStringLocalizer<RocketPOSResources> sharedLocalizer,
              LocService locService)
         {
             _iAssetEventService = assetEventService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public IActionResult Index(bool? isHistory)
         {
+            _iCommonService.GetPageWiseRoleRigths("AssetEvent");
             List<AssetEventViewModel> asssetEventViewModel = new List<AssetEventViewModel>();
             asssetEventViewModel = _iAssetEventService.GetAssetEventList().ToList();
             return View(asssetEventViewModel);
@@ -57,22 +61,29 @@ namespace RocketPOS.Controllers.Transaction
         public IActionResult AssetEvent(int? id, string type)
         {
             AssetEventModel assetEventModel = new AssetEventModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                ViewBag.ActionType = type;
-                assetEventModel = _iAssetEventService.GetAssetEventById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+                    ViewBag.ActionType = type;
+                    assetEventModel = _iAssetEventService.GetAssetEventById(Convert.ToInt32(id));
+                }
+                else
+                {
+                    assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
+                }
+                assetEventModel.StoreList = _iDropDownService.GetStoreList();
+                assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
+                assetEventModel.FoodMenuList = _iDropDownService.GetProductionFormulaFoodMenuList();
+                assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
+                assetEventModel.MissingNoteList = _iDropDownService.GetCateringFoodMenuGlobalStatus();
+                return View(assetEventModel);
             }
             else
             {
-                assetEventModel.EventDatetime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                assetEventModel.ReferenceNo = _iAssetEventService.ReferenceNumberAssetEvent().ToString();
+                return RedirectToAction("NotFound", "Error");
             }
-            assetEventModel.StoreList= _iDropDownService.GetStoreList();
-            assetEventModel.AssetItemList = _iDropDownService.GetAssetItemList();
-            assetEventModel.FoodMenuList = _iDropDownService.GetProductionFormulaFoodMenuList();
-            assetEventModel.IngredientList = _iDropDownService.GetIngredientList();
-            assetEventModel.MissingNoteList = _iDropDownService.GetCateringFoodMenuGlobalStatus();
-            return View(assetEventModel);
         }
 
         [HttpPost]
@@ -113,12 +124,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _iAssetEventService.DeleteAssetEven(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iAssetEventService.DeleteAssetEven(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpGet]

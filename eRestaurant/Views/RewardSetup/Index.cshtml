@@ -15,9 +15,9 @@
                 <h5 class="card-title">Reward Setup</h5>
             </div>
             @*<div class="float-right">
-                <a asp-action="RewardSetup" class="btn btn-primary float-sm-left ">Add</a>
+                    <a asp-action="RewardSetup" class="btn btn-primary float-sm-left ">Add</a>
 
-            </div>*@
+                </div>*@
         </div>
     </div>
     <br />
@@ -70,36 +70,39 @@
                         {
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.OfferName)
-                            </td>
-                            <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.TransactionAmount)
-                            </td>
-                            <td class="text-right">
-                                @Html.DisplayFor(modelItem => item.RewardPoint)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Notes)
-                            </td>
-                            <td>
-                                @if (item.IsActive == true)
-                                {
-                                    @Html.DisplayName("True")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("False")
-                                }
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="RewardSetup" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                 </div>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.OfferName)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.TransactionAmount)
+                                </td>
+                                <td class="text-right">
+                                    @Html.DisplayFor(modelItem => item.RewardPoint)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Notes)
+                                </td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        @if (@UserRolePermissionForPage.Edit == true)
+                                        {
+                                            <a asp-action="RewardSetup" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        }
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

@@ -18,7 +18,7 @@ namespace RocketPOS.Controllers.Master
         private readonly IBankService _iBankService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
-        public BankController(IBankService iBankService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public BankController(IBankService iBankService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iBankService = iBankService;
             _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
@@ -27,6 +27,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Bank");
             List<BankModel> bankList = new List<BankModel>();
             bankList = _iBankService.GetBankList().ToList();
             if (noDelete != null)
@@ -39,13 +40,20 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Bank(int? id)
         {
             BankModel bankModel = new BankModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int bankId = Convert.ToInt32(id);
-                bankModel = _iBankService.GetBankById(bankId);
-            }
+                if (id > 0)
+                {
+                    int bankId = Convert.ToInt32(id);
+                    bankModel = _iBankService.GetBankById(bankId);
+                }
 
-            return View(bankModel);
+                return View(bankModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -92,15 +100,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Bank", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Bank", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iBankService.DeleteBank(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iBankService.DeleteBank(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

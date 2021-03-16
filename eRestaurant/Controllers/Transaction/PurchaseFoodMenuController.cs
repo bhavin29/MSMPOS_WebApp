@@ -89,7 +89,7 @@ namespace RocketPOS.Controllers.Transaction
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult PurchaseFoodMenu(PurchaseModel purchaseModel, string Cancel)
-        {   
+        {
             purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
             purchaseModel.StoreList = _iDropDownService.GetStoreList();
             purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
@@ -247,7 +247,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId,int storeId)
+        public JsonResult PurchaseFoodMenuListByDate(string fromDate, string toDate, int supplierId, int storeId)
         {
             List<PurchaseViewModel> purchaseViewModels = new List<PurchaseViewModel>();
             DateTime newFromDate, newToDate;
@@ -267,7 +267,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public ActionResult GetTaxByFoodMenuId(int foodMenuId,int itemType)
+        public ActionResult GetTaxByFoodMenuId(int foodMenuId, int itemType)
         {
             decimal taxPercentage = 0;
             taxPercentage = _iPurchaseService.GetTaxByFoodMenuId(foodMenuId, itemType);
@@ -327,20 +327,27 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult View(long? id)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.View == true)
             {
-                long purchaseId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseService.GetViewPurchaseFoodMenuById(purchaseId);
+                if (id > 0)
+                {
+                    long purchaseId = Convert.ToInt64(id);
+                    purchaseModel = _iPurchaseService.GetViewPurchaseFoodMenuById(purchaseId);
+                }
+                else
+                {
+                    purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
+                }
+                purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                return View(purchaseModel);
             }
             else
             {
-                purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumberFoodMenu().ToString();
+                return RedirectToAction("NotFound", "Error");
             }
-            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            purchaseModel.StoreList = _iDropDownService.GetStoreList();
-            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            return View(purchaseModel);
         }
     }
 }

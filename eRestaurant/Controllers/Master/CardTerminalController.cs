@@ -14,36 +14,46 @@ namespace RocketPOS.Controllers.Master
     public class CardTerminalController : Controller
     {
         private readonly ICardTerminalService _iCardTerminalService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public CardTerminalController(ICardTerminalService iCardTerminalService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public CardTerminalController(ICardTerminalService iCardTerminalService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iCardTerminalService = iCardTerminalService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("CardTerminal");
             List<CardTerminalModel> cardTerminalModels = new List<CardTerminalModel>();
             cardTerminalModels = _iCardTerminalService.GetCardTerminalList().ToList();
             return View(cardTerminalModels);
-          }
+        }
 
         public ActionResult CardTerminal(int? id)
         {
             CardTerminalModel cardTerminalModel = new CardTerminalModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int cardTerminalId = Convert.ToInt32(id);
-                cardTerminalModel = _iCardTerminalService.GetCardTerminalById(cardTerminalId);
-            }
-            cardTerminalModel.OutletList = _iDropDownService.GetOutletList();
+                if (id > 0)
+                {
+                    int cardTerminalId = Convert.ToInt32(id);
+                    cardTerminalModel = _iCardTerminalService.GetCardTerminalById(cardTerminalId);
+                }
+                cardTerminalModel.OutletList = _iDropDownService.GetOutletList();
 
-            return View(cardTerminalModel);
+                return View(cardTerminalModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -77,9 +87,16 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iCardTerminalService.DeleteCardTerminal(id);
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iCardTerminalService.DeleteCardTerminal(id);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         private string ValidationCardTerminal(CardTerminalModel cardTerminalModel)

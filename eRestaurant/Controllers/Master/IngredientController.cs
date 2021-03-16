@@ -20,7 +20,7 @@ namespace RocketPOS.Controllers
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public IngredientController(IIngredientService ingredientService, ICommonService iCommonService,  IDropDownService idropDownService,
+        public IngredientController(IIngredientService ingredientService, ICommonService iCommonService, IDropDownService idropDownService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iIngredientService = ingredientService; _iCommonService = iCommonService;
@@ -32,6 +32,7 @@ namespace RocketPOS.Controllers
         // GET: Ingredient
         public IActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Ingredient");
             List<IngredientModel> ingredientList = new List<IngredientModel>();
             ingredientList = _iIngredientService.GetIngredientList().ToList();
             if (noDelete != null)
@@ -45,16 +46,23 @@ namespace RocketPOS.Controllers
         public ActionResult Ingredient(int? id)
         {
             IngredientModel ingredientModel = new IngredientModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int ingredientId = Convert.ToInt32(id);
-                ingredientModel = _iIngredientService.GetIngredientById(ingredientId);
+                if (id > 0)
+                {
+                    int ingredientId = Convert.ToInt32(id);
+                    ingredientModel = _iIngredientService.GetIngredientById(ingredientId);
+                }
+
+                ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
+                ingredientModel.UnitList = _iDropDownService.GetUnitList();
+                ingredientModel.TaxList = _iDropDownService.GetTaxList();
+                return View(ingredientModel);
             }
- 
-            ingredientModel.IngredientCategoryList = _iDropDownService.GetIngredientCategoryList();
-            ingredientModel.UnitList = _iDropDownService.GetUnitList();
-            ingredientModel.TaxList = _iDropDownService.GetTaxList();
-            return View(ingredientModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         // POST: Ingredient/Ingredient
@@ -100,15 +108,22 @@ namespace RocketPOS.Controllers
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Ingredient", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Ingredient", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deleteid = _iIngredientService.DeleteIngredient(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deleteid = _iIngredientService.DeleteIngredient(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

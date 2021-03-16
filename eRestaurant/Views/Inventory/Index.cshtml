@@ -15,8 +15,11 @@
                 <h5 class="card-title">Opening Stock</h5>
             </div>
             <div class="col-md-1">
-                <a asp-controller="Inventory" asp-action="Import">Import</a>
-            </div>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-controller="Inventory" asp-action="Import">Import</a>
+                }
+                </div>
 
         </div>
     </div>
@@ -117,15 +120,18 @@
                                     </td>
                                     <td>
                                         <div class="form-button-action">
-                                            @if (item.PhysicalStockQty > 0)
+                                            @if (@UserRolePermissionForPage.Add == true || @UserRolePermissionForPage.Edit == true)
                                             {
-                                                <input type="button" value="Process" style="background-color:green" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId,@item.ItemType);" />
+                                                @if (item.PhysicalStockQty > 0)
+                                                {
+                                                    <input type="button" value="Process" style="background-color:green" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId,@item.ItemType);" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="button" value="Process" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId,@item.ItemType);" />
+                                                }
                                             }
-                                            else
-                                            {
-                                                <input type="button" value="Process" class="btn btn-outline-dark" onclick="return SaveInventoryDetailById(this,@item.Id,@item.FoodMenuId,@item.ItemType);" />
-                                            }
-                                        </div>
+                                            </div>
                                     </td>
                                     <td>
                                         <input asp-for="@item.PhysicalIsLock" type="checkbox" class="form-check-input" style="margin: 5Px 0 0 0px" />

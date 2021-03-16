@@ -15,18 +15,21 @@ namespace RocketPOS.Controllers
     public class AddonsController : Controller
     {
         private readonly IAddonsService _iAddonsService;
+        private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public AddonsController(IAddonsService addonsService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public AddonsController(IAddonsService addonsService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iAddonsService = addonsService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("Addons");
             List<AddonsModel> adonsList = new List<AddonsModel>();
             adonsList = _iAddonsService.GetAddonsList().ToList();
             return View(adonsList);
@@ -35,13 +38,19 @@ namespace RocketPOS.Controllers
         public ActionResult Addons(int? id)
         {
             AddonsModel addonsModel = new AddonsModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int addonsId = Convert.ToInt32(id);
-                addonsModel = _iAddonsService.GetAddonesById(addonsId);
+                if (id > 0)
+                {
+                    int addonsId = Convert.ToInt32(id);
+                    addonsModel = _iAddonsService.GetAddonesById(addonsId);
+                }
+                return View(addonsModel);
             }
-
-            return View(addonsModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -76,9 +85,15 @@ namespace RocketPOS.Controllers
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iAddonsService.DeleteAddons(id);
-
-            return RedirectToAction(nameof(Index));
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iAddonsService.DeleteAddons(id);
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         private string ValidationAddons(AddonsModel addonsModel)
@@ -94,7 +109,7 @@ namespace RocketPOS.Controllers
             //    ErrorString = _locService.GetLocalizedHtmlString("ValidPrice");
             //    return ErrorString;
             //}
-  
+
             return ErrorString;
         }
 

@@ -19,7 +19,7 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuCategoryController(IFoodMenuCatagoryService ifoodMenuCatagoryService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _ifoodMenuCatagoryService = ifoodMenuCatagoryService;
             _sharedLocalizer = sharedLocalizer; _iCommonService = iCommonService;
@@ -28,6 +28,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("FoodMenuCategory");
             List<FoodMenuCatagoryModel> foodMenuCategoryModel = new List<FoodMenuCatagoryModel>();
             foodMenuCategoryModel = _ifoodMenuCatagoryService.GetFoodCategoryList().ToList();
             if (noDelete != null)
@@ -35,18 +36,25 @@ namespace RocketPOS.Controllers.Master
                 ViewBag.Result = _locService.GetLocalizedHtmlString("Can not delete reference available.");
             }
             return View(foodMenuCategoryModel);
-         }
+        }
 
         public ActionResult FoodMenuCategory(int? id)
         {
             FoodMenuCatagoryModel foodMenuCategoryModel = new FoodMenuCatagoryModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int foodMenuiCateGoryId = Convert.ToInt32(id);
-                foodMenuCategoryModel = _ifoodMenuCatagoryService.GetFoodCategoryById(foodMenuiCateGoryId);
-            }
+                if (id > 0)
+                {
+                    int foodMenuiCateGoryId = Convert.ToInt32(id);
+                    foodMenuCategoryModel = _ifoodMenuCatagoryService.GetFoodCategoryById(foodMenuiCateGoryId);
+                }
 
-            return View(foodMenuCategoryModel);
+                return View(foodMenuCategoryModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -91,15 +99,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("FoodMenuCategory", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("FoodMenuCategory", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _ifoodMenuCatagoryService.DeleteFoodMenuCatagory(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _ifoodMenuCatagoryService.DeleteFoodMenuCatagory(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

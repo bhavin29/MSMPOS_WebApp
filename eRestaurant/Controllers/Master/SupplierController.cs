@@ -30,6 +30,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Supplier");
             List<SupplierModel> supplierList = new List<SupplierModel>();
             supplierList = _iSupplierService.GetSupplierList().ToList();
             if (noDelete != null)
@@ -42,14 +43,21 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Supplier(int? id)
         {
             SupplierModel supplierModel = new SupplierModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int supplierId = Convert.ToInt32(id);
-                supplierModel = _iSupplierService.GetSupplierById(supplierId);
+                if (id > 0)
+                {
+                    int supplierId = Convert.ToInt32(id);
+                    supplierModel = _iSupplierService.GetSupplierById(supplierId);
+                }
+                ViewData["VatLabel"] = LoginInfo.VATLabel;
+                ViewData["PinLabel"] = LoginInfo.PINLabel;
+                return View(supplierModel);
             }
-            ViewData["VatLabel"] =LoginInfo.VATLabel;
-            ViewData["PinLabel"] = LoginInfo.PINLabel;
-            return View(supplierModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -94,15 +102,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Supplier", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Supplier", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iSupplierService.DeleteSupplier(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iSupplierService.DeleteSupplier(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

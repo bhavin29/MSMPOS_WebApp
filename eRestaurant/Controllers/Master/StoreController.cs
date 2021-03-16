@@ -29,6 +29,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Store");
             List<StoreModel> storeModel = new List<StoreModel>();
             storeModel = _istoreService.GetStoreList().ToList();
             if (noDelete != null)
@@ -41,20 +42,27 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Store(int? id)
         {
             StoreModel storeModel = new StoreModel();
-            try
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                if (id > 0)
+                try
                 {
-                    int storeId = Convert.ToInt32(id);
-                    storeModel = _istoreService.GetStoreById(storeId);
+                    if (id > 0)
+                    {
+                        int storeId = Convert.ToInt32(id);
+                        storeModel = _istoreService.GetStoreById(storeId);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Store", ex.Message.ToString());
-            }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("Store", ex.Message.ToString());
+                }
 
-            return View(storeModel);
+                return View(storeModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -99,15 +107,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Store", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Store", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _istoreService.DeleteStore(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _istoreService.DeleteStore(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

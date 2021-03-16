@@ -166,10 +166,28 @@ $("#ActualBatchSize").keyup(function () {
     var batchSize = $("#BatchSize").val();
     var actualBatchSize = $("#ActualBatchSize").val();
     var ingredientQty = 0;
+
     for (var i = 1; i < entryIngredient.rows.length; i++) {
-        ingredientQty = entryIngredient.rows[i].cells[1].innerText;
+        var value = entryIngredient.rows[i].cells[1].innerText;
+        ingredientQty = value.split(' ')[0].replace(',','');
+        ingredientQty = parseFloat(ingredientQty);
         actualIngredientQty = (ingredientQty * actualBatchSize) / batchSize;
-        entryIngredient.rows[i].cells[2].innerHTML = parseFloat(actualIngredientQty).toFixed(2);
+        actualIngredientQty = parseFloat(actualIngredientQty).toFixed(2);
+        var ingtextbox = '#i' + i;
+        $(ingtextbox).val(actualIngredientQty);
+    }
+
+    var entryFoodmenu = document.getElementById('EntryFoodMenu');
+    var foodmenuQty = 0;
+
+    for (var i = 1; i < entryFoodmenu.rows.length; i++) {
+        var value = entryFoodmenu.rows[i].cells[1].innerText;
+        foodmenuQty = value.split(' ')[0].replace(',', '');
+        foodmenuQty = parseFloat(foodmenuQty);
+        actualfoodmenuQty = (foodmenuQty * actualBatchSize) / batchSize;
+        actualfoodmenuQty = parseFloat(actualfoodmenuQty).toFixed(2);
+        var foodtextbox = '#f' + i;
+        $(foodtextbox).val(actualfoodmenuQty);
     }
 });
 
@@ -206,17 +224,19 @@ $(function () {
     $('#saveOrder').click(function () {
 
         var message = validation(1);
-        debugger;
         $("#EntryIngredient tbody tr").each(function () {
             var tds = $(this).find("td");
             var currentRow = $(this).closest("tr");
             var dataline = $('#EntryIngredient').DataTable().row(currentRow).data();
+            var values = currentRow.find(":input").map(function () {
+                return $(this).val()
+            });
 
             ingredientDataArr.push({
                 peIngredientId: dataline[0],
                 ingredientId: dataline[1],
-                ingredientQty: dataline[3],
-                actualIngredientQty: tds[2].textContent
+                ingredientQty: dataline[3].split(' ')[0].replace(',', ''),
+                actualIngredientQty: values[0]//tds[2].textContent
             });
         });
 
@@ -224,13 +244,16 @@ $(function () {
             var tds = $(this).find("td");
             var currentRow = $(this).closest("tr");
             var datatrline = $('#EntryFoodMenu').DataTable().row(currentRow).data();
+            var values = currentRow.find(":input").map(function () {
+                return $(this).val()
+            });
 
             foodMenuDataArr.push({
                 peFoodMenuId: datatrline[0],
                 foodMenuId: datatrline[1],
-                expectedOutput: datatrline[3],
+                expectedOutput: datatrline[3].split(' ')[0].replace(',', ''),
                 allocationOutput: $(currentRow).find("#allocateOut").val(),
-                actualOutput: $(currentRow).find("#actualOut").val()
+                actualOutput: values[0]
             });
         });
 

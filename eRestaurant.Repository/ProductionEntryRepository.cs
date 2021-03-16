@@ -107,7 +107,7 @@ namespace RocketPOS.Repository
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PF.Id AS ProductionFormulaId,PF.FormulaName AS ProductionFormulaName,PF.[BatchSize],PF.[BatchSizeUnitId],PF.FoodmenuType,PF.IsActive,U.UnitName as BatchSizeUnitName from ProductionFormula PF " +
+                var query = "select PF.Id AS ProductionFormulaId,PF.FormulaName AS ProductionFormulaName,PF.[BatchSize],PF.[BatchSizeUnitId],PF.FoodmenuType,PF.IsActive,U.UnitShortName as BatchSizeUnitName from ProductionFormula PF " +
                             "Inner Join [Units] U On U.Id=PF.BatchSizeUnitId Where PF.IsDeleted=0 And PF.Id=" + id;
                 productionEntryModel = con.QueryFirstOrDefault<ProductionEntryModel>(query);
             }
@@ -119,7 +119,9 @@ namespace RocketPOS.Repository
             List<ProductionEntryFoodMenuModel> productionEntryFoodMenuModel = new List<ProductionEntryFoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput, U.Unitname as FoodMenuUnitName  from ProductionFormulaFoodmenu PFM " +
+                var query = " select PFM.FoodMenuId,FM.FoodMenuName,PFM.ExpectedOutput, U.UnitShortname as FoodMenuUnitName  " +
+                            " , NULL AS PEFoodMenuId, NULL AS AllocationOutput, NULL AS ActualOutput" +
+                            " from ProductionFormulaFoodmenu PFM " +
                             " Inner Join FoodMenu FM On FM.Id = PFM.FoodMenuId  inner join Units U ON U.Id = FM.UnitsId  Where PFM.IsDeleted = 0 And PFM.ProductionFormulaId =" + productionFormulaId;
                 productionEntryFoodMenuModel = con.Query<ProductionEntryFoodMenuModel>(query).AsList();
             }
@@ -131,7 +133,7 @@ namespace RocketPOS.Repository
             List<ProductionEntryIngredientModel> productionEntryIngredientModel = new List<ProductionEntryIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFI.IngredientId,I.IngredientName,PFI.IngredientQty, U.Unitname as IngredientUnitName  from ProductionFormulaIngredient PFI  " +
+                var query = " select PFI.IngredientId,I.IngredientName,PFI.IngredientQty, U.UnitShortname as IngredientUnitName  from ProductionFormulaIngredient PFI  " +
                             " Inner Join Ingredient I On I.Id=PFI.IngredientId  inner join Units U ON U.Id = I.IngredientUnitId  Where PFI.IsDeleted=0 And PFI.ProductionFormulaId=" + productionFormulaId;
                 productionEntryIngredientModel = con.Query<ProductionEntryIngredientModel>(query).AsList();
             }

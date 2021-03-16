@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="col-md-3 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="BatchSize" class="control-label">Batch Size</label>
+                                                <label asp-for="BatchSize" class="control-label">Recipe Batch Size</label>
                                                 <input asp-for="BatchSize" class="form-control" style="text-align:right" disabled="disabled" />
                                                 <span asp-validation-for="BatchSize" class="text-danger"></span>
                                             </div>
@@ -80,20 +80,21 @@
                                                         <th style="width:0%">PEFoodMenuId</th>
                                                         <th style="width:0%">FoodMenuId</th>
                                                         <th style="width:45%">Menu Item</th>
-                                                        <th style="width:15%" class="text-right">Expected</th>
-                                                        <th style="width:20%" class="text-right">Allocation </th>
-                                                        <th style="width:20%" class="text-right">Actual</th>
+                                                        <th style="width:15%" class="text-right">Receipe Output</th>
+                                                        <th style="width:20%" class="text-right">Actual Production</th>
                                                         @*<th style="width:15%">Action</th>*@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @if (Model.productionEntryFoodMenuModels != null)
                                                     {
+                                                        var rownumber = 0;
                                                         @foreach (var item in Model.productionEntryFoodMenuModels)
                                                         {
                                                             var tm = "#myModal" + item.FoodMenuId;
                                                             var mid = "myModal" + item.FoodMenuId;
                                                             var rowId = "rowId" + item.FoodMenuId;
+                                                            var fId = "f";
                                                             <tr id="@rowId">
                                                                 <td>
                                                                     @item.PEFoodMenuId
@@ -107,11 +108,12 @@
                                                                 <td class="text-right">
                                                                     @item.ExpectedOutput.ToString("N") @item.FoodMenuUnitName
                                                                 </td>
-                                                                <td class="text-right">
+                                                                @*<td class="text-right">
                                                                     <input type="number" id="allocateOut" asp-for="@item.AllocationOutput" id="AllocationOutput" onkeyup="return calculateSum();" class="form-control col-sm-11 text-right AllocationOutput" min="0" max="99999" value="@item.AllocationOutput" />
-                                                                </td>
+                                                                </td>*@
                                                                 <td class="text-right">
-                                                                    <input type="number" id="actualOut" asp-for="@item.ActualOutput" id="ActualOutput" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualOutput" />
+                                                                    @{ rownumber = rownumber + 1; fId = "f" + rownumber;}
+                                                                    <input type="number" id="@fId" asp-for="@item.ActualOutput" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualOutput" />
                                                                 </td>
                                                             </tr>
                                                         }
@@ -130,17 +132,19 @@
                                                     <th style="width:0%">IngredientId</th>
                                                     <th style="width:50%">Stock Item</th>
                                                     <th style="width:15%">Formula Qty</th>
-                                                    <th style="width:15%">Actual Qty</th>
+                                                    <th style="width:15%">Atual Consumption</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (Model.productionEntryIngredientModels != null)
                                                 {
-                                                    @foreach (var item in Model.productionEntryIngredientModels)
-                                                    {
-                                                        var tm = "#myModal" + item.IngredientId;
-                                                        var mid = "myModal" + item.IngredientId;
-                                                        var rowId = "rowId" + item.IngredientId;
+                                                    var rownumber = 0;
+                                                   @foreach (var item in Model.productionEntryIngredientModels)
+                                                   {
+                                                       var tm = "#myModal" + item.IngredientId;
+                                                       var mid = "myModal" + item.IngredientId;
+                                                       var rowId = "rowId" + item.IngredientId;
+                                                       var fId = "f";
                                                         <tr id="@rowId">
                                                             <td>
                                                                 @item.PEIngredientId
@@ -155,7 +159,8 @@
                                                                 @item.IngredientQty.ToString("N") @item.IngredientUnitName
                                                             </td>
                                                             <td class="text-right">
-                                                                @item.ActualIngredientQty.ToString("N")
+                                                                @{ rownumber = rownumber + 1; fId = "i" + rownumber;}
+                                                                <input type="number" asp-for="@item.ActualIngredientQty" id="@fId" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualIngredientQty" />
                                                             </td>
                                                         </tr>
                                                     }
@@ -172,12 +177,12 @@
                                         <textarea asp-for="Notes" class="form-control input-full text-left" rows="2" cols="140"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                @*<div class="col-md-6">
                                     <div class="form-group form-inline">
                                         <label asp-for="VariationNotes" class="col-form-label ">Variation</label>
                                         <textarea asp-for="VariationNotes" class="form-control input-full text-left" readonly="readonly" rows="2" cols="140"></textarea>
                                     </div>
-                                </div>
+                                </div>*@
                             </div>
                             <div class="form-group">
 
@@ -222,11 +227,11 @@
 
 @section scripts{
     <script>
-        foodMenuDataArr = []
+        foodMenuDataArr = [];
         ingredientDataArr = []
         if (@Model.Id>0){
-            @*foodMenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryFoodMenuModels))');
-            ingredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryIngredientModels))');*@
+            ingredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryIngredientModels))');
+            foodMenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryFoodMenuModels))');
         }
     </script>
 

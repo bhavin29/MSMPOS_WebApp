@@ -71,7 +71,7 @@ namespace RocketPOS.Controllers.Transaction
                 productionFormulaModel.FoodmenuType =(int) foodMenuType;
                 productionFormulaModel.IsActive = true;
             }
-            productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);// ((int)foodMenuType);
+            productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType((int)foodMenuType);
             productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
             productionFormulaModel.BatchSizeUnitsList = _iDropDownService.GetUnitList();
 

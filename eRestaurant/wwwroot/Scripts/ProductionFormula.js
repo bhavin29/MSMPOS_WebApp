@@ -76,7 +76,9 @@ $('#addFoodMenuRow').on('click', function (e) {
             '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
             'Are you want to delete this?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + $("#FoodMenuId").val() + '" onclick="deleteFoodMenuOrder(0, ' + $("#FoodMenuId").val() + ',0)" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div ></div >',
         ]).node().id = rowId;
+
         FormulaFoodMenuTable.draw(false);
+
         foodMenuDataArr.push({
             pfFoodMenuId: $("#PFFoodMenuId").val(),
             foodMenuId: $("#FoodMenuId").val(),
@@ -93,7 +95,7 @@ $('#addFoodMenuRow').on('click', function (e) {
         editFoodMenuDataArr = [];
 
         
-        $("#FoodMenuId").focus();
+        $('#FoodMenuId').val(0).trigger('change');
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -119,7 +121,11 @@ function deleteFoodMenuOrder(id, foodMenuId, rowId) {
 
 
 $(document).on('click', 'a.editFoodMenuItem', function (e) {
+
+    debugger;
     if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
+        debugger;
+
         var message = 'No data available!'
         $(".modal-body").text(message);
         $("#save").hide();
@@ -142,8 +148,9 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
         for (var i = 0; i < foodMenuDataArr.length; i++) {
             if (foodMenuDataArr[i].foodMenuId == id) {
                 $("#PFFoodMenuId").val(foodMenuDataArr[i].pfFoodMenuId);
-                $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
+              //  $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
                 $("#ExpectedOutput").val(foodMenuDataArr[i].expectedOutput);
+                $('#FoodMenuId').val(foodMenuDataArr[i].foodMenuId).trigger('change');
                 editFoodMenuDataArr = foodMenuDataArr.splice(i, 1);
             }
         }
@@ -154,9 +161,8 @@ function validation(id) {
     var message = '';
     if (id == 0) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
-            message = "Select food menu"
+            message = "Select menu item"
         }
-
         if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
         }
@@ -186,26 +192,25 @@ function validation(id) {
 
     if (id == 1) {
         if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
-            var message = 'At least one menu item should be entered'
-            return message;
+            message = 'At least one menu item should be entered'
         }
-
-        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+        else if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
         }
-
-        if (!FormulaIngredientTable.data().any() || FormulaIngredientTable.data().row == null) {
-            var message = 'At least one stock item should be entered'
-            return message;
+        else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
+            message = "Enter Batch Size"
+        }
+        else if (!FormulaIngredientTable.data().any() || FormulaIngredientTable.data().row == null) {
+             message = 'At least one stock item should be entered'
         }
     }
 
     if (id == 2) {
         if ($("#IngredientId").val() == '' || $("#IngredientId").val() == '0') {
-            message = "Select ingredient"
+            message = "Select stock item"
         }
         else if ($("#IngredientQty").val() == '' || $("#IngredientQty").val() == 0) {
-            message = "Enter ingredient qty"
+            message = "Enter stock qty"
         }
 
         if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
@@ -214,7 +219,7 @@ function validation(id) {
 
         for (var i = 0; i < ingredientDataArr.length; i++) {
             if ($("#IngredientId").val() == ingredientDataArr[i].ingredientId) {
-                message = "Ingredient already selected!"
+                message = "stock item already selected!"
                 break;
             }
         }
@@ -223,10 +228,10 @@ function validation(id) {
 }
 
 function clearFoodMenuItem() {
-    $('#FoodMenuId').val(0).trigger('change');
     $("#PFFoodMenuId").val('0');    
     $("#ExpectedOutput").val(parseFloat(1.00).toFixed(2));
     $("#FoodMenuUnitName").html('');
+    $('#FoodMenuId').val(0).trigger('change');
 }
 
 
@@ -310,8 +315,10 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
         for (var i = 0; i < ingredientDataArr.length; i++) {
             if (ingredientDataArr[i].ingredientId == id) {
                 $("#PFIngredientId").val(ingredientDataArr[i].pfIngredientId);
-                $("#IngredientId").val(ingredientDataArr[i].ingredientId);
+              //  $("#IngredientId").val(ingredientDataArr[i].ingredientId);
                 $("#IngredientQty").val(ingredientDataArr[i].ingredientQty);
+                $('#IngredientId').val(ingredientDataArr[i].ingredientId).trigger('change');
+
                 editIngredientDataArr = ingredientDataArr.splice(i, 1);
             }
         }
@@ -319,10 +326,10 @@ $(document).on('click', 'a.editIngredientItem', function (e) {
 });
 
 function clearIngredientItem() {
-    $('#IngredientId').val(0).trigger('change');
     $("#PFIngredientId").val('0');
     $("#IngredientQty").val(parseFloat(1.00).toFixed(2));
     $("#IngredientUnitName").html('');
+    $('#IngredientId').val(0).trigger('change');
 }
 
 function GetUnitNameByIngredientId() {
@@ -351,7 +358,8 @@ function GetUnitNameByFoodMenuId() {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
             //$("#BatchSizeUnitName").text(obj.unitName);
-            $("#BatchSizeUnitId").val(obj.id);
+          //  $("#BatchSizeUnitId").val(obj.id);
+            $('#BatchSizeUnitId').val(obj.id).trigger('change');
         },
         error: function (data) {
             alert(data);

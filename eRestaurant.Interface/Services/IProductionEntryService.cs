@@ -11,8 +11,9 @@ namespace RocketPOS.Interface.Services
         int UpdateProductionEntry(ProductionEntryModel productionEntryModel);
         int InsertProductionEntry(ProductionEntryModel productionEntryModel);
 
-        List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType);
+        List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType, string fromDate, string toDate, int statusId);
         int DeleteProductionEntryById(int id);
         ProductionEntryModel GetProductionEntryById(int id);
+        ProductionEntryModel GetProductionEntryViewById(int id);
     }
 }

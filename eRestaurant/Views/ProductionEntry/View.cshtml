@@ -1,0 +1,159 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.ProductionEntryModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@section Styles {
+    <link href="@Url.Content("~/Styles/print.css")" rel="stylesheet" type="text/css" />
+}
+@{
+    Layout = "";
+}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag
+    https://bootsnipp.com/snippets/9gjD
+   https://plnkr.co/edit/lWk6Yd?preview ---------->
+
+<div id="CateringReport" class="container">
+    <div class="row">
+        <div style="background-color:#F7F7F7">
+            <div class="col-md-11">
+                <h5 class="card-title">
+                    Production Entry
+                </h5>
+            </div>
+            @*<div class="float-right">
+                    <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
+                </div>*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                @*<h4>@Model.FromStoreName</h4>*@
+            </div>
+            <div class="row mb-4">
+                <div class="col-xs-9">
+                    @*<address>
+                            <strong></strong>@Model.SupplierAddress1<br>
+                            <strong></strong>@Model.SupplierAddress2<br>
+                            <strong></strong>@Model.SupplierPhone<br>
+                            <strong></strong>@Model.SupplierEmail<br>
+                        </address>*@
+                </div>
+
+                <div class="col-xs-3 text-right">
+                    <address>
+                        <strong>Recipe Name: </strong>@Model.ProductionFormulaName<br>
+                        <strong>Recipe Batch Size :  </strong>@Model.BatchSize @Model.BatchSizeUnitName<br>
+                        <strong>Store Name :  </strong>@Model.StoreName<br>
+                        <strong>Production Date  :  </strong>@Model.ProductionDate.ToShortDateString()<br>
+                        <strong>Actual Batch Size :  </strong>@Model.ActualBatchSize @Model.BatchSizeUnitName<br>
+
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.productionEntryFoodMenuModels.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">Menu Item</th>
+                                    <th style="width:8%" class="text-right">Expected Qty </th>
+                                    <th style="width:10%" class="text-right">Receipe Qty</th>
+                                    <th style="width:10%" class="text-right">Actual Production</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.productionEntryFoodMenuModels)
+                                {
+                                    var tm = "#myAModal" + item.FoodMenuId;
+                                    var mid = "myAModal" + item.FoodMenuId;
+                                    var rowId = "rowId" + item.FoodMenuId;
+                                <tr id="@rowId">
+                                    <td>
+                                        @item.FoodMenuName [ @item.FoodMenuUnitName ]
+                                    </td>
+                                    <td class="text-right">
+                                        @item.ExpectedOutput.ToString("N")
+                                    </td>
+                                    <td class="text-right">
+                                        @item.AllocationOutput
+                                    </td>
+                                    <td class="text-right">
+                                        @item.ActualOutput
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.productionEntryIngredientModels.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">Stock Item</th>
+                                    <th style="width:8%" class="text-right">Expected Qty </th>
+                                    <th style="width:10%" class="text-right">Receipe Qty</th>
+                                    <th style="width:10%" class="text-right">Actual Consumption</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.productionEntryIngredientModels)
+                                {
+                                    var tm = "#myAModal" + item.IngredientId;
+                                    var mid = "myAModal" + item.IngredientId;
+                                    var rowId = "rowId" + item.IngredientId;
+                                <tr id="@rowId">
+                                    <td>
+                                        @item.IngredientName [ @item.IngredientUnitName ]
+                                    </td>
+                                    <td class="text-right">
+                                        @item.IngredientQty.ToString("N")
+                                    </td>
+                                    <td class="text-right">
+                                        @item.AllocationIngredientQty
+                                    </td>
+                                    <td class="text-right">
+                                        @item.ActualIngredientQty
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-sm-6 text-left">
+            @if (Model.Notes != null)
+            {
+                <div><strong>Notes : </strong> @Model.Notes</div>
+            }
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

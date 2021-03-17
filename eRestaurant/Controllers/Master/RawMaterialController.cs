@@ -27,6 +27,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("RawMaterial");
             List<RawMaterialModel> rawMaterialModel = new List<RawMaterialModel>();
             rawMaterialModel = _iRawMaterialService.GetRawMaterialList().ToList();
             if (noDelete != null)
@@ -39,12 +40,19 @@ namespace RocketPOS.Controllers.Master
         public ActionResult RawMaterial(int? id)
         {
             RawMaterialModel rawMaterialModel = new RawMaterialModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                rawMaterialModel = _iRawMaterialService.GetRawMaterialById(Convert.ToInt32(id));
-            }
+                if (id > 0)
+                {
+                    rawMaterialModel = _iRawMaterialService.GetRawMaterialById(Convert.ToInt32(id));
+                }
 
-            return View(rawMaterialModel);
+                return View(rawMaterialModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -89,15 +97,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("RawMaterial", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("RawMaterial", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iRawMaterialService.DeleteRawMaterial(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iRawMaterialService.DeleteRawMaterial(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

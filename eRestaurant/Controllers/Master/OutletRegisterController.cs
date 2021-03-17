@@ -14,21 +14,24 @@ namespace RocketPOS.Controllers.Master
 {
     public class OutletRegisterController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IOutletRegisterService _iOutletRegisterService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public OutletRegisterController(IOutletRegisterService iOutletRegisterService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public OutletRegisterController(IOutletRegisterService iOutletRegisterService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iOutletRegisterService = iOutletRegisterService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("OutletRegister");
             List<OutletRegisterModel> outletRegisterModels = new List<OutletRegisterModel>();
             outletRegisterModels = _iOutletRegisterService.GetOutletRegisterList().ToList();
 
@@ -38,18 +41,24 @@ namespace RocketPOS.Controllers.Master
         public ActionResult OutletRegister(int? id)
         {
             OutletRegisterModel outletRegisterModel = new OutletRegisterModel();
-
-            outletRegisterModel.OpenDate = DateTime.Now;
-
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int OutletRegisterId = Convert.ToInt32(id);
-                outletRegisterModel = _iOutletRegisterService.GetOutletRegisterById(OutletRegisterId);
-            }
-            outletRegisterModel.OutletList = _iDropDownService.GetOutletList();
-            outletRegisterModel.UserList = _iDropDownService.GetUserList();
+                outletRegisterModel.OpenDate = DateTime.Now;
 
-            return View(outletRegisterModel);
+                if (id > 0)
+                {
+                    int OutletRegisterId = Convert.ToInt32(id);
+                    outletRegisterModel = _iOutletRegisterService.GetOutletRegisterById(OutletRegisterId);
+                }
+                outletRegisterModel.OutletList = _iDropDownService.GetOutletList();
+                outletRegisterModel.UserList = _iDropDownService.GetUserList();
+
+                return View(outletRegisterModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -110,9 +119,16 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iOutletRegisterService.DeleteOutletRegister(id);
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iOutletRegisterService.DeleteOutletRegister(id);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         private string ValidationOutletRegister(OutletRegisterModel outletRegisterModel)

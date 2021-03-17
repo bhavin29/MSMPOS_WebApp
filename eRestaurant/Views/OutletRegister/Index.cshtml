@@ -15,7 +15,10 @@
                 <h5 class="card-title">Outlet Register</h5>
             </div>
             <div class="float-right">
-                <a asp-action="OutletRegister" class="btn btn-primary float-sm-left ">Add</a>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="OutletRegister" class="btn btn-primary float-sm-left ">Add</a>
+                }
             </div>
         </div>
     </div>
@@ -78,7 +81,10 @@
                                 </th>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="OutletRegister" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                        @if (@UserRolePermissionForPage.Edit == true)
+                                        {
+                                            <a asp-action="OutletRegister" class="btn btn-link btn-primary btn-lg" asp-route-Id="@item.Id"><i class="fa fa-edit"></i></a>
+                                        }
                                         @*<a href="#" class="btn btn-link btn-danger" data-toggle="modal" data-target="@tm"><i class="fa fa-times"></i></a>*@
                                     </div>
                                 </td>
@@ -107,7 +113,7 @@
         </div>
     </div>
 </div>
-  
+
 @section Scripts {
     <script>
         $(document).ready(function () {

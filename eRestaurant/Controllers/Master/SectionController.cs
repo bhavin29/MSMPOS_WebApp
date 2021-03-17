@@ -27,6 +27,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Section");
             List<SectionModel> sectionModel = new List<SectionModel>();
             sectionModel = _iSectionService.GetSectionList().ToList();
             if (noDelete != null)
@@ -39,12 +40,19 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Section(int? id)
         {
             SectionModel sectionModel = new SectionModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                sectionModel = _iSectionService.GetSectionById(Convert.ToInt32(id));
-            }
+                if (id > 0)
+                {
+                    sectionModel = _iSectionService.GetSectionById(Convert.ToInt32(id));
+                }
 
-            return View(sectionModel);
+                return View(sectionModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -89,15 +97,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Section", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Section", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iSectionService.DeleteSection(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iSectionService.DeleteSection(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

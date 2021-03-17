@@ -13,20 +13,23 @@ namespace RocketPOS.Controllers.Master
 {
     public class RolePermissionController : Controller
     {
+        private readonly ICommonService _iCommonService;
         private readonly IRolePermissionService _iRolePermissionService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public RolePermissionController(IRolePermissionService rolePermissionService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public RolePermissionController(IRolePermissionService rolePermissionService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iRolePermissionService = rolePermissionService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
         public IActionResult Index(int? webRoleId)
         {
+            _iCommonService.GetPageWiseRoleRigths("RolePermission");
             RolePermissionModel rolePermissionModel = new RolePermissionModel();
             rolePermissionModel.WebRoleList = _iDropDownService.GetWebRoleList();
             if (webRoleId!=null)

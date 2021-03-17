@@ -13,8 +13,11 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-8"><h4 class="card-title">@ViewData["Title"]</h4></div>
-                    <div class="col-md-4"><a asp-action="Purchase" class="pull-right btn btn-primary">Create PO</a></div>
-                </div>
+                    @if (@UserRolePermissionForPage.Add == true)
+                    {
+                        <div class="col-md-4"><a asp-action="Purchase" class="pull-right btn btn-primary">Create PO</a></div>
+                    }
+                    </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -68,11 +71,17 @@
                                             </td>
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a asp-action="purchase" asp-route-Id="@item.Id">Edit</a>
-                                                    <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                                    <a asp-action="purchaseGRN" asp-route-Id="@item.Id">GRN</a>
-                                                    <a asp-action="purchaseInvoice"  asp-route-Id="@item.Id">Invoice</a>
-                                                </div>
+                                                    @if (UserRolePermissionForPage.Edit == true)
+                                                    {
+                                                        <a asp-action="purchase" asp-route-Id="@item.Id">Edit</a>
+                                                    }
+                                                    @if (UserRolePermissionForPage.Delete == true)
+                                                    {
+                                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                                    }
+                                                        <a asp-action="purchaseGRN" asp-route-Id="@item.Id">GRN</a>
+                                                        <a asp-action="purchaseInvoice" asp-route-Id="@item.Id">Invoice</a>
+                                                    </div>
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

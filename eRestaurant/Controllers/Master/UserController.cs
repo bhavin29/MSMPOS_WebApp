@@ -20,7 +20,7 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public UserController(IUserService userService, ICommonService iCommonService,IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public UserController(IUserService userService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iUserService = userService;
             _iDropDownService = idropDownService; _iCommonService = iCommonService;
@@ -30,6 +30,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("User");
             List<UserModel> userModel = new List<UserModel>();
             userModel = _iUserService.GetUserList().ToList();
             if (noDelete != null)
@@ -42,15 +43,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult User(int? id)
         {
             UserModel userModel = new UserModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int userId = Convert.ToInt32(id);
-                userModel = _iUserService.GetUserById(userId);
+                if (id > 0)
+                {
+                    int userId = Convert.ToInt32(id);
+                    userModel = _iUserService.GetUserById(userId);
+                }
+                userModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                userModel.OutletList = _iDropDownService.GetOutletList();
+                userModel.WebRoleList = _iDropDownService.GetWebRoleList();
+                return View(userModel);
             }
-            userModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            userModel.OutletList = _iDropDownService.GetOutletList();
-            userModel.WebRoleList= _iDropDownService.GetWebRoleList();
-            return View(userModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -99,21 +107,28 @@ namespace RocketPOS.Controllers.Master
         {
 
             int result = 0;
-            result = _iCommonService.GetValidateReference("User", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
+                result = _iCommonService.GetValidateReference("User", id.ToString());
+                if (result > 0)
+                {
 
-                return RedirectToAction(nameof(Index), new { noDelete = result });
-            }
-            
-            else
-            { 
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+
+                else
+                {
                     var deletedid = _iUserService.DeleteOutlet(id);
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
             }
         }
-    
-    private string ValidationUser(UserModel userModel)
+
+        private string ValidationUser(UserModel userModel)
         {
             string ErrorString = string.Empty;
             if (string.IsNullOrEmpty(userModel.Username))

@@ -25,6 +25,7 @@ namespace RocketPOS.Controllers.Master
 
         public IActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("EmailSetting");
             ClientModel clientModel = new ClientModel();
             clientModel = _iCommonService.GetEmailSettings();
             return View(clientModel);

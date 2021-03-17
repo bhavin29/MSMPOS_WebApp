@@ -14,19 +14,22 @@ namespace RocketPOS.Controllers.Master
     public class FoodMenuRateController : Controller
     {
         private readonly IFoodMenuRateService _iFoodMenuRateService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public FoodMenuRateController(IFoodMenuRateService foodMenuRateService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuRateController(IFoodMenuRateService foodMenuRateService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iFoodMenuRateService = foodMenuRateService;
+            _iCommonService = iCommonService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
         public IActionResult Index(int? outletListId, int? foodCategoryId,int? flag)
         {
+            _iCommonService.GetPageWiseRoleRigths("FoodMenuRate");
             FoodMenuRateModel foodMenuRateModel = new FoodMenuRateModel();
             foodMenuRateModel.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
             foodMenuRateModel.OutletList = _iDropDownService.GetOutletList();

@@ -20,7 +20,7 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public TablesController(ITablesService tableService, ICommonService iCommonService,IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public TablesController(ITablesService tableService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iTablesService = tableService;
             _iDropDownService = idropDownService;
@@ -31,6 +31,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Tables");
             List<TablesModel> tableList = new List<TablesModel>();
             tableList = _iTablesService.GetTablesList().ToList();
             if (noDelete != null)
@@ -43,13 +44,20 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Tables(int? id)
         {
             TablesModel tableModel = new TablesModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int tableId = Convert.ToInt32(id);
-                tableModel = _iTablesService.GetTablesById(tableId);
+                if (id > 0)
+                {
+                    int tableId = Convert.ToInt32(id);
+                    tableModel = _iTablesService.GetTablesById(tableId);
+                }
+                tableModel.OutletList = _iDropDownService.GetOutletList();
+                return View(tableModel);
             }
-            tableModel.OutletList = _iDropDownService.GetOutletList();
-            return View(tableModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -85,15 +93,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Tables", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Tables", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iTablesService.DeleteTables(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iTablesService.DeleteTables(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

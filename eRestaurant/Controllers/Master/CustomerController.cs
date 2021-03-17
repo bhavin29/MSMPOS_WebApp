@@ -29,6 +29,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Customer");
             List<CustomerModel> customerList = new List<CustomerModel>();
             customerList = _iCustomerService.GetCustomerList().ToList();
             if (noDelete != null)
@@ -41,13 +42,20 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Customer(int? id)
         {
             CustomerModel customerModel = new CustomerModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int customerId = Convert.ToInt32(id);
-                customerModel = _iCustomerService.GetCustomerById(customerId);
-            }
+                if (id > 0)
+                {
+                    int customerId = Convert.ToInt32(id);
+                    customerModel = _iCustomerService.GetCustomerById(customerId);
+                }
 
-            return View(customerModel);
+                return View(customerModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -91,15 +99,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Customer", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Customer", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iCustomerService.DeleteCustomer(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iCustomerService.DeleteCustomer(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

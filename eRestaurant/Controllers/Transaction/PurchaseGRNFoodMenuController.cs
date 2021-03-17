@@ -17,6 +17,7 @@ namespace RocketPOS.Controllers.Transaction
     {
         private readonly IPurchaseGRNService _iPurchaseGRNService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
         private readonly ISupplierService _iSupplierService;
@@ -24,6 +25,7 @@ namespace RocketPOS.Controllers.Transaction
 
         public PurchaseGRNFoodMenuController(IPurchaseGRNService purchaseService,
             IDropDownService idropDownService,
+            ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService,
             ISupplierService supplierService,
@@ -31,6 +33,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             _iPurchaseGRNService = purchaseService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _iSupplierService = supplierService;
             _iEmailService = emailService;
             _sharedLocalizer = sharedLocalizer;
@@ -40,6 +43,7 @@ namespace RocketPOS.Controllers.Transaction
         // GET: PurchaseGRNFoodMenu
         public ActionResult PurchaseGRNFoodMenuList()
         {
+            _iCommonService.GetPageWiseRoleRigths("PurchaseGRNFoodMenu");
             List<PurchaseGRNViewModel> purchaseList = new List<PurchaseGRNViewModel>();
             purchaseList = _iPurchaseGRNService.GetPurchaseGRNFoodMenuList().ToList();
             return View(purchaseList);
@@ -57,35 +61,42 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult PurchaseGRNFoodMenu(long? id, long? purchaseId, string type)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            if (purchaseId > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
-                if (purchaseModel != null)
+                if (purchaseId > 0)
                 {
-                    purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                    purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
-                }
-            }
-            else
-            {
-                if (id > 0)
-                {
-                    ViewBag.ActionType = type;
-                    long purchaseGRNId = Convert.ToInt64(id);
-                    purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuById(purchaseGRNId);
+                    purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
+                    if (purchaseModel != null)
+                    {
+                        purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                        purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                    }
                 }
                 else
                 {
-                    purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                    purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                    purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                    if (id > 0)
+                    {
+                        ViewBag.ActionType = type;
+                        long purchaseGRNId = Convert.ToInt64(id);
+                        purchaseModel = _iPurchaseGRNService.GetPurchaseGRNFoodMenuById(purchaseGRNId);
+                    }
+                    else
+                    {
+                        purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                        purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                        purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                    }
                 }
+                purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                return View(purchaseModel);
             }
-            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            purchaseModel.StoreList = _iDropDownService.GetStoreList();
-            //purchaseModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
-            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            return View(purchaseModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         // POST: PurchaseGRN/Create
@@ -166,7 +177,7 @@ namespace RocketPOS.Controllers.Transaction
         }
 
         [HttpGet]
-        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId,int storeId)
+        public JsonResult PurchaseGRNFoodMenuListByDate(string fromDate, string toDate, int supplierId, int storeId)
         {
             List<PurchaseGRNViewModel> purchaseViewModels = new List<PurchaseGRNViewModel>();
             DateTime newFromDate, newToDate;
@@ -186,12 +197,19 @@ namespace RocketPOS.Controllers.Transaction
         }
         public ActionResult Delete(int id)
         {
-            int result = _iPurchaseGRNService.DeletePurchaseGRN(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iPurchaseGRNService.DeletePurchaseGRN(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(PurchaseGRNFoodMenuList));
             }
-            return RedirectToAction(nameof(PurchaseGRNFoodMenuList));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult DeletePurchaseGRNDetails(long purchaseId)
@@ -253,7 +271,7 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult GetFoodMenuLastPrice(int itemType, int foodMenuId)
         {
             decimal unitPrice = 0;
-            unitPrice = _iPurchaseGRNService.GetFoodMenuLastPrice(itemType,foodMenuId);
+            unitPrice = _iPurchaseGRNService.GetFoodMenuLastPrice(itemType, foodMenuId);
             return Json(new { UnitPrice = unitPrice });
         }
 
@@ -268,21 +286,28 @@ namespace RocketPOS.Controllers.Transaction
         public IActionResult View(int? id)
         {
             PurchaseGRNModel purchaseModel = new PurchaseGRNModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.View == true)
             {
-                long purchaseGRNId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseGRNService.GetViewPurchaseGRNFoodMenuById(purchaseGRNId);
+                if (id > 0)
+                {
+                    long purchaseGRNId = Convert.ToInt64(id);
+                    purchaseModel = _iPurchaseGRNService.GetViewPurchaseGRNFoodMenuById(purchaseGRNId);
+                }
+                else
+                {
+                    purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                }
+
+                purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                return View(purchaseModel);
             }
             else
             {
-                purchaseModel.PurchaseGRNDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                purchaseModel.ReferenceNo = _iPurchaseGRNService.ReferenceNumberFoodMenu().ToString();
+                return RedirectToAction("NotFound", "Error");
             }
-
-            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            purchaseModel.StoreList = _iDropDownService.GetStoreList();
-            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            return View(purchaseModel);
         }
     }
 }

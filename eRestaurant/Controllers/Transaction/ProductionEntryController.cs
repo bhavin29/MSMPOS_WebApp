@@ -15,21 +15,25 @@ namespace RocketPOS.Controllers.Transaction
     {
         private readonly IProductionEntryService _iProductionEntryService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
         public ProductionEntryController(IProductionEntryService productionEntryService,
              IDropDownService idropDownService,
+             ICommonService iCommonService,
              IStringLocalizer<RocketPOSResources> sharedLocalizer,
              LocService locService)
         {
             _iProductionEntryService = productionEntryService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public IActionResult Index(int? foodMenuType)
         {
+            _iCommonService.GetPageWiseRoleRigths("ProductionEntry");
             if (TempData["foodMenuType"] == null)
             {
                 TempData["foodMenuType"] = 2;
@@ -46,6 +50,7 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public JsonResult GetProductionEntryList(int? foodMenuType)
         {
+            _iCommonService.GetPageWiseRoleRigths("ProductionEntry");
             TempData["foodMenuType"] = foodMenuType;
             List<ProductionEntryViewModel> productionEntryViewModels = new List<ProductionEntryViewModel>();
             productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType));
@@ -53,30 +58,36 @@ namespace RocketPOS.Controllers.Transaction
         }
         public ActionResult ProductionEntry(int? id, int? foodMenuType, int? productionFormulaId, string type)
         {
-
-            ProductionEntryModel productionEntryModel = new ProductionEntryModel();
-            TempData["foodMenuType"] = foodMenuType;
-
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
+                ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+                TempData["foodMenuType"] = foodMenuType;
 
-                ViewBag.ActionType = type;
-                productionEntryModel = _iProductionEntryService.GetProductionEntryById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+
+                    ViewBag.ActionType = type;
+                    productionEntryModel = _iProductionEntryService.GetProductionEntryById(Convert.ToInt32(id));
+                }
+                else
+                {
+                    if (Convert.ToInt32(productionFormulaId) > 0)
+                    {
+                        productionEntryModel = _iProductionEntryService.GetProductionFormulaById(Convert.ToInt32(productionFormulaId));
+                    }
+                    productionEntryModel.ProductionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
+                }
+                productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
+                productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
+                productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
+
+                return View(productionEntryModel);
             }
             else
             {
-                if (Convert.ToInt32(productionFormulaId) > 0)
-                {
-                    productionEntryModel = _iProductionEntryService.GetProductionFormulaById(Convert.ToInt32(productionFormulaId));
-                }
-                productionEntryModel.ProductionDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                productionEntryModel.FoodmenuType = Convert.ToInt32(foodMenuType);
+                return RedirectToAction("NotFound", "Error");
             }
-            productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
-            productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
-            productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
-
-            return View(productionEntryModel);
         }
 
         public JsonResult GetProductionFormulaById(int id)
@@ -145,12 +156,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _iProductionEntryService.DeleteProductionEntryById(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iProductionEntryService.DeleteProductionEntryById(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
     }
 }

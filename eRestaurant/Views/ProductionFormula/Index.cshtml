@@ -29,8 +29,11 @@
             </div>
             <div class="col-md-1">
                 <div class="form-check form-switch">
-                    <a id="AddProdFormula" onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
-                </div>
+                    @if (@UserRolePermissionForPage.Add == true)
+                    {
+                        <a id="AddProdFormula" onclick="return AddProductionFormula();" class="btn btn-primary float-sm-left ">Add</a>
+                    }
+                    </div>
             </div>
         </div>
     </div>
@@ -79,15 +82,24 @@
                                 </td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
-                                        <label> / </label>
-                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                    </div>
+                                        @if (UserRolePermissionForPage.Edit == true)
+                                        {
+                                            <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="Edit">Edit</a>
+                                            <label> / </label>
+                                        }
+                                        @if (UserRolePermissionForPage.Delete == true)
+                                        {
+                                            <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+                                        }
+                                        </div>
                                 </td>
                                 <td>
                                     <div class="form-button-action">
-                                        <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
-                                    </div>
+                                        @if (UserRolePermissionForPage.View == true)
+                                        {
+                                            <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                        }
+                                        </div>
                                 </td>
                             </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -163,17 +175,27 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>' +
-                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionFormula(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                    var editDelete='';
+                                    if ("@UserRolePermissionForPage.Edit" == "True") {
+                                        editDelete = '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a><label> / </label>'
+                                    }
+                                    if ("@UserRolePermissionForPage.Delete" == "True") {
+                                        editDelete = ' <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                            '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                            'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deleteProductionFormula(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                    }
+                                    return editDelete;
                                 },
                             },
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=View">View</a></div>'
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=View">View</a></div>'
+                                    }
+                                    return view;
                                 },
                             }
                         ],

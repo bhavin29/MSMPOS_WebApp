@@ -28,6 +28,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("AssetItem");
             List<AssetItemModel> assetItemModel = new List<AssetItemModel>();
             assetItemModel = _iAssetItemService.GetAssetItemList().ToList();
             if (noDelete != null)
@@ -40,14 +41,21 @@ namespace RocketPOS.Controllers.Master
         public ActionResult AssetItem(int? id)
         {
             AssetItemModel assetItemModel = new AssetItemModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                assetItemModel = _iAssetItemService.GetAssetItemById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+                    assetItemModel = _iAssetItemService.GetAssetItemById(Convert.ToInt32(id));
+                }
+                assetItemModel.UnitList = _iDropDownService.GetUnitList();
+                assetItemModel.TaxList = _iDropDownService.GetTaxList();
+                assetItemModel.AssetCategoryList = _iDropDownService.GetAssetCategoryList();
+                return View(assetItemModel);
             }
-            assetItemModel.UnitList = _iDropDownService.GetUnitList();
-            assetItemModel.TaxList = _iDropDownService.GetTaxList();
-            assetItemModel.AssetCategoryList = _iDropDownService.GetAssetCategoryList();
-            return View(assetItemModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -80,15 +88,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("AssetItem", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("AssetItem", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iAssetItemService.DeleteAssetItem(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iAssetItemService.DeleteAssetItem(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
     }

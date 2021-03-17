@@ -14,21 +14,25 @@ namespace RocketPOS.Controllers.Transaction
     {
         private readonly IProductionFormulaService _iProductionFormulaService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
         public ProductionFormulaController(IProductionFormulaService productionFormulaService,
             IDropDownService idropDownService,
+            ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService)
         {
             _iProductionFormulaService = productionFormulaService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
         public IActionResult Index(int? foodMenuType)
         {
+            _iCommonService.GetPageWiseRoleRigths("ProductionFormula");
             if (TempData["foodMenuType"] == null)
             {
                 TempData["foodMenuType"] = 2;
@@ -51,31 +55,39 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public JsonResult GetProductionFormulaList(int? foodMenuType)
         {
+            _iCommonService.GetPageWiseRoleRigths("ProductionFormula");
             TempData["foodMenuType"] = foodMenuType;
             List<ProductionFormulaViewModel> productionFormulaViewModels = new List<ProductionFormulaViewModel>();
             productionFormulaViewModels = _iProductionFormulaService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             return Json(new { productionFormulaList = productionFormulaViewModels });
         }
 
-        public ActionResult ProductionFormula(int? id,int? foodMenuType, string type)
+        public ActionResult ProductionFormula(int? id, int? foodMenuType, string type)
         {
             ProductionFormulaModel productionFormulaModel = new ProductionFormulaModel();
             TempData["foodMenuType"] = foodMenuType;
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                ViewBag.ActionType = type;
-                productionFormulaModel = _iProductionFormulaService.GetProductionFormulaById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+                    ViewBag.ActionType = type;
+                    productionFormulaModel = _iProductionFormulaService.GetProductionFormulaById(Convert.ToInt32(id));
+                }
+                else
+                {
+                    productionFormulaModel.FoodmenuType = (int)foodMenuType;
+                    productionFormulaModel.IsActive = true;
+                }
+                productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);// ((int)foodMenuType);
+                productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
+                productionFormulaModel.BatchSizeUnitsList = _iDropDownService.GetUnitList();
+
+                return View(productionFormulaModel);
             }
             else
             {
-                productionFormulaModel.FoodmenuType =(int) foodMenuType;
-                productionFormulaModel.IsActive = true;
+                return RedirectToAction("NotFound", "Error");
             }
-            productionFormulaModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType((int)foodMenuType);
-            productionFormulaModel.IngredientList = _iDropDownService.GetIngredientList();
-            productionFormulaModel.BatchSizeUnitsList = _iDropDownService.GetUnitList();
-
-            return View(productionFormulaModel);
         }
 
         public JsonResult GetUnitNameByFoodMenuId(int foodMenuId)
@@ -86,7 +98,7 @@ namespace RocketPOS.Controllers.Transaction
             {
                 unitModel = _iProductionFormulaService.GetUnitNameByFoodMenuId(foodMenuId);
             }
-            return Json(new { UnitName = unitModel.UnitName, Id= unitModel.Id });
+            return Json(new { UnitName = unitModel.UnitName, Id = unitModel.Id });
         }
 
         [HttpPost]
@@ -114,7 +126,7 @@ namespace RocketPOS.Controllers.Transaction
                         {
                             productionFormulaMessage = _locService.GetLocalizedHtmlString("SaveSuccess");
                         }
-                        else if (result == -1 )
+                        else if (result == -1)
                         {
                             productionFormulaMessage = _locService.GetLocalizedHtmlString("Recipe formula already created for this Menu item ");
                             return Json(new { error = true, message = productionFormulaMessage, status = 201 });
@@ -137,12 +149,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _iProductionFormulaService.DeleteProductionFormulaById(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iProductionFormulaService.DeleteProductionFormulaById(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
     }
 }

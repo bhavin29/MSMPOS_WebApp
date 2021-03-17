@@ -15,12 +15,14 @@
                 <h5 class="card-title">Varient</h5>
             </div>
             <div class="float-right">
-                <a asp-action="Varient" class="btn btn-primary float-sm-left ">Add</a>
-
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="Varient" class="btn btn-primary float-sm-left ">Add</a>
+                }
             </div>
         </div>
     </div>
-    <br/>
+    <br />
     <div class="table-responsive">
         <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
             <div class="col-sm-12">
@@ -65,35 +67,41 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FoodMenuName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.VarientName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Price)
-                            </td>
-                            <td>
-                                @if (item.IsActive == true)
-                                {
-                                    @Html.DisplayName("True")
-                                }
-                                else
-                                {
-                                    @Html.DisplayName("False")
-                                }
-                            </td>
-                            <td>
-                                <div class="form-button-action">
-                                    <a asp-action="Varient"  asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                    <label> / </label>
-                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                </div>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.VarientName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @if (item.IsActive == true)
+                                    {
+                                        @Html.DisplayName("True")
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayName("False")
+                                    }
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        @if (@UserRolePermissionForPage.Edit == true)
+                                        {
+                                            <a asp-action="Varient" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                            <label> / </label>
+                                        }
+                                        @if (@UserRolePermissionForPage.Delete == true)
+                                        {
+                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                        }
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

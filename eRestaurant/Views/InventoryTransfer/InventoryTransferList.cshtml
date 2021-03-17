@@ -14,10 +14,13 @@
                 <h5 class="card-title">Stock Transfer</h5>
             </div>
             <div class="float-right">
-                <a asp-action="InventoryTransfer" asp-route-inventoryType="1" class="btn btn-primary" style="margin-right:16px">+ Menu</a>
-                <a asp-action="InventoryTransfer" asp-route-inventoryType="2" class=" btn btn-primary" style="margin-right:16px">+ Stock</a>
-                <a asp-action="InventoryTransfer" asp-route-inventoryType="3" class=" btn btn-primary">+ Asset</a>
-            </div>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="InventoryTransfer" asp-route-inventoryType="1" class="btn btn-primary" style="margin-right:16px">+ Menu</a>
+                    <a asp-action="InventoryTransfer" asp-route-inventoryType="2" class=" btn btn-primary" style="margin-right:16px">+ Stock</a>
+                    <a asp-action="InventoryTransfer" asp-route-inventoryType="3" class=" btn btn-primary">+ Asset</a>
+                }
+                </div>
         </div>
     </div>
     <div class="row">
@@ -94,8 +97,11 @@
                                         </td>*@
                                         <td>
                                             <div class="form-button-action">
-                                                <a asp-action="View" asp-route-Id="@item.Id" >View</a>
-                                            </div>
+                                                @if (@UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                }
+                                                </div>
                                         </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -171,7 +177,11 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a  href="/InventoryTransfer/View/' + row.id + '">View</a></div>'
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a  href="/InventoryTransfer/View/' + row.id + '">View</a></div>'
+                                    }
+                                    return view;
                                 },
                             }
                         ],

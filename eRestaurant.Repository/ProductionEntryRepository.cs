@@ -395,12 +395,12 @@ namespace RocketPOS.Repository
                         if (productionEntryModel.Status==2)
                         {
                             CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                            string sResult = commonRepository.InventoryPush("PE-Ingredient", result);
+                            string sResult = commonRepository.InventoryPush("PE_Ingredient", Convert.ToInt32(productionEntryModel.Id));
                         }
                         if (productionEntryModel.Status == 3)
                         {
                             CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                            string sResult = commonRepository.InventoryPush("PE-Food", result);
+                            string sResult = commonRepository.InventoryPush("PE_Food", productionEntryModel.Id);
                         }
                     }
                     else

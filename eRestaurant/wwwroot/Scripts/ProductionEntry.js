@@ -84,7 +84,7 @@ $("#ActualBatchSize").keyup(function () {
             return $(this).val()
         });
 
-        ingredientQty = parseFloat(dataline[3]);
+        ingredientQty = parseFloat(dataline[3].replace(',',''));
 
         actualIngredientQty = (ingredientQty * actualBatchSize) / batchSize;
         actualIngredientQty = parseFloat(actualIngredientQty).toFixed(2);
@@ -105,7 +105,7 @@ $("#ActualBatchSize").keyup(function () {
             return $(this).val()
         });
 
-        foodmenuQty = parseFloat(datatrline[3]);
+        foodmenuQty = parseFloat(datatrline[3].replace(',', ''));
         actualfoodmenuQty = (foodmenuQty * actualBatchSize) / batchSize;
         actualfoodmenuQty = parseFloat(actualfoodmenuQty).toFixed(2);
         var foodtextbox = '#f' + i;

@@ -29,31 +29,6 @@
                                     <div class="row">
                                         <div class="col-md-5 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="FormulaName" class="control-label">Formula Name</label>
-                                                <input asp-for="FormulaName" class="form-control" />
-                                                <span asp-validation-for="FormulaName" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 pr-2 pl-2">
-                                            <div class="form-group">
-                                                <label asp-for="BatchSize" class="control-label">Batch Size</label>
-                                                <input asp-for="BatchSize" type="number" min="1" max="99999" class="form-control text-right" />
-                                                <span asp-validation-for="BatchSize"  class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 pr-2 pl-0">
-                                              <div class="form-group">
-                                                <label asp-for="BatchSizeUnitsList" class="control-label">Unit</label>
-                                                <select asp-for="BatchSizeUnitId"
-                                                        class="form-control"
-                                                        asp-items="@(new SelectList(Model.BatchSizeUnitsList, "Value", "Text"))" >
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-5 pr-2 pl-2">
-                                            <div class="form-group">
                                                 <label asp-for="FoodMenuList" class="control-label">Menu item</label>
                                                 <select asp-for="FoodMenuId"
                                                         class="form-control"
@@ -120,8 +95,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="form-button-action">
-                                                                        <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> / 
-                                                                        <a href="#" data-toggle="modal"  data-target="@tm">Delete</a>
+                                                                        <a href="#" data-itemid="@item.FoodMenuId" class="editFoodMenuItem">Edit</a> /
+                                                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                     </div>
                                                                 </td>
                                                                 <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -148,22 +123,33 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6 col-lg-6">
                                     <div class="row">
-                                        <div class="col-md-1 pr-2 pl-2">
-                                            <div class="row">
-                                                <label asp-for="IsActive" class="control-label" style="margin: 0px 0 0 500px">IsActive</label>
-                                                <input asp-for="IsActive" class="form-check-input" style="margin: 0px 0 0 475px" />
+                                        <div class="col-md-5 pr-2 pl-2">
+                                            <div class="form-group">
+                                                <label asp-for="FormulaName" class="control-label">Formula Name</label>
+                                                <input asp-for="FormulaName" class="form-control" />
+                                                <span asp-validation-for="FormulaName" class="text-danger"></span>
                                             </div>
-                                            <div class="col-md-2 pr-2 pl-2">
-                                                <div class="form-group">
-                                                    <label class="control-label text-right"></label>
-                                                    <input type="number" style="visibility:hidden"  min="1" max="99999" value="1" placeholder="0.00" class="form-control text-right" />
-                                                </div>
+                                        </div>
+                                        <div class="col-md-2 pr-2 pl-2">
+                                            <div class="form-group">
+                                                <label asp-for="BatchSize" class="control-label">Batch Size</label>
+                                                <input asp-for="BatchSize" type="number" min="1" max="99999" class="form-control text-right" />
+                                                <span asp-validation-for="BatchSize" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 pr-2 pl-0">
+                                            <div class="form-group">
+                                                <label asp-for="BatchSizeUnitsList" class="control-label">Unit</label>
+                                                <select asp-for="BatchSizeUnitId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.BatchSizeUnitsList, "Value", "Text"))">
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6">
                                     <div class="row">
                                         <div class="col-md-5 pr-2 pl-2">
                                             <div class="form-group">
@@ -202,7 +188,7 @@
                                                         <th style="width:0%">PFIngredientId</th>
                                                         <th style="width:0%">IngredientId</th>
                                                         <th style="width:60%">Stock Item</th>
-                                                        <th style="width:25%" >Qty</th>
+                                                        <th style="width:25%">Qty</th>
                                                         <th style="width:15%">Action</th>
                                                     </tr>
                                                 </thead>
@@ -231,7 +217,7 @@
                                                                     <div class="form-button-action">
                                                                         <a href="#" data-itemid="@item.IngredientId" class=" editIngredientItem">Edit</a> /
 
-                                                                        <a href="#" data-toggle="modal"  data-target="@tm">Delete</a>
+                                                                        <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                                     </div>
                                                                 </td>
                                                                 <div class="modal fade" id=@mid tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -258,6 +244,20 @@
                                             </table>
                                         </div>
 
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-1 pr-2 pl-2">
+                                            <div class="row">
+                                                <label asp-for="IsActive" class="control-label" style="margin: 0px 0 0 500px">IsActive</label>
+                                                <input asp-for="IsActive" class="form-check-input" style="margin: 0px 0 0 475px" />
+                                            </div>
+                                            <div class="col-md-2 pr-2 pl-2">
+                                                <div class="form-group">
+                                                    <label class="control-label text-right"></label>
+                                                    <input type="number" style="visibility:hidden" min="1" max="99999" value="1" placeholder="0.00" class="form-control text-right" />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

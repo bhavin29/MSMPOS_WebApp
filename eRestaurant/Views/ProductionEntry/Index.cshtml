@@ -232,16 +232,14 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    var editDelete = '';
+                                    var editDelete = "";
                                     if (row.status == 2) {
-
                                         if ("@UserRolePermissionForPage.Edit" == "True") {
-                                            editDelete = '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a></div>'
+                                            return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a></div>'
                                         }
                                     }
-                                    else if (row.status == 3)
-                                    {
-                                        editDelete = '';
+                                    else if (row.status == 3) {
+                                        editDelete = '<div></div>';
                                     }
                                     else {
                                         if ("@UserRolePermissionForPage.Edit" == "True") {

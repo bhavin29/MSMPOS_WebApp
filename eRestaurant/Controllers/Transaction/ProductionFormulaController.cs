@@ -163,5 +163,19 @@ namespace RocketPOS.Controllers.Transaction
                 return RedirectToAction("NotFound", "Error");
             }
         }
+
+        public ActionResult View(long? id)
+        {
+            ProductionFormulaModel productionFormulaModel = new ProductionFormulaModel();
+            if (UserRolePermissionForPage.View == true)
+            {
+                productionFormulaModel = _iProductionFormulaService.GetProductionFormulaViewById(Convert.ToInt32(id));
+                return View(productionFormulaModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+        }
     }
 }

@@ -97,7 +97,7 @@
                                     <div class="form-button-action">
                                         @if (UserRolePermissionForPage.View == true)
                                         {
-                                            <a asp-action="ProductionFormula" asp-route-Id="@item.Id" asp-route-foodMenuType="@item.FoodmenuType" asp-route-type="View">View</a>
+                                            <a asp-action="View" asp-route-Id="@item.Id" >View</a>
                                         }
                                         </div>
                                 </td>
@@ -193,7 +193,7 @@
                                 mRender: function (data, type, row) {
                                     var view = '';
                                     if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="/ProductionFormula/ProductionFormula/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=View">View</a></div>'
+                                        view = '<div class="form-button-action"><a href="/ProductionFormula/View/' + row.id + '">View</a></div>'
                                     }
                                     return view;
                                 },

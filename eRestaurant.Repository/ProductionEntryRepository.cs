@@ -69,6 +69,20 @@ namespace RocketPOS.Repository
             return productionEntryFoodMenuModel;
         }
 
+        public List<ProductionEntryFoodMenuModel> GetProductionEntryFoodMenuDetailsView(int productionEntryId)
+        {
+            List<ProductionEntryFoodMenuModel> productionEntryFoodMenuModel = new List<ProductionEntryFoodMenuModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select PEM.Id AS PEFoodMenuId, PEM.FoodMenuId,FM.FoodMenuName,PEM.ExpectedOutput,PEM.AllocationOutput,PEM.ActualOutput, U.Unitname as FoodMenuUnitName " +
+                            " from ProductionEntryFoodmenu PEM  " +
+                            " Inner Join FoodMenu FM On FM.Id = PEM.FoodMenuId inner join Units U ON U.Id = FM.UnitsId " +
+                            " Where PEM.IsDeleted = 0 And PEM.ProductionEntryId =" + productionEntryId;
+                productionEntryFoodMenuModel = con.Query<ProductionEntryFoodMenuModel>(query).AsList();
+            }
+            return productionEntryFoodMenuModel;
+        }
+
         public List<ProductionEntryIngredientModel> GetProductionEntryIngredientDetails(int productionEntryId)
         {
             List<ProductionEntryIngredientModel> productionEntryIngredientModel = new List<ProductionEntryIngredientModel>();
@@ -83,7 +97,21 @@ namespace RocketPOS.Repository
             return productionEntryIngredientModel;
         }
 
-        public List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType)
+        public List<ProductionEntryIngredientModel> GetProductionEntryIngredientDetailsView(int productionEntryId)
+        {
+            List<ProductionEntryIngredientModel> productionEntryIngredientModel = new List<ProductionEntryIngredientModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "  select PEI.Id AS PEIngredientId, PEI.IngredientId,I.IngredientName,PEI.IngredientQty,PEI.ActualIngredientQty,PEI.AllocationIngredientQty,U.Unitname as IngredientUnitName " +
+                            "  from ProductionEntryIngredient PEI    " +
+                            "  Inner Join Ingredient I On I.Id=PEI.IngredientId inner join Units U ON U.Id = I.ingredientUnitId " +
+                            "  Where PEI.IsDeleted=0 And PEI.ProductionEntryId=" + productionEntryId;
+                productionEntryIngredientModel = con.Query<ProductionEntryIngredientModel>(query).AsList();
+            }
+            return productionEntryIngredientModel;
+        }
+
+        public List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType, string fromDate, string toDate, int statusId)
         {
             List<ProductionEntryViewModel> productionEntryList = new List<ProductionEntryViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -102,9 +130,35 @@ namespace RocketPOS.Repository
                 {
                     query += " And PE.FoodmenuType = 2";
                 }
+
+                if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+                {
+                    query += " AND Convert(Date, PE.ProductionDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   ";
+                }
+
+                if (statusId!=0)
+                {
+                    query += " AND PE.Status = "+ statusId ;
+                }
+                query += "   order by PE.ProductionDate, PE.Id desc";
+
                 productionEntryList = con.Query<ProductionEntryViewModel>(query).AsList();
             }
             return productionEntryList;
+        }
+
+        public ProductionEntryModel GetProductionEntryViewById(int id)
+        {
+            ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName, PE.ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
+                            " PE.FoodmenuType,U.UnitShortName as BatchSizeUnitName,PE.AssetEventId,AE.EventName,PE.Storeid, S.StoreName " +
+                            " from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId  inner join Store S on S.ID = PE.Storeid " +
+                            " Inner Join [Units] U On U.Id=PF.BatchSizeUnitId  left join AssetEvent AE On AE.Id= PE.AssetEventId Where PE.IsDeleted=0 And PE.Id=" + id;
+                productionEntryModel = con.QueryFirstOrDefault<ProductionEntryModel>(query);
+            }
+            return productionEntryModel;
         }
 
         public ProductionEntryModel GetProductionFormulaById(int id)

@@ -14,5 +14,6 @@ namespace RocketPOS.Interface.Services
 
         List<ProductionFormulaViewModel> GetProductionFormulaList(int foodmenuType);
         int DeleteProductionFormulaById(int id);
+        ProductionFormulaModel GetProductionFormulaViewById(int id);
     }
 }

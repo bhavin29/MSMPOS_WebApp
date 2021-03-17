@@ -43,17 +43,28 @@ namespace RocketPOS.Controllers.Transaction
                 TempData["foodMenuType"] = foodMenuType;
             }
             List<ProductionEntryViewModel> productionEntryViewModels = new List<ProductionEntryViewModel>();
-            productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType));
+            productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType),null,null,0);
             return View(productionEntryViewModels);
         }
 
         [HttpGet]
-        public JsonResult GetProductionEntryList(int? foodMenuType)
+        public JsonResult GetProductionEntryList(int? foodMenuType, string fromDate, string toDate, int statusId)
         {
             _iCommonService.GetPageWiseRoleRigths("ProductionEntry");
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
             TempData["foodMenuType"] = foodMenuType;
             List<ProductionEntryViewModel> productionEntryViewModels = new List<ProductionEntryViewModel>();
-            productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType));
+            productionEntryViewModels = _iProductionEntryService.GetProductionEntryList(Convert.ToInt32(foodMenuType), newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), statusId);
             return Json(new { productionEntryList = productionEntryViewModels });
         }
         public ActionResult ProductionEntry(int? id, int? foodMenuType, int? productionFormulaId, string type)
@@ -165,6 +176,20 @@ namespace RocketPOS.Controllers.Transaction
                     ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+        }
+
+        public ActionResult View(long? id)
+        {
+            ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+            if (UserRolePermissionForPage.View == true)
+            {
+                productionEntryModel = _iProductionEntryService.GetProductionEntryViewById(Convert.ToInt32(id));
+                return View(productionEntryModel);
             }
             else
             {

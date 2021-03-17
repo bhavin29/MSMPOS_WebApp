@@ -36,7 +36,7 @@ namespace RocketPOS.Repository
         {
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select U.UnitName from Ingredient I Inner Join Units U On U.Id=I.IngredientUnitId Where I.IsDeleted=0 And I.Id=" + ingredientId;
+                var query = "select U.UnitShortName as UnitName from Ingredient I Inner Join Units U On U.Id=I.IngredientUnitId Where I.IsDeleted=0 And I.Id=" + ingredientId;
                 return con.QueryFirstOrDefault<string>(query);
             }
         }

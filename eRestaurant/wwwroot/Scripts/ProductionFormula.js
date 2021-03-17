@@ -47,6 +47,7 @@ $(document).ready(function () {
     });
     if ($('#FoodmenuType').val() == 2) {
         $('#onthespot').prop('checked', true);
+        if ($('#FormulaName').val() == '') { $('#FormulaName').val('Formula name as menu item'); }
         $('#FormulaName').attr("disabled", "disabled"); 
     }
     else {
@@ -91,7 +92,10 @@ $('#addFoodMenuRow').on('click', function (e) {
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
 
-         $('#FormulaName').val($('#FoodMenuId').children("option:selected").text());
+
+        if ($('#FoodmenuType').val() == 2) {
+            $('#FormulaName').val($('#FoodMenuId').children("option:selected").text());
+        }
 
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
@@ -163,15 +167,6 @@ function validation(id) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
             message = "Select menu item"
         }
-        else if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
-            message = "Select Batch Size Unit"
-        }
-        else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
-            message = "Enter Batch Size"
-        }
-        else if (($("#FormulaName").val() == '' || $("#FormulaName").val() == 0) && ($("#FoodmenuType").val() == 3)) {
-            message = "Enter Formula Name"
-        }
         else if ($("#ExpectedOutput").val() == '' || $("#ExpectedOutput").val() == 0) {
             message = "Enter Expected Output"
         }
@@ -191,12 +186,17 @@ function validation(id) {
     }
 
     if (id == 1) {
-
-        if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
-            message = 'At least one menu item should be entered'
-        }
-        else if ($("#BatchSizeUnitId").val() == null || $("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
+        }
+        else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
+            message = "Enter Batch Size"
+        }
+        else if (($("#FormulaName").val() == '' || $("#FormulaName").val() == 0) && ($("#FoodmenuType").val() == 3)) {
+            message = "Enter Formula Name"
+        }
+        else if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
+            message = 'At least one menu item should be entered'
         }
         else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
             message = "Enter Batch Size"
@@ -212,10 +212,6 @@ function validation(id) {
         }
         else if ($("#IngredientQty").val() == '' || $("#IngredientQty").val() == 0) {
             message = "Enter stock qty"
-        }
-
-        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
-            message = "Select Batch Size Unit"
         }
 
         for (var i = 0; i < ingredientDataArr.length; i++) {
@@ -354,7 +350,7 @@ function GetUnitNameByFoodMenuId() {
         success: function (data) {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
-            $('#BatchSizeUnitId').val(obj.id).trigger('change');
+            //$('#BatchSizeUnitId').val(obj.id).trigger('change');
         },
         error: function (data) {
             alert(data);

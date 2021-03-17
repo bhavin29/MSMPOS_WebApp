@@ -37,30 +37,30 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="card-body">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <input id="fromDate" type="date" class="form-control" />
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select Id="statusId"
+                                    class="form-control">
+                                <option value="0">Select Status</option>
+                                <option value="1">Save As Draft</option>
+                                <option value="2">In Progress</option>
+                                <option value="3">Completed</option>
+                            </select>
                         </div>
-                        <div class="col-md-2">
-                            <input id="toDate" type="date" class="form-control" />
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <select Id="statusId"
-                                        class="form-control">
-                                    <option value="0">Select Status</option>
-                                    <option value="1">Save As Draft</option>
-                                    <option value="2">In Progress</option>
-                                    <option value="3">Completed</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <a id="btnLoadData" onclick="return loadProductionEntryList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
-                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadProductionEntryList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>

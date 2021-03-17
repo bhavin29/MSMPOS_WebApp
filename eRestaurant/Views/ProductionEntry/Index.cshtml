@@ -187,9 +187,13 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    if (row.status == 3) {
+                                    if (row.status == 2) {
                                         return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a></div>'
-                                        }
+                                    }
+                                    else if (row.status == 3)
+                                    {
+                                        return '';
+                                    }
                                     else {
                                         return '<div class="form-button-action"><a href="/ProductionEntry/ProductionEntry/' + row.id + '?foodMenuType=' + row.foodmenuType + '&type=Edit">Edit</a>'+
                                          ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +

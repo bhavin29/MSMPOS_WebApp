@@ -3,7 +3,7 @@ var foodMenuDeletedId = [];
 var editIngredientDataArr = [];
 var ingredientDeletedId = [];
 $(document).ready(function () {
-    $("#ProductionFormula").validate();
+    $('#ProductionFormula').validate();
     FormulaFoodMenuTable = $('#formulaFoodMenu').DataTable({
         columnDefs: [
             { targets: [0], orderable: false, visible: false },
@@ -45,17 +45,17 @@ $(document).ready(function () {
             ['200', '500', '1000']
         ],
     });
-    if ($("#FoodmenuType").val() == 2) {
-        $("#onthespot").prop('checked', true);
-        $("#FormulaName").attr("disabled", "disabled"); 
+    if ($('#FoodmenuType').val() == 2) {
+        $('#onthespot').prop('checked', true);
+        $('#FormulaName').attr("disabled", "disabled"); 
     }
     else {
-        $("#onthespot").prop('checked', false);
+        $('#onthespot').prop('checked', false);
     }
-    $("#IngredientId").select2();
-    $("#FoodMenuId").select2();
-    $("#BatchSizeUnitId").select2();
-    $("#FoodMenuId").focus();
+    $('#IngredientId').select2();
+    $('#FoodMenuId').select2();
+    $('#BatchSizeUnitId').select2();
+    $('#FoodMenuId').focus();
 });
 
 
@@ -64,11 +64,12 @@ $('#addFoodMenuRow').on('click', function (e) {
     var message = validation(0);
     var rowId = "rowId" + $("#FoodMenuId").val();
     ExpectedOutput = $("#ExpectedOutput").val();
+
     if (message == '') {
         FormulaFoodMenuTable.row('.active').remove().draw(false);
         var rowNode = FormulaFoodMenuTable.row.add([
-            $("#PFFoodMenuId").val(),
-            $("#FoodMenuId").val(),
+            $('#PFFoodMenuId').val(),
+            $('#FoodMenuId').val(),
             $('#FoodMenuId').children("option:selected").text(),
             parseFloat(ExpectedOutput).toFixed(2) + ' ' + $("#FoodMenuUnitName").text() ,
             '<td><div class="form-button-action"><a href="#" data-itemId="' + $("#FoodMenuId").val() + '" class=" editFoodMenuItem">Edit</a></a> / <a href="#" data-toggle="modal" data-target="#myModal0">Delete</a></div></td > ' +
@@ -86,16 +87,16 @@ $('#addFoodMenuRow').on('click', function (e) {
             foodMenuUnitName: $("#FoodMenuUnitName").text(),
             foodMenuName: $('#FoodMenuId').children("option:selected").text()
         });
+
         $(rowNode).find('td').eq(1).addClass('text-right');
         $(rowNode).find('td').eq(2).addClass('text-right');
 
-        $("#FormulaName").val($('#FoodMenuId').children("option:selected").text()),
+         $('#FormulaName').val($('#FoodMenuId').children("option:selected").text());
 
         clearFoodMenuItem();
         editFoodMenuDataArr = [];
-
         
-        $('#FoodMenuId').val(0).trigger('change');
+     //   $('#FoodMenuId').val(0).trigger('change');
     }
     else if (message != '') {
         $(".modal-body").text(message);
@@ -148,7 +149,6 @@ $(document).on('click', 'a.editFoodMenuItem', function (e) {
         for (var i = 0; i < foodMenuDataArr.length; i++) {
             if (foodMenuDataArr[i].foodMenuId == id) {
                 $("#PFFoodMenuId").val(foodMenuDataArr[i].pfFoodMenuId);
-              //  $("#FoodMenuId").val(foodMenuDataArr[i].foodMenuId);
                 $("#ExpectedOutput").val(foodMenuDataArr[i].expectedOutput);
                 $('#FoodMenuId').val(foodMenuDataArr[i].foodMenuId).trigger('change');
                 editFoodMenuDataArr = foodMenuDataArr.splice(i, 1);
@@ -163,7 +163,7 @@ function validation(id) {
         if ($("#FoodMenuId").val() == '' || $("#FoodMenuId").val() == '0') {
             message = "Select menu item"
         }
-        if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+        else if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
         }
         else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
@@ -191,10 +191,11 @@ function validation(id) {
     }
 
     if (id == 1) {
+
         if (!FormulaFoodMenuTable.data().any() || FormulaFoodMenuTable.data().row == null) {
             message = 'At least one menu item should be entered'
         }
-        else if ($("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
+        else if ($("#BatchSizeUnitId").val() == null || $("#BatchSizeUnitId").val() == '' || $("#BatchSizeUnitId").val() == '0') {
             message = "Select Batch Size Unit"
         }
         else if ($("#BatchSize").val() == '' || $("#BatchSize").val() == 0) {
@@ -233,10 +234,6 @@ function clearFoodMenuItem() {
     $("#FoodMenuUnitName").html('');
     $('#FoodMenuId').val(0).trigger('change');
 }
-
-
-//Ingredient
-
 
 $('#addIngredientRow').on('click', function (e) {
     e.preventDefault();
@@ -357,8 +354,6 @@ function GetUnitNameByFoodMenuId() {
         success: function (data) {
             var obj = JSON.parse(data);
             $("#FoodMenuUnitName").text(obj.unitName);
-            //$("#BatchSizeUnitName").text(obj.unitName);
-          //  $("#BatchSizeUnitId").val(obj.id);
             $('#BatchSizeUnitId').val(obj.id).trigger('change');
         },
         error: function (data) {
@@ -385,6 +380,7 @@ function saveOrder(data) {
 $(function () {
     $('#saveOrder').click(function () {
         var message = validation(1);
+        debugger;
         if (message == '') {
             $("#productionFormulaForm").on("submit", function (e) {
                 e.preventDefault();
@@ -394,6 +390,7 @@ $(function () {
                     FormulaName: $("#FormulaName").val(),
                     BatchSize: $("#BatchSize").val(),
                     BatchSizeUnitId: $("#BatchSizeUnitId").val(),
+                    StoreId: $("#StoreId").val(),
                     ExpectedOutput: $("#ExpectedOutput").val(),
                     IsActive: $("#IsActive").is(":checked"),
                     ProductionFormulaFoodMenuModels: foodMenuDataArr,

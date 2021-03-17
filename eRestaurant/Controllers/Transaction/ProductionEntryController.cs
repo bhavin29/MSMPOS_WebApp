@@ -59,8 +59,7 @@ namespace RocketPOS.Controllers.Transaction
 
             if (id > 0)
             {
-
-                ViewBag.ActionType = type;
+               ViewBag.ActionType = type;
                 productionEntryModel = _iProductionEntryService.GetProductionEntryById(Convert.ToInt32(id));
             }
             else
@@ -75,6 +74,8 @@ namespace RocketPOS.Controllers.Transaction
             productionEntryModel.ProductionFormulaList = _iDropDownService.GetProductionFormulaList(Convert.ToInt32(foodMenuType));
             productionEntryModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(3);
             productionEntryModel.IngredientList = _iDropDownService.GetIngredientList();
+            productionEntryModel.StoreList = _iDropDownService.GetStoreList();
+            ViewBag.SelectedStore = productionEntryModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
 
             return View(productionEntryModel);
         }

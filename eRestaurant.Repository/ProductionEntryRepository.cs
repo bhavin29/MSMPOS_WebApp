@@ -46,8 +46,10 @@ namespace RocketPOS.Repository
             ProductionEntryModel productionEntryModel = new ProductionEntryModel();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName, PE.ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
-                            "PE.FoodmenuType,U.UnitShortName as BatchSizeUnitName,PE.AssetEventId,AE.EventName from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId Inner Join [Units] U On U.Id=PF.BatchSizeUnitId  left join AssetEvent AE On AE.Id= PE.AssetEventId Where PE.IsDeleted=0 And PE.Id=" + id;
+                var query = " select PE.Id, PE.ProductionFormulaId,PF.FormulaName AS ProductionFormulaName, PE.ProductionDate,PE.ActualBatchSize,PE.VariationNotes,PE.Notes,PE.Status, PF.[BatchSize],PF.[BatchSizeUnitId], " +
+                            " PE.FoodmenuType,U.UnitShortName as BatchSizeUnitName,PE.AssetEventId,AE.EventName,PE.Storeid, S.StoreName " + 
+                            " from ProductionEntry PE Inner Join ProductionFormula PF On PF.Id=PE.ProductionFormulaId  inner join Store S on S.ID = PE.Storeid " + 
+                            " Inner Join [Units] U On U.Id=PF.BatchSizeUnitId  left join AssetEvent AE On AE.Id= PE.AssetEventId Where PE.IsDeleted=0 And PE.Id=" + id;
                 productionEntryModel = con.QueryFirstOrDefault<ProductionEntryModel>(query);
             }
             return productionEntryModel;
@@ -72,7 +74,7 @@ namespace RocketPOS.Repository
             List<ProductionEntryIngredientModel> productionEntryIngredientModel = new List<ProductionEntryIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "  select PEI.Id AS PEIngredientId, PEI.IngredientId,I.IngredientName,PEI.IngredientQty,PEI.ActualIngredientQty,U.Unitname as IngredientUnitName " +
+                var query = "  select PEI.Id AS PEIngredientId, PEI.IngredientId,I.IngredientName,PEI.IngredientQty,PEI.ActualIngredientQty,PEI.AllocationIngredientQty,U.Unitname as IngredientUnitName " +
                             "  from ProductionEntryIngredient PEI    " +
                             "  Inner Join Ingredient I On I.Id=PEI.IngredientId inner join Units U ON U.Id = I.ingredientUnitId " +
                             "  Where PEI.IsDeleted=0 And PEI.ProductionEntryId=" + productionEntryId;
@@ -86,8 +88,11 @@ namespace RocketPOS.Repository
             List<ProductionEntryViewModel> productionEntryList = new List<ProductionEntryViewModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,PE.AssetEventId,AE.EventName from ProductionEntry  PE  " +
-                            " inner join ProductionFormula  PF On PF.Id=PE.ProductionFormulaId  inner join [User] U On U.Id=PE.UserIdInserted inner join employee e on e.id = u.employeeid  left join AssetEvent AE On AE.Id= PE.AssetEventId where PE.IsDeleted=0 ";
+                var query = " select PE.Id,PE.ProductionFormulaId,PF.FormulaName As ProductionFormulaName,PE.ReferenceNo,PE.ActualBatchSize,convert(varchar(12),ProductionDate, 3) as ProductionDate,PE.ProductionCompletionDate,PE.Status, PE.FoodmenuType ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username ,PE.AssetEventId,AE.EventName,PE.StoreID, S.StoreName " + 
+                            " from ProductionEntry  PE inner join ProductionFormula  PF On PF.Id=PE.ProductionFormulaId " + 
+                            " inner join [User] U On U.Id=PE.UserIdInserted inner join Store S on S.Id = PE.StoreId" + 
+                            " inner join employee e on e.id = u.employeeid  left join AssetEvent AE On AE.Id= PE.AssetEventId " + 
+                            " where PE.IsDeleted=0 ";
 
                 if (foodmenuType != 0)
                 {
@@ -133,7 +138,7 @@ namespace RocketPOS.Repository
             List<ProductionEntryIngredientModel> productionEntryIngredientModel = new List<ProductionEntryIngredientModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select PFI.IngredientId,I.IngredientName,PFI.IngredientQty, U.UnitShortname as IngredientUnitName  from ProductionFormulaIngredient PFI  " +
+                var query = " select PFI.IngredientId,I.IngredientName,PFI.IngredientQty,U.UnitShortname as IngredientUnitName  from ProductionFormulaIngredient PFI  " +
                             " Inner Join Ingredient I On I.Id=PFI.IngredientId  inner join Units U ON U.Id = I.IngredientUnitId  Where PFI.IsDeleted=0 And PFI.ProductionFormulaId=" + productionFormulaId;
                 productionEntryIngredientModel = con.Query<ProductionEntryIngredientModel>(query).AsList();
             }
@@ -162,6 +167,7 @@ namespace RocketPOS.Repository
                              " ,[Status] " +
                              " ,[VariationNotes] " +
                              " ,[Notes] " +
+                             " ,[StoreId] " +
                              " ,[UserIdInserted]  " +
                              " ,[DateInserted]   " +
                              " ,[IsDeleted])     " +
@@ -174,7 +180,8 @@ namespace RocketPOS.Repository
                              " ,@ActualBatchSize " +
                               " ,@Status " +
                                " ,@VariationNotes " +
-                                " ,@Notes, " +
+                                " ,@Notes " +
+                                " ,@StoreId, " +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
                              "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
@@ -211,6 +218,7 @@ namespace RocketPOS.Repository
                                              "  ([ProductionEntryId] " +
                                              " ,[IngredientId] " +
                                              " ,[IngredientQty] " +
+                                             " , [AllocationIngredientQty] " +
                                              " ,[ActualIngredientQty] " +
                                              " ,[UserIdInserted]" +
                                              " ,[DateInserted]" +
@@ -219,6 +227,7 @@ namespace RocketPOS.Repository
                                               "(" + result + "," +
                                               ingredient.IngredientId + "," +
                                               ingredient.IngredientQty + "," +
+                                              ingredient.AllocationIngredientQty + "," +
                                                ingredient.ActualIngredientQty + "," +
                                     LoginInfo.Userid + ",GetUtcDate(),0);";
                         ingredientResult = con.Execute(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
@@ -227,6 +236,16 @@ namespace RocketPOS.Repository
                     if (foodMenuResult > 0 && ingredientResult > 0)
                     {
                         sqltrans.Commit();
+                        if (productionEntryModel.Status == 2)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PE_Ingredient", result);
+                        }
+                        if (productionEntryModel.Status == 3)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PE_Food", result);
+                        }
                     }
                     else
                     {
@@ -255,6 +274,7 @@ namespace RocketPOS.Repository
                             ",Status = @Status " +
                             ",VariationNotes = @VariationNotes " +
                             ",Notes = @Notes " +
+                            ",StoreId = @StoreId " +
                             "  ,[UserIdUpdated] = " + LoginInfo.Userid + " " +
                             "  ,[DateUpdated]  = GetUtcDate()  where id= " + productionEntryModel.Id + ";";
                 result = con.Execute(query, productionEntryModel, sqltrans, 0, System.Data.CommandType.Text);
@@ -288,7 +308,7 @@ namespace RocketPOS.Repository
                         {
                             queryDetails = "Update [dbo].[ProductionEntryFoodmenu] set " +
                                              "[FoodMenuId]		  	 = " + item.FoodMenuId +
-                                             ",[ExpectedOutput]     = " + item.ExpectedOutput +
+                                             //",[ExpectedOutput]     = " + item.ExpectedOutput +
                                               ",[AllocationOutput]     = " + item.AllocationOutput +
                                                ",[ActualOutput]     = " + item.ActualOutput +
                                              " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
@@ -305,7 +325,8 @@ namespace RocketPOS.Repository
                         {
                             queryDetails = "Update [dbo].[ProductionEntryIngredient] set " +
                                              "[IngredientId]		  	 = " + item.IngredientId +
-                                             ",[IngredientQty]     = " + item.IngredientQty +
+                                                //",[IngredientQty]     = " + item.IngredientQty +
+                                                ",[AllocationIngredientQty]     = " + item.AllocationIngredientQty +
                                                 ",[ActualIngredientQty]     = " + item.ActualIngredientQty +
                                              " ,[UserIdUpdated] = " + LoginInfo.Userid + "," +
                                              " [DateUpdated] = GetUTCDate() " +
@@ -317,6 +338,16 @@ namespace RocketPOS.Repository
                     if (foodmenudetails > 0 && ingredientdetails > 0)
                     {
                         sqltrans.Commit();
+                        if (productionEntryModel.Status==2)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PE-Ingredient", result);
+                        }
+                        if (productionEntryModel.Status == 3)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("PE-Food", result);
+                        }
                     }
                     else
                     {

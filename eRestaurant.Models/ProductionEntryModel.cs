@@ -26,6 +26,10 @@ namespace RocketPOS.Models
     public class ProductionEntryModel
     {
         public int Id { get; set; }
+        public string StoreName { get; set; }
+        [Required(ErrorMessage = "Select Store")]
+        public int? StoreId { get; set; }
+        public List<SelectListItem> StoreList { get; set; }
         public string ProductionFormulaId { get; set; }
         public string ProductionFormulaName { get; set; }
         public List<SelectListItem> ProductionFormulaList { get; set; }
@@ -67,12 +71,12 @@ namespace RocketPOS.Models
         public int PEFoodMenuId { get; set; }
         public int FoodMenuId { get; set; }
         public string FoodMenuName { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal ExpectedOutput { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal AllocationOutput { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal ActualOutput { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal ExpectedOutput { get; set; } // Reciepe formula qty
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal AllocationOutput { get; set; } // Receipe * actual batch size
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal ActualOutput { get; set; } // actual change enter by use
         public string FoodMenuUnitName { get; set; }
 
     }
@@ -81,10 +85,13 @@ namespace RocketPOS.Models
         public int PEIngredientId { get; set; }
         public int IngredientId { get; set; }
         public string IngredientName { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal IngredientQty { get; set; }
-        [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]
-        public decimal ActualIngredientQty { get; set; }
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal IngredientQty { get; set; }// Reciepe formula qty
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal ActualIngredientQty { get; set; } // Receipe * actual batch size
+        [DisplayFormat(DataFormatString = "{0:0.000}", ApplyFormatInEditMode = true)]
+        public decimal AllocationIngredientQty { get; set; }//actual change enter by use
+        
         public string IngredientUnitName { get; set; }
     }
 }

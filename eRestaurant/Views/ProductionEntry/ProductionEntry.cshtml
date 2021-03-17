@@ -48,11 +48,24 @@
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label asp-for="BatchSizeUnitName" class="control-label" style="margin-top: 28px">@(Model.BatchSizeUnitName)</label>
+                                                @if (Model.BatchSizeUnitName != null)
+                                                {
+                                                    <label asp-for="BatchSizeUnitName" class="control-label" style="margin-top: 28px">@Model.BatchSizeUnitName</label>
+                                                }
                                             </div>
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-4 pr-2 pl-2">
+                                            <div class="form-group">
+                                                <label asp-for="StoreList" class="control-label">Store</label>
+                                                <select asp-for="StoreId"
+                                                        class="form-control"
+                                                        asp-items="@(new SelectList(Model.StoreList, "Value", "Text",ViewBag.SelectedStore))">
+                                                </select>
+                                                <span asp-validation-for="StoreId" class="text-danger"></span>
+                                            </div>
+                                        </div>
                                         <div class="col-md-4 pr-2 pl-2">
                                             <div class="form-group">
                                                 <label asp-for="ProductionDate" class="control-label">Production Date</label>
@@ -61,9 +74,18 @@
                                         </div>
                                         <div class="col-md-3 pr-2 pl-2">
                                             <div class="form-group">
-                                                <label class="control-label">Actual Batch Size </label>
-                                                <input asp-for="ActualBatchSize" type="number" placeholder="0.00" class="form-control " style="text-align:right" />
-                                                <span asp-validation-for="ActualBatchSize" class="text-danger"></span>
+                                                @if (Model.Status >= 2)
+                                                {
+                                                    <label class="control-label">Actual Batch Size </label>
+                                                    <input asp-for="ActualBatchSize" type="number" placeholder="0.00" disabled="disabled" class="form-control " style="text-align:right" />
+                                                    <span asp-validation-for="ActualBatchSize" class="text-danger"></span>
+                                                }
+                                                else
+                                                {
+                                                    <label class="control-label">Actual Batch Size </label>
+                                                    <input asp-for="ActualBatchSize" type="number" placeholder="0.00" class="form-control " style="text-align:right" />
+                                                    <span asp-validation-for="ActualBatchSize" class="text-danger"></span>
+                                                }
                                             </div>
                                         </div>
                                         <div class="col-md-1 pr-2 pl-2">
@@ -79,10 +101,10 @@
                                                     <tr>
                                                         <th style="width:0%">PEFoodMenuId</th>
                                                         <th style="width:0%">FoodMenuId</th>
-                                                        <th style="width:45%">Menu Item</th>
-                                                        <th style="width:15%" class="text-right">Receipe Output</th>
+                                                        <th style="width:60%">Menu Item</th>
+                                                        <th style="width:0%" class="text-right">Expected Qty</th>
+                                                        <th style="width:20%" class="text-right">Receipe Qty</th>
                                                         <th style="width:20%" class="text-right">Actual Production</th>
-                                                        @*<th style="width:15%">Action</th>*@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -95,6 +117,7 @@
                                                             var mid = "myModal" + item.FoodMenuId;
                                                             var rowId = "rowId" + item.FoodMenuId;
                                                             var fId = "f";
+                                                            var faId = "fa";
                                                             <tr id="@rowId">
                                                                 <td>
                                                                     @item.PEFoodMenuId
@@ -103,16 +126,17 @@
                                                                     @item.FoodMenuId
                                                                 </td>
                                                                 <td>
-                                                                    @item.FoodMenuName
+                                                                    @item.FoodMenuName [ @item.FoodMenuUnitName ]
                                                                 </td>
                                                                 <td class="text-right">
-                                                                    @item.ExpectedOutput.ToString("N") @item.FoodMenuUnitName
+                                                                    @item.ExpectedOutput.ToString("N")
                                                                 </td>
-                                                                @*<td class="text-right">
-                                                                    <input type="number" id="allocateOut" asp-for="@item.AllocationOutput" id="AllocationOutput" onkeyup="return calculateSum();" class="form-control col-sm-11 text-right AllocationOutput" min="0" max="99999" value="@item.AllocationOutput" />
-                                                                </td>*@
                                                                 <td class="text-right">
-                                                                    @{ rownumber = rownumber + 1; fId = "f" + rownumber;}
+                                                                    @{ faId = "fa" + rownumber;}
+                                                                    <input type="number" id="@faId" asp-for="@item.AllocationOutput" disabled="disabled" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocationOutput" />
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    @{ fId = "f" + rownumber; rownumber = rownumber + 1;}
                                                                     <input type="number" id="@fId" asp-for="@item.ActualOutput" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualOutput" />
                                                                 </td>
                                                             </tr>
@@ -130,21 +154,23 @@
                                                 <tr>
                                                     <th style="width:0%">PEIngredientId</th>
                                                     <th style="width:0%">IngredientId</th>
-                                                    <th style="width:50%">Stock Item</th>
-                                                    <th style="width:15%">Formula Qty</th>
-                                                    <th style="width:15%">Atual Consumption</th>
+                                                    <th style="width:60%">Stock Item</th>
+                                                    <th style="width:0%">Expected Qty</th>
+                                                    <th style="width:20%">Receipe Qty</th>
+                                                    <th style="width:20%">Atual Consumption</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @if (Model.productionEntryIngredientModels != null)
                                                 {
                                                     var rownumber = 0;
-                                                   @foreach (var item in Model.productionEntryIngredientModels)
-                                                   {
-                                                       var tm = "#myModal" + item.IngredientId;
-                                                       var mid = "myModal" + item.IngredientId;
-                                                       var rowId = "rowId" + item.IngredientId;
-                                                       var fId = "f";
+                                                    @foreach (var item in Model.productionEntryIngredientModels)
+                                                    {
+                                                        var tm = "#myModal" + item.IngredientId;
+                                                        var mid = "myModal" + item.IngredientId;
+                                                        var rowId = "rowId" + item.IngredientId;
+                                                        var fId = "f";
+                                                        var faId = "fa";
                                                         <tr id="@rowId">
                                                             <td>
                                                                 @item.PEIngredientId
@@ -153,15 +179,29 @@
                                                                 @item.IngredientId
                                                             </td>
                                                             <td>
-                                                                @item.IngredientName
+                                                                @item.IngredientName [ @item.IngredientUnitName ]
                                                             </td>
                                                             <td class="text-right">
-                                                                @item.IngredientQty.ToString("N") @item.IngredientUnitName
+                                                                @item.IngredientQty.ToString("N")
                                                             </td>
                                                             <td class="text-right">
-                                                                @{ rownumber = rownumber + 1; fId = "i" + rownumber;}
-                                                                <input type="number" asp-for="@item.ActualIngredientQty" id="@fId" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualIngredientQty" />
+                                                                @{ faId = "ia" + rownumber;}
+                                                                <input type="number" asp-for="@item.AllocationIngredientQty" id="@faId" disabled="disabled" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.AllocationIngredientQty" />
                                                             </td>
+                                                            @if (Model.Status >= 2)
+                                                            {
+                                                                <td class="text-right">
+                                                                    @{ fId = "i" + rownumber; rownumber = rownumber + 1;}
+                                                                    <input type="number" asp-for="@item.ActualIngredientQty" id="@fId" disabled="disabled" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualIngredientQty" />
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="text-right">
+                                                                    @{ fId = "i" + rownumber; rownumber = rownumber + 1;}
+                                                                    <input type="number" asp-for="@item.ActualIngredientQty" id="@fId" class="form-control col-sm-11 text-right" min="0" max="99999" value="@item.ActualIngredientQty" />
+                                                                </td>
+                                                            }
                                                         </tr>
                                                     }
                                                 }
@@ -178,25 +218,33 @@
                                     </div>
                                 </div>
                                 @*<div class="col-md-6">
-                                    <div class="form-group form-inline">
-                                        <label asp-for="VariationNotes" class="col-form-label ">Variation</label>
-                                        <textarea asp-for="VariationNotes" class="form-control input-full text-left" readonly="readonly" rows="2" cols="140"></textarea>
-                                    </div>
-                                </div>*@
+                                        <div class="form-group form-inline">
+                                            <label asp-for="VariationNotes" class="col-form-label ">Variation</label>
+                                            <textarea asp-for="VariationNotes" class="form-control input-full text-left" readonly="readonly" rows="2" cols="140"></textarea>
+                                        </div>
+                                    </div>*@
                             </div>
                             <div class="form-group">
 
                                 @if (ViewBag.ActionType != "View")
                                 {
-                                    @if (Model.Status == 0 || Model.Status == 1)
+                                    @if (Model.Status == 1)
                                     {
                                         <input type="submit" id="saveOrder" value="Save As Draft" class="btn btn-primary" />
                                         <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
                                     }
-                                    @if (Model.Status == 2)
+                                    else @if (Model.Status == 2)
+                                   {
+                                    @*<input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />*@
+                                    <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
+                                    }
+                                    else @if (Model.Status == 3)
+                                   {
+                                   }
+                                   else
                                     {
+                                        <input type="submit" id="saveOrder" value="Save As Draft" class="btn btn-primary" />
                                         <input type="submit" id="inProgress" value="In Progress" class="btn btn-primary" />
-                                        <input type="submit" id="completed" value="Completed" class="btn btn-primary" />
                                     }
                                 }
                                 <a href='@Url.Action("Index", "ProductionEntry")' class="btn btn-primary" style="margin:0px 0px 0px 0px">Cancel</a>
@@ -228,8 +276,8 @@
 @section scripts{
     <script>
         foodMenuDataArr = [];
-        ingredientDataArr = []
-        if (@Model.Id>0){
+        ingredientDataArr = [];
+        if (@Model.Id> 0) {
             ingredientDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryIngredientModels))');
             foodMenuDataArr = JSON.parse('@Html.Raw(Json.Serialize(Model.productionEntryFoodMenuModels))');
         }

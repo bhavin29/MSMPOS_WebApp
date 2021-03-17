@@ -32,9 +32,20 @@ namespace RocketPOS.Services
             return productionEntryModel;
         }
 
-        public List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType)
+        public List<ProductionEntryViewModel> GetProductionEntryList(int foodmenuType, string fromDate, string toDate, int statusId)
         {
-            return iProductionEntryRepository.GetProductionEntryList(foodmenuType);
+            return iProductionEntryRepository.GetProductionEntryList(foodmenuType,  fromDate,  toDate,  statusId);
+        }
+
+        public ProductionEntryModel GetProductionEntryViewById(int id)
+        {
+            ProductionEntryModel productionEntryModel = new ProductionEntryModel();
+
+            productionEntryModel = iProductionEntryRepository.GetProductionEntryViewById(id);
+            productionEntryModel.productionEntryFoodMenuModels = iProductionEntryRepository.GetProductionEntryFoodMenuDetailsView(id);
+            productionEntryModel.productionEntryIngredientModels = iProductionEntryRepository.GetProductionEntryIngredientDetailsView(id);
+
+            return productionEntryModel;
         }
 
         public ProductionEntryModel GetProductionFormulaById(int id)

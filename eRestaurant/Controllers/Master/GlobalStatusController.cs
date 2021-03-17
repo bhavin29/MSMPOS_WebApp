@@ -28,6 +28,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("GlobalStatus");
             List<GlobalStatusModel> globalStatusModel = new List<GlobalStatusModel>();
             globalStatusModel = _iGlobalStatusService.GetGlobalStatusList().ToList();
             if (noDelete != null)
@@ -40,12 +41,19 @@ namespace RocketPOS.Controllers.Master
         public ActionResult GlobalStatus(int? id)
         {
             GlobalStatusModel globalStatusModel = new GlobalStatusModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                globalStatusModel = _iGlobalStatusService.GetGlobalStatusById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+                    globalStatusModel = _iGlobalStatusService.GetGlobalStatusById(Convert.ToInt32(id));
+                }
+                globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
+                return View(globalStatusModel);
             }
-            globalStatusModel.ModuleList = _iDropDownService.GetGlobalStatusList();
-            return View(globalStatusModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -105,15 +113,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("GlobalStatus", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("GlobalStatus", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iGlobalStatusService.DeleteGlobalStatus(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iGlobalStatusService.DeleteGlobalStatus(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

@@ -163,7 +163,10 @@
                         <br />
                         <div class="form-group">
                             <div class="form-button-action">
-                                <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                                @if (@UserRolePermissionForPage.Add == true)
+                                {
+                                    <input id="saveOrder" type="submit" class="btn btn-primary " style="margin:0px 0px 0px 5px" value="Save" />
+                                }
                                 <a href='@Url.Action("Index", "FoodMenuIngredient")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
                             </div>
                         </div>

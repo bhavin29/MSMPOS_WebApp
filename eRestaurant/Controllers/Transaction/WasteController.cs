@@ -15,6 +15,7 @@ namespace RocketPOS.Controllers.Transaction
     public class WasteController : Controller
     {
         private readonly IWasteService _iWasteService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
@@ -22,10 +23,12 @@ namespace RocketPOS.Controllers.Transaction
 
         public WasteController(IWasteService wasteService,
             IDropDownService idropDownService,
+             ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iWasteService = wasteService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
@@ -33,6 +36,7 @@ namespace RocketPOS.Controllers.Transaction
         // GET: Waste
         public ActionResult WasteList(int? foodMenuId, int? ingredientId)
         {
+            _iCommonService.GetPageWiseRoleRigths("Waste");
             WasteListViewModel wasteListViewModel = new WasteListViewModel();
             wasteListViewModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             wasteListViewModel.IngredientList = _iDropDownService.GetIngredientList();
@@ -62,27 +66,33 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult Waste(long? id, string type)
         {
             WasteModel wasteModel = new WasteModel();
-
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                long wasteId = Convert.ToInt64(id);
-                wasteModel = _iWasteService.GetWasteById(wasteId);
-                ViewBag.ActionType = type;
+                if (id > 0)
+                {
+                    long wasteId = Convert.ToInt64(id);
+                    wasteModel = _iWasteService.GetWasteById(wasteId);
+                    ViewBag.ActionType = type;
+                }
+                else
+                {
+                    wasteModel.WasteDateTime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    wasteModel.ReferenceNumber = _iWasteService.ReferenceNumber().ToString();
+                }
+
+                wasteModel.StoreList = _iDropDownService.GetStoreList();
+                wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+                wasteModel.IngredientList = _iDropDownService.GetIngredientList();
+                wasteModel.FoodMenuListForLostAmount = _iWasteService.FoodMenuListForLostAmount();
+                wasteModel.IngredientListForLostAmount = _iWasteService.IngredientListForLostAmount();
+
+
+                return View(wasteModel);
             }
             else
             {
-                wasteModel.WasteDateTime = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                wasteModel.ReferenceNumber = _iWasteService.ReferenceNumber().ToString();
+                return RedirectToAction("NotFound", "Error");
             }
-
-            wasteModel.StoreList = _iDropDownService.GetStoreList();
-            wasteModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
-            wasteModel.IngredientList = _iDropDownService.GetIngredientList();
-            wasteModel.FoodMenuListForLostAmount = _iWasteService.FoodMenuListForLostAmount();
-            wasteModel.IngredientListForLostAmount = _iWasteService.IngredientListForLostAmount();
-
-
-            return View(wasteModel);
         }
 
         // POST: Waste/Create
@@ -146,12 +156,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _iWasteService.DeleteWaste(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iWasteService.DeleteWaste(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(WasteList));
             }
-            return RedirectToAction(nameof(WasteList));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult DeleteWasteDetails(string wasteId)
@@ -205,10 +222,18 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult View(long? id)
         {
+
             WasteModel wasteModel = new WasteModel();
-            long wasteId = Convert.ToInt64(id);
-            wasteModel = _iWasteService.GetViewWasteById(wasteId);
-            return View(wasteModel);
+            if (UserRolePermissionForPage.View == true)
+            {
+                long wasteId = Convert.ToInt64(id);
+                wasteModel = _iWasteService.GetViewWasteById(wasteId);
+                return View(wasteModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
     }
 }

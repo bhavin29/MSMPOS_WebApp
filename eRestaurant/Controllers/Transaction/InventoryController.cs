@@ -24,13 +24,15 @@ namespace RocketPOS.Controllers.Transaction
         private readonly IInventoryService _iInventoryService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
+        private readonly ICommonService _iCommonService;
         private readonly LocService _locService;
         public List<InventoryOpenigStockImport> _inventoryOpenigStockImports;
         private readonly IHostingEnvironment _hostingEnvironment;
-        public InventoryController(IHostingEnvironment hostingEnvironment, IInventoryService inventoryService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public InventoryController(IHostingEnvironment hostingEnvironment, ICommonService iCommonService, IInventoryService inventoryService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _hostingEnvironment = hostingEnvironment;
             _iInventoryService = inventoryService;
+            _iCommonService = iCommonService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
@@ -42,6 +44,7 @@ namespace RocketPOS.Controllers.Transaction
         }
         public IActionResult Index(int? storeId, int? foodCategoryId,int? itemType)
         {
+            _iCommonService.GetPageWiseRoleRigths("Inventory");
             InventoryModel inventoryModel = new InventoryModel();
 
             if (itemType == 1)

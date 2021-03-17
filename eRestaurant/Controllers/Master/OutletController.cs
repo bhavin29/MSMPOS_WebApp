@@ -31,6 +31,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Outlet");
             List<OutletModel> outletModels = new List<OutletModel>();
             outletModels = _iOutletService.GetOutletList().ToList();
             if (noDelete != null)
@@ -43,15 +44,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Outlet(int? id)
         {
             OutletModel outletModel = new OutletModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int outletId = Convert.ToInt32(id);
-                outletModel = _iOutletService.GetOutletById(outletId);
-                outletModel.OriginalStoreId = outletModel.StoreId;
-            }
-            outletModel.StoreList = _iDropDownService.GetStoreList();
+                if (id > 0)
+                {
+                    int outletId = Convert.ToInt32(id);
+                    outletModel = _iOutletService.GetOutletById(outletId);
+                    outletModel.OriginalStoreId = outletModel.StoreId;
+                }
+                outletModel.StoreList = _iDropDownService.GetStoreList();
 
-            return View(outletModel);
+                return View(outletModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -105,15 +113,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Outlet", id.ToString());     
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Outlet", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iOutletService.DeleteOutlet(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iOutletService.DeleteOutlet(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

@@ -14,7 +14,10 @@
                 <h5 class="card-title">Purchase Invoices</h5>
             </div>
             <div class="float-right">
-                <a asp-action="PurchaseInvoiceFoodMenu" class="btn btn-primary float-sm-left ">+ Purchase Invoice</a>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="PurchaseInvoiceFoodMenu" class="btn btn-primary float-sm-left ">+ Purchase Invoice</a>
+                }
             </div>
         </div>
     </div>
@@ -68,7 +71,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-</thead>
+                            </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -80,7 +83,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-</tfoot>
+                            </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
@@ -117,7 +120,10 @@
                                             </td>*@
                                         <td>
                                             <div class="form-button-action">
-                                                <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                @if (@UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
@@ -201,7 +207,11 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/View/' + row.id + '">View</a></div>'
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/View/' + row.id + '">View</a></div>'
+                                    }
+                                    return view;
                                 },
                             }
                         ],

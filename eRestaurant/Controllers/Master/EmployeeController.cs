@@ -19,7 +19,7 @@ namespace RocketPOS.Controllers.Master
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public EmployeeController(IEmployeeService employeeService, ICommonService iCommonService,IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public EmployeeController(IEmployeeService employeeService, ICommonService iCommonService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iemployeeService = employeeService; _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
@@ -28,6 +28,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("Employee");
             List<EmployeeModel> employeeList = new List<EmployeeModel>();
             employeeList = _iemployeeService.GetEmployeeList().ToList();
             if (noDelete != null)
@@ -40,13 +41,20 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Employee(int? id)
         {
             EmployeeModel employeeModel = new EmployeeModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int employeeId = Convert.ToInt32(id);
-                employeeModel = _iemployeeService.GetEmployeeById(employeeId);
-            }
+                if (id > 0)
+                {
+                    int employeeId = Convert.ToInt32(id);
+                    employeeModel = _iemployeeService.GetEmployeeById(employeeId);
+                }
 
-            return View(employeeModel);
+                return View(employeeModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -91,15 +99,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("Employee", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("Employee", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iemployeeService.DeleteEmployee(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iemployeeService.DeleteEmployee(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

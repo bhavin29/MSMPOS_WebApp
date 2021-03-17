@@ -25,6 +25,7 @@ namespace RocketPOS.Controllers.Master
         }
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("AssetCategory");
             List<AssetCategoryModel> assetCategoryModel = new List<AssetCategoryModel>();
             assetCategoryModel = _iAssetCategoryService.GetAssetCategoryList().ToList();
             if (noDelete != null)
@@ -37,11 +38,18 @@ namespace RocketPOS.Controllers.Master
         public ActionResult AssetCategory(int? id)
         {
             AssetCategoryModel assetCategoryModel = new AssetCategoryModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                assetCategoryModel = _iAssetCategoryService.GetAssetCategoryById(Convert.ToInt32(id));
+                if (id > 0)
+                {
+                    assetCategoryModel = _iAssetCategoryService.GetAssetCategoryById(Convert.ToInt32(id));
+                }
+                return View(assetCategoryModel);
             }
-            return View(assetCategoryModel);
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -75,15 +83,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("AssetCategory", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("AssetCategory", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iAssetCategoryService.DeleteAssetCategory(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iAssetCategoryService.DeleteAssetCategory(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
     }

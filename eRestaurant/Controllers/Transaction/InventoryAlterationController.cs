@@ -15,22 +15,26 @@ namespace RocketPOS.Controllers.Transaction
     {
         private readonly IInventoryAlterationService _inventoryAlterationService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
 
         public InventoryAlterationController(IInventoryAlterationService inventoryAlterationService,
             IDropDownService idropDownService,
+             ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _inventoryAlterationService = inventoryAlterationService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public IActionResult Index(int? storeId, DateTime? fromDate, DateTime? toDate, int? foodMenuId)
         {
+            _iCommonService.GetPageWiseRoleRigths("InventoryAlteration");
             InventoryAlterationViewModel inventoryAlterationView = new InventoryAlterationViewModel();
 
             if (storeId!=null)
@@ -47,6 +51,7 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult InventoryAlteration(int? id, int? inventoryType)
         {
+            _iCommonService.GetPageWiseRoleRigths("InventoryAlteration");
             InventoryAlterationModel inventoryAlterationModel = new InventoryAlterationModel();
             inventoryAlterationModel.FoodMenuList = _iDropDownService.GetFoodMenuList();
             inventoryAlterationModel.IngredientList = _iDropDownService.GetIngredientList();

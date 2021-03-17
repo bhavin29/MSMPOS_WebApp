@@ -14,18 +14,21 @@ namespace RocketPOS.Controllers.Master
     {
         private readonly IFoodMenuIngredientService _iFoodMenuIngredientService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
-        public FoodMenuIngredientController(IFoodMenuIngredientService foodMenuIngredientService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public FoodMenuIngredientController(IFoodMenuIngredientService foodMenuIngredientService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iFoodMenuIngredientService = foodMenuIngredientService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
         public IActionResult Index(int? foodMenuId)
         {
+            _iCommonService.GetPageWiseRoleRigths("FoodMenuIngredient");
             FoodMenuIngredientModel foodMenuIngredientModel = new FoodMenuIngredientModel();
             if (Convert.ToInt32(foodMenuId) > 0)
             {

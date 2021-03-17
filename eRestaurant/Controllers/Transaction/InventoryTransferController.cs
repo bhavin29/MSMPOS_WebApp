@@ -17,22 +17,26 @@ namespace RocketPOS.Controllers.Transaction
 
         private readonly IInventoryTransferService _inventoryTransferService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
 
         public InventoryTransferController(IInventoryTransferService inventoryTransferService,
             IDropDownService idropDownService,
+            ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _inventoryTransferService = inventoryTransferService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult InventoryTransferList()
         {
+            _iCommonService.GetPageWiseRoleRigths("InventoryTransfer");
             List<InventoryTransferViewModel> inventoyTransferViewModels = new List<InventoryTransferViewModel>();
             inventoyTransferViewModels = _inventoryTransferService.GetInventoryTransferList().ToList();
             return View(inventoyTransferViewModels);
@@ -59,34 +63,48 @@ namespace RocketPOS.Controllers.Transaction
         [HttpGet]
         public ActionResult GetOrderById(long Id)
         {
-            InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
-            inventoryTransferModel = _inventoryTransferService.GetInventoryTransferById(Id);
-            return View(inventoryTransferModel);
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
+            {
+                InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
+                inventoryTransferModel = _inventoryTransferService.GetInventoryTransferById(Id);
+                return View(inventoryTransferModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult InventoryTransfer(long? id, int? inventoryType, string type)
         {
             InventoryTransferModel inventoryTransferModel = new InventoryTransferModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                ViewBag.ActionType = type;
-                long purchaseId = Convert.ToInt64(id);
-                inventoryTransferModel = _inventoryTransferService.GetInventoryTransferById(purchaseId);
+                if (id > 0)
+                {
+                    ViewBag.ActionType = type;
+                    long purchaseId = Convert.ToInt64(id);
+                    inventoryTransferModel = _inventoryTransferService.GetInventoryTransferById(purchaseId);
 
+                }
+                else
+                {
+                    inventoryTransferModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
+                    inventoryTransferModel.InventoryType = Convert.ToInt32(inventoryType);
+                }
+                inventoryTransferModel.FromStoreList = _iDropDownService.GetStoreList();
+                inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
+                inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
+                inventoryTransferModel.AssetItemList = _iDropDownService.GetAssetItemList();
+                inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+                return View(inventoryTransferModel);
             }
             else
             {
-                inventoryTransferModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                inventoryTransferModel.ReferenceNo = _inventoryTransferService.ReferenceNumber().ToString();
-                inventoryTransferModel.InventoryType = Convert.ToInt32(inventoryType);
+                return RedirectToAction("NotFound", "Error");
             }
-            inventoryTransferModel.FromStoreList = _iDropDownService.GetStoreList();
-            inventoryTransferModel.ToStoreList = _iDropDownService.GetStoreList();
-            inventoryTransferModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            inventoryTransferModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryTransferModel.AssetItemList = _iDropDownService.GetAssetItemList();
-            inventoryTransferModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
-            return View(inventoryTransferModel);
         }
 
         [HttpPost]
@@ -152,12 +170,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _inventoryTransferService.DeleteInventoryTransfer(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _inventoryTransferService.DeleteInventoryTransfer(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(InventoryTransferList));
             }
-            return RedirectToAction(nameof(InventoryTransferList));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult DeleteInventoryTransferDetails(long id)
@@ -183,7 +208,7 @@ namespace RocketPOS.Controllers.Transaction
                 ErrorString = _locService.GetLocalizedHtmlString("ValidToStore");
                 return ErrorString;
             }
-            
+
             if (inventoryTransferModel.InventoryTransferDetail == null || inventoryTransferModel.InventoryTransferDetail.Count < 1)
             {
                 ErrorString = _locService.GetLocalizedHtmlString("ValidTransferDetails");
@@ -193,7 +218,7 @@ namespace RocketPOS.Controllers.Transaction
             return ErrorString;
         }
 
-        public ActionResult GetFoodMenuStock(int foodMenuId, int storeId,int inventoryType)
+        public ActionResult GetFoodMenuStock(int foodMenuId, int storeId, int inventoryType)
         {
             decimal stockQty = 0;
             stockQty = _inventoryTransferService.GetFoodMenuStock(foodMenuId, storeId, inventoryType);

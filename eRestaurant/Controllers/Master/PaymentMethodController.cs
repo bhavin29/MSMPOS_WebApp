@@ -29,6 +29,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("PaymentMethod");
             List<PaymentMethodModel> paymentMethodModel = new List<PaymentMethodModel>();
             paymentMethodModel = _iPaymentMethodService.GetPaymentMethodList().ToList();
             if (noDelete != null)
@@ -41,13 +42,20 @@ namespace RocketPOS.Controllers.Master
         public ActionResult PaymentMethod(int? id)
         {
             PaymentMethodModel paymentMethodModel = new PaymentMethodModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int paymentMethodId = Convert.ToInt32(id);
-                paymentMethodModel = _iPaymentMethodService.GetAddonesById(paymentMethodId);
-            }
+                if (id > 0)
+                {
+                    int paymentMethodId = Convert.ToInt32(id);
+                    paymentMethodModel = _iPaymentMethodService.GetAddonesById(paymentMethodId);
+                }
 
-            return View(paymentMethodModel);
+                return View(paymentMethodModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -91,15 +99,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("PaymentMethod", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("PaymentMethod", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iPaymentMethodService.DeletePaymentMethod(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iPaymentMethodService.DeletePaymentMethod(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

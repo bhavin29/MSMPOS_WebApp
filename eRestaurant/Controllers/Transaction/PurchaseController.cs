@@ -15,6 +15,7 @@ namespace RocketPOS.Controllers.Transaction
     public class PurchaseController : Controller
     {
         private readonly IPurchaseService _iPurchaseService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
@@ -22,10 +23,12 @@ namespace RocketPOS.Controllers.Transaction
 
         public PurchaseController(IPurchaseService purchaseService,
             IDropDownService idropDownService,
+             ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService)
         {
             _iPurchaseService = purchaseService;
+            _iCommonService = iCommonService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
@@ -34,6 +37,7 @@ namespace RocketPOS.Controllers.Transaction
         // GET: Purchase
         public ActionResult PurchaseList()
         {
+            _iCommonService.GetPageWiseRoleRigths("Purchase");
             List<PurchaseViewModel> purchaseList = new List<PurchaseViewModel>();
             purchaseList = _iPurchaseService.GetPurchaseList().ToList();
             return View(purchaseList);
@@ -52,21 +56,28 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult Purchase(long? id)
         {
             PurchaseModel purchaseModel = new PurchaseModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                long purchaseId = Convert.ToInt64(id);
-                purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+                if (id > 0)
+                {
+                    long purchaseId = Convert.ToInt64(id);
+                    purchaseModel = _iPurchaseService.GetPurchaseById(purchaseId);
+                }
+                else
+                {
+                    purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
+                }
+                purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
+                return View(purchaseModel);
             }
             else
             {
-                purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                purchaseModel.ReferenceNo = _iPurchaseService.ReferenceNumber().ToString();
+                return RedirectToAction("NotFound", "Error");
             }
-            purchaseModel.SupplierList = _iDropDownService.GetSupplierList();
-            purchaseModel.StoreList = _iDropDownService.GetStoreList();
-            purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            purchaseModel.IngredientList = _iDropDownService.GetIngredientList();
-            return View(purchaseModel);
         }
 
         // POST: Purchase/Create
@@ -129,12 +140,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _iPurchaseService.DeletePurchase(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _iPurchaseService.DeletePurchase(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(PurchaseList));
             }
-            return RedirectToAction(nameof(PurchaseList));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult DeletePurchaseDetails(long purchaseId)

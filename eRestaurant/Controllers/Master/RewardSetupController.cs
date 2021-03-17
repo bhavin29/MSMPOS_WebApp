@@ -27,6 +27,7 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Index(int? noDelete)
         {
+            _iCommonService.GetPageWiseRoleRigths("RewardSetup");
             List<RewardSetupModel> rewardSetupModel = new List<RewardSetupModel>();
             rewardSetupModel = _iRewardSetupService.GetRewardSetupList().ToList();
             if (noDelete != null)
@@ -39,12 +40,19 @@ namespace RocketPOS.Controllers.Master
         public ActionResult RewardSetup(int? id)
         {
             RewardSetupModel rewardSetupModel = new RewardSetupModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                rewardSetupModel = _iRewardSetupService.GetRewardSetupById(Convert.ToInt32(id));
-            }
+                if (id > 0)
+                {
+                    rewardSetupModel = _iRewardSetupService.GetRewardSetupById(Convert.ToInt32(id));
+                }
 
-            return View(rewardSetupModel);
+                return View(rewardSetupModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         [HttpPost]
@@ -89,15 +97,22 @@ namespace RocketPOS.Controllers.Master
         public ActionResult Delete(int id)
         {
             int result = 0;
-            result = _iCommonService.GetValidateReference("RewardSetup", id.ToString());
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                return RedirectToAction(nameof(Index), new { noDelete = result });
+                result = _iCommonService.GetValidateReference("RewardSetup", id.ToString());
+                if (result > 0)
+                {
+                    return RedirectToAction(nameof(Index), new { noDelete = result });
+                }
+                else
+                {
+                    var deletedid = _iRewardSetupService.DeleteRewardSetup(id);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             else
             {
-                var deletedid = _iRewardSetupService.DeleteRewardSetup(id);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("NotFound", "Error");
             }
         }
 

@@ -17,22 +17,26 @@ namespace RocketPOS.Controllers.Transaction
 
         private readonly IInventoryAdjustmentService _inventoryAdjustmentService;
         private readonly IDropDownService _iDropDownService;
+        private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
 
 
         public InventoryAdjustmentController(IInventoryAdjustmentService inventoryAdjustmentService,
             IDropDownService idropDownService,
+              ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _inventoryAdjustmentService = inventoryAdjustmentService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult InventoryAdjustmentList(int consumptionStatus)
         {
+            _iCommonService.GetPageWiseRoleRigths("InventoryAdjustment");
             ViewBag.ConsumptionStatus = consumptionStatus;
             List<InventoryAdjustmentViewModel> inventoyAdjustmentViewModels = new List<InventoryAdjustmentViewModel>();
             inventoyAdjustmentViewModels = _inventoryAdjustmentService.GetInventoryAdjustmentList(consumptionStatus).ToList();
@@ -70,27 +74,34 @@ namespace RocketPOS.Controllers.Transaction
         public ActionResult InventoryAdjustment(long? id, int? inventoryType, int? consumptionStatus, string type)
         {
             InventoryAdjustmentModel inventoryAdjustmentModel = new InventoryAdjustmentModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true || UserRolePermissionForPage.View == true)
             {
-                ViewBag.ActionType = type;
-                long purchaseId = Convert.ToInt64(id);
-                inventoryAdjustmentModel = _inventoryAdjustmentService.GetInventoryAdjustmentById(purchaseId);
+                if (id > 0)
+                {
+                    ViewBag.ActionType = type;
+                    long purchaseId = Convert.ToInt64(id);
+                    inventoryAdjustmentModel = _inventoryAdjustmentService.GetInventoryAdjustmentById(purchaseId);
 
+                }
+                else
+                {
+                    inventoryAdjustmentModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    inventoryAdjustmentModel.ReferenceNo = _inventoryAdjustmentService.ReferenceNumber().ToString();
+                    inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
+                    inventoryAdjustmentModel.ConsumptionStatus = Convert.ToInt32(consumptionStatus);
+                }
+                inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
+                ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
+                inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
+                inventoryAdjustmentModel.AssetItemList = _iDropDownService.GetAssetItemList();
+                inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
+                return View(inventoryAdjustmentModel);
             }
             else
             {
-                inventoryAdjustmentModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
-                inventoryAdjustmentModel.ReferenceNo = _inventoryAdjustmentService.ReferenceNumber().ToString();
-                inventoryAdjustmentModel.InventoryType = Convert.ToInt32(inventoryType);
-                inventoryAdjustmentModel.ConsumptionStatus = Convert.ToInt32(consumptionStatus);
+                return RedirectToAction("NotFound", "Error");
             }
-            inventoryAdjustmentModel.StoreList = _iDropDownService.GetStoreList();
-            ViewBag.SelectedStore = inventoryAdjustmentModel.StoreList.Where(x => x.Selected == true).Select(x => x.Value).SingleOrDefault();
-            inventoryAdjustmentModel.EmployeeList = _iDropDownService.GetEmployeeList();
-            inventoryAdjustmentModel.IngredientList = _iDropDownService.GetIngredientList();
-            inventoryAdjustmentModel.AssetItemList = _iDropDownService.GetAssetItemList();
-            inventoryAdjustmentModel.FoodMenuList = _iDropDownService.GetFoodMenuListByFoodmenuType(-1);
-            return View(inventoryAdjustmentModel);
         }
 
         [HttpPost]
@@ -154,12 +165,19 @@ namespace RocketPOS.Controllers.Transaction
 
         public ActionResult Delete(int id)
         {
-            int result = _inventoryAdjustmentService.DeleteInventoryAdjustment(id);
-            if (result > 0)
+            if (UserRolePermissionForPage.Delete == true)
             {
-                ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                int result = _inventoryAdjustmentService.DeleteInventoryAdjustment(id);
+                if (result > 0)
+                {
+                    ViewBag.Result = _locService.GetLocalizedHtmlString("Delete");
+                }
+                return RedirectToAction(nameof(InventoryAdjustmentList));
             }
-            return RedirectToAction(nameof(InventoryAdjustmentList));
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         public ActionResult DeleteInventoryAdjustmentDetails(long id)

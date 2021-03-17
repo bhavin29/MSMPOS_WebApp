@@ -42,16 +42,19 @@
                                 <div class="form-group">
                                     @if (Model != null)
                                     {
-                                        @if (Model.Id > 0)
+                                        @if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
                                         {
-                                            <input type="submit" value="Save" class="btn btn-primary" />
+                                            @if (Model.Id > 0)
+                                            {
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            }
+                                            else
+                                            {
+                                                <input type="submit" value="Save" class="btn btn-primary" />
+                                            }
                                         }
-                                        else
-                                        {
-                                            <input type="submit" value="Save" class="btn btn-primary" />
-                                        }
-                                        <a href='@Url.Action("Index", "Home")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
-                                    }
+                                    <a href='@Url.Action("Index", "Home")' class="btn btn-primary" style="margin:0px 0px 0px 5px">Cancel</a>
+                                }
                                 </div>
                             </form>
                         </div>

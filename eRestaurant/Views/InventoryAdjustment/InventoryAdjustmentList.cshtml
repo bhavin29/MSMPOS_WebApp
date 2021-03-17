@@ -25,9 +25,12 @@
                 }
             </div>
             <div class="float-right">
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class=" btn btn-primary" style="margin-right:16px">+ Menu</a>
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="2" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary" style="margin-right:16px">+ Stock</a>
-                <a asp-action="InventoryAdjustment" asp-route-inventoryType="3" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary">+ Asset</a>
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="InventoryAdjustment" asp-route-inventoryType="1" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class=" btn btn-primary" style="margin-right:16px">+ Menu</a>
+                    <a asp-action="InventoryAdjustment" asp-route-inventoryType="2" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary" style="margin-right:16px">+ Stock</a>
+                    <a asp-action="InventoryAdjustment" asp-route-inventoryType="3" asp-route-consumptionStatus="@ViewBag.ConsumptionStatus" class="btn btn-primary">+ Asset</a>
+                }
             </div>
         </div>
     </div>
@@ -99,7 +102,10 @@
                                             </td>*@
                                         <td>
                                             <div class="form-button-action">
-                                                <a asp-action="View" asp-route-Id="@item.Id" >View</a>
+                                                @if (@UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
@@ -176,7 +182,11 @@
                             {
                                 data: null,
                                 mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/InventoryAdjustment/View/' + row.id + '">View</a></div>'
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/InventoryAdjustment/View/' + row.id + '">View</a></div>'
+                                    }
+                                    return view;
                                 },
                             }
                         ],

@@ -15,20 +15,23 @@ namespace RocketPOS.Controllers.Master
     {
 
         private readonly IEmployeeAttendanceService _iemployeeAttendanceService;
+        private readonly ICommonService _iCommonService;
         private readonly IDropDownService _iDropDownService;
         private IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private LocService _locService;
 
-        public EmployeeAttendanceController(IEmployeeAttendanceService employeeAttendanceService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        public EmployeeAttendanceController(IEmployeeAttendanceService employeeAttendanceService, ICommonService iCommonService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
             _iemployeeAttendanceService = employeeAttendanceService;
             _iDropDownService = idropDownService;
+            _iCommonService = iCommonService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
 
         public ActionResult Index()
         {
+            _iCommonService.GetPageWiseRoleRigths("EmployeeAttendance");
             List<EmployeeAttendanceModel> userModel = new List<EmployeeAttendanceModel>();
             userModel = _iemployeeAttendanceService.GetEmployeeAttendaceList().ToList();
             return View(userModel);
@@ -37,18 +40,25 @@ namespace RocketPOS.Controllers.Master
         public ActionResult EmployeeAttendance(int? id)
         {
             EmployeeAttendanceModel employeeAttendanceModel = new EmployeeAttendanceModel();
-            if (id > 0)
+            if (UserRolePermissionForPage.Add == true || UserRolePermissionForPage.Edit == true)
             {
-                int userId = Convert.ToInt32(id);
-                employeeAttendanceModel = _iemployeeAttendanceService.GetEmployeeAttendaceById(userId);
+                if (id > 0)
+                {
+                    int userId = Convert.ToInt32(id);
+                    employeeAttendanceModel = _iemployeeAttendanceService.GetEmployeeAttendaceById(userId);
+                }
+                else
+                {
+                    employeeAttendanceModel.LogDate = DateTime.Now;
+                }
+                employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
+
+                return View(employeeAttendanceModel);
             }
             else
             {
-                employeeAttendanceModel.LogDate = DateTime.Now;
+                return RedirectToAction("NotFound", "Error");
             }
-            employeeAttendanceModel.EmployeeList = _iDropDownService.GetEmployeeList();
-
-            return View(employeeAttendanceModel);
         }
 
         [HttpPost]
@@ -67,7 +77,7 @@ namespace RocketPOS.Controllers.Master
                 }
             }
 
-            if (_iemployeeAttendanceService.ValidationEmployeeAttendance(employeeAttendanceModel)==0)
+            if (_iemployeeAttendanceService.ValidationEmployeeAttendance(employeeAttendanceModel) == 0)
             {
                 ViewBag.Validate = "Employee with same log date already exits";
 
@@ -92,15 +102,22 @@ namespace RocketPOS.Controllers.Master
 
         public ActionResult Delete(int id)
         {
-            var deletedid = _iemployeeAttendanceService.DeleteEmployeeAttendance(id);
+            if (UserRolePermissionForPage.Delete == true)
+            {
+                var deletedid = _iemployeeAttendanceService.DeleteEmployeeAttendance(id);
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
         }
 
         private string ValidationEmployeeAttendance(EmployeeAttendanceModel employeeAttendanceModel)
         {
             string ErrorString = string.Empty;
-            double  timeDiffrent = employeeAttendanceModel.OutTime.TotalMinutes - employeeAttendanceModel.InTime.TotalMinutes;
+            double timeDiffrent = employeeAttendanceModel.OutTime.TotalMinutes - employeeAttendanceModel.InTime.TotalMinutes;
 
             if (string.IsNullOrEmpty(employeeAttendanceModel.EmployeeId.ToString()) || employeeAttendanceModel.EmployeeId == 0)
             {

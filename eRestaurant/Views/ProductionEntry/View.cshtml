@@ -35,23 +35,16 @@
             </div>
             <div class="row mb-4">
                 <div class="col-xs-9">
-                    @*<address>
-                            <strong></strong>@Model.SupplierAddress1<br>
-                            <strong></strong>@Model.SupplierAddress2<br>
-                            <strong></strong>@Model.SupplierPhone<br>
-                            <strong></strong>@Model.SupplierEmail<br>
-                        </address>*@
-                </div>
-
-                <div class="col-xs-3 text-right">
                     <address>
                         <strong>Recipe Name: </strong>@Model.ProductionFormulaName<br>
                         <strong>Recipe Batch Size :  </strong>@Model.BatchSize @Model.BatchSizeUnitName<br>
                         <strong>Store Name :  </strong>@Model.StoreName<br>
                         <strong>Production Date  :  </strong>@Model.ProductionDate.ToShortDateString()<br>
                         <strong>Actual Batch Size :  </strong>@Model.ActualBatchSize @Model.BatchSizeUnitName<br>
-
                     </address>
+                </div>
+
+                <div class="col-xs-3 text-right">
                 </div>
             </div>
         </div>
@@ -67,7 +60,6 @@
                             <thead>
                                 <tr>
                                     <th style="width:25%">Menu Item</th>
-                                    <th style="width:8%" class="text-right">Expected Qty </th>
                                     <th style="width:10%" class="text-right">Receipe Qty</th>
                                     <th style="width:10%" class="text-right">Actual Production</th>
                                 </tr>
@@ -81,9 +73,6 @@
                                 <tr id="@rowId">
                                     <td>
                                         @item.FoodMenuName [ @item.FoodMenuUnitName ]
-                                    </td>
-                                    <td class="text-right">
-                                        @item.ExpectedOutput.ToString("N")
                                     </td>
                                     <td class="text-right">
                                         @item.AllocationOutput
@@ -110,7 +99,6 @@
                             <thead>
                                 <tr>
                                     <th style="width:25%">Stock Item</th>
-                                    <th style="width:8%" class="text-right">Expected Qty </th>
                                     <th style="width:10%" class="text-right">Receipe Qty</th>
                                     <th style="width:10%" class="text-right">Actual Consumption</th>
                                 </tr>
@@ -124,9 +112,6 @@
                                 <tr id="@rowId">
                                     <td>
                                         @item.IngredientName [ @item.IngredientUnitName ]
-                                    </td>
-                                    <td class="text-right">
-                                        @item.IngredientQty.ToString("N")
                                     </td>
                                     <td class="text-right">
                                         @item.AllocationIngredientQty

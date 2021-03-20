@@ -20,7 +20,7 @@
                                     <span asp-validation-for="IngredientCategoryName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group">
-                                    <label asp-for="RawMaterialList" class="control-label">Raw Material</label>
+                                    <label asp-for="RawMaterialList" class="control-label">Stock Type</label>
                                     <select asp-for="RawMaterialId"
                                             class="form-control"
                                             asp-items="@(new SelectList(Model.RawMaterialList, "Value", "Text"))">

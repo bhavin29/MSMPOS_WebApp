@@ -155,16 +155,25 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType,int active)
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType,int active,string reportDate)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query ="";
+                DateTime dt = new DateTime();
+
+                dt = Convert.ToDateTime(reportDate);
+
+                var query = "Exec WebRptCurrentStock " + supplierId + "," + storeId + "," + itemType + "," + active + ",'" + dt.ToString("dd/MM/yyyy") + "'";
+
+                inventoryReportModel = con.Query<InventoryReportModel>(query).ToList();
+
+                return inventoryReportModel;
+
 
                 if (itemType == 0) 
                 {
-                    query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
+                        query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
                                 " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
                                 " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.UnitShortName as Unitname," +
                                 " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +

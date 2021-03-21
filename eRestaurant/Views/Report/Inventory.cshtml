@@ -332,6 +332,7 @@
                             for (var i = 0; i < obj.storeList.length; ++i) {
                                 $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
                             }
+                            $("#StoreId").val(1).trigger('change');
                         },
                         error: function (data) {
                             alert(data);

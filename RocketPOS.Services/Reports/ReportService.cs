@@ -50,5 +50,9 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetDataSyncHistoryReport();
         }
 
+        public List<MasterSalesReportModel> GetMasterSaleReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
+            return _iReportRepository.GetMasterSaleReport(fromDate, toDate, categoryId, foodMenuId, outletId);
+        }
     }
 }

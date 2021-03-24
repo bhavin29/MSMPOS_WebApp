@@ -14,5 +14,6 @@ namespace RocketPOS.Interface.Services.Reports
         List<OutletRegisterReportModel> GetOutletRegisterReport(int OutletRegisterId);
         PrintReceiptA4 GetPrintReceiptA4Detail(int CustomerOrderId);
         List<DataHistorySyncReportModel> GetDataSyncHistoryReport();
+        List<MasterSalesReportModel> GetMasterSaleReport(string fromDate, string toDate, int categoryId, int foodMenuId,int outletId);
     }
 }

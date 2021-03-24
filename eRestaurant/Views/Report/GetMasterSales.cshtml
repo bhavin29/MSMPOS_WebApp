@@ -1,0 +1,188 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.Reports.MasterSalesReport
+@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("MasterSalesReport");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("MasterSalesTable");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-10">
+                <h5 class="card-title">Master Sales Report</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @if (Model != null)
+                            {
+                                <select asp-for="FoodCategoryId" class="form-control"
+                                        asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @if (Model != null)
+                            {
+                                <select asp-for="FoodMenuId" class="form-control"
+                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            @if (Model != null)
+                            {
+                                <select asp-for="OutletId" class="form-control"
+                                        asp-items="@(new SelectList(Model.OutletList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadMasterSalesList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead role="row">
+                        <tr>
+                            <th style="width:8%">@Html.DisplayName("Date")</th>
+                            <th style="width:22%">@Html.DisplayName("Time")</th>
+                            <th style="width:23%">@Html.DisplayName("Invoice#")</th>
+                            <th style="width:8%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Rate")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:5%">@Html.DisplayName("Tax")</th>
+                            <th style="width:5%">@Html.DisplayName("Gross")</th>
+                            <th style="width:5%">@Html.DisplayName("Category")</th>
+                        </tr>
+                    </thead>
+                    <tfoot role="row">
+                        <tr>
+                            <th style="width:8%">@Html.DisplayName("Date")</th>
+                            <th style="width:22%">@Html.DisplayName("Time")</th>
+                            <th style="width:23%">@Html.DisplayName("Invoice#")</th>
+                            <th style="width:8%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Rate")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:5%">@Html.DisplayName("Tax")</th>
+                            <th style="width:5%">@Html.DisplayName("Gross")</th>
+                            <th style="width:5%">@Html.DisplayName("Category")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var MasterSalesTable = null;
+        $(document).ready(function () {
+            var myDate = new Date();
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(tdate);
+            $("#toDate").val(tdate);
+            MasterSalesTable = $('#@dataTableName').DataTable();
+
+            $("#FoodCategoryId").select2();
+            $("#FoodMenuId").select2();
+            $("#OutletId").select2();
+        });
+
+        function loadMasterSalesList() {
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/Report/GetMasterSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (MasterSalesTable != null) {
+                        MasterSalesTable.clear();
+                        MasterSalesTable.destroy();
+                    }
+                    MasterSalesTable = $("#MasterSalesTable").DataTable({
+                        "data": data.masterSalesList,
+                        "columns": [
+                            { "data": "orderDate", "name": "OrderDate", "autoWidth": true },
+                            { "data": "orderTime", "name": "OrderTime", "autoWidth": true },
+                            { "data": "salesInvoiceNumber", "name": "SalesInvoiceNumber", "autoWidth": true },
+                            { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                            { "data": "foodMenuRate", "name": "FoodMenuRate", "autoWidth": true },
+                            { "data": "foodMenuQty", "name": "FoodMenuQty", "autoWidth": true },
+                            { "data": "price", "name": "Price", "autoWidth": true },
+                            { "data": "discount", "name": "Discount", "autoWidth": true },
+                            { "data": "tax", "name": "Tax", "autoWidth": true },
+                            { "data": "grossAmount", "name": "GrossAmount", "autoWidth": true },
+                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true }
+                        ],
+                        columnDefs: [
+                            {
+                                targets: [4,5,6,7,8,9], orderable: false,
+                                targets: [4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                            }
+                        ],
+                        dom: 'Bfrtip',
+                        "buttons": [{
+                            extend: 'excel',
+                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                            filename: function () {
+                                var d = new Date();
+                                var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                                var n = d.getTime();
+                                return 'Master_Sales_Report_' + date + '_' + n;
+                            },
+                        }],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+    </script>
+}

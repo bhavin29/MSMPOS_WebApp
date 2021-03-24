@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 using SelectPdf;
+using RocketPOS.Framework;
 
 namespace RocketPOS.Controllers.Reports
 {
@@ -45,15 +46,15 @@ namespace RocketPOS.Controllers.Reports
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
 
-          //  inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
+            //  inventoryReportModel = _iReportService.GetInventoryReport(inventoryReportParamModel);
             return View(inventoryReportModel);
         }
         [HttpGet]
-        public JsonResult GetInventoryStockList(int supplierId, int storeId,int itemType, int active,string reportDate)
+        public JsonResult GetInventoryStockList(int supplierId, int storeId, int itemType, int active, string reportDate)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
-            inventoryReportModel = _iReportService.GetInventoryStockList(supplierId, storeId, itemType,active, reportDate);
+            inventoryReportModel = _iReportService.GetInventoryStockList(supplierId, storeId, itemType, active, reportDate);
             return Json(new { InventoryStockList = inventoryReportModel });
         }
 
@@ -67,9 +68,9 @@ namespace RocketPOS.Controllers.Reports
             return View(inventoryReportModel);
         }
 
-        public ActionResult InventoryDetail(int id, string name, string code,string stock,string opening)
+        public ActionResult InventoryDetail(int id, string name, string code, string stock, string opening)
         {
-            if (code =="null")
+            if (code == "null")
                 code = "";
 
             ViewData["FoodMenuName"] = name;
@@ -81,8 +82,8 @@ namespace RocketPOS.Controllers.Reports
             InventoryReportParamModel inventoryReportParamModel = new InventoryReportParamModel();
 
             inventoryReportModel = _iReportService.GetInventoryDetailReport(inventoryReportParamModel, id);
-            if (inventoryReportModel.Count>0 )
-            ViewData["StoreName"] = inventoryReportModel[0].StoreName;
+            if (inventoryReportModel.Count > 0)
+                ViewData["StoreName"] = inventoryReportModel[0].StoreName;
 
             return View(inventoryReportModel);
         }
@@ -154,7 +155,7 @@ namespace RocketPOS.Controllers.Reports
             //  return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
         }
 
-        public ActionResult PrintReceiptA4(int id,string clientName,string address1, string address2, string phone)
+        public ActionResult PrintReceiptA4(int id, string clientName, string address1, string address2, string phone)
         {
             PrintReceiptA4 printReceiptA4 = new PrintReceiptA4();
             printReceiptA4 = _iReportService.GetPrintReceiptA4Detail(id);
@@ -174,19 +175,19 @@ namespace RocketPOS.Controllers.Reports
                         <tr align='center' Height='50'>
 	                    <td colspan='6'><div align='right'>");
 
-                sb.Append(clientName +"</br>"+ address1+"</br>" + address2+ "</br>" + phone);
-                sb.Append(@"</div></td>
+            sb.Append(clientName + "</br>" + address1 + "</br>" + address2 + "</br>" + phone);
+            sb.Append(@"</div></td>
                             </tr>
                             <tr align='center' Height='50'>
                             	<td colspan='6'>INVOICE </td>
                             </tr>
                             <tr Height='50'>
-                            <td colspan=3 >Customer Name : "+ printReceiptA4.PrintReceiptDetail.CustomerName + @" </td>
-                                  	<td colspan=3>Mode of payment : "+ printReceiptA4.PrintReceiptDetail.PaymentMethodName + @"</td>
+                            <td colspan=3 >Customer Name : " + printReceiptA4.PrintReceiptDetail.CustomerName + @" </td>
+                                  	<td colspan=3>Mode of payment : " + printReceiptA4.PrintReceiptDetail.PaymentMethodName + @"</td>
                             </tr>
                             <tr Height='50'>
-                            	<td colspan=3>Invoice : "+ printReceiptA4 .PrintReceiptDetail.SalesInvoiceNumber+ @"</td>
-                            	<td colspan=3>Date : "+ printReceiptA4.PrintReceiptDetail.BillDateTime + @"</td>
+                            	<td colspan=3>Invoice : " + printReceiptA4.PrintReceiptDetail.SalesInvoiceNumber + @"</td>
+                            	<td colspan=3>Date : " + printReceiptA4.PrintReceiptDetail.BillDateTime + @"</td>
                             </tr>
                             <tr Height='30' class='noBorder'>
                             	<td colspan=3 >Item</td>
@@ -197,10 +198,10 @@ namespace RocketPOS.Controllers.Reports
 
             foreach (var item in printReceiptA4.PrintReceiptItemList)
             {
-                sb.AppendFormat(@"<tr  Height='30' class='noBorder'><td colspan=3 >{0}</td><td width=50 >{1}</td><td>{2}</td><td>{3}</td></tr>", item.FoodMenuName,item.FoodMenuQty,item.FoodMenuRate,item.Price);
+                sb.AppendFormat(@"<tr  Height='30' class='noBorder'><td colspan=3 >{0}</td><td width=50 >{1}</td><td>{2}</td><td>{3}</td></tr>", item.FoodMenuName, item.FoodMenuQty, item.FoodMenuRate, item.Price);
             }
             sb.Append(@"<tr Height='30'><td colspan=4></td><td >Gross Total</td><td >" + printReceiptA4.PrintReceiptDetail.GrossAmount + "</td></tr>");
-            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Vatable</td><td >"+ printReceiptA4 .PrintReceiptDetail.VatableAmount+ "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=4></td><td >Vatable</td><td >" + printReceiptA4.PrintReceiptDetail.VatableAmount + "</td></tr>");
             sb.Append(@"<tr Height='30'><td colspan=4></td><td >Non Vatable</td><td >" + printReceiptA4.PrintReceiptDetail.NonVatableAmount + "</td></tr>");
             sb.Append(@"<tr Height='30'><td colspan=4></td><td >Total Tax</td><td >" + printReceiptA4.PrintReceiptDetail.TaxAmount + "</td></tr>");
             sb.Append(@"<tr Height='30'><td colspan=4></td><td >Grand Total</td><td >" + printReceiptA4.PrintReceiptDetail.TotalAmount + "</td></tr>");
@@ -252,5 +253,31 @@ namespace RocketPOS.Controllers.Reports
             return View(dataHistorySyncReportModels);
         }
 
+        public ViewResult GetMasterSales()
+        {
+            MasterSalesReport masterSalesReport = new MasterSalesReport();
+            masterSalesReport.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            masterSalesReport.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            masterSalesReport.OutletList = _iDropDownService.GetOutletList();
+            return View(masterSalesReport);
+        }
+
+        public JsonResult GetMasterSalesList(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
+            List<MasterSalesReportModel> masterSalesReportModel = new List<MasterSalesReportModel>();
+            DateTime newFromDate, newToDate;
+            if (fromDate != null)
+            {
+                newFromDate = fromDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromDate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newFromDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
+            masterSalesReportModel = _iReportService.GetMasterSaleReport(newFromDate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
+            return Json(new { masterSalesList = masterSalesReportModel });
+        }
     }
 }

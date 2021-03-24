@@ -257,5 +257,39 @@ namespace RocketPOS.Repository.Reports
 
             return dataHistorySyncReportModels;
         }
+
+        public List<MasterSalesReportModel> GetMasterSaleReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
+            List<MasterSalesReportModel> masterSalesReportModel = new List<MasterSalesReportModel>();
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string Query = string.Empty;
+
+                Query = " select CONVERT(VARCHAR(10),CO.OrderDate,103) As OrderDate,CONVERT(VARCHAR(8),CO.OrderDate,108)  As OrderTime,CO.SalesInvoiceNumber," +
+                        " FM.FoodMenuName ,COI.FoodMenuRate,FoodMenuQty,COI.Price,COI.Discount,COI.FoodMenuVat As Tax,COI.GrossAmount,FMC.FoodMenuCategoryName " +
+                        " from CustomerOrder CO " +
+                        " Inner Join CustomerOrderItem COI ON CO.Id =COI.CustomerOrderId " +
+                        " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId " +
+                        " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
+                        " Where Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
+
+                if (outletId != 0)
+                {
+                    Query += " And CO.OutletId = " + outletId;
+                }
+
+                if (categoryId != 0)
+                {
+                    Query += " And FMC.Id = " + categoryId;
+                }
+                if (foodMenuId != 0)
+                {
+                    Query += " And FM.Id = " + foodMenuId;
+                }
+
+                masterSalesReportModel = db.Query<MasterSalesReportModel>(Query).ToList();
+                return masterSalesReportModel;
+            }
+        }
     }
 }

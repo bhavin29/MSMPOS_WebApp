@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 namespace RocketPOS.Models.Reports
 {
-    public class MasterSalesReport
+    public class ReportParameterModel
     {
         public int FoodCategoryId { get; set; }
         public string FoodCategoryName { get; set; }

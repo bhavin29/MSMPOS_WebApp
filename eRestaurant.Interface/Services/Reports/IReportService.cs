@@ -15,5 +15,16 @@ namespace RocketPOS.Interface.Services.Reports
         PrintReceiptA4 GetPrintReceiptA4Detail(int CustomerOrderId);
         List<DataHistorySyncReportModel> GetDataSyncHistoryReport();
         List<MasterSalesReportModel> GetMasterSaleReport(string fromDate, string toDate, int categoryId, int foodMenuId,int outletId);
+        List<DetailedDailyReportModel> GetDetailedDailyByDate(string Fromdate, string Todate, int outletId);
+        List<DetailSaleSummaryModel> GetDetailSaleSummaryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<ProductWiseSalesReportModel> GetProductWiseSales(string Fromdate, string Todate, string ReportType, int outletId);
+        List<SalesByCategoryProductModel> GetSaleByCategorySectionReport(string fromDate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId);
+        List<TableStatisticsModel> GetTableStatisticsReport(string fromDate, string toDate, int outletId);
+        List<SalesSummaryModel> GetSalesSummaryByFoodCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<SalesSummaryByFoodCategoryFoodMenuModel> GetSalesSummaryByFoodCategoryFoodMenuReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<SalesSummaryBySectionModel> GetSalesSummaryBySectionReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<CustomerRewardModel> GetCustomerRewardReport(string fromDate, string toDate, string customerPhone, string customerName, int outletId);
+        List<SalesSummaryByWeek> GetSalesSummaryByWeekReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<SalesSummaryByHours> GetSalesSummaryByHoursReport(string fromDate, string toDate, int outletId);
     }
 }

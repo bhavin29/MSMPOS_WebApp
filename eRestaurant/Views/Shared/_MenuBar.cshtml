@@ -59,7 +59,7 @@
                             @*<a class="dropdown-item" href="~/FoodMenuIngredient">Food Menu Ingredient</a>*@
 
                             @*<a class="dropdown-item" href="~/Addons">Addons</a>
-                                <a class="dropdown-item" href="~/Varient">Varient</a>*@
+                <a class="dropdown-item" href="~/Varient">Varient</a>*@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
@@ -77,9 +77,9 @@
                                 <span>Purchase Invoices</span>
                             </a>
                             @*<hr />
-        <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
-            <span>Invoices</span>
-        </a>*@
+                <a class="dropdown-item" asp-area="" asp-controller="Invoices" asp-action="Index">
+                    <span>Invoices</span>
+                </a>*@
                             <hr />
                             <a class="dropdown-item" asp-area="" asp-controller="InventoryAdjustment" asp-route-consumptionStatus="1" asp-action="InventoryAdjustmentList">
                                 <span>Stock In</span>
@@ -133,6 +133,16 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reports
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
+                            <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="GetMasterSales">
+                                <span>Master Sales</span>
+                            </a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="font-weight:bold" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Utilities
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
@@ -141,7 +151,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkST">
                             <a class="dropdown-item" asp-controller="scheduler" asp-action="index">Scheduler</a>
                         </div>
-                        
+
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" style="font-weight:bold; font-size:12px" href="#" id="navbarDropdownMenuLinkST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

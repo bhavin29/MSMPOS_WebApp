@@ -36,7 +36,6 @@ namespace RocketPOS.Controllers.Reports
         }
         public IActionResult Index()
         {
-
             return View();
         }
         public ViewResult Inventory()

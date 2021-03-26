@@ -247,6 +247,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult DetailedDailyByDate()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -255,6 +256,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult DetailSaleSummaryReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -263,6 +265,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult ProductWiseSales()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -271,6 +274,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SaleByCategorySectionReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -279,6 +283,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult TableStatisticsReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -287,6 +292,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SalesSummaryByFoodCategoryReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -295,6 +301,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SalesSummaryByFoodCategoryFoodMenuReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -303,6 +310,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SalesSummaryBySectionReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -311,6 +319,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult CustomerRewardReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -319,6 +328,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SalesSummaryByWeekReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -327,6 +337,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        [HttpGet]
         public ViewResult SalesSummaryByHoursReport()
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -352,7 +363,7 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReportModel = _iReportService.GetMasterSaleReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { masterSalesList = masterSalesReportModel });
         }
-        public JsonResult DetailedDailyByDate(string fromdate, string toDate, int outletId)
+        public JsonResult DetailedDailyByDateList(string fromdate, string toDate, int outletId)
         {
             List<DetailedDailyReportModel> detailedDailyReportModels = new List<DetailedDailyReportModel>();
             DateTime newfromdate, newToDate;
@@ -366,11 +377,17 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            detailedDailyReportModels = _iReportService.GetDetailedDailyByDate(fromdate, toDate, outletId);
+            DateTime dtFrom = new DateTime();
+            DateTime dtTo = new DateTime();
+
+            dtFrom = Convert.ToDateTime(newfromdate);
+            dtTo = Convert.ToDateTime(newToDate);
+
+            detailedDailyReportModels = _iReportService.GetDetailedDailyByDate(dtFrom.ToString("yyyy-MM-dd") + " 00:00:00", dtTo.ToString("yyyy-MM-dd") + " 23:59i:59",outletId);
             return Json(new { detailedDailyList = detailedDailyReportModels });
 
         }
-        public JsonResult DetailSaleSummaryReport(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        public JsonResult DetailSaleSummaryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
             {
             List<DetailSaleSummaryModel> detailSaleSummaryModels = new List<DetailSaleSummaryModel>();
             DateTime newfromdate, newToDate;
@@ -386,10 +403,10 @@ namespace RocketPOS.Controllers.Reports
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
 
-            detailSaleSummaryModels = _iReportService.GetDetailSaleSummaryReport(fromdate, toDate, categoryId, foodMenuId, outletId);
+            detailSaleSummaryModels = _iReportService.GetDetailSaleSummaryReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { detailSaleSummaryList = detailSaleSummaryModels });
         }
-        public JsonResult  ProductWiseSales(string fromdate, string toDate, string ReportType, int outletId)
+        public JsonResult  ProductWiseSalesList(string fromdate, string toDate, string ReportType, int outletId)
             {
             List<ProductWiseSalesReportModel> productWiseSalesReportModels = new List<ProductWiseSalesReportModel>();
             DateTime newfromdate, newToDate;
@@ -403,10 +420,16 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            productWiseSalesReportModels= _iReportService.GetProductWiseSales(fromdate, toDate, ReportType, outletId);
-            return Json(new { productWiseSalesReportList = productWiseSalesReportModels });
+            DateTime dtFrom = new DateTime();
+            DateTime dtTo = new DateTime();
+
+            dtFrom = Convert.ToDateTime(newfromdate);
+            dtTo = Convert.ToDateTime(newToDate);
+
+            productWiseSalesReportModels = _iReportService.GetProductWiseSales(dtFrom.ToString("yyyy-MM-dd") + " 00:00:00", dtTo.ToString("yyyy-MM-dd") + " 23:59i:59", "Excel", outletId);
+            return Json(new { productWiseSalesList = productWiseSalesReportModels });
         }
-        public JsonResult SaleByCategorySectionReport(string fromdate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
+        public JsonResult SaleByCategorySectionList(string fromdate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
             {
             List<SalesByCategoryProductModel> salesByCategoryProductModels = new List<SalesByCategoryProductModel>();
             DateTime newfromdate, newToDate;
@@ -420,10 +443,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesByCategoryProductModels= _iReportService.GetSaleByCategorySectionReport(fromdate, toDate, reportName, categoryId, foodMenuId, outletId);
+            salesByCategoryProductModels= _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), "SalesBySectionCategory", categoryId, foodMenuId, outletId);
             return Json(new { salesByCategoryProductList = salesByCategoryProductModels });
         }
-        public JsonResult  TableStatisticsReport(string fromdate, string toDate, int outletId)
+        public JsonResult  TableStatisticsList(string fromdate, string toDate, int outletId)
             {
             List<TableStatisticsModel> tableStatisticsModels = new List<TableStatisticsModel>();
             DateTime newfromdate, newToDate;
@@ -437,10 +460,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            tableStatisticsModels= _iReportService.GetTableStatisticsReport(fromdate, toDate, outletId);
+            tableStatisticsModels= _iReportService.GetTableStatisticsReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
             return Json(new { tableStatisticsList = tableStatisticsModels });
         }
-        public JsonResult  SalesSummaryByFoodCategoryReport(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        public JsonResult  SalesSummaryByFoodCategoryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
             {
             List<SalesSummaryModel> salesSummaryModels = new List<SalesSummaryModel>();
             DateTime newfromdate, newToDate;
@@ -454,10 +477,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryModels= _iReportService.GetSalesSummaryByFoodCategoryReport(fromdate, toDate, categoryId, foodMenuId, outletId);
+            salesSummaryModels= _iReportService.GetSalesSummaryByFoodCategoryReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryList = salesSummaryModels });
         }
-        public JsonResult  SalesSummaryByFoodCategoryFoodMenuReport(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        public JsonResult  SalesSummaryByFoodCategoryFoodMenuList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
             {
             List<SalesSummaryByFoodCategoryFoodMenuModel> salesSummaryByFoodCategoryFoodMenuModels = new List<SalesSummaryByFoodCategoryFoodMenuModel>();
             DateTime newfromdate, newToDate;
@@ -471,10 +494,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByFoodCategoryFoodMenuModels= _iReportService.GetSalesSummaryByFoodCategoryFoodMenuReport(fromdate, toDate, categoryId, foodMenuId, outletId);
+            salesSummaryByFoodCategoryFoodMenuModels= _iReportService.GetSalesSummaryByFoodCategoryFoodMenuReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryByFoodCategoryFoodMenuList = salesSummaryByFoodCategoryFoodMenuModels });
         }
-        public JsonResult  SalesSummaryBySectionReport(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        public JsonResult  SalesSummaryBySectionList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
             {
             List<SalesSummaryBySectionModel> salesSummaryBySectionModels = new List<SalesSummaryBySectionModel>();
             DateTime newfromdate, newToDate;
@@ -488,10 +511,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryBySectionModels= _iReportService.GetSalesSummaryBySectionReport(fromdate, toDate, categoryId, foodMenuId, outletId);
+            salesSummaryBySectionModels= _iReportService.GetSalesSummaryBySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryBySectionList = salesSummaryBySectionModels });
         }
-        public JsonResult  CustomerRewardReport(string fromdate, string toDate, string customerPhone, string customerName, int outletId)
+        public JsonResult  CustomerRewardList(string fromdate, string toDate, string customerPhone, string customerName, int outletId)
             {
             List<CustomerRewardModel> customerRewardModels = new List<CustomerRewardModel>();
             DateTime newfromdate, newToDate;
@@ -505,10 +528,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            customerRewardModels= _iReportService.GetCustomerRewardReport(fromdate, toDate, customerPhone, customerName, outletId);
+            customerRewardModels = _iReportService.GetCustomerRewardReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), customerPhone, customerName, outletId);
             return Json(new { customerRewardList = customerRewardModels });
         }
-        public JsonResult  SalesSummaryByWeekReport(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        public JsonResult  SalesSummaryByWeekList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
             {
             List<SalesSummaryByWeek> salesSummaryByWeeks = new List<SalesSummaryByWeek>();
             DateTime newfromdate, newToDate;
@@ -522,10 +545,10 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByWeeks= _iReportService.GetSalesSummaryByWeekReport(fromdate, toDate, categoryId, foodMenuId, outletId);
+            salesSummaryByWeeks= _iReportService.GetSalesSummaryByWeekReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryByWeeksList = salesSummaryByWeeks });
         }
-        public JsonResult  SalesSummaryByHoursReport(string fromdate, string toDate, int outletId)
+        public JsonResult  SalesSummaryByHoursList(string fromdate, string toDate, int outletId)
             {
             List<SalesSummaryByHours> salesSummaryByHours = new List<SalesSummaryByHours>();
             DateTime newfromdate, newToDate;
@@ -539,7 +562,7 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByHours= _iReportService.GetSalesSummaryByHoursReport(fromdate, toDate, outletId);
+            salesSummaryByHours= _iReportService.GetSalesSummaryByHoursReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
             return Json(new { salesSummaryByHoursList = salesSummaryByHours });
         }
 

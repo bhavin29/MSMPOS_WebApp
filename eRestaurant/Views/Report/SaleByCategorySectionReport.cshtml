@@ -12,7 +12,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <h5 class="card-title">Master Sales Report</h5>
+                <h5 class="card-title">Sale By Category Section Report</h5>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadMasterSalesList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadSaleByCategorySectionList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -70,32 +70,30 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("Section")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:0%">@Html.DisplayName("")</th>
+                            <th style="width:10%">@Html.DisplayName("Rate")</th>
+                            <th style="width:10%">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Discount")</th>
+                            <th style="width:10%">@Html.DisplayName("Tax")</th>
+                            <th style="width:10%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Value %")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("Section")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:0%">@Html.DisplayName("")</th>
+                            <th style="width:10%">@Html.DisplayName("Rate")</th>
+                            <th style="width:10%">@Html.DisplayName("Qty")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Discount")</th>
+                            <th style="width:10%">@Html.DisplayName("Tax")</th>
+                            <th style="width:10%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Value %")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -122,10 +120,10 @@
             $("#OutletId").select2();
         });
 
-        function loadMasterSalesList() {
+        function loadSaleByCategorySectionList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/Report/GetMasterSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
+                url: "/Report/SaleByCategorySectionList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
@@ -134,28 +132,31 @@
                         MasterSalesTable.destroy();
                     }
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
-                        "data": data.masterSalesList,
+                        "data": data.salesByCategoryProductList,
                         "columns": [
-                            { "data": "orderDate", "name": "OrderDate", "autoWidth": true },
-                            { "data": "orderTime", "name": "OrderTime", "autoWidth": true },
-                            { "data": "salesInvoiceNumber", "name": "SalesInvoiceNumber", "autoWidth": true },
+                            { "data": "sectionName", "name": "SectionName", "autoWidth": true },
+                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
                             { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
-                            { "data": "foodMenuRate", "name": "FoodMenuRate", "autoWidth": true },
-                            { "data": "foodMenuQty", "name": "FoodMenuQty", "autoWidth": true },
-                            { "data": "price", "name": "Price", "autoWidth": true },
-                            { "data": "discount", "name": "Discount", "autoWidth": true },
-                            { "data": "tax", "name": "Tax", "autoWidth": true },
-                            { "data": "grossAmount", "name": "GrossAmount", "autoWidth": true },
-                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true }
+                            { "data": "totalUnitPrice", "name": "TotalUnitPrice", "autoWidth": true },
+                            { "data": "totalQty", "name": "TotalQty", "autoWidth": true },
+                            { "data": "totalPrice", "name": "TotalPrice", "autoWidth": true },
+                            { "data": "totalDiscount", "name": "TotalDiscount", "autoWidth": true },
+                            { "data": "totalTax", "name": "TotalTax", "autoWidth": true },
+                            { "data": "totalGrossAmount", "name": "TotalGrossAmount", "autoWidth": true },
+                            { "data": "valuePercentage", "name": "ValuePercentage", "autoWidth": true },
                         ],
                         columnDefs: [
                             {
-                                targets: [4, 5, 6, 7, 8, 9],
+                                targets: [2],
+                                visible:false
+                            },
+                            {
+                                targets: [3,4, 5, 6, 7, 8, 9],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
-                                targets: [4,5,6,7,8,9], orderable: false,
-                                targets: [4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                                targets: [3,4,5,6,7,8,9], orderable: false,
+                                targets: [3,4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',

@@ -324,11 +324,11 @@ namespace RocketPOS.Repository.Reports
                         " Left Join Tax T On T.Id = COI.foodmenuvattaxid " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                if (categoryId != -1)
+                if (categoryId != 0)
                 {
                     Query += " And FM.FoodCategoryId = " + categoryId;
                 }
-                if (foodMenuId != -1)
+                if (foodMenuId != 0)
                 {
                     Query += " And FM.Id = " + foodMenuId;
                 }
@@ -369,11 +369,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -393,11 +393,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -417,11 +417,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -442,11 +442,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -467,11 +467,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -492,11 +492,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -517,11 +517,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -542,11 +542,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -567,11 +567,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -592,11 +592,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                    if (categoryId != -1)
+                     if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
-                    if (foodMenuId != -1)
+                    if (foodMenuId != 0)
                     {
                         Query += " And FM.Id = " + foodMenuId;
                     }
@@ -642,7 +642,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                if (categoryId != -1)
+                 if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -671,11 +671,11 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                if (categoryId != -1)
+                 if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
-                if (foodMenuId != -1)
+                if (foodMenuId != 0)
                 {
                     Query += " And FM.Id = " + foodMenuId;
                 }
@@ -700,7 +700,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                if (categoryId != -1)
+                 if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -752,7 +752,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                if (categoryId != -1)
+                 if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }

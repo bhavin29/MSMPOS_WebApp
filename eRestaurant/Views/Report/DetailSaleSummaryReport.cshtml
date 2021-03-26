@@ -12,7 +12,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <h5 class="card-title">Master Sales Report</h5>
+                <h5 class="card-title">Detail Sale Summary Report</h5>
             </div>
         </div>
     </div>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadMasterSalesList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadDetailSaleSummaryList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -71,31 +71,31 @@
                     <thead role="row">
                         <tr>
                             <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Gross")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:8%">@Html.DisplayName("Net")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax %")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax")</th>
+                            <th style="width:8%">@Html.DisplayName("Gross")</th>
+                            <th style="width:8%">@Html.DisplayName("Cash")</th>
+                            <th style="width:8%">@Html.DisplayName("Card")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
                             <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Gross")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:8%">@Html.DisplayName("Net")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax %")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax")</th>
+                            <th style="width:8%">@Html.DisplayName("Gross")</th>
+                            <th style="width:8%">@Html.DisplayName("Cash")</th>
+                            <th style="width:8%">@Html.DisplayName("Card")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -122,10 +122,10 @@
             $("#OutletId").select2();
         });
 
-        function loadMasterSalesList() {
+        function loadDetailSaleSummaryList() {
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/Report/GetMasterSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
+                url: "/Report/DetailSaleSummaryList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
@@ -134,28 +134,28 @@
                         MasterSalesTable.destroy();
                     }
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
-                        "data": data.masterSalesList,
+                        "data": data.detailSaleSummaryList,
                         "columns": [
                             { "data": "orderDate", "name": "OrderDate", "autoWidth": true },
-                            { "data": "orderTime", "name": "OrderTime", "autoWidth": true },
-                            { "data": "salesInvoiceNumber", "name": "SalesInvoiceNumber", "autoWidth": true },
-                            { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
-                            { "data": "foodMenuRate", "name": "FoodMenuRate", "autoWidth": true },
-                            { "data": "foodMenuQty", "name": "FoodMenuQty", "autoWidth": true },
-                            { "data": "price", "name": "Price", "autoWidth": true },
-                            { "data": "discount", "name": "Discount", "autoWidth": true },
-                            { "data": "tax", "name": "Tax", "autoWidth": true },
-                            { "data": "grossAmount", "name": "GrossAmount", "autoWidth": true },
-                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true }
+                            { "data": "foodMenuName", "name": "OrderTime", "autoWidth": true },
+                            { "data": "totalGrossAmount", "name": "SalesInvoiceNumber", "autoWidth": true },
+                            { "data": "totalQty", "name": "FoodMenuName", "autoWidth": true },
+                            { "data": "totalNetAmount", "name": "FoodMenuRate", "autoWidth": true },
+                            { "data": "totalDiscountAmount", "name": "FoodMenuQty", "autoWidth": true },
+                            { "data": "totalTaxPercentage", "name": "Price", "autoWidth": true },
+                            { "data": "totalTaxAmount", "name": "TotalTaxAmount", "autoWidth": true },
+                            { "data": "totalBillGrossAmount", "name": "TotalBillGrossAmount", "autoWidth": true },
+                            { "data": "cashPayment", "name": "CashPayment", "autoWidth": true },
+                            { "data": "cardPayment", "name": "CardPayment", "autoWidth": true }
                         ],
                         columnDefs: [
                             {
-                                targets: [4, 5, 6, 7, 8, 9],
+                                targets: [2,3,4, 5, 6, 7, 8, 9,10],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
                                 targets: [4,5,6,7,8,9], orderable: false,
-                                targets: [4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                                targets: [2,3,4, 5, 6, 7, 8, 9,10], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
@@ -166,7 +166,7 @@
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                 var n = d.getTime();
-                                return 'Master_Sales_Report_' + date + '_' + n;
+                                return 'Detail_Sale_Summary_Report_' + date + '_' + n;
                             },
                         }],
                         "bLengthChange": true,

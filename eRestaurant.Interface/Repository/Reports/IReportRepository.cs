@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using RocketPOS.Models;
 using RocketPOS.Models.Reports;
 
 namespace RocketPOS.Interface.Repository.Reports
@@ -26,5 +27,7 @@ namespace RocketPOS.Interface.Repository.Reports
         List<CustomerRewardModel> GetCustomerRewardReport(string fromDate, string toDate, string customerPhone, string customerName, int outletId);
         List<SalesSummaryByWeek> GetSalesSummaryByWeekReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
         List<SalesSummaryByHours> GetSalesSummaryByHoursReport(string fromDate, string toDate, int outletId);
+        List<TallySetupModel> GetTallySetup(int outletId);
+        List<TallySalesVoucherModel> GetSalesVoucherData(string fromDate, string toDate, int outletId);
     }
 }

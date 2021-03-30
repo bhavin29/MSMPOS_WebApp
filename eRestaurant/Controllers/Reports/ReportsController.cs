@@ -16,6 +16,7 @@ using System.IO;
 using System.Text;
 using SelectPdf;
 using RocketPOS.Framework;
+using Microsoft.AspNetCore.Hosting;
 
 namespace RocketPOS.Controllers.Reports
 {
@@ -26,9 +27,10 @@ namespace RocketPOS.Controllers.Reports
         private readonly IDropDownService _iDropDownService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
-
-        public ReportController(IReportService iReportService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
+        private readonly IHostingEnvironment _hostingEnvironment;
+        public ReportController(IHostingEnvironment hostingEnvironment, IReportService iReportService, IDropDownService idropDownService, IStringLocalizer<RocketPOSResources> sharedLocalizer, LocService locService)
         {
+            _hostingEnvironment = hostingEnvironment;
             _iReportService = iReportService;
             _iDropDownService = idropDownService;
             _sharedLocalizer = sharedLocalizer;
@@ -346,6 +348,15 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletList = _iDropDownService.GetOutletList();
             return View(masterSalesReport);
         }
+        public ViewResult TallyVoucher()
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+            masterSalesReport.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            masterSalesReport.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            masterSalesReport.OutletList = _iDropDownService.GetOutletList();
+            return View(masterSalesReport);
+        }
+
         public JsonResult GetMasterSalesList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
         {
             List<MasterSalesReportModel> masterSalesReportModel = new List<MasterSalesReportModel>();
@@ -383,12 +394,12 @@ namespace RocketPOS.Controllers.Reports
             dtFrom = Convert.ToDateTime(newfromdate);
             dtTo = Convert.ToDateTime(newToDate);
 
-            detailedDailyReportModels = _iReportService.GetDetailedDailyByDate(dtFrom.ToString("yyyy-MM-dd") + " 00:00:00", dtTo.ToString("yyyy-MM-dd") + " 23:59i:59",outletId);
+            detailedDailyReportModels = _iReportService.GetDetailedDailyByDate(dtFrom.ToString("yyyy-MM-dd") + " 00:00:00", dtTo.ToString("yyyy-MM-dd") + " 23:59i:59", outletId);
             return Json(new { detailedDailyList = detailedDailyReportModels });
 
         }
         public JsonResult DetailSaleSummaryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
-            {
+        {
             List<DetailSaleSummaryModel> detailSaleSummaryModels = new List<DetailSaleSummaryModel>();
             DateTime newfromdate, newToDate;
 
@@ -406,8 +417,8 @@ namespace RocketPOS.Controllers.Reports
             detailSaleSummaryModels = _iReportService.GetDetailSaleSummaryReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { detailSaleSummaryList = detailSaleSummaryModels });
         }
-        public JsonResult  ProductWiseSalesList(string fromdate, string toDate, string ReportType, int outletId)
-            {
+        public JsonResult ProductWiseSalesList(string fromdate, string toDate, string ReportType, int outletId)
+        {
             List<ProductWiseSalesReportModel> productWiseSalesReportModels = new List<ProductWiseSalesReportModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -430,7 +441,7 @@ namespace RocketPOS.Controllers.Reports
             return Json(new { productWiseSalesList = productWiseSalesReportModels });
         }
         public JsonResult SaleByCategorySectionList(string fromdate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
-            {
+        {
             List<SalesByCategoryProductModel> salesByCategoryProductModels = new List<SalesByCategoryProductModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -443,11 +454,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesByCategoryProductModels= _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), "SalesBySectionCategory", categoryId, foodMenuId, outletId);
+            salesByCategoryProductModels = _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), "SalesBySectionCategory", categoryId, foodMenuId, outletId);
             return Json(new { salesByCategoryProductList = salesByCategoryProductModels });
         }
-        public JsonResult  TableStatisticsList(string fromdate, string toDate, int outletId)
-            {
+        public JsonResult TableStatisticsList(string fromdate, string toDate, int outletId)
+        {
             List<TableStatisticsModel> tableStatisticsModels = new List<TableStatisticsModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -460,11 +471,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            tableStatisticsModels= _iReportService.GetTableStatisticsReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
+            tableStatisticsModels = _iReportService.GetTableStatisticsReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
             return Json(new { tableStatisticsList = tableStatisticsModels });
         }
-        public JsonResult  SalesSummaryByFoodCategoryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
-            {
+        public JsonResult SalesSummaryByFoodCategoryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
             List<SalesSummaryModel> salesSummaryModels = new List<SalesSummaryModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -477,11 +488,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryModels= _iReportService.GetSalesSummaryByFoodCategoryReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
+            salesSummaryModels = _iReportService.GetSalesSummaryByFoodCategoryReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryList = salesSummaryModels });
         }
-        public JsonResult  SalesSummaryByFoodCategoryFoodMenuList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
-            {
+        public JsonResult SalesSummaryByFoodCategoryFoodMenuList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
             List<SalesSummaryByFoodCategoryFoodMenuModel> salesSummaryByFoodCategoryFoodMenuModels = new List<SalesSummaryByFoodCategoryFoodMenuModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -494,11 +505,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByFoodCategoryFoodMenuModels= _iReportService.GetSalesSummaryByFoodCategoryFoodMenuReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
+            salesSummaryByFoodCategoryFoodMenuModels = _iReportService.GetSalesSummaryByFoodCategoryFoodMenuReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryByFoodCategoryFoodMenuList = salesSummaryByFoodCategoryFoodMenuModels });
         }
-        public JsonResult  SalesSummaryBySectionList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
-            {
+        public JsonResult SalesSummaryBySectionList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
             List<SalesSummaryBySectionModel> salesSummaryBySectionModels = new List<SalesSummaryBySectionModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -511,11 +522,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryBySectionModels= _iReportService.GetSalesSummaryBySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
+            salesSummaryBySectionModels = _iReportService.GetSalesSummaryBySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryBySectionList = salesSummaryBySectionModels });
         }
-        public JsonResult  CustomerRewardList(string fromdate, string toDate, string customerPhone, string customerName, int outletId)
-            {
+        public JsonResult CustomerRewardList(string fromdate, string toDate, string customerPhone, string customerName, int outletId)
+        {
             List<CustomerRewardModel> customerRewardModels = new List<CustomerRewardModel>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -531,8 +542,8 @@ namespace RocketPOS.Controllers.Reports
             customerRewardModels = _iReportService.GetCustomerRewardReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), customerPhone, customerName, outletId);
             return Json(new { customerRewardList = customerRewardModels });
         }
-        public JsonResult  SalesSummaryByWeekList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
-            {
+        public JsonResult SalesSummaryByWeekList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
             List<SalesSummaryByWeek> salesSummaryByWeeks = new List<SalesSummaryByWeek>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -545,11 +556,11 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByWeeks= _iReportService.GetSalesSummaryByWeekReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
+            salesSummaryByWeeks = _iReportService.GetSalesSummaryByWeekReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
             return Json(new { salesSummaryByWeeksList = salesSummaryByWeeks });
         }
-        public JsonResult  SalesSummaryByHoursList(string fromdate, string toDate, int outletId)
-            {
+        public JsonResult SalesSummaryByHoursList(string fromdate, string toDate, int outletId)
+        {
             List<SalesSummaryByHours> salesSummaryByHours = new List<SalesSummaryByHours>();
             DateTime newfromdate, newToDate;
             if (fromdate != null)
@@ -562,9 +573,61 @@ namespace RocketPOS.Controllers.Reports
                 newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                 newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
             }
-            salesSummaryByHours= _iReportService.GetSalesSummaryByHoursReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
+            salesSummaryByHours = _iReportService.GetSalesSummaryByHoursReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
             return Json(new { salesSummaryByHoursList = salesSummaryByHours });
         }
+        public JsonResult TallyVoucherList(string fromdate, string toDate, int outletId)
+        {
+            List<TallySalesVoucherModel> tallySalesVoucherModels = new List<TallySalesVoucherModel>();
+            DateTime newfromdate, newToDate;
+            if (fromdate != null)
+            {
+                newfromdate = fromdate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromdate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
+            tallySalesVoucherModels = _iReportService.GetSalesVoucherData(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
+            return Json(new { tallySalesVoucherList = tallySalesVoucherModels });
+        }
+        public async Task<IActionResult> TallyVoucherXMLDownload(string fromdate, string toDate, int outletId, string outletName)
+        {
+            string sWebRootFolder = _hostingEnvironment.WebRootPath + "\\" + "Download";
+            string sFileName = outletName.Trim().ToString() + "_TallySalesVoucher_" + DateTime.Now.ToString("MM-dd-yyyy_HHmmss") + ".XML";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            try
+            {
+                DateTime newfromdate, newToDate;
+                if (fromdate != null)
+                {
+                    newfromdate = fromdate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromdate);
+                    newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+                }
+                else
+                {
+                    newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                }
 
+                _iReportService.GenerateSalesVoucher(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId, sWebRootFolder + "\\" + sFileName);
+
+                using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+            }
+            catch (Exception ex)
+            {
+                SystemLogs.Register(ex.Message);
+            }
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
+        }
     }
 }
+    

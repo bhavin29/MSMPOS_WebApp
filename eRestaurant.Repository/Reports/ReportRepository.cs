@@ -803,6 +803,36 @@ namespace RocketPOS.Repository.Reports
                 return salesSummaryByHours;
             }
         }
+        public List<TallySetupModel> GetTallySetup(int outletId)
+        {
+            List<TallySetupModel> tallySetupModel = new List<TallySetupModel>();
+
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                tallySetupModel = db.Query<TallySetupModel>("select KeyName,LedgerName from tallysetup where outletId=" + outletId.ToString()).ToList();
+            }
+            return tallySetupModel;
+        }
+
+        public List<TallySalesVoucherModel> GetSalesVoucherData(string fromDate, string toDate, int outletId)
+        {
+            List<TallySalesVoucherModel> tallySalesVouchers = new List<TallySalesVoucherModel>();
+
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string query = " select convert(varchar(10), BD.BillDate,103) as BillDate,  sum(round(CO.VatableAmount, 0)) + Sum(round(CO.NonVatableAmount, 0)) + sum(round(CO.TaxAmount, 0)) as Sales,  " +
+                                " PML.TallyLedgerName,PML.TallyLedgerNamePark,PML.TallyBillPostfix, " +
+                                " sum(round(CO.VatableAmount, 0)) as CashSales, Sum(round(CO.NonVatableAmount, 0)) as ExemptedSales,sum(round(CO.TaxAmount, 0)) as OutputVAT " +
+                                " from Billdetail BD " +
+                                " INNER join PaymentMethod PM on PM.Id = BD.PaymentMethodId Inner join Bill B on B.ID = BD.BillId " + 
+                                " inner join CustomerOrder CO on CO.ID = B.CustomerOrderId  inner join PaymentMethodLedger PML on PML.PaymentMethodId = PM.Id and PML.Outletid = " + outletId +
+                                " Where Convert(Date, BD.BillDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  And B.BillStatus = 4 AND B.OutletId = " + outletId +
+                                " group by convert(varchar(10), BD.BillDate, 103),PML.TallyLedgerName,PML.TallyLedgerNamePark,PML.TallyBillPostfix ";
+
+                tallySalesVouchers = db.Query<TallySalesVoucherModel>(query).ToList();
+            }
+            return tallySalesVouchers;
+        }
 
     }
 }

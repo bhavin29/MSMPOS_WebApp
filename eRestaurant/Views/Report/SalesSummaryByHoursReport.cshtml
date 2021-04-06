@@ -12,7 +12,7 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <h5 class="card-title">Master Sales Report</h5>
+                <h5 class="card-title">Sales Summary by Hours Report</h5>
             </div>
         </div>
     </div>
@@ -21,13 +21,24 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
-                        <input id="fromDate" type="date" class="form-control" />
+                        @*<input id="fromDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="fromDate" class="control-label">From Date</label>
+                            <input asp-for="fromDate" type="date" class="form-control" />
+                            <span asp-validation-for="fromDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <input id="toDate" type="date" class="form-control" />
+                        @*<input id="toDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="toDate" class="control-label">To Date</label>
+                            <input asp-for="toDate" type="date" class="form-control" />
+                            <span asp-validation-for="toDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label class="control-label">Category</label>
                             @if (Model != null)
                             {
                                 <select asp-for="FoodCategoryId" class="form-control"
@@ -38,6 +49,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label class="control-label">Product</label>
                             @if (Model != null)
                             {
                                 <select asp-for="FoodMenuId" class="form-control"
@@ -48,6 +60,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label class="control-label">Outlet</label>
                             @if (Model != null)
                             {
                                 <select asp-for="OutletId" class="form-control"
@@ -57,7 +70,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadMasterSalesList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadMasterSalesList();" style="margin-top: 22px" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -70,32 +83,26 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("OrderDate")</th>
+                            <th style="width:10%">@Html.DisplayName("StartHour")</th>
+                            <th style="width:10%">@Html.DisplayName("EndHour")</th>
+                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
+                            <th style="width:15%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Discount")</th>
+                            <th style="width:10%">@Html.DisplayName("Tax")</th>
+                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                         </tr>
-                    </thead>
+                      </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("OrderDate")</th>
+                            <th style="width:10%">@Html.DisplayName("StartHour")</th>
+                            <th style="width:10%">@Html.DisplayName("EndHour")</th>
+                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
+                            <th style="width:15%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Discount")</th>
+                            <th style="width:10%">@Html.DisplayName("Tax")</th>
+                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -109,12 +116,6 @@
     <script>
         var MasterSalesTable = null;
         $(document).ready(function () {
-            var myDate = new Date();
-            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
-            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
-
-            $("#fromDate").val(tdate);
-            $("#toDate").val(tdate);
             MasterSalesTable = $('#@dataTableName').DataTable();
 
             $("#FoodCategoryId").select2();
@@ -123,9 +124,17 @@
         });
 
         function loadMasterSalesList() {
+            var message = '';
+
+            if ($("#OutletId").val() == '' || $("#OutletId").val() == '0') {
+                message = "Select Outlet"
+            }
+
+            if (message == '') {
+
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/Report/GetMasterSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
+                url: "/Report/SalesSummaryByHoursList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
@@ -134,28 +143,25 @@
                         MasterSalesTable.destroy();
                     }
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
-                        "data": data.masterSalesList,
+                        "data": data.salesSummaryByHoursList,
                         "columns": [
                             { "data": "orderDate", "name": "OrderDate", "autoWidth": true },
-                            { "data": "orderTime", "name": "OrderTime", "autoWidth": true },
-                            { "data": "salesInvoiceNumber", "name": "SalesInvoiceNumber", "autoWidth": true },
-                            { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
-                            { "data": "foodMenuRate", "name": "FoodMenuRate", "autoWidth": true },
-                            { "data": "foodMenuQty", "name": "FoodMenuQty", "autoWidth": true },
-                            { "data": "price", "name": "Price", "autoWidth": true },
-                            { "data": "discount", "name": "Discount", "autoWidth": true },
-                            { "data": "tax", "name": "Tax", "autoWidth": true },
-                            { "data": "grossAmount", "name": "GrossAmount", "autoWidth": true },
-                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true }
+                            { "data": "startHour", "name": "StartHour", "autoWidth": true },
+                            { "data": "endHour", "name": "EndHour", "autoWidth": true },
+                            { "data": "totalInvoice", "name": "TotalInvoice", "autoWidth": true },
+                            { "data": "netSalesAmount", "name": "NetSalesAmount", "autoWidth": true },
+                            { "data": "totalDiscount", "name": "TotalDiscount", "autoWidth": true },
+                            { "data": "totalTax", "name": "TotalTax", "autoWidth": true },
+                            { "data": "totalGrossAmount", "name": "TotalGrossAmount", "autoWidth": true },
                         ],
                         columnDefs: [
                             {
-                                targets: [4, 5, 6, 7, 8, 9],
+                                targets: [3,4, 5, 6, 7],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
-                                targets: [4,5,6,7,8,9], orderable: false,
-                                targets: [4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                                targets: [3,4,5,6,7,8,9], orderable: false,
+                                targets: [3, 4, 5, 6, 7], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
@@ -166,7 +172,7 @@
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                 var n = d.getTime();
-                                return 'Master_Sales_Report_' + date + '_' + n;
+                                return 'Sales_summary_Hours_Report' + date + '_' + n;
                             },
                         }],
                         "bLengthChange": true,
@@ -187,6 +193,14 @@
 
                 }
             });
+            }
+            else if (message != '') {
+                $(".modal-body").text(message);
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
         }
     </script>
 }

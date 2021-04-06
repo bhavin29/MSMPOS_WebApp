@@ -21,13 +21,24 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
-                        <input id="fromDate" type="date" class="form-control" />
+                        @*<input id="fromDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="fromDate" class="control-label">From Date</label>
+                            <input asp-for="fromDate" type="date" class="form-control" />
+                            <span asp-validation-for="fromDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <input id="toDate" type="date" class="form-control" />
+                        @*<input id="toDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="toDate" class="control-label">To Date</label>
+                            <input asp-for="toDate" type="date" class="form-control" />
+                            <span asp-validation-for="toDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label class="control-label">Outlet</label>
                             @if (Model != null)
                             {
                                 <select asp-for="OutletId" class="form-control"
@@ -37,10 +48,10 @@
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <a id="btnLoadData" onclick="return loadCustomerRewardList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadCustomerRewardList();" style="margin-top: 22px" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                     <div class="col-md-2">
-                        <a id="download" class="btn btn-outline-light" data-dismiss="modal">XML</a>
+                        <a id="download" class="btn btn-outline-light" style="margin-top: 22px" data-dismiss="modal">XML</a>
                     </div>
                 </div>
             </div>
@@ -102,18 +113,6 @@
     <script>
         var MasterSalesTable = null;
         $(document).ready(function () {
-
-            //var date = new Date();
-            //var fdate = new Date(date.getFullYear(), date.getMonth(), 1);
-            //var tdate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            //         debugger;
-
-            var myDate = new Date();
-            var fdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth()+1 )).slice(-2) + '-' + ('01');
-            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth()+1 )).slice(-2) + '-' + ('0' + myDate.getDate() ).slice(-2);
-
-            $("#fromDate").val(fdate);
-            $("#toDate").val(tdate);
             MasterSalesTable = $('#@dataTableName').DataTable();
 
             $("#FoodCategoryId").select2();

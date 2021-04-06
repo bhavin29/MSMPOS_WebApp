@@ -5,6 +5,10 @@
     <UserSecretsId>c0c53d16-ad4e-484d-bc29-08525de0f801</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="FastMember" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />

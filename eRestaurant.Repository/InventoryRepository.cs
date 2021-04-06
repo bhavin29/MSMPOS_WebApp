@@ -133,7 +133,7 @@ namespace RocketPOS.Repository
                     query = " select StoreId,I.FoodmenuId,foodmenucategoryname,foodmenuname,PhysicalDatetime,PhysicalIsLock,PhysicalLastCalcDatetime,PhysicalStockINQty,PhysicalStockOutQty,PhysicalStockQty from inventory i " +
                                 " inner join foodmenu f on f.id = i.foodmenuid " +
                                 " inner join foodmenucategory fc on fc.id = f.foodcategoryid " +
-                                "  inner join foodmenurate fmr on fmr.foodmenuid = f.id and fmr.outletid = (select id from store where id = " + storeId + ") " + 
+                                "  inner join foodmenurate fmr on fmr.foodmenuid = f.id and fmr.outletid = (select id from outlet where storeid = " + storeId + ") " + 
                                 " Where FMR.IsActive=1 AND F.IsDeleted=0 AND I.IsDeleted = 0  And I.StoreId = " + storeId;
 
                     if (foodCategoryId > 0)

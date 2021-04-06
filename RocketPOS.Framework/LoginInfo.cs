@@ -47,5 +47,11 @@ namespace RocketPOS.Framework
         public static string PurchaseApprovalEmail = "";
         public static int Timeoffset = 0;
         public static int WebRoleId = 0;
+        public static string FromDate ;
+        public static string ToDate ;
+        public static int CategoryId ;
+        public static int FoodMenuId ;
+        public static int OutletId;
+
     }
 }

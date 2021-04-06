@@ -116,3 +116,8 @@ hr {
 .dropdown-item {
     padding: 0px,0px !important;
    }
+
+.dropdown-menu.columns-3 {
+    min-width: 600px !important;
+   
+}

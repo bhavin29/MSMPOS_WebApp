@@ -21,19 +21,32 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-2">
-                        <input id="fromDate" type="date" class="form-control" />
+                        @*<input id="fromDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="fromDate" class="control-label">From Date</label>
+                            <input asp-for="fromDate" type="date" class="form-control" />
+                            <span asp-validation-for="fromDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
-                        <input id="toDate" type="date" class="form-control" />
+                        @*<input id="toDate" type="date" class="form-control" />*@
+                        <div class="form-group">
+                            <label asp-for="toDate" class="control-label">To Date</label>
+                            <input asp-for="toDate" type="date" class="form-control" />
+                            <span asp-validation-for="toDate" class="text-danger"></span>
+                        </div>
                     </div>
                     <div class="col-md-2">
+                        <label class="control-label">customer Phone</label>
                         <input id="customerPhone" type="text" placeholder="Customer Phone" class="form-control" />
                     </div>
                     <div class="col-md-2">
+                        <label class="control-label">Customer name</label>
                         <input id="customerName" type="text" placeholder="Customer Name" class="form-control" />
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
+                            <label class="control-label">Outlet</label>
                             @if (Model != null)
                             {
                                 <select asp-for="OutletId" class="form-control"
@@ -43,6 +56,7 @@
                         </div>
                     </div>
                     <div class="col-md-2">
+                        <label class="control-label"></label>
                         <a id="btnLoadData" onclick="return loadCustomerRewardList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
@@ -85,12 +99,6 @@
     <script>
         var MasterSalesTable = null;
         $(document).ready(function () {
-            var myDate = new Date();
-            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
-            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
-
-            $("#fromDate").val(tdate);
-            $("#toDate").val(tdate);
             MasterSalesTable = $('#@dataTableName').DataTable();
 
             $("#FoodCategoryId").select2();
@@ -99,7 +107,14 @@
         });
 
         function loadCustomerRewardList() {
-            $.ajaxSetup({ cache: false });
+            var message = '';
+
+            if ($("#OutletId").val() == '' || $("#OutletId").val() == '0') {
+                message = "Select Outlet"
+            }
+
+            if (message == '') {
+           $.ajaxSetup({ cache: false });
             $.ajax({
                 url: "/Report/CustomerRewardList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&customerPhone=" + $("#customerPhone").val() + "&customerName=" + $("#customerName").val() + "&outletId=" + $("#OutletId").val(),
                 dataType: "json",
@@ -157,6 +172,14 @@
 
                 }
             });
+            }
+            else if (message != '') {
+                $(".modal-body").text(message);
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
         }
     </script>
 }

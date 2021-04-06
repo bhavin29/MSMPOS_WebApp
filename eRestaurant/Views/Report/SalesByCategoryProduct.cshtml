@@ -12,7 +12,18 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                <h5 class="card-title">Master Sales Report</h5>
+                @if (ViewBag.Reportname == "SalesByCategoryProductQtyDesc")
+                {
+                    <h5 class="card-title">Category Product Qty Desc</h5>
+                }
+                @if (ViewBag.Reportname == "SalesByCategoryProductQtyAsc")
+                {
+                    <h5 class="card-title">Category Product Qty Asc</h5>
+                }
+                @if (ViewBag.Reportname == "SalesByCategoryProductAmountDesc")
+                {
+                    <h5 class="card-title">Category Product Amount Desc</h5>
+                }
             </div>
         </div>
     </div>
@@ -38,7 +49,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label  class="control-label">Category</label>
+                            <label class="control-label">Category</label>
                             @if (Model != null)
                             {
                                 <select asp-for="FoodCategoryId" class="form-control"
@@ -83,32 +94,28 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Rate")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:8%">@Html.DisplayName("Amount")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Value%")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Date")</th>
-                            <th style="width:8%">@Html.DisplayName("Time")</th>
-                            <th style="width:8%">@Html.DisplayName("Invoice#")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
-                            <th style="width:5%">@Html.DisplayName("Discount")</th>
-                            <th style="width:5%">@Html.DisplayName("Tax")</th>
-                            <th style="width:5%">@Html.DisplayName("Gross")</th>
-                            <th style="width:21%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:8%">@Html.DisplayName("Rate")</th>
+                            <th style="width:8%">@Html.DisplayName("Qty")</th>
+                            <th style="width:8%">@Html.DisplayName("Amount")</th>
+                            <th style="width:8%">@Html.DisplayName("Discount")</th>
+                            <th style="width:8%">@Html.DisplayName("Tax")</th>
+                            <th style="width:10%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Value%")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -144,7 +151,18 @@
             $("#OutletId").select2();
         });
 
-//https://codepen.io/RedJokingInn/pen/XMVoXL
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        var rname = getUrlVars()["rname"];
 
         function loadMasterSalesList() {
             var message = '';
@@ -157,7 +175,7 @@
 
             $.ajaxSetup({ cache: false });
             $.ajax({
-                url: "/Report/GetMasterSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
+                url: "/Report/SalesByCategoryProductList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val() + "&rname=" + rname,
                 dataType: "json",
                 type: "GET",
                 success: function (data) {
@@ -166,60 +184,59 @@
                         MasterSalesTable.destroy();
                     }
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
-                        "data": data.masterSalesList,
+                        "data": data.salesByCategoryProductList,
                         "columns": [
-                            { "data": "orderDate", "name": "OrderDate", "autoWidth": true },
-                            { "data": "orderTime", "name": "OrderTime", "autoWidth": true },
-                            { "data": "salesInvoiceNumber", "name": "SalesInvoiceNumber", "autoWidth": true },
+                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
                             { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
-                            { "data": "foodMenuRate", "name": "FoodMenuRate", "autoWidth": true },
-                            { "data": "foodMenuQty", "name": "FoodMenuQty", "autoWidth": true },
-                            { "data": "price", "name": "Price", "autoWidth": true },
-                            { "data": "discount", "name": "Discount", "autoWidth": true },
-                            { "data": "tax", "name": "Tax", "autoWidth": true },
-                            { "data": "grossAmount", "name": "GrossAmount", "autoWidth": true },
-                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true }
+                            { "data": "totalUnitPrice", "name": "TotalUnitPrice", "autoWidth": true },
+                            { "data": "totalQty", "name": "TotalQty", "autoWidth": true },
+                            { "data": "totalPrice", "name": "TotalPrice", "autoWidth": true },
+                            { "data": "totalDiscount", "name": "TotalDiscount", "autoWidth": true },
+                            { "data": "totalTax", "name": "TotalTax", "autoWidth": true },
+                            { "data": "totalGrossAmount", "name": "TotalGrossAmount", "autoWidth": true },
+                            { "data": "valuePercentage", "name": "ValuePercentage", "autoWidth": true }
                         ],
                         columnDefs: [
                             {
-                                targets: [4, 5, 6, 7, 8, 9],
+                                targets: [2,3,4, 5, 6, 7, 8],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                             {
-                                targets: [4, 5, 6, 7, 8, 9], orderable: false,
-                                targets: [4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                                targets: [2,3,4, 5, 6, 7, 8], orderable: false,
+                                targets: [2,3, 4, 5, 6, 7, 8], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [
                             {
                                 extend: 'pdf',
-                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]},
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8]},
                                 filename: function () {
                                     var d = new Date();
                                     var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                     var n = d.getTime();
-                                    return 'Master_Sales_Report_' + date + '_' + n;
+                                    return 'Sales_By_Category_Product_Report_' + date + '_' + n;
                                 },
                                 customize: function (doc) {
                                     doc.pageMargins = [20, 20, 20, 20];
                                     doc.defaultStyle.fontSize = 8;
                                     doc.styles.tableHeader.fontSize = 8;
                                     doc.styles.title.fontSize = 9;
-                                    doc.content[0].text = 'Master Sales Report';
+                                    doc.content[0].text = 'Sales By Category Product Report';
                                     doc.content[0].alignment = 'left';
                                     var logo = 'data:image/jpg;base64,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';
 
-                                    doc.content[1].table.widths = ['10%', '8%', '8%', '24%', '8%', '8%', '8%', '10%', '8%', '8%', '10%'];
+                                    doc.content[1].table.widths = ['10%', '8%', '8%', '24%', '8%', '8%', '8%', '10%', '8%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {
+                                        doc.content[1].table.body[i][2].alignment = 'right';
+                                        doc.content[1].table.body[i][3].alignment = 'right';
                                         doc.content[1].table.body[i][4].alignment = 'right';
                                         doc.content[1].table.body[i][5].alignment = 'right';
                                         doc.content[1].table.body[i][6].alignment = 'right';
                                         doc.content[1].table.body[i][7].alignment = 'right';
                                         doc.content[1].table.body[i][8].alignment = 'right';
-                                        doc.content[1].table.body[i][9].alignment = 'right';
                                    }
 
                                     // Create a footer
@@ -240,12 +257,12 @@
                             },
                             {
                             extend: 'excel',
-                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
                             filename: function () {
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                 var n = d.getTime();
-                                return 'Master_Sales_Report_' + date + '_' + n;
+                                return 'Sales_By_Category_Product_Report_' + date + '_' + n;
                             },
                         }],
                         "bLengthChange": true,

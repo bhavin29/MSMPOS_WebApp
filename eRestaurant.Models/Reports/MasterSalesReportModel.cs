@@ -16,6 +16,10 @@ namespace RocketPOS.Models.Reports
         public int OutletId { get; set; }
         public string OutletName { get; set; }
         public List<SelectListItem> OutletList { get; set; }
+        public DateTime? fromDate { get; set; }
+        public DateTime? toDate { get; set; }
+        public int categoryId { get; set; }
+        public int foodMenuId { get; set; }
     }
     public class MasterSalesReportModel
     {

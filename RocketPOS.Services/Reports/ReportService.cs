@@ -202,5 +202,17 @@ namespace RocketPOS.Services.Reports
             }
         }
 
+        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId) 
+        {
+            return _iReportRepository.GetCessReport(fromDate, toDate, outletId);
+        }
+        public CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
+        {
+            return _iReportRepository.GetCessCategoryReport(fromDate, toDate, categoryId,  foodMenuId, outletId);
+        }
+        public List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId)
+        {
+            return _iReportRepository.GetModOfPaymentReport(fromDate, toDate, outletId);
+        }
     }
 }

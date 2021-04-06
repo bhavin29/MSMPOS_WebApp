@@ -102,8 +102,8 @@ namespace RocketPOS.Models.Reports
     public class SalesSummaryByHours
     {
         public string OrderDate { get; set; }
-        public TimeSpan StartHour { get; set; }
-        public TimeSpan EndHour { get; set; }
+        public TimeSpan? StartHour { get; set; }
+        public TimeSpan? EndHour { get; set; }
         public decimal TotalInvoice { get; set; }
         public decimal NetSalesAmount { get; set; }
         public decimal TotalDiscount { get; set; }
@@ -118,5 +118,63 @@ namespace RocketPOS.Models.Reports
         public string Credit { get; set; }
         public string Debit { get; set; }
         public string Balance { get; set; }
+    }
+    public class ModeofPaymentReportModel
+    {
+        public string BillDate { get; set; }
+        public string PaymentMethodName { get; set; }
+        public string Sales { get; set; }
+        public decimal BillAmount { get; set; }
+        public string Card { get; set; }
+        public string Chqeue { get; set; }
+        public string Cash { get; set; }
+        public string PaisaI { get; set; }
+
+    }
+    public class CessReportModel
+    {
+        public List<CessSummaryModel> CessSummaryList { get; set; }
+
+        public List<CessDetailModel> CessDetailList { get; set; }
+    }
+
+    public class CessCategoryReportModel
+    {
+        public List<CessCategorySummaryModel> CessSummaryList { get; set; }
+
+        public List<CessDetailModel> CessDetailList { get; set; }
+    }
+    public class CessDetailModel
+    {
+        public string BillDate { get; set; }
+        public string InvoiceNumber { get; set; }
+        public decimal NetSales { get; set; }
+        public decimal Vatable { get; set; }
+        public decimal NonVatable { get; set; }
+        public decimal TotalTax { get; set; }
+        public decimal GrandTotal { get; set; }
+        public Decimal CateringLevy { get; set; }
+    }
+
+    public class CessSummaryModel
+    {
+        public string BillDate { get; set; }
+        public decimal NetSales { get; set; }
+        public decimal Vatable { get; set; }
+        public decimal NonVatable { get; set; }
+        public decimal TotalTax { get; set; }
+        public decimal GrandTotal { get; set; }
+        public Decimal CateringLevy { get; set; }
+    }
+    public class CessCategorySummaryModel
+    {
+        //   public string BillDate { get; set; }
+        public string FoodmenucategoryName { get; set; }
+        public decimal NetSales { get; set; }
+        public decimal Vatable { get; set; }
+        public decimal NonVatable { get; set; }
+        public decimal TotalTax { get; set; }
+        public decimal GrandTotal { get; set; }
+        public Decimal CateringLevy { get; set; }
     }
 }

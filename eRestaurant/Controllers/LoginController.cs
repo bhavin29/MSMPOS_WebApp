@@ -95,7 +95,11 @@ namespace RocketPOS.Controllers
                 LoginInfo.EmailDisplayName = loginModel.EmailDisplayName;
                 LoginInfo.FromEmailPassword = loginModel.FromEmailPassword;
                 LoginInfo.WebRoleId = loginModel.WebRoleId;
-
+                LoginInfo.FromDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("dd/MM/yyyy");
+                LoginInfo.ToDate = DateTime.Now.ToString("dd/MM/yyyy"); 
+                LoginInfo.FoodMenuId = -1;
+                LoginInfo.CategoryId = -1;
+                LoginInfo.OutletId = -1;
             }
             catch (Exception ex)
             {

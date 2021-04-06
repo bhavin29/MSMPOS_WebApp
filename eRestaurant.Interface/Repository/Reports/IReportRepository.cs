@@ -29,5 +29,8 @@ namespace RocketPOS.Interface.Repository.Reports
         List<SalesSummaryByHours> GetSalesSummaryByHoursReport(string fromDate, string toDate, int outletId);
         List<TallySetupModel> GetTallySetup(int outletId);
         List<TallySalesVoucherModel> GetSalesVoucherData(string fromDate, string toDate, int outletId);
+        CessReportModel GetCessReport(string fromDate, string toDate, int outletId);
+        CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
+        List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId);
     }
 }

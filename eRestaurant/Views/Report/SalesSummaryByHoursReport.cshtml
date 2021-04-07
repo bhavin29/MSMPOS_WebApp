@@ -83,9 +83,9 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:10%">@Html.DisplayName("OrderDate")</th>
-                            <th style="width:10%">@Html.DisplayName("StartHour")</th>
-                            <th style="width:10%">@Html.DisplayName("EndHour")</th>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:10%">@Html.DisplayName("Start")</th>
+                            <th style="width:10%">@Html.DisplayName("End")</th>
                             <th style="width:10%">@Html.DisplayName("#Invoice")</th>
                             <th style="width:15%">@Html.DisplayName("Gross")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
@@ -95,9 +95,9 @@
                       </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:10%">@Html.DisplayName("OrderDate")</th>
-                            <th style="width:10%">@Html.DisplayName("StartHour")</th>
-                            <th style="width:10%">@Html.DisplayName("EndHour")</th>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:10%">@Html.DisplayName("Start")</th>
+                            <th style="width:10%">@Html.DisplayName("End")</th>
                             <th style="width:10%">@Html.DisplayName("#Invoice")</th>
                             <th style="width:15%">@Html.DisplayName("Gross")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
@@ -167,7 +167,20 @@
                         dom: 'Bfrtip',
                         "buttons": [{
                             extend: 'excel',
-                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+                            customize: function (xlsx) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                var thousandSepCols = [ 'D', 'E', 'F', 'G', 'H'];
+                                for (i = 0; i < thousandSepCols.length; i++) {
+                                    $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
+                                }
+                            },
+                            customizeData: function (data) {
+                                for (var i = 0; i < data.body.length; i++) {
+                                    for (var j = 1; j < data.body[i].length; j++) {
+                                        data.body[i][j] = '\u200C' + data.body[i][j];
+                                    }
+                                }
+                            },
                             filename: function () {
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);

@@ -85,7 +85,6 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Section")</th>
                             <th style="width:20%">@Html.DisplayName("Category")</th>
-                            <th style="width:0%">@Html.DisplayName("")</th>
                             <th style="width:10%">@Html.DisplayName("Rate")</th>
                             <th style="width:10%">@Html.DisplayName("Qty")</th>
                             <th style="width:10%">@Html.DisplayName("Total")</th>
@@ -99,7 +98,6 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Section")</th>
                             <th style="width:20%">@Html.DisplayName("Category")</th>
-                            <th style="width:0%">@Html.DisplayName("")</th>
                             <th style="width:10%">@Html.DisplayName("Rate")</th>
                             <th style="width:10%">@Html.DisplayName("Qty")</th>
                             <th style="width:10%">@Html.DisplayName("Total")</th>
@@ -166,7 +164,7 @@
                         "columns": [
                             { "data": "sectionName", "name": "SectionName", "autoWidth": true },
                             { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
-                            { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+  //                          { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
                             { "data": "totalUnitPrice", "name": "TotalUnitPrice", "autoWidth": true },
                             { "data": "totalQty", "name": "TotalQty", "autoWidth": true },
                             { "data": "totalPrice", "name": "TotalPrice", "autoWidth": true },
@@ -176,24 +174,24 @@
                             { "data": "valuePercentage", "name": "ValuePercentage", "autoWidth": true },
                         ],
                         columnDefs: [
+                            //{
+                            //    targets: [2],
+                            //    visible:false
+                            //},
                             {
-                                targets: [2],
-                                visible:false
-                            },
-                            {
-                                targets: [3,4, 5, 6, 7, 8, 9],
+                                targets: [2,3,4, 5, 6, 7, 8],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
-                                targets: [3,4,5,6,7,8,9], orderable: false,
-                                targets: [3,4, 5, 6, 7, 8, 9], orderable: false, class: "text-right",
+                                targets: [2,3,4,5,6,7,8], orderable: false,
+                                targets: [2,3,4, 5, 6, 7, 8], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [
                             {
                                 extend: 'pdf',
-                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] },
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8] },
                                 filename: function () {
                                     var d = new Date();
                                     var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
@@ -246,8 +244,21 @@
                             },
                             {
                             extend: 'excel',
-                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8,9] },
-                            filename: function () {
+                                customize: function (xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                    var thousandSepCols = ['C', 'D', 'E', 'F', 'G', 'H', 'I'];
+                                    for (i = 0; i < thousandSepCols.length; i++) {
+                                        $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
+                                    }
+                                },
+                                customizeData: function (data) {
+                                    for (var i = 0; i < data.body.length; i++) {
+                                        for (var j = 1; j < data.body[i].length; j++) {
+                                            data.body[i][j] = '\u200C' + data.body[i][j];
+                                        }
+                                    }
+                                },
+                                filename: function () {
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                 var n = d.getTime();

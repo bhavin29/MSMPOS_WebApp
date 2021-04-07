@@ -830,9 +830,10 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.FromDate = fromdate;
             LoginInfo.ToDate = toDate;
             LoginInfo.OutletId = outletId;
-
+  
             salesSummaryByHours = _iReportService.GetSalesSummaryByHoursReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
-            return Json(new { salesSummaryByHoursList = salesSummaryByHours });
+               var salesSummaryByHoursConvert = salesSummaryByHours.Select(x => new { EndHour = x.EndHour.ToString(), x.NetSalesAmount, x.OrderDate, StartHour= x.StartHour.ToString(), x.TotalDiscount, x.TotalGrossAmount, x.TotalInvoice, x.TotalTax }).ToList();
+            return Json(new { salesSummaryByHoursList = salesSummaryByHoursConvert });
         }
         public JsonResult GetCessList(string fromdate, string toDate, int outletId)
         {

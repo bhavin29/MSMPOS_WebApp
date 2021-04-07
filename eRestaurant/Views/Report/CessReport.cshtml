@@ -135,12 +135,12 @@
                         "data": data.cessReportList,
                         "columns": [
                             { "data": "billDate", "name": "BillDate", "autoWidth": true },
-                            { "data": "netSales", "name": "NetSales", "autoWidth": true },
-                            { "data": "vatable", "name": "Vatable", "autoWidth": true },
-                            { "data": "nonVatable", "name": "NonVatable", "autoWidth": true },
-                            { "data": "totalTax", "name": "TotalTax", "autoWidth": true },
-                            { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true },
-                            { "data": "cateringLevy", "name": "CateringLevy", "autoWidth": true },
+                            { "data": "netSales", "name": "NetSales", "autoWidth": true, "type": "num" },
+                            { "data": "vatable", "name": "Vatable", "autoWidth": true, "type": "num" },
+                            { "data": "nonVatable", "name": "NonVatable", "autoWidth": true, "type": "num" },
+                            { "data": "totalTax", "name": "TotalTax", "autoWidth": true, "type": "num"},
+                            { "data": "grandTotal", "name": "GrandTotal", "autoWidth": true, "type": "num"},
+                            { "data": "cateringLevy", "name": "CateringLevy", "autoWidth": true, "type": "num" },
                         ],
                         columnDefs: [
                             {
@@ -201,14 +201,27 @@
                                         },
                             },
                             {
-                            extend: 'excel',
-                            exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6] },
-                            filename: function () {
-                                var d = new Date();
-                                var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
-                                var n = d.getTime();
-                                return 'Catering_Levy_Summary_Report_' + date + '_' + n;
-                            },
+                                extend: 'excel',
+                                customize: function (xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                    var thousandSepCols = ['B', 'C', 'D','E','F','G'];
+                                    for (i = 0; i < thousandSepCols.length; i++) {
+                                        $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
+                                    }
+                                },
+                                customizeData: function (data) {
+                                    for (var i = 0; i < data.body.length; i++) {
+                                        for (var j = 1; j < data.body[i].length; j++) {
+                                            data.body[i][j] = '\u200C' + data.body[i][j];
+                                        }
+                                    }
+                                },
+                                filename: function () {
+                                    var d = new Date();
+                                    var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                                    var n = d.getTime();
+                                    return 'Catering_Levy_Summary_Report_' + date + '_' + n;
+                                },
                         }],
                         "bLengthChange": true,
                         "bInfo": true,

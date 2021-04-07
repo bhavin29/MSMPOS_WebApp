@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-md-2">
                         <label class="control-label"></label>
-                        <a id="btnLoadData" onclick="return loadCustomerRewardList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                        <a id="btnLoadData" onclick="return loadCustomerRewardList();" style="margin-top: 22px" class="btn btn-outline-light" data-dismiss="modal">Load</a>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,20 @@
                         dom: 'Bfrtip',
                         "buttons": [{
                             extend: 'excel',
-                            exportOptions: { columns: [0, 1, 2, 3, 4, 5] },
+                            customize: function (xlsx) {
+                                var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                var thousandSepCols = [ 'D', 'E', 'F'];
+                                for (i = 0; i < thousandSepCols.length; i++) {
+                                    $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
+                                }
+                            },
+                            customizeData: function (data) {
+                                for (var i = 0; i < data.body.length; i++) {
+                                    for (var j = 1; j < data.body[i].length; j++) {
+                                        data.body[i][j] = '\u200C' + data.body[i][j];
+                                    }
+                                }
+                            },
                             filename: function () {
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);

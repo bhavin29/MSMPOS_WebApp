@@ -181,7 +181,48 @@
                             }
                         ],
                         dom: 'Bfrtip',
-                        "buttons": [{
+                        "buttons": [
+                            {
+                                extend: 'pdf',
+                                filename: function () {
+                                    var d = new Date();
+                                    var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                                    var n = d.getTime();
+                                    return 'Sales_Voucher_Report_' + date + '_' + n;
+                                },
+                                customize: function (doc) {
+                                    doc.pageMargins = [20, 20, 20, 20];
+                                    doc.defaultStyle.fontSize = 8;
+                                    doc.styles.tableHeader.fontSize = 8;
+                                    doc.styles.title.fontSize = 10;
+                                    doc.content[0].text = 'Sales Voucher Report' + '\n' + $("#OutletId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
+                                    doc.content[0].alignment = 'left';
+                                    doc.content[1].table.widths = ['10%', '20%', '20%', '10%', '10%', '10%', '10%', '10%'];
+
+                                    var rowCount = doc.content[1].table.body.length;
+                                    for (i = 1; i < rowCount; i++) {
+                                        doc.content[1].table.body[i][4].alignment = 'right';
+                                        doc.content[1].table.body[i][5].alignment = 'right';
+                                        doc.content[1].table.body[i][6].alignment = 'right';
+                                        doc.content[1].table.body[i][7].alignment = 'right';
+                                    }
+                                    // Create a footer
+                                    doc['footer'] = (function (page, pages) {
+                                        return {
+                                            columns: [
+                                                '',//'This is your left footer column',
+                                                {
+                                                    // This is the right column
+                                                    alignment: 'right',
+                                                    text: ['Page ', { text: page.toString() }, ' of ', { text: pages.toString() }]
+                                                }
+                                            ],
+                                            margin: [10, 0]
+                                        }
+                                    });
+                                },
+                            },
+                            {
                             extend: 'excel',
                             customize: function (xlsx) {
                                 var sheet = xlsx.xl.worksheets['sheet1.xml'];

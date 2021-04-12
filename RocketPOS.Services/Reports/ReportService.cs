@@ -202,9 +202,9 @@ namespace RocketPOS.Services.Reports
             }
         }
 
-        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId) 
+        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId,string reporttype) 
         {
-            return _iReportRepository.GetCessReport(fromDate, toDate, outletId);
+            return _iReportRepository.GetCessReport(fromDate, toDate, outletId, reporttype);
         }
         public CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
         {

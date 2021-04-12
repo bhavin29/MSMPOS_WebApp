@@ -644,9 +644,31 @@ namespace RocketPOS.Controllers.Reports
             // productWiseSalesReportModels.RemoveAll(p => p.SalesPrice == "");
             //System.Text.Json.JsonSerializer.Serialize
 
+            productWiseSalesReportModels.RemoveAt(0);
+            productWiseSalesReportModels.RemoveAt(1);
+            productWiseSalesReportModels.RemoveAt(2);
+            productWiseSalesReportModels.RemoveAt(3);
+            productWiseSalesReportModels.RemoveAt(4);
+            productWiseSalesReportModels.RemoveAt(5);
+            productWiseSalesReportModels.RemoveAt(6);
+            productWiseSalesReportModels.RemoveAt(7);
+            productWiseSalesReportModels.RemoveAt(8);
+            productWiseSalesReportModels.RemoveAt(9);
+            productWiseSalesReportModels.RemoveAt(10);
+
+            ProductWiseSalesReportModel[] array = productWiseSalesReportModels.ToArray();
+
+            
+
+            //    string output = new System.Web.Script.JavascriptSerializer.JavaScriptSerializer().Serialize(productWiseSalesReportModels);
 
 
-            return Json(new { productWiseSalesList = System.Text.Json.JsonSerializer.Serialize(productWiseSalesReportModels) });
+            //   var a = JsonConvert.Serialize(productWiseSalesReportModels);
+
+            //          var b = JsonConvert.DeserializeObject(a);
+            return Json(new { productWiseSalesList = (array) });
+            
+
         }
         public JsonResult SaleByCategorySectionList(string fromdate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
         {
@@ -853,7 +875,7 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.ToDate = toDate;
             LoginInfo.OutletId = outletId;
 
-            cessReportModels = _iReportService.GetCessReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
+            cessReportModels = _iReportService.GetCessReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId, "cessSummary");
             return Json(new { cessReportList = cessReportModels.CessSummaryList });
         }
         public JsonResult GetCessDetailList(string fromdate, string toDate, int outletId)
@@ -874,7 +896,7 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.ToDate = toDate;
             LoginInfo.OutletId = outletId;
 
-            cessReportModels = _iReportService.GetCessReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
+            cessReportModels = _iReportService.GetCessReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId, "cessDetail");
             return Json(new { cessReportList = cessReportModels.CessDetailList   });
         }
         public JsonResult GetModOfPaymentList(string fromdate, string toDate, int outletId)
@@ -897,24 +919,86 @@ namespace RocketPOS.Controllers.Reports
 
             modeofPaymentReportModels = _iReportService.GetModOfPaymentReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
 
-            var dataTable = ConvertToDataTable(modeofPaymentReportModels);
-            var dataResult = GetInversedDataTable(dataTable, "PaymentMethodName", "BillDate", "BillAmount", " ", true);
+            // for linqpad objItems.Dump();
+
+            var result = modeofPaymentReportModels.GroupBy(x => new { x.BillDate, x.PaymentMethodName, x.BillAmount, x.Sales })
+                        .Select(g =>
+                        {
+                            var a = g.ToList();
+                            return
+                            new
+                            {
+                                BillDate = a[0].BillDate,
+                                PaymentMethodName = a[0].PaymentMethodName,
+                                BillAmount = a[0].BillAmount,
+                                Sales = a[0].Sales
+                            };
+                        });
+
+            // for linqpad result.Dump();
+
+            var query = result
+             .GroupBy(c => c.BillDate)
+             .Select(g => new {
+                 BillDate = g.Key,
+                 Sales = g.Sum( c=> Convert.ToDecimal(c.BillAmount))/2,
+              //   Sales = g.Where(c => c.PaymentMethodName == "SALES").Sum(c => Convert.ToDecimal(c.Sales)),
+                 Cash = g.Where(c => c.PaymentMethodName == "CASH").Sum(c => c.BillAmount),
+                 PaisaI = g.Where(c => c.PaymentMethodName == "M-PESA").Sum(c => c.BillAmount),
+                 CreditCard = g.Where(c => c.PaymentMethodName == "CREDIT CARD").Sum(c => c.BillAmount),
+                 DebitCard = g.Where(c => c.PaymentMethodName == "DEBIT CARD").Sum(c => c.BillAmount)
+             });
+          //   .ToList();
+
+       //     List<ModeofPaymentReportResultModel> modeofPaymentReportModels1 = query.AsParallel).ToList();
+
+
+            //var dataTable = ConvertToDataTable(modeofPaymentReportModels);
+            //   var dataResult = GetInversedDataTable(dataTable, "PaymentMethodName", "BillDate", "BillAmount", " ", true);
 
             List<ModeofPaymentReportModel> modeofPaymentReports = new List<ModeofPaymentReportModel>();
+            ModeofPaymentReportModel modeofPaymentReportModel = new ModeofPaymentReportModel();
+            List<ModeofPaymentReportModel> returnLists = new List<ModeofPaymentReportModel>();
+            //  gList.AddRange(DirectCast(DBDataTable.Select(), IEnumerable(Of Guid)))
 
-            List<ModeofPaymentReportModel> listObject = dataResult.AsEnumerable()
-                                  .Select(x => new ModeofPaymentReportModel()
-                                  {
-                                      BillDate = x.Field<string>(0),
-                                      Sales = x.Field<string>(1),
-                                      Chqeue = x.Field<string>(2),
-                                      Cash = x.Field<string>(3),
-                                      PaisaI = x.Field<string>(4),
-                                      Card = x.Field<string>(5),
-                                  }).ToList();
+            //   modeofPaymentReports.AddRang(DirectCast(dataResult.Select().ToList());
+            //   modeofPaymentReports = ;
+
+                  List<ModeofPaymentReportResultModel> listObject = query.AsEnumerable()
+                                        .Select(x => new ModeofPaymentReportResultModel()
+                                        {
+                                            BillDate = x.BillDate,
+                                            Sales = x.Sales,
+                                            Cash = x.Cash,
+                                            PaisaI = x.PaisaI,
+                                            CreditCard = x.CreditCard,
+                                            DebitCard = x.DebitCard,
+                                        }).ToList();
+
+      /*      List<dynamic> dynamicListReturned = GetListFromDT(typeof(ModeofPaymentReportModel), dataResult);
+            List<ModeofPaymentReportModel> listPersons = dynamicListReturned.Cast<ModeofPaymentReportModel>().ToList();*/
+
 
             return Json(new { modeofPaymentReportList = listObject });
         }
+
+        public List<dynamic> GetListFromDT(Type className, DataTable dataTable)
+        {
+            List<dynamic> list = new List<dynamic>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                object objClass = Activator.CreateInstance(className);
+                Type type = objClass.GetType();
+                foreach (DataColumn column in row.Table.Columns)
+                {
+                    PropertyInfo prop = type.GetProperty(column.ColumnName);
+                    prop.SetValue(objClass, row[column.ColumnName], null);
+                }
+                list.Add(objClass);
+            }
+            return list;
+        }
+
         public JsonResult GetCessCategoryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
         {
             CessCategoryReportModel cessCategoryReportModels = new CessCategoryReportModel();

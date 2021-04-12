@@ -83,27 +83,24 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Id")</th>
-                            <th style="width:8%">@Html.DisplayName("Row")</th>
-                            <th style="width:8%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("Row")</th>
+                            <th style="width:25%">@Html.DisplayName("Category")</th>
                             <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Rate")</th>
+                            <th style="width:15%">@Html.DisplayName("Qty")</th>
+                            <th style="width:15%">@Html.DisplayName("Total")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:8%">@Html.DisplayName("Row")</th>
-                            <th style="width:8%">@Html.DisplayName("Category")</th>
+                            <th style="width:10%">@Html.DisplayName("Row")</th>
+                            <th style="width:25%">@Html.DisplayName("Category")</th>
                             <th style="width:25%">@Html.DisplayName("Product")</th>
-                            <th style="width:5%">@Html.DisplayName("Rate")</th>
-                            <th style="width:5%">@Html.DisplayName("Qty")</th>
-                            <th style="width:5%">@Html.DisplayName("Total")</th>
+                            <th style="width:10%">@Html.DisplayName("Rate")</th>
+                            <th style="width:15%">@Html.DisplayName("Qty")</th>
+                            <th style="width:15%">@Html.DisplayName("Total")</th>
                         </tr>
                     </tfoot>
-                    <tbody>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -149,7 +146,6 @@
             $.ajax({
                 url: "/Report/ProductWiseSalesList?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&outletId=" + $("#OutletId").val(),
                 dataType: "json",
-                contentType: "application/json",
                 type: "GET",
                 success: function (data) {
                     if (MasterSalesTable != null) {
@@ -157,14 +153,11 @@
                         MasterSalesTable.destroy();
                     }
 
-                  //  alert(JSON.parse(JSON.stringify(data.productWiseSalesList)));
-
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
                         "data": (data.productWiseSalesList),
                         "columns": [
-                            { "data": "foodMenuCategoryName" , "name": "FoodMenuCategoryName", "autoWidth": true },
-                            { "data": "id" , "name": "Id", "autoWidth": true },
-                            { "data": "rowNumber" , "name": "RowNumber", "autoWidth": true },
+                            { "data": "rowNumber", "name": "RowNumber", "autoWidth": true },
+                            { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
                             { "data": "foodMenuName" , "name": "FoodMenuName", "autoWidth": true },
                             { "data": "salesPrice" , "name": "SalesPrice", "autoWidth": true },
                             { "data": "foodMenuQty" , "name": "FoodMenuQty", "autoWidth": true },
@@ -172,19 +165,19 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [4,5,6],
+                                targets: [3,4,5],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
-                                targets: [4,5,6], orderable: false,
-                                targets: [4, 5, 6], orderable: false, class: "text-right",
+                                targets: [3,4,5], orderable: false,
+                                targets: [3,4, 5], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [
                             {
                                 extend: 'pdf',
-                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5] },
                                 filename: function () {
                                     var d = new Date();
                                     var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
@@ -199,7 +192,7 @@
                                     // Remove spaces around page title
                                     doc.content[0].text = 'Product Wise Sales Report';
                                     doc.content[0].alignment = 'left';
-                                    
+
                                     //doc.content[0].image = logo;
                                     //doc.content[0].width = 50;
                                     //Create Header
@@ -264,7 +257,7 @@
                     });
                 },
                 error: function (err) {
-
+                    alert(err);
                 }
             });
             }

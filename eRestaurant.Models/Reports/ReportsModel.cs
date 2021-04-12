@@ -125,12 +125,24 @@ namespace RocketPOS.Models.Reports
         public string PaymentMethodName { get; set; }
         public string Sales { get; set; }
         public decimal BillAmount { get; set; }
-        public string Card { get; set; }
+        public string CreditCard { get; set; }
+        public string DebitCard { get; set; }
         public string Chqeue { get; set; }
         public string Cash { get; set; }
         public string PaisaI { get; set; }
 
     }
+    public class ModeofPaymentReportResultModel
+    {
+        public string BillDate { get; set; }
+        public decimal Sales { get; set; }
+        public decimal Cash { get; set; }
+        public decimal PaisaI { get; set; }
+        public decimal CreditCard { get; set; }
+        public decimal DebitCard { get; set; }
+
+    }
+
     public class CessReportModel
     {
         public List<CessSummaryModel> CessSummaryList { get; set; }

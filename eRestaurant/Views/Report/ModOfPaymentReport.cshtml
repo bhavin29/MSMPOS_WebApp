@@ -62,21 +62,21 @@
                     <thead role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Date")</th>
-                            <th style="width:20%">@Html.DisplayName("Sales")</th>
-                            <th style="width:20%">@Html.DisplayName("Chqeue")</th>
-                            <th style="width:20%">@Html.DisplayName("Cash")</th>
-                            <th style="width:20%">@Html.DisplayName("PAISA")</th>
-                            <th style="width:10%">@Html.DisplayName("Card")</th>
+                            <th style="width:18%">@Html.DisplayName("Sales")</th>
+                            <th style="width:18%">@Html.DisplayName("Cash")</th>
+                            <th style="width:18%">@Html.DisplayName("M-PESA")</th>
+                            <th style="width:18%">@Html.DisplayName("Credit Card")</th>
+                            <th style="width:18%">@Html.DisplayName("Debit Card")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Date")</th>
-                            <th style="width:20%">@Html.DisplayName("Sales")</th>
-                            <th style="width:20%">@Html.DisplayName("Chqeue")</th>
-                            <th style="width:20%">@Html.DisplayName("Cash")</th>
-                            <th style="width:20%">@Html.DisplayName("PAISA")</th>
-                            <th style="width:10%">@Html.DisplayName("Card")</th>
+                            <th style="width:18%">@Html.DisplayName("Sales")</th>
+                            <th style="width:18%">@Html.DisplayName("Cash")</th>
+                            <th style="width:18%">@Html.DisplayName("M-PESA")</th>
+                            <th style="width:18%">@Html.DisplayName("Credit Card")</th>
+                            <th style="width:18%">@Html.DisplayName("Debit Card")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -138,10 +138,10 @@
                         "columns": [
                             { "data": "billDate", "name": "BillDate", "autoWidth": true },
                             { "data": "sales", "name": "sales", "autoWidth": true },
-                            { "data": "chqeue", "name": "chqeue", "autoWidth": true },
                             { "data": "cash", "name": "cash", "autoWidth": true },
                             { "data": "paisaI", "name": "paisaI", "autoWidth": true },
-                            { "data": "card", "name": "card", "autoWidth": true },
+                            { "data": "creditCard", "name": "CreditCard", "autoWidth": true },
+                            { "data": "debitCard", "name": "DebitCard", "autoWidth": true },
                         ],
                         columnDefs: [
                             {
@@ -171,7 +171,7 @@
                                     doc.styles.title.fontSize = 10;
                                     doc.content[0].text = 'Sales Summary by Payment Method' + '\n' + $("#OutletId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
                                     doc.content[0].alignment = 'left';
-                                    doc.content[1].table.widths = ['10%', '20%', '20%', '20%', '20%', '10%'];
+                                    doc.content[1].table.widths = ['10%', '18%', '18%', '18%', '18%', '18%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {

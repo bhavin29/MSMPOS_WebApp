@@ -937,7 +937,7 @@ namespace RocketPOS.Repository.Reports
                                 " sum(round(CO.VatableAmount, 0)) as CashSales, Sum(round(CO.NonVatableAmount, 0)) as ExemptedSales,sum(round(CO.TaxAmount, 0)) as OutputVAT " +
                                 " from Billdetail BD " +
                                 " INNER join PaymentMethodLedger PML on PML.PaymentMethodId = BD.PaymentMethodId and PML.OutletId = " + outletId +
-                                " Inner join Bill B on B.MasterID = BD.BillId and B.OutletId = " + outletId + " and COI.OutletId = " + outletId + 
+                                " Inner join Bill B on B.MasterID = BD.BillId and B.OutletId = " + outletId + " and BD.OutletId = " + outletId + 
                                 " inner join CustomerOrder CO on CO.MasterID = B.CustomerOrderId  AND CO.OutletId = " + outletId +
                                 " Where Convert(Date, BD.BillDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " +
                                 " And B.BillStatus = 4 AND BD.OutletId = " + outletId +

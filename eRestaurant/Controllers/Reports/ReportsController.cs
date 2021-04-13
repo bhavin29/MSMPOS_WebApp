@@ -658,7 +658,7 @@ namespace RocketPOS.Controllers.Reports
 
             ProductWiseSalesReportModel[] array = productWiseSalesReportModels.ToArray();
 
-            
+
 
             //    string output = new System.Web.Script.JavascriptSerializer.JavaScriptSerializer().Serialize(productWiseSalesReportModels);
 
@@ -667,7 +667,7 @@ namespace RocketPOS.Controllers.Reports
 
             //          var b = JsonConvert.DeserializeObject(a);
             return Json(new { productWiseSalesList = (array) });
-            
+
 
         }
         public JsonResult SaleByCategorySectionList(string fromdate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
@@ -833,7 +833,24 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.OutletId = outletId;
 
             salesSummaryByWeeks = _iReportService.GetSalesSummaryByWeekReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), categoryId, foodMenuId, outletId);
-            return Json(new { salesSummaryByWeeksList = salesSummaryByWeeks });
+
+            salesSummaryByWeeks = salesSummaryByWeeks.OrderBy(e => Convert.ToDateTime(e.WeekStartDate)).ToList();
+
+            var query = salesSummaryByWeeks
+                  .Select(g => new
+                  {
+                      WeekDate =g.WeekStartDate,
+                      WeekStartDate = Convert.ToDateTime(g.WeekStartDate),
+                      TotalInvoice = g.TotalInvoice,
+                      NetSalesAmount = g.NetSalesAmount,
+                      TotalDiscount = g.TotalDiscount,
+                      TotalTax = g.TotalTax,
+                      TotalGrossAmount = g.TotalGrossAmount
+                  });
+
+            var res = from ordr in query orderby Convert.ToDateTime(ordr.WeekStartDate) select ordr;
+
+            return Json(new { salesSummaryByWeeksList = res });
         }
         public JsonResult SalesSummaryByHoursList(string fromdate, string toDate, int outletId)
         {
@@ -852,9 +869,9 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.FromDate = fromdate;
             LoginInfo.ToDate = toDate;
             LoginInfo.OutletId = outletId;
-  
+
             salesSummaryByHours = _iReportService.GetSalesSummaryByHoursReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId);
-               var salesSummaryByHoursConvert = salesSummaryByHours.Select(x => new { EndHour = x.EndHour.ToString(), x.NetSalesAmount, x.OrderDate, StartHour= x.StartHour.ToString(), x.TotalDiscount, x.TotalGrossAmount, x.TotalInvoice, x.TotalTax }).ToList();
+            var salesSummaryByHoursConvert = salesSummaryByHours.Select(x => new { EndHour = x.EndHour.ToString(), x.NetSalesAmount, x.OrderDate, StartHour = x.StartHour.ToString(), x.TotalDiscount, x.TotalGrossAmount, x.TotalInvoice, x.TotalTax }).ToList();
             return Json(new { salesSummaryByHoursList = salesSummaryByHoursConvert });
         }
         public JsonResult GetCessList(string fromdate, string toDate, int outletId)
@@ -897,7 +914,7 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.OutletId = outletId;
 
             cessReportModels = _iReportService.GetCessReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), outletId, "cessDetail");
-            return Json(new { cessReportList = cessReportModels.CessDetailList   });
+            return Json(new { cessReportList = cessReportModels.CessDetailList });
         }
         public JsonResult GetModOfPaymentList(string fromdate, string toDate, int outletId)
         {
@@ -939,18 +956,19 @@ namespace RocketPOS.Controllers.Reports
 
             var query = result
              .GroupBy(c => c.BillDate)
-             .Select(g => new {
+             .Select(g => new
+             {
                  BillDate = g.Key,
-                 Sales = g.Sum( c=> Convert.ToDecimal(c.BillAmount))/2,
-              //   Sales = g.Where(c => c.PaymentMethodName == "SALES").Sum(c => Convert.ToDecimal(c.Sales)),
+                 Sales = g.Sum(c => Convert.ToDecimal(c.BillAmount)) / 2,
+                 //   Sales = g.Where(c => c.PaymentMethodName == "SALES").Sum(c => Convert.ToDecimal(c.Sales)),
                  Cash = g.Where(c => c.PaymentMethodName == "CASH").Sum(c => c.BillAmount),
                  PaisaI = g.Where(c => c.PaymentMethodName == "M-PESA").Sum(c => c.BillAmount),
                  CreditCard = g.Where(c => c.PaymentMethodName == "CREDIT CARD").Sum(c => c.BillAmount),
                  DebitCard = g.Where(c => c.PaymentMethodName == "DEBIT CARD").Sum(c => c.BillAmount)
              });
-          //   .ToList();
+            //   .ToList();
 
-       //     List<ModeofPaymentReportResultModel> modeofPaymentReportModels1 = query.AsParallel).ToList();
+            //     List<ModeofPaymentReportResultModel> modeofPaymentReportModels1 = query.AsParallel).ToList();
 
 
             //var dataTable = ConvertToDataTable(modeofPaymentReportModels);
@@ -964,19 +982,19 @@ namespace RocketPOS.Controllers.Reports
             //   modeofPaymentReports.AddRang(DirectCast(dataResult.Select().ToList());
             //   modeofPaymentReports = ;
 
-                  List<ModeofPaymentReportResultModel> listObject = query.AsEnumerable()
-                                        .Select(x => new ModeofPaymentReportResultModel()
-                                        {
-                                            BillDate = x.BillDate,
-                                            Sales = x.Sales,
-                                            Cash = x.Cash,
-                                            PaisaI = x.PaisaI,
-                                            CreditCard = x.CreditCard,
-                                            DebitCard = x.DebitCard,
-                                        }).ToList();
+            List<ModeofPaymentReportResultModel> listObject = query.AsEnumerable()
+                                  .Select(x => new ModeofPaymentReportResultModel()
+                                  {
+                                      BillDate = x.BillDate,
+                                      Sales = x.Sales,
+                                      Cash = x.Cash,
+                                      PaisaI = x.PaisaI,
+                                      CreditCard = x.CreditCard,
+                                      DebitCard = x.DebitCard,
+                                  }).ToList();
 
-      /*      List<dynamic> dynamicListReturned = GetListFromDT(typeof(ModeofPaymentReportModel), dataResult);
-            List<ModeofPaymentReportModel> listPersons = dynamicListReturned.Cast<ModeofPaymentReportModel>().ToList();*/
+            /*      List<dynamic> dynamicListReturned = GetListFromDT(typeof(ModeofPaymentReportModel), dataResult);
+                  List<ModeofPaymentReportModel> listPersons = dynamicListReturned.Cast<ModeofPaymentReportModel>().ToList();*/
 
 
             return Json(new { modeofPaymentReportList = listObject });
@@ -1042,9 +1060,9 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.FoodMenuId = foodMenuId;
             LoginInfo.OutletId = outletId;
 
-            salesByCategoryProductModels = _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), rname,categoryId, foodMenuId, outletId);
-            var salesByCategoryProduct = salesByCategoryProductModels.Select(x => new { x.FoodMenuCategoryName, x.FoodMenuName, x.TotalDiscount, x.TotalGrossAmount, x.TotalPrice, x.TotalQty, x.TotalTax, x.TotalUnitPrice, x.ValuePercentage }).ToList();
-            return Json(new { salesByCategoryProductList = salesByCategoryProduct });
+            salesByCategoryProductModels = _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), rname, categoryId, foodMenuId, outletId);
+           // var salesByCategoryProduct = salesByCategoryProductModels.Select(x => new { x.FoodMenuCategoryName, x.FoodMenuName, x.TotalDiscount, x.TotalGrossAmount, x.TotalPrice, x.TotalQty, x.TotalTax, x.TotalUnitPrice, x.ValuePercentage }).ToList();
+            return Json(new { salesByCategoryProductList = salesByCategoryProductModels });
         }
         public JsonResult SalesBySectionCategoryProductList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId, string rname)
         {
@@ -1067,7 +1085,7 @@ namespace RocketPOS.Controllers.Reports
             LoginInfo.OutletId = outletId;
 
             salesByCategoryProductModels = _iReportService.GetSaleByCategorySectionReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), rname, categoryId, foodMenuId, outletId);
-         //   var salesByCategoryProduct = salesByCategoryProductModels.Select(x => new { x.FoodMenuCategoryName, x.FoodMenuName, x.TotalDiscount, x.TotalGrossAmount, x.TotalPrice, x.TotalQty, x.TotalTax, x.TotalUnitPrice, x.ValuePercentage }).ToList();
+            //   var salesByCategoryProduct = salesByCategoryProductModels.Select(x => new { x.FoodMenuCategoryName, x.FoodMenuName, x.TotalDiscount, x.TotalGrossAmount, x.TotalPrice, x.TotalQty, x.TotalTax, x.TotalUnitPrice, x.ValuePercentage }).ToList();
             return Json(new { salesByCategoryProductList = salesByCategoryProductModels });
         }
         public JsonResult SalesBySectionProductList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId, string rname)

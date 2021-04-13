@@ -91,6 +91,7 @@ namespace RocketPOS.Models.Reports
 
     public class SalesSummaryByWeek
     {
+        public string WeekDate { get; set; }
         public string WeekStartDate { get; set; }
         public decimal TotalInvoice { get; set; }
         public decimal NetSalesAmount { get; set; }

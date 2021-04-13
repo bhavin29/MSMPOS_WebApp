@@ -140,7 +140,7 @@
                     MasterSalesTable = $("#MasterSalesTable").DataTable({
                         "data": data.salesSummaryByWeeksList,
                         "columns": [
-                            { "data": "weekStartDate", "name": "WeekStartDate", "autoWidth": true },
+                            { "data": "weekDate", "name": "WeekDate", "autoWidth": true },
                             { "data": "totalInvoice", "name": "TotalInvoice", "autoWidth": true },
                             { "data": "netSalesAmount", "name": "NetSalesAmount", "autoWidth": true },
                             { "data": "totalDiscount", "name": "TotalDiscount", "autoWidth": true },
@@ -155,7 +155,11 @@
                            {
                                 targets: [1,2,3,4,5], orderable: false,
                                 targets: [1,2,3,4, 5], orderable: false, class: "text-right",
-                            }
+                            },
+                        //    {
+                        //        targets: [0],
+                        //        render: $.fn.dataTable.render.moment('dd/MM/yyyy')
+                        //    }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [

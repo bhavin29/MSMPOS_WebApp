@@ -83,8 +83,9 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:25%">@Html.DisplayName("Category")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:10%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Qty")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
@@ -94,8 +95,9 @@
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:25%">@Html.DisplayName("Category")</th>
-                            <th style="width:25%">@Html.DisplayName("Product")</th>
+                            <th style="width:20%">@Html.DisplayName("Category")</th>
+                            <th style="width:20%">@Html.DisplayName("Product")</th>
+                            <th style="width:10%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Qty")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
@@ -160,6 +162,7 @@
                         "columns": [
                             { "data": "foodMenuCategoryName", "name": "FoodMenuCategoryName", "autoWidth": true },
                             { "data": "foodMenuName", "name": "FoodMenuName", "autoWidth": true },
+                            { "data": "netSalesAmount", "name": "NetSalesAmount", "autoWidth": true },
                             { "data": "totalQty", "name": "TotalQty", "autoWidth": true },
                             { "data": "totalDiscount", "name": "TotalDiscount", "autoWidth": true },
                             { "data": "totalTax", "name": "TotalTax", "autoWidth": true },
@@ -168,19 +171,19 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [2,3,4, 5, 6],
+                                targets: [2,3,4, 5, 6,7],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
-                                targets: [2,3,4,5,6], orderable: false,
-                                targets: [2,3,4, 5, 6], orderable: false, class: "text-right",
+                                targets: [2,3,4,5,6,7], orderable: false,
+                                targets: [2,3,4, 5, 6,7], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [
                             {
                                 extend: 'pdf',
-                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6] },
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6,7] },
                                 filename: function () {
                                     var d = new Date();
                                     var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
@@ -194,7 +197,7 @@
                                     doc.styles.title.fontSize = 10;
                                     doc.content[0].text = 'Sales Summary By Category Product Report' + '\n' + $("#OutletId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
                                     doc.content[0].alignment = 'left';
-                                    doc.content[1].table.widths = ['15%', '25%', '10%', '10%', '10%', '15%', '15%'];
+                                    doc.content[1].table.widths = ['15%', '25%', '10%', '10%', '10%', '10%', '10%','10%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {
@@ -203,6 +206,7 @@
                                         doc.content[1].table.body[i][4].alignment = 'right';
                                         doc.content[1].table.body[i][5].alignment = 'right';
                                         doc.content[1].table.body[i][6].alignment = 'right';
+                                        doc.content[1].table.body[i][7].alignment = 'right';
                                     }
                                     // Create a footer
                                     doc['footer'] = (function (page, pages) {
@@ -224,7 +228,7 @@
                             extend: 'excel',
                                 customize: function (xlsx) {
                                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                                    var thousandSepCols = [ 'C', 'D', 'E', 'F', 'G'];
+                                    var thousandSepCols = [ 'C', 'D', 'E', 'F', 'G','H'];
                                     for (i = 0; i < thousandSepCols.length; i++) {
                                         $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
                                     }

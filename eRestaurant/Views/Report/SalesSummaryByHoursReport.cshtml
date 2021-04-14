@@ -86,11 +86,11 @@
                             <th style="width:10%">@Html.DisplayName("Date")</th>
                             <th style="width:10%">@Html.DisplayName("Start")</th>
                             <th style="width:10%">@Html.DisplayName("End")</th>
-                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
-                            <th style="width:15%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
+                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
-                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
+                            <th style="width:15%">@Html.DisplayName("Gross")</th>
                         </tr>
                       </thead>
                     <tfoot role="row">
@@ -98,11 +98,11 @@
                             <th style="width:10%">@Html.DisplayName("Date")</th>
                             <th style="width:10%">@Html.DisplayName("Start")</th>
                             <th style="width:10%">@Html.DisplayName("End")</th>
-                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
-                            <th style="width:15%">@Html.DisplayName("Gross")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
+                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
-                            <th style="width:15%">@Html.DisplayName("Net Sales")</th>
+                            <th style="width:15%">@Html.DisplayName("Gross")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -156,7 +156,7 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [3,4, 5, 6, 7],
+                                targets: [4, 5, 6, 7],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {

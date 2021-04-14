@@ -84,7 +84,7 @@
                     <thead role="row">
                         <tr>
                             <th style="width:15%">@Html.DisplayName("Week")</th>
-                            <th style="width:10%">@Html.DisplayName("Invoice#")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
                             <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:15%">@Html.DisplayName("Discount")</th>
                             <th style="width:15%">@Html.DisplayName("Tax")</th>
@@ -94,7 +94,7 @@
                     <tfoot role="row">
                         <tr>
                             <th style="width:15%">@Html.DisplayName("Week")</th>
-                            <th style="width:10%">@Html.DisplayName("Invoice#")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
                             <th style="width:15%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:15%">@Html.DisplayName("Discount")</th>
                             <th style="width:15%">@Html.DisplayName("Tax")</th>
@@ -149,7 +149,7 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [1,2,3,4, 5,],
+                                targets: [2,3,4, 5,],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {

@@ -85,7 +85,7 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Section")</th>
                             <th style="width:10%">@Html.DisplayName("Order Date")</th>
-                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
                             <th style="width:10%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
@@ -96,7 +96,7 @@
                         <tr>
                             <th style="width:10%">@Html.DisplayName("Section")</th>
                             <th style="width:10%">@Html.DisplayName("Order Date")</th>
-                            <th style="width:10%">@Html.DisplayName("#Invoice")</th>
+                            <th style="width:10%">@Html.DisplayName("Invoice Count")</th>
                             <th style="width:10%">@Html.DisplayName("Net Sales")</th>
                             <th style="width:10%">@Html.DisplayName("Discount")</th>
                             <th style="width:10%">@Html.DisplayName("Tax")</th>
@@ -152,12 +152,12 @@
                       ],
                         columnDefs: [
                             {
-                                targets: [2,3,4, 5, 6],
+                                targets: [3,4, 5, 6],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                            {
                                 targets: [2, 3,4,5,6], orderable: false,
-                                targets: [3,4, 5, 6], orderable: false, class: "text-right",
+                                targets: [2, 3,4, 5, 6], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',

@@ -1,0 +1,342 @@
+﻿@using Microsoft.Extensions.Localization;
+@model IEnumerable<RocketPOS.Models.SalesViewModel>
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("Food Menu Sales");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("SalesFood");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <h5 class="card-title">Sales Orders</h5>
+            </div>
+            <div class="float-right">
+                @if (@UserRolePermissionForPage.Add == true)
+                {
+                    <a asp-action="SalesFoodMenu" class="btn btn-primary float-sm-left ">Create SO</a>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <input id="fromDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <input id="toDate" type="date" class="form-control" />
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select Id="CustomerId"
+                                    class="form-control">
+                                <option value="">Select Customer</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <select Id="StoreId"
+                                    class="form-control">
+                                <option value="">Select Store</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadPurchaseList();" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="table-responsive">
+                <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+                    <div class="col-sm-12">
+                        <table id="@SharedLocalizer.GetLocalizedHtmlString("SalesFood")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                            <thead>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Customer")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:14%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    @*<th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>*@
+                            </thead>
+                            <tfoot>
+                                <tr role="row">
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Date")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Customer")</th>
+                                    <th style="width:16%" rowspan="1" colspan="1">@Html.DisplayName("Store")</th>
+                                    <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
+                                    <th style="width:14%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
+                                    <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
+                                    @*<th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>*@
+                            </tfoot>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var tm = "#myModal" + item.Id;
+                                    var mid = "myModal" + item.Id;
+                                    <tr role="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.CustomerName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StoreName)
+                                        </td>
+                                        <td class="text-right">
+                                            @Html.DisplayFor(modelItem => item.GrandTotal)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Username)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Status)
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                @if (UserRolePermissionForPage.Edit == true)
+                                                {
+                                                    <a asp-action="SalesFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
+                                                    <label> / </label>
+                                                }
+                                                @if (UserRolePermissionForPage.Delete == true)
+                                                {
+                                                    <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                                }
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                                <label> / </label>
+                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                            </div>
+                                        </td>
+                                        @*<td>
+                                            <div class="form-button-action">
+                                                @if (UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                }
+                                            </div>
+                                        </td>*@
+                                    </tr>
+                                    <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    @SharedLocalizer.GetLocalizedHtmlString("DeleteConfrim")
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <a asp-action="Delete" asp-route-Id="@item.Id" id="deleteBtn" class="btn bg-danger mr-1">Delete</a>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var SalesFood = null;
+        $(document).ready(function () {
+            var myDate = new Date();
+            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+
+            $("#fromDate").val(tdate);
+            $("#toDate").val(tdate);
+            $("#CustomerId").select2();
+            $("#StoreId").select2();
+            GetCustomerList();
+            GetStoreList();
+            SalesFood = $('#@dataTableName').DataTable();
+            loadPurchaseList();
+
+        });
+
+        function loadPurchaseList() {
+            $.ajaxSetup({ cache: false });
+            $.ajax({
+                url: "/Sales/SalesFoodMenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&customerId=" + $("#CustomerId").val() + "&storeId=" + $("#StoreId").val(),
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (SalesFood != null) {
+                        SalesFood.clear();
+                        SalesFood.destroy();
+                    }
+                    SalesFood = $("#SalesFood").DataTable({
+                        "data": data.purchaseFoodMenu,
+                        "columns": [
+                            { "data": "referenceNo", "name": "Number", "autoWidth": true },
+                            { "data": "date", "name": "Date", "autoWidth": true },
+                            { "data": "customerName", "name": "Customer", "autoWidth": true },
+                            { "data": "storeName", "name": "StoreName", "autoWidth": true },
+                            { "data": "grandTotal", "name": "Amount", "autoWidth": true, className: "text-right" },
+                            { "data": "username", "name": "Username", "autoWidth": true },
+                            { "data": "status", "name": "Status", "autoWidth": true },
+                            {
+                                data: "",
+                                mRender: function (data, type, row) {
+                                    if (row.status == 'GRN' || row.status == 'Invoice') {
+                                        return '';
+                                    }
+                                    else {
+                                        var editDelete='';
+                                         if ("@UserRolePermissionForPage.Edit" == "True")
+                                         {
+                                             editDelete = '<div class="form-button-action"><a href="/Sales/SalesFoodmenu/' + row.id + '?type=Edit">Edit</a> / '
+                                        }
+                                        if ("@UserRolePermissionForPage.Delete" == "True")
+                                        {
+                                            editDelete+=' <a href="#" data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                            '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                                'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                        }
+                                        return editDelete;
+                                    }
+                                },
+                            },
+                            {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    var invoiceGRN = "";
+                                    if (row.status == 'GRN') {
+                                        invoiceGRN= ' <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                    }
+                                    else if (row.status == 'Invoice') {
+                                        invoiceGRN= '';
+                                    }
+                                    else {
+                                        invoiceGRN= '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
+                                            ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                    }
+                                    return invoiceGRN;
+                                    },
+                            },
+                            @*{
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/Sales/View/' + row.id + '">View</a></div>'
+                                    }
+                                    return view;
+                                },
+                            },*@
+                        ],
+                        columnDefs: [
+                            {
+                                targets: [4],
+                                render: $.fn.dataTable.render.number(',', '.', 2)
+                            },
+                              { targets: [7,8], orderable: false}
+                        ],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": false,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+        }
+
+        function deletePurchaseDetail(id) {
+            $.ajax({
+                url: "/Sales/Delete/" + id,
+                data: { },
+                dataType: "json",
+                success: function (data) {
+                    loadPurchaseList();
+                },
+                error: function (data) {
+                    loadPurchaseList();
+                }
+            });
+        };
+
+        function GetCustomerList() {
+            $.ajax({
+                url: "/Sales/GetCustomerList",
+                data: {},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#CustomerId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.customerList.length; ++i) {
+                        $("#CustomerId").append('<option value="' + obj.customerList[i].value + '">' + obj.customerList[i].text + '</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
+
+        function GetStoreList() {
+            $.ajax({
+                url: "/Report/GetStoreList",
+                data: {},
+                type: "GET",
+                dataType: "text",
+                success: function (data) {
+                    $("#StoreId").empty();
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.storeList.length; ++i) {
+                        $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
+                    }
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
+    </script>
+}

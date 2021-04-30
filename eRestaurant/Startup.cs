@@ -204,6 +204,12 @@ namespace RocketPOS
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
             services.AddScoped<IRolePermissionService, RolePermissionService>();
+            services.AddScoped<ISalesRepository, SalesRepository>();
+            services.AddScoped<ISalesService, SalesService>();
+            services.AddScoped<ISalesDeliveryRepository, SalesDeliveryRepository>();
+            services.AddScoped<ISalesDeliveryService, SalesDeliveryService>();
+            services.AddScoped<ISalesInvoiceRepository, SalesInvoiceRepository>();
+            services.AddScoped<ISalesInvoiceService, SalesInvoiceService>();
             services.AddHttpClient();
         }
 

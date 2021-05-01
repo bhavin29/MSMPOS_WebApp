@@ -40,5 +40,7 @@ namespace RocketPOS.Interface.Services
 
         List<SelectListItem> GetWebRoleList();
 
+        List<SelectListItem> GetCustomerList();
+
     }
 }

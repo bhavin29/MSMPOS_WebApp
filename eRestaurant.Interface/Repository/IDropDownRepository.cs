@@ -35,5 +35,7 @@ namespace RocketPOS.Interface.Repository
         List<DropDownModel> GetAssetLocationList();
         List<DropDownModel> GetGlobalStatusList();
         List<DropDownModel> GetWebRoleList();
+
+        List<DropDownModel> GetCustomerList();
     }
 }

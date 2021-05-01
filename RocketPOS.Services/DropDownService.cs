@@ -412,5 +412,20 @@ namespace RocketPOS.Services
             }
             return lstWebRole;
         }
+
+        public List<SelectListItem> GetCustomerList()
+        {
+            List<SelectListItem> lstCustomer = new List<SelectListItem>();
+            lstCustomer.Add(new SelectListItem { Text = "Select", Value = string.Empty });
+            List<DropDownModel> lstCustomerResult = _dropDownRepository.GetCustomerList().ToList();
+            if (lstCustomerResult != null && lstCustomerResult.Count > 0)
+            {
+                foreach (var item in lstCustomerResult)
+                {
+                    lstCustomer.Add(new SelectListItem { Text = item.Name, Value = item.Id.ToString() });
+                }
+            }
+            return lstCustomer;
+        }
     }
 }

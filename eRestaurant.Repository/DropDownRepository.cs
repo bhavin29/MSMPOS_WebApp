@@ -312,5 +312,16 @@ namespace RocketPOS.Repository
             }
             return dropDownModels;
         }
+
+        public List<DropDownModel> GetCustomerList()
+        {
+            List<DropDownModel> dropDownModels = new List<DropDownModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = "SELECT Id,CustomerName As [Name],TaxInclusive as Optional  FROM Customer Where IsDeleted=0";
+                dropDownModels = con.Query<DropDownModel>(query).ToList();
+            }
+            return dropDownModels;
+        }
     }
 }

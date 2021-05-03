@@ -266,15 +266,15 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { UnitPrice = unitPrice });
         }
 
-        //public ActionResult PurchaseGRNByPurchaseId(int id)
-        //{
-        //    return RedirectToAction("PurchaseGRNFoodMenu", "PurchaseGRNFoodMenu", new { purchaseId = id });
-        //}
+        public ActionResult SalesDeliveryBySalesId(int id)
+        {
+            return RedirectToAction("SalesDeliveryFoodMenu", "SalesDelivery", new { purchaseId = id });
+        }
 
-        //public ActionResult PurchaseInvoiceByPurchaseId(int id)
-        //{
-        //    return RedirectToAction("PurchaseInvoiceFoodMenu", "PurchaseInvoiceFoodMenu", new { purchaseId = id });
-        //}
+        public ActionResult SalesInvoiceBySalesId(int id)
+        {
+            return RedirectToAction("SalesInvoiceFoodMenu", "SalesInvoice", new { purchaseId = id });
+        }
 
         public ActionResult PurchaseApproveSuccess(int id)
         {

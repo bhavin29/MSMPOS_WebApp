@@ -128,9 +128,9 @@
                                         </td>
                                         <td>
                                             <div class="form-button-action">
-                                                <a asp-action="PurchaseGRNByPurchaseId" asp-route-Id="@item.Id">GRN </a>
+                                                <a asp-action="SalesDeliveryBySalesId" asp-route-Id="@item.Id">Delivery </a>
                                                 <label> / </label>
-                                                <a asp-action="PurchaseInvoiceByPurchaseId" asp-route-Id="@item.Id">Invoice </a>
+                                                <a asp-action="SalesInvoiceBySalesId" asp-route-Id="@item.Id">Invoice </a>
                                             </div>
                                         </td>
                                         @*<td>
@@ -236,15 +236,15 @@
                                 data: null,
                                 mRender: function (data, type, row) {
                                     var invoiceGRN = "";
-                                    if (row.status == 'GRN') {
-                                        invoiceGRN= ' <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                    if (row.status == 'Delivery') {
+                                        invoiceGRN = ' <a href="/Sales/SalesInvoiceBySalesId/' + row.id + '">Invoice</a> </div>'
                                     }
                                     else if (row.status == 'Invoice') {
                                         invoiceGRN= '';
                                     }
                                     else {
-                                        invoiceGRN= '<div class="form-button-action"><a href="/PurchaseFoodmenu/PurchaseGRNByPurchaseId/' + row.id + '">GRN</a>' +
-                                            ' / <a href="/PurchaseFoodmenu/PurchaseInvoiceByPurchaseId/' + row.id + '">Invoice</a> </div>'
+                                        invoiceGRN = '<div class="form-button-action"><a href="/Sales/SalesDeliveryBySalesId/' + row.id + '">Delivery</a>' +
+                                            ' / <a href="/Sales/SalesInvoiceBySalesId/' + row.id + '">Invoice</a> </div>'
                                     }
                                     return invoiceGRN;
                                     },

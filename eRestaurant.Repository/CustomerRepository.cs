@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT Id, CustomerTypeId, CustomerNumber, CustomerName,CustomerAddress1, CustomerAddress2,CustomerPhone,CustomerEmail,CustomerImage, IsActive,FavDeliveryAddress from Customer WHERE IsDeleted = 0 " +
+                var query = "SELECT Id, CustomerTypeId, CustomerNumber, CustomerName,CustomerAddress1, CustomerAddress2,CustomerPhone,CustomerEmail,CustomerImage, IsActive,FavDeliveryAddress,TaxInclusive from Customer WHERE IsDeleted = 0 " +
                             "ORDER BY CustomerName ";
                 supplierModel = con.Query<CustomerModel>(query).ToList();
             }
@@ -49,9 +49,9 @@ namespace RocketPOS.Repository
 
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = "INSERT INTO Customer (CustomerTypeId, CustomerNumber,CustomerName,CustomerAddress1, CustomerAddress2,CustomerPhone,CustomerEmail,CustomerImage, FavDeliveryAddress,IsActive)" +
+                var query = "INSERT INTO Customer (CustomerTypeId, CustomerNumber,CustomerName,CustomerAddress1, CustomerAddress2,CustomerPhone,CustomerEmail,CustomerImage, FavDeliveryAddress,IsActive,TaxInclusive)" +
                             "VALUES " +
-                            "(@CustomerTypeId, @CustomerNumber,@CustomerName,@CustomerAddress1, @CustomerAddress2,@CustomerPhone,@CustomerEmail,@CustomerImage, @FavDeliveryAddress,@IsActive);" +
+                            "(@CustomerTypeId, @CustomerNumber,@CustomerName,@CustomerAddress1, @CustomerAddress2,@CustomerPhone,@CustomerEmail,@CustomerImage, @FavDeliveryAddress,@IsActive,@TaxInclusive);" +
                             " SELECT CAST(SCOPE_IDENTITY() as INT);";
                 result = con.Execute(query, customerModel, sqltrans, 0, System.Data.CommandType.Text);
 
@@ -84,7 +84,7 @@ namespace RocketPOS.Repository
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "UPDATE Customer SET  CustomerTypeId=@CustomerTypeId, CustomerNumber=@CustomerNumber,CustomerName=@CustomerName," +
                             "CustomerAddress1=@CustomerAddress1, CustomerAddress2=@CustomerAddress2,CustomerPhone=@CustomerPhone," +
-                            "CustomerEmail =@CustomerEmail,CustomerImage=@CustomerImage, FavDeliveryAddress=@FavDeliveryAddress, IsActive=@IsActive " +
+                            "CustomerEmail =@CustomerEmail,CustomerImage=@CustomerImage, FavDeliveryAddress=@FavDeliveryAddress, IsActive=@IsActive,TaxInclusive=@TaxInclusive " +
                             "WHERE Id = @Id;";
                 result = con.Execute(query, customerModel, sqltrans, 0, System.Data.CommandType.Text);
 

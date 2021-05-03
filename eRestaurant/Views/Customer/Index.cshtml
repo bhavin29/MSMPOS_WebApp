@@ -43,6 +43,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TaxInclusive)
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -63,6 +66,9 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.IsActive)
                             </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TaxInclusive)
+                            </th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -72,44 +78,54 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CustomerName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CustomerPhone)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CustomerEmail)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CustomerAddress1)  @Html.DisplayFor(modelItem => item.CustomerAddress2)
-                                </td>
-                                <td>
-                                    @if (item.IsActive == true)
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerPhone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerEmail)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CustomerAddress1)  @Html.DisplayFor(modelItem => item.CustomerAddress2)
+                            </td>
+                            <td>
+                                @if (item.IsActive == true)
+                                {
+                                    @Html.DisplayName("True")
+                                }
+                                else
+                                {
+                                    @Html.DisplayName("False")
+                                }
+                            </td>
+                            <td>
+                                @if (item.TaxInclusive == true)
+                                {
+                                    @Html.DisplayName("True")
+                                }
+                                else
+                                {
+                                    @Html.DisplayName("False")
+                                }
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    @if (@UserRolePermissionForPage.Edit == true)
                                     {
-                                        @Html.DisplayName("True")
+                                        <a asp-action="Customer" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
                                     }
-                                    else
+                                    @if (@UserRolePermissionForPage.Delete == true)
                                     {
-                                        @Html.DisplayName("False")
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                     }
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        @if (@UserRolePermissionForPage.Edit == true)
-                                        {
-                                            <a asp-action="Customer" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                            <label> / </label>
-                                        }
-                                        @if (@UserRolePermissionForPage.Delete == true)
-                                        {
-                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                        }
-                                    </div>
+                                </div>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -171,7 +187,7 @@
                 dom: 'Bfrtip',
                 "buttons": [{
                     extend: 'excel',
-                    exportOptions: { columns: [0, 1, 2, 3, 4] },
+                    exportOptions: { columns: [0, 1, 2, 3, 4,5] },
                     filename: function () {
                         var d = new Date();
                         var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);

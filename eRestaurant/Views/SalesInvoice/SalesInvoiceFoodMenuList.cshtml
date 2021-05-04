@@ -70,7 +70,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>*@
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
@@ -82,7 +82,7 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Amount")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
-                                    @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>*@
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -118,14 +118,14 @@
                                                     <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
                                                 </div>
                                             </td>
-                                        @*<td>
+                                        <td>
                                             <div class="form-button-action">
                                                 @if (@UserRolePermissionForPage.View == true)
                                                 {
-                                                    <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                                    <a asp-action="GetInvoicePrint" asp-route-Id="@item.Id">View</a>
                                                 }
                                             </div>
-                                        </td>*@
+                                        </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -204,16 +204,16 @@
                                         'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseInvoiceFoodMenu('+ row.id +')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
                                 },
                             },
-                            @*{
+                            {
                                 data: null,
                                 mRender: function (data, type, row) {
                                     var view = '';
                                     if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="/PurchaseInvoiceFoodMenu/View/' + row.id + '">View</a></div>'
+                                        view = '<div class="form-button-action"><a href="/SalesInvoice/GetInvoicePrint/' + row.id + '">View</a></div>'
                                     }
                                     return view;
                                 },
-                            }*@
+                            }
                         ],
                         columnDefs: [
                             {

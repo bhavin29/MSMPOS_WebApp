@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using OpenHtmlToPdf;
 using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
@@ -221,6 +222,35 @@ namespace RocketPOS.Controllers.Transaction
             int purchaseId = 0;
             purchaseId = _iSalesInvoiceService.GetPurchaseIdByPOReference(poReference);
             return Json(new { purchaseId = purchaseId });
+        }
+
+        [HttpGet]
+        public ActionResult GetInvoicePrint(int id)
+        {
+            SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
+            salesInvoiceModel = _iSalesInvoiceService.GetSalesInvoiceReportById(id);
+            string html = _iSalesInvoiceService.GetInvoiceHtmlString(salesInvoiceModel);
+    //        const string html =
+    //"<!DOCTYPE html>" +
+    //"<html>" +
+    //"<head><meta charset='UTF-8'><title>Title</title></head>" +
+    //"<body></body>" +
+    //"</html>";
+
+            var pdf = Pdf
+    .From(html)
+    .OfSize(PaperSize.A4)
+    .WithTitle("Title")
+    .WithoutOutline()
+    .WithMargins(1.25.Centimeters())
+    .Portrait()
+    .Comressed()
+    .Content();
+
+            return new FileContentResult(pdf, "application/pdf")
+            {
+                FileDownloadName = "InvoiceReport.pdf"
+            };
         }
     }
 }

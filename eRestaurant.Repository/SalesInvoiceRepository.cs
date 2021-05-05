@@ -528,5 +528,38 @@ namespace RocketPOS.Repository
             }
             return purchaseModelList;
         }
+
+        public List<SalesInvoiceModel> GetSalesInvoiceReportById(long id)
+        {
+            List<SalesInvoiceModel> purchaseModelList = new List<SalesInvoiceModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select SI.ReferenceNumber AS ReferenceNo,s.StoreName,si.SalesInvoiceDate,c.CustomerName,c.CustomerAddress1,c.CustomerAddress2,c.CustomerNumber,c.CustomerEmail " +
+                            " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount from SalesInvoice SI Inner Join Store S On s.Id=si.StoreId " +
+                            " inner join Customer c on c.Id=si.CustomerId where si.Id= "+ id;
+                purchaseModelList = con.Query<SalesInvoiceModel>(query).AsList();
+            }
+            return purchaseModelList;
+        }
+
+        public List<SalesInvoiceDetailModel> GetSalesInvoiceReportFoodMenuDetails(long id)
+        {
+            List<SalesInvoiceDetailModel> purchaseDetails = new List<SalesInvoiceDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select pin.Id as SalesInvoiceId,  (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType,  " +
+                     " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then PIN.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId,   " +
+                     " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,   " +
+                     " pin.UnitPrice as UnitPrice, pin.SOQty,PIN.InvoiceQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount, pin.DiscountPercentage,pin.DiscountAmount  , pin.VatableAmount,pin.NonVatableAmount ," +
+                     " (case when PIN.FoodMenuId is null then (case when PIN.IngredientId is null then UA.UnitName else UI.UnitName end) else UF.UnitName end) as UnitName" +
+                     " from SalesInvoice as P  inner join SalesInvoiceDetail as PIN on P.id = pin.SalesInvoiceId  " +
+                     " left join FoodMenu as f on pin.FoodMenuId = f.Id   left join Ingredient as I on pin.IngredientId = I.Id  left join Units As UI On UI.Id = I.IngredientUnitId  " +
+                     " left join AssetItem as AI on PIN.AssetItemId = AI.Id    left join Units As UF On UF.Id = F.UnitsId     left join Units As UA On UA.Id = AI.UnitId  " +
+                     " where P.id = "+id+" and pin.isdeleted = 0 and p.isdeleted = 0 ";
+
+                purchaseDetails = con.Query<SalesInvoiceDetailModel>(query).AsList();
+            }
+            return purchaseDetails;
+        }
     }
 }

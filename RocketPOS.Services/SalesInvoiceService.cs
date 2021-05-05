@@ -168,5 +168,122 @@ namespace RocketPOS.Services
         {
             return _iSalesInvoiceRepository.GetPurchaseInvoiceById(purchaseInvoiceId);
         }
+
+        public SalesInvoiceModel GetSalesInvoiceReportById(long id)
+        {
+            SalesInvoiceModel purchaseModel = new SalesInvoiceModel();
+
+            var model = (from purchase in _iSalesInvoiceRepository.GetSalesInvoiceReportById(id).ToList()
+                         select new SalesInvoiceModel()
+                         {
+                             Id = purchase.Id,
+                             SalesId = purchase.SalesId,
+                             ReferenceNo = purchase.ReferenceNo,
+                             CustomerId = purchase.CustomerId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             SalesInvoiceDate = purchase.SalesInvoiceDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes,
+                             SOReferenceNo = purchase.SOReferenceNo,
+                             SODate = purchase.SODate,
+                             CustomerAddress1= purchase.CustomerAddress1,
+                             CustomerAddress2 = purchase.CustomerAddress2,
+                             CustomerEmail = purchase.CustomerEmail,
+                             CustomerName = purchase.CustomerName,
+                             StoreName = purchase.StoreName
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.SalesInvoiceDetails = (from purchasedetails in _iSalesInvoiceRepository.GetSalesInvoiceReportFoodMenuDetails(id)
+                                             select new SalesInvoiceDetailModel()
+                                             {
+                                                 SalesInvoiceId = purchasedetails.SalesInvoiceId,
+                                                 IngredientId = purchasedetails.IngredientId,
+                                                 FoodMenuId = purchasedetails.FoodMenuId,
+                                                 SOQTY = purchasedetails.SOQTY,
+                                                 InvoiceQty = purchasedetails.InvoiceQty,
+                                                 UnitPrice = purchasedetails.UnitPrice,
+                                                 GrossAmount = purchasedetails.GrossAmount,
+                                                 DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                 DiscountAmount = purchasedetails.DiscountAmount,
+                                                 TaxAmount = purchasedetails.TaxAmount,
+                                                 TotalAmount = purchasedetails.TotalAmount,
+                                                 IngredientName = purchasedetails.IngredientName,
+                                                 FoodMenuName = purchasedetails.FoodMenuName,
+                                                 UnitName= purchasedetails.UnitName
+                                             }).ToList();
+            }
+            return model;
+        }
+
+        public string GetInvoiceHtmlString(SalesInvoiceModel salesInvoiceModel)
+        {
+            var sb = new StringBuilder();
+            sb.Append(@"<html>
+                    <style type='text/css'>
+                        table, tr, td {
+                        border: 1px solid;
+                    }
+                    tr.noBorder td {
+                    border: 0;
+                    }
+                    </style>
+                    <body>
+                        <table border=1 width='1280' Height='800'>
+                        <tr align='center' Height='50'>
+	                    <td colspan='7'><div align='center'>");
+
+            sb.Append(salesInvoiceModel.StoreName);
+            sb.Append(@"</div></td>
+                            </tr>
+                            <tr align='center' Height='50'>
+                            	<td colspan='7'>INVOICE </td>
+                            </tr>
+                            <tr Height='50'>
+                            <td colspan=3 >"+ salesInvoiceModel.CustomerName + "</br>" + salesInvoiceModel.CustomerAddress1 + "</br>" + salesInvoiceModel.CustomerAddress2 + "</br>" + salesInvoiceModel.CustomerEmail + @"</td>
+                            <td colspan=2></td>
+                            <td colspan=2></td>
+                            </tr>
+                            <tr Height='50'>
+                            	<td colspan=3>Invoice : " + salesInvoiceModel.ReferenceNo + @"</td>
+                                <td colspan=2></td>
+                            	<td colspan=2>Date : " + salesInvoiceModel.SalesInvoiceDate + @"</td>
+                            </tr>
+                            <tr Height='30' class='noBorder'>
+                            	<td colspan=3 ><b>Item</b></td>
+                            	<td width=50 ><b>Qty</b></td>
+                                <td ><b>UoM</b></td>
+                            	<td ><b>Rate</b></td>
+                            	<td ><b>Amount</b></td>
+                            </tr>");
+
+            foreach (var item in salesInvoiceModel.SalesInvoiceDetails)
+            {
+                sb.AppendFormat(@"<tr  Height='30' class='noBorder'><td colspan=3 >{0}</td><td width=50 >{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>", item.FoodMenuName, item.InvoiceQty , item.UnitName, item.UnitPrice, item.GrossAmount);
+            }
+            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Gross Total</td><td >" + salesInvoiceModel.GrossAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Vatable</td><td >" + salesInvoiceModel.VatableAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Non Vatable</td><td >" + salesInvoiceModel.NonVatableAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Total Tax</td><td >" + salesInvoiceModel.TaxAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Grand Total</td><td >" + salesInvoiceModel.TotalAmount + "</td></tr>");
+            sb.Append(@" <tr Height='30'>
+                            <td colspan='7'>Remarks :  "+ salesInvoiceModel.Notes  + @"</td>
+                            </tr>
+                            </body>
+                            </table>
+                            </html>");
+            return sb.ToString();
+        }
     }
 }

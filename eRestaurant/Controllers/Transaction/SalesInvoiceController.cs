@@ -230,22 +230,22 @@ namespace RocketPOS.Controllers.Transaction
             SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
             salesInvoiceModel = _iSalesInvoiceService.GetSalesInvoiceReportById(id);
             string html = _iSalesInvoiceService.GetInvoiceHtmlString(salesInvoiceModel);
-    //        const string html =
-    //"<!DOCTYPE html>" +
-    //"<html>" +
-    //"<head><meta charset='UTF-8'><title>Title</title></head>" +
-    //"<body></body>" +
-    //"</html>";
+            //        const string html =
+            //"<!DOCTYPE html>" +
+            //"<html>" +
+            //"<head><meta charset='UTF-8'><title>Title</title></head>" +
+            //"<body></body>" +
+            //"</html>";
 
             var pdf = Pdf
-    .From(html)
-    .OfSize(PaperSize.A4)
-    .WithTitle("Title")
-    .WithoutOutline()
-    .WithMargins(1.25.Centimeters())
-    .Portrait()
-    .Comressed()
-    .Content();
+                .From(html)
+                .OfSize(PaperSize.A4)
+                .WithTitle("Title")
+                .WithoutOutline()
+                .WithMargins(1.25.Centimeters())
+                .Portrait()
+                .Comressed()
+                .Content();
 
             return new FileContentResult(pdf, "application/pdf")
             {

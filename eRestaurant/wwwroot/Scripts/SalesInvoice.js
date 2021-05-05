@@ -169,8 +169,8 @@ $('#addRow').on('click', function (e) {
             totalAmount: Total,
             vatableAmount: Vatable,
             nonVatableAmount: Nonvatable,
-            purchaseInvoiceId: $("#SalesInvoiceId").val(),
-            purchaseStatus: $("#SalesStatus").val(),
+            salesInvoiceId: $("#SalesInvoiceId").val(),
+            salesStatus: $("#SalesStatus").val(),
             itemType: $("#ItemType").val(),
         });
         var attRowNode = '#' + recordid;
@@ -245,7 +245,7 @@ $(function () {
                     DriverName: $("#DriverName").val(),
                     VehicleNumber: $("#VehicleNumber").val(),
                     Notes: $("#Notes").val(),
-                    purchaseStatus: $("#SalesStatus").val(),
+                    SalesStatus: $("#SalesStatus").val(),
                     SupplierList: [],
                     FoodMenuList: [],
                     SalesInvoiceDetails: dataArr,

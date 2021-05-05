@@ -254,16 +254,16 @@ namespace RocketPOS.Repository
                         if (purchaseModel.SalesId > 0)
                             outResult = UpdatePurchaseOrderId(purchaseModel.SalesId);
 
-                        //if (purchaseModel.SalesId == 0)
-                        //{
-                        //    CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                        //    string sResult = commonRepository.InventoryPush("PI", result);
-                        //}
-                        //else if (purchaseModel.PurchaseId > 0 && purchaseModel.PurchaseStatus != 4)
-                        //{
-                        //    CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                        //    string sResult = commonRepository.InventoryPush("PI", result);
-                        //}
+                        if (purchaseModel.SalesId == 0)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("SalesInvoice", result);
+                        }
+                        else if (purchaseModel.SalesId > 0 && purchaseModel.SalesStatus != 4)
+                        {
+                            CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                            string sResult = commonRepository.InventoryPush("SalesInvoice", result);
+                        }
 
                     }
                     else

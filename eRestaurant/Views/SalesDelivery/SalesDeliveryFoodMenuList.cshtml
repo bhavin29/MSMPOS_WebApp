@@ -189,7 +189,7 @@
                             { "data": "storeName", "name": "StoreName", "autoWidth": true },
                             { "data": "totalAmount", "name": "Amount", "autoWidth": true, className: "text-right" },
                             { "data": "username", "name": "Username", "autoWidth": true },
-                            {
+                        /*    {
                                 data: null,
                                 mRender: function (data, type, row) {
                                     return '<div class="form-button-action"><a href="/SalesDelivery/SalesDeliveryFoodmenu/' + row.id + '?type=Edit">Edit</a>' +
@@ -198,17 +198,17 @@
                                         '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
                                         'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseGRNDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
                                     },
-                            },
-                            @*{
+                            },*/
+                            {
                                 data: null,
                                 mRender: function (data, type, row) {
                                      var view = '';
                                     if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="/PurchaseGRNFoodmenu/View/' + row.id + '">View</a></div>'
+                                        view = '<div class="form-button-action"><a href="#' + row.id + '">View</a></div>'
                                     }
                                     return view;
                                 },
-                            }*@
+                            }
                         ],
                         columnDefs: [
                             {

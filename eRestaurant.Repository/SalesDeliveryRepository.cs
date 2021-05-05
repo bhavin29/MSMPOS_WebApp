@@ -243,8 +243,8 @@ namespace RocketPOS.Repository
                         if (purchaseModel.SalesId > 0)
                             outResult = UpdatePurchaseOrderId(purchaseModel.SalesId);
 
-                        //CommonRepository commonRepository = new CommonRepository(_ConnectionString);
-                        //string sResult = commonRepository.InventoryPush("GRN", result);
+                        CommonRepository commonRepository = new CommonRepository(_ConnectionString);
+                        string sResult = commonRepository.InventoryPush("SalesDelivery", result);
 
                     }
                     else

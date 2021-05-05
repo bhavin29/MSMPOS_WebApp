@@ -58,10 +58,10 @@ namespace RocketPOS.Repository.Reports
             {
                 var query = " SELECT Convert(varchar(10), ID.DocDate, 103)as DocDate,ID.StoreId,DocType,DocTable,DocNumber,DocNumberId,DocNumberDetailId,SupplierId, " +
                             " StoreName,SupplierName,ID.FoodMenuId,ID.IngredientId,Reamrks,StockInQty,StockOutQty,BalanceQty " +
-                            " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and (I.FoodmenuId = ID.FoodMenuid  or  I.IngredientID = ID.IngredientID) " +
+                            " FROM InventoryDetail ID inner join Inventory I ON I.StoreId = ID.Storeid and (I.FoodmenuId = ID.FoodMenuid  or  I.IngredientID = ID.IngredientID or I.AssetitemId = ID.AssetItemId ) " +
                             " inner join Store S ON S.ID = ID.StoreID " +
                             " left join SUPPLIER SP on SP.Id = ID.SupplierId " +
-                            " WHERE I.ID=" + id + "Order by ID.DocDate asc";
+                            " WHERE I.ID=" + id + " Order by ID.DocDate asc";
                 //  " where Convert(varchar(10), ID.DocDate, 103) between '01/01/2021' and '01/01/2022'"
 
                 ////  " WHERE I.AlterQty < INV.StockQty  ";

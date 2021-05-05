@@ -470,7 +470,7 @@ namespace RocketPOS.Repository
             {
                 var query = " select sales.Id as Id,  ReferenceNo, convert(varchar(12),SalesDate, 3) as [Date],customer.customerName," +
                     " sales.GrandTotal as GrandTotal,sales.DueAmount as Due, S.StoreName," +
-                    " case when sales.Status = 5 then 'Invoice' when sales.Status = 4 then 'GRN'  when sales.Status = 3 then 'Rejected' when  sales.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    " case when sales.Status = 5 then 'Invoice' when sales.Status = 4 then 'Delivery'  when sales.Status = 3 then 'Rejected' when  sales.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
                     " from sales inner join customer on sales.customerId = customer.Id inner join [User] U on U.Id=sales.UserIdInserted  inner join employee e on e.id = u.employeeid inner join store S on S.Id = sales.StoreId" +
                     " where  sales.InventoryType=1 And sales.Isdeleted = 0 " +
                     " AND Convert(Date, SalesDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
@@ -593,7 +593,7 @@ namespace RocketPOS.Repository
             {
                 var query = "select sales.Id as Id,  ReferenceNo, convert(varchar(12),SalesDate, 3) as [Date],customer.customerName," +
                     "sales.GrandTotal as GrandTotal,sales.DueAmount as Due,S.StoreName, " +
-                    "case when sales.Status = 5 then 'Invoice' when sales.Status = 4 then 'GRN' when sales.Status = 3 then 'Rejected' when  sales.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
+                    "case when sales.Status = 5 then 'Invoice' when sales.Status = 4 then 'Delivery' when sales.Status = 3 then 'Rejected' when  sales.Status = 2 then 'Approved' Else 'Created' End AS Status ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
                     "from sales inner join customer on sales.customerId = customer.Id inner join [User] U on U.Id=sales.UserIdInserted  inner join employee e on e.id = u.employeeid  inner join store S on S.Id = sales.StoreId where sales.InventoryType=1 And sales.Isdeleted = 0 order by SalesDate, sales.Id desc";
                 purchaseViewModelList = con.Query<SalesViewModel>(query).AsList();
             }

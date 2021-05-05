@@ -1,0 +1,155 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.SalesInvoiceModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@section Styles {
+    <link href="@Url.Content("~/Styles/print.css")" rel="stylesheet" type="text/css" />
+}
+@{
+    Layout = "";
+}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag
+    https://bootsnipp.com/snippets/9gjD
+   https://plnkr.co/edit/lWk6Yd?preview ---------->
+
+<div id="CateringReport" class="container">
+    <div class="row">
+        <div style="background-color:#F7F7F7">
+            <div class="col-md-11">
+                <h5 class="card-title">
+                    Sales Invoice
+                </h5>
+            </div>
+            @*<div class="float-right">
+                    <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
+                </div>*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="invoice-title">
+                <h4>@Model.CustomerName</h4>
+            </div>
+            <div class="row mb-4">
+                <div class="col-xs-9">
+                    @*<address>
+                            <strong></strong>@Model.SupplierAddress1<br>
+                            <strong></strong>@Model.SupplierAddress2<br>
+                            <strong></strong>@Model.SupplierPhone<br>
+                            <strong></strong>@Model.SupplierEmail<br>
+                        </address>*@
+                </div>
+                <div class="col-xs-3 text-right">
+                    <address>
+                        <strong>Invoice No#  </strong>@Model.ReferenceNo<br>
+                        <strong>Date  :  </strong>@Model.SalesInvoiceDate.ToShortDateString()<br>
+                        @if (Model.SOReferenceNo != null)
+                        {
+                            <strong>SO No.: </strong>@Model.SOReferenceNo<br>
+                            <strong>SO Date : </strong>@Model.SODate.ToShortDateString()<br>
+                        }
+                        <strong>Store :  </strong>@Model.StoreName<br>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.SalesInvoiceDetails.Count > 0)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">Product</th>
+                                    <th style="width:8%" class="text-right">Price</th>
+                                    <th style="width:8%" class="text-right">SO Qty </th>
+                                    <th style="width:16%" class="text-right">Invoice Qty </th>
+                                    <th style="width:10%" class="text-right">Gross</th>
+                                    <th style="width:8%" class="text-right">Tax</th>
+                                    <th style="width:10%" class="text-right">Discount</th>
+                                    <th style="width:10%" class="text-right">Discount %</th>
+                                    <th style="width:10%" class="text-right">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.SalesInvoiceDetails)
+                                {
+                                    var tm = "#myAModal" + item.SalesInvoiceId;
+                                    var mid = "myAModal" + item.SalesInvoiceId;
+                                    var rowId = "rowId" + item.SalesInvoiceId;
+                                    <tr id="@rowId">
+                                        <td>
+                                            @item.FoodMenuName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.UnitPrice.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.SOQTY.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.InvoiceQty.ToString("0.00") @item.UnitName
+                                        </td>
+                                        <td class="text-right">
+                                            @item.GrossAmount.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TaxAmount.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountAmount.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.DiscountPercentage.ToString("0.00")
+                                        </td>
+                                        <td class="text-right">
+                                            @item.TotalAmount.ToString("0.00")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-12 ">
+                            <div class="col-sm-9">
+                            </div>
+                            <div class="col-sm-3 text-right">
+                                <div><strong>Gross Amount  : </strong>@Model.GrossAmount.ToString("0.00")</div>
+                                <div><strong>Vatable  : </strong>@Model.VatableAmount.ToString("0.00")</div>
+                                <div><strong>NonVatable  : </strong>@Model.NonVatableAmount.ToString("0.00")</div>
+                                <div><strong>Tax Amount  : </strong>@Model.TaxAmount.ToString("0.00")</div>
+                                <div><strong>Total Amount  : </strong>@Model.TotalAmount.ToString("0.00")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <div class="row">
+        <div class="col-md-12 ">
+            <div class="col-sm-6 text-left">
+                <div><strong>Delivery Note# : </strong>@Model.DeliveryNoteNumber</div>
+                <div><strong>Delivery Date : </strong>@Model.DeliveryDate.ToShortDateString()</div>
+                <div><strong>Driver Name : </strong>@Model.DriverName</div>
+                <div><strong>Vehicle Number : </strong> @Model.VehicleNumber</div>
+                <div><strong>Notes : </strong> @Model.Notes</div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

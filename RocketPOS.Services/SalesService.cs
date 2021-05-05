@@ -43,10 +43,10 @@ namespace RocketPOS.Services
                              Status = purchase.Status,
                              DateInserted = purchase.DateInserted,
                              CustomerName = purchase.CustomerName,
-                             SupplierAddress1 = purchase.SupplierAddress1,
-                             SupplierAddress2 = purchase.SupplierAddress2,
-                             SupplierPhone = purchase.SupplierPhone,
-                             SupplierEmail = purchase.SupplierEmail,
+                             CustomerAddress1 = purchase.CustomerAddress1,
+                             CustomerAddress2 = purchase.CustomerAddress2,
+                             CustomerPhone = purchase.CustomerPhone,
+                             CustomerEmail = purchase.CustomerEmail,
                              GrossAmount = purchase.GrossAmount,
                              VatableAmount = purchase.VatableAmount,
                              NonVatableAmount = purchase.NonVatableAmount,
@@ -117,6 +117,60 @@ namespace RocketPOS.Services
         public List<SalesViewModel> PurchaseFoodMenuListByDate(string fromDate, string toDate, int customerId, int storeId)
         {
             return _iSalesRepository.PurchaseFoodMenuListByDate(fromDate,  toDate,customerId, storeId);
+        }
+
+        public SalesModel GetViewSalesFoodMenuById(long purchaseId)
+        {
+            SalesModel purchaseModel = new SalesModel();
+
+            var model = (from purchase in _iSalesRepository.GetViewSalesFoodMenuById(purchaseId).ToList()
+                         select new SalesModel()
+                         {
+                             Id = purchase.Id,
+                             ReferenceNo = purchase.ReferenceNo,
+                             CustomerId = purchase.CustomerId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             Date = purchase.Date,
+                             GrandTotal = purchase.GrandTotal,
+                             DiscountAmount = purchase.DiscountAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             Due = purchase.Due,
+                             Paid = purchase.Paid,
+                             Notes = purchase.Notes,
+                             Status = purchase.Status,
+                             DateInserted = purchase.DateInserted,
+                             CustomerName = purchase.CustomerName,
+                             CustomerAddress1 = purchase.CustomerAddress1,
+                             CustomerAddress2 = purchase.CustomerAddress2,
+                             CustomerPhone = purchase.CustomerPhone,
+                             CustomerEmail = purchase.CustomerEmail,
+                             GrossAmount = purchase.GrossAmount,
+                             StoreName = purchase.StoreName,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.SalesDetails = (from purchasedetails in _iSalesRepository.GetViewSalesFoodMenuDetails(purchaseId)
+                                         select new SalesDetailsModel()
+                                         {
+                                             SalesId = purchasedetails.SalesId,
+                                             FoodMenuId = purchasedetails.FoodMenuId,
+                                             Quantity = purchasedetails.Quantity,
+                                             UnitPrice = purchasedetails.UnitPrice,
+                                             DiscountAmount = purchasedetails.DiscountAmount,
+                                             DiscountPercentage = purchasedetails.DiscountPercentage,
+                                             TaxAmount = purchasedetails.TaxAmount,
+                                             TaxPercentage = purchasedetails.TaxPercentage,
+                                             Total = purchasedetails.Total,
+                                             FoodMenuName = purchasedetails.FoodMenuName,
+                                             UnitName = purchasedetails.UnitName,
+                                             VatableAmount = purchasedetails.VatableAmount,
+                                             NonVatableAmount = purchasedetails.NonVatableAmount
+                                         }).ToList();
+            }
+            return model;
         }
     }
 }

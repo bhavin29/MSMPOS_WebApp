@@ -1,0 +1,179 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.SalesModel
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@section Styles {
+    <link href="@Url.Content("~/css/print.css")" rel="stylesheet" type="text/css" />
+}
+@{
+    Layout = "";
+}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+@*<script>
+        function printDiv() {
+            var myStyle12 = '<style type="text/css">.invoice-title h2, .invoice-title h3 {display: inline-block;}.table > tbody > tr > .no-line {border - top: none;}</style>';
+            var myStyle1 = '<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css" />';
+            var myStyle2 = '<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js" />';
+            var myStyle3 = '<script src="//code.jquery.com/jquery-1.11.1.min.js" />';
+            var myStyle4 = '<link rel="stylesheet" href="https://localhost:44319/css/print.css" />';
+
+            var divToPrint = document.getElementById('DivIdToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><head>    ' + myStyle1 + myStyle2 + myStyle3 + myStyle4 +'</head><body>    ' + divToPrint.innerHTML + '</body></html> ');
+            newWin.document.close();
+           // setTimeout(function () { newWin.close(); }, 10);
+        }
+    </script>*@
+<!------ Include the above in your HEAD tag
+    https://bootsnipp.com/snippets/9gjD
+   https://plnkr.co/edit/lWk6Yd?preview ---------->
+
+<div id="CateringReport" class="container">
+    <div class="row">
+        <div style="background-color:#F7F7F7">
+            <div class="col-md-11">
+                <h5 class="card-title">Sales Order</h5>
+            </div>
+            @*<div class="float-right">
+                    <input type="button" value="Print" class="btn btn-primary btn-sm float-left" onclick=' return printDiv();'>
+                </div>*@
+        </div>
+    </div>
+    <div id="DivIdToPrint">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="invoice-title">
+                    <h4>@Model.CustomerName</h4>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-xs-9">
+                        <address>
+                            <strong></strong>@Model.CustomerAddress1<br>
+                            <strong></strong>@Model.CustomerAddress2<br>
+                            <strong></strong>@Model.CustomerPhone<br>
+                            <strong></strong>@Model.CustomerEmail<br>
+                        </address>
+                    </div>
+                    <div class="col-xs-3 text-right">
+                        <address>
+                            <strong>Order No.: </strong>@Model.ReferenceNo<br>
+                            <strong>Date : </strong>@Model.Date.ToShortDateString()<br>
+                            <strong>Store : </strong>@Model.StoreName<br>
+
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (Model.SalesDetails.Count > 0)
+        {
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        @*<div class="panel-heading">
+                                <h3 class="panel-title"><strong>Purchase Details</strong></h3>
+                            </div>*@
+                        <div class="panel-body">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th style="width:25%">Product</th>
+                                        <th style="width:10%" class="text-right">Price</th>
+                                        <th style="width:8%" class="text-right">Qty </th>
+                                        <th style="width:10%" class="text-right">Amount</th>
+                                        <th style="width:8%" class="text-right">Tax</th>
+                                        <th style="width:8%" class="text-right">Tax %</th>
+                                        <th style="width:8%" class="text-right">Discount</th>
+                                        <th style="width:8%" class="text-right">Discount %</th>
+                                        <th style="width:15%" class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.SalesDetails)
+                                    {
+                                        var tm = "#myAModal" + item.SalesId;
+                                        var mid = "myAModal" + item.SalesId;
+                                        var rowId = "rowId" + item.SalesId;
+                                        <tr id="@rowId">
+                                            <td>
+                                                @item.FoodMenuName
+                                            </td>
+                                            <td class="text-right">
+                                                @item.UnitPrice.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Quantity.ToString("0.00") @item.UnitName
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Total.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.TaxPercentage.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountAmount.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.DiscountPercentage.ToString("0.00")
+                                            </td>
+                                            <td class="text-right">
+                                                @item.Total.ToString("0.00")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-12 ">
+                                <div class="col-sm-9">
+                                </div>
+                                <div class="col-sm-3 text-right">
+                                    <div><strong>Gross  : </strong>@Model.GrossAmount.ToString("0.00")</div>
+                                    @*<div><strong>Discount  : </strong>@Model.DiscountAmount.ToString("0.00")</div>*@
+                                    <div><strong>Vatable  : </strong>@Model.VatableAmount.ToString("0.00")</div>
+                                    <div><strong>NonVatable  : </strong>@Model.NonVatableAmount.ToString("0.00")</div>
+                                    <div><strong>VAT    : </strong>@Model.TaxAmount.ToString("0.00")</div>
+                                    <div><strong>Total  : </strong>@Model.GrandTotal.ToString("0.00")</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-12 ">
+                <div class="col-sm-6">
+                    @if (Model.Notes != null)
+                    {
+                        <div><strong>Remakrs: </strong> @Model.Notes</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function printDiv() {
+            var myStyle = '<link rel="stylesheet" href="https://localhost:44319/css/print.css" />';
+            var divToPrint = document.getElementById('DivIdToPrint');
+            var newWin = window.open('', 'Print-Window');
+            newWin.document.open();
+            newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html > ');
+            newWin.document.close();
+            setTimeout(function () { newWin.close(); }, 10);
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+
+    /**/
+}

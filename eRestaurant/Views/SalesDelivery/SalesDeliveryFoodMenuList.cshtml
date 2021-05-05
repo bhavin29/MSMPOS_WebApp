@@ -16,7 +16,7 @@
             <div class="float-right">
                 @if (@UserRolePermissionForPage.Add == true)
                 {
-                <a asp-action="SalesDeliveryFoodMenu" class="btn btn-primary float-sm-left ">Create Sales Delivery Note</a>
+                    <a asp-action="SalesDeliveryFoodMenu" class="btn btn-primary float-sm-left ">Create Sales Delivery Note</a>
                 }
             </div>
         </div>
@@ -107,21 +107,21 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Username)
                                         </td>
-                                        <td>
+                                        @*<td>
                                                 <div class="form-button-action">
                                                     <a asp-action="SalesDeliveryFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit   <i class="fa fa-edit"></i></a>
                                                     <label> / </label>
                                                     <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
                                                 </div>
-                                            </td>
-                                        @*<td>
+                                            </td>*@
+                                        <td>
                                             <div class="form-button-action">
                                                 @if (@UserRolePermissionForPage.View == true)
                                                 {
                                                     <a asp-action="View" asp-route-Id="@item.Id">View   <i class="fa fa-edit"></i></a>
                                                 }
                                             </div>
-                                        </td>*@
+                                        </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -152,141 +152,141 @@
 
 @section Scripts {
     <script>
-        var SalesDeliveryFood = null;
-        $(document).ready(function () {
-            var myDate = new Date();
-            var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
-            var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
+                var SalesDeliveryFood = null;
+                $(document).ready(function () {
+                    var myDate = new Date();
+                    var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
+                    var tdate = myDate.getFullYear() + '-' + ('0' + (myDate.getMonth() + 1)).slice(-2) + '-' + ('0' + myDate.getDate()).slice(-2);
 
-            $("#fromDate").val(tdate);
-            $("#toDate").val(tdate);
-            GetCustomerList();
-            GetStoreList();
-            SalesDeliveryFood = $('#@dataTableName').DataTable();
-            $("#CustomerId").select2();
-            $("#StoreId").select2();
-            loadSalesDeliveryList();
+                    $("#fromDate").val(tdate);
+                    $("#toDate").val(tdate);
+                    GetCustomerList();
+                    GetStoreList();
+                    SalesDeliveryFood = $('#@dataTableName').DataTable();
+                    $("#CustomerId").select2();
+                    $("#StoreId").select2();
+                    loadSalesDeliveryList();
 
-        });
+                });
 
-        function loadSalesDeliveryList() {
-            $.ajaxSetup({ cache: false });
-            $.ajax({
-                url: "/SalesDelivery/SalesDeliveryFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&customerId=" + $("#CustomerId").val() + "&storeId=" + $("#StoreId").val(),
-                dataType: "json",
-                type: "GET",
-                success: function (data) {
-                    if (SalesDeliveryFood != null) {
-                        SalesDeliveryFood.clear();
-                        SalesDeliveryFood.destroy();
-                    }
-                    SalesDeliveryFood = $("#SalesDeliveryFood").DataTable({
-                        "data": data.salesDeliveryFood,
-                        "columns": [
-                            { "data": "referenceNo", "name": "Number", "autoWidth": true },
-                            { "data": "date", "name": "Date", "autoWidth": true },
-                            { "data": "customerName", "name": "Customer", "autoWidth": true },
-                            { "data": "storeName", "name": "StoreName", "autoWidth": true },
-                            { "data": "totalAmount", "name": "Amount", "autoWidth": true, className: "text-right" },
-                            { "data": "username", "name": "Username", "autoWidth": true },
-                        /*    {
-                                data: null,
-                                mRender: function (data, type, row) {
-                                    return '<div class="form-button-action"><a href="/SalesDelivery/SalesDeliveryFoodmenu/' + row.id + '?type=Edit">Edit</a>' +
-                                        ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
-                                        '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
-                                        '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
-                                        'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseGRNDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
-                                    },
-                            },*/
-                            {
-                                data: null,
-                                mRender: function (data, type, row) {
-                                     var view = '';
-                                    if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="#' + row.id + '">View</a></div>'
-                                    }
-                                    return view;
-                                },
+                function loadSalesDeliveryList() {
+                    $.ajaxSetup({ cache: false });
+                    $.ajax({
+                        url: "/SalesDelivery/SalesDeliveryFoodmenuListByDate?fromDate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&customerId=" + $("#CustomerId").val() + "&storeId=" + $("#StoreId").val(),
+                        dataType: "json",
+                        type: "GET",
+                        success: function (data) {
+                            if (SalesDeliveryFood != null) {
+                                SalesDeliveryFood.clear();
+                                SalesDeliveryFood.destroy();
                             }
-                        ],
-                        columnDefs: [
-                            {
-                                targets: [4],
-                                render: $.fn.dataTable.render.number(',', '.', 2)
-                            },
-                             { targets: [5], orderable: false }
-                        ],
-                        "bLengthChange": true,
-                        "bInfo": true,
-                        "bFilter": true,
-                        "ordering": false,
-                        "autoWidth": false,
-                        "orderCellsTop": true,
-                        "stateSave": false,
-                        "pageLength": 200,
-                        "lengthMenu": [
-                            [200, 500, 1000],
-                            ['200', '500', '1000']
-                        ],
+                            SalesDeliveryFood = $("#SalesDeliveryFood").DataTable({
+                                "data": data.salesDeliveryFood,
+                                "columns": [
+                                    { "data": "referenceNo", "name": "Number", "autoWidth": true },
+                                    { "data": "date", "name": "Date", "autoWidth": true },
+                                    { "data": "customerName", "name": "Customer", "autoWidth": true },
+                                    { "data": "storeName", "name": "StoreName", "autoWidth": true },
+                                    { "data": "totalAmount", "name": "Amount", "autoWidth": true, className: "text-right" },
+                                    { "data": "username", "name": "Username", "autoWidth": true },
+                                /*    {
+                                        data: null,
+                                        mRender: function (data, type, row) {
+                                            return '<div class="form-button-action"><a href="/SalesDelivery/SalesDeliveryFoodmenu/' + row.id + '?type=Edit">Edit</a>' +
+                                                ' / <a href="#"  data-toggle="modal" data-target="#myModal' + row.id + '">Delete</a> ' +
+                                                '<div class="modal fade" id=myModal' + row.id + ' tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' +
+                                                '<div class= "modal-dialog" > <div class="modal-content"><div class="modal-header"><h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div><div class="modal-body">' +
+                                                'Are you sure want to delete this item?</div><div class="modal-footer"><a id="deleteBtn" data-itemId="' + row.id + '" onclick="deletePurchaseGRNDetail(' + row.id + ')" data-dismiss="modal" class="btn bg-danger mr-1">Delete</a><button type="button" class="btn btn-primary" data-dismiss="modal">Close</button></div></div></div></div></div>'
+                                            },
+                                    },*/
+                                    {
+                                        data: null,
+                                        mRender: function (data, type, row) {
+                                             var view = '';
+                                            if ("@UserRolePermissionForPage.View" == "True") {
+                                                view = '<div class="form-button-action"><a href="/SalesDelivery/View/' + row.id + '">View</a></div>'
+                                            }
+                                            return view;
+                                        },
+                                    }
+                                ],
+                                columnDefs: [
+                                    {
+                                        targets: [4],
+                                        render: $.fn.dataTable.render.number(',', '.', 2)
+                                    },
+                                     { targets: [5], orderable: false }
+                                ],
+                                "bLengthChange": true,
+                                "bInfo": true,
+                                "bFilter": true,
+                                "ordering": false,
+                                "autoWidth": false,
+                                "orderCellsTop": true,
+                                "stateSave": false,
+                                "pageLength": 200,
+                                "lengthMenu": [
+                                    [200, 500, 1000],
+                                    ['200', '500', '1000']
+                                ],
+                            });
+                        },
+                        error: function (err) {
+
+                        }
                     });
-                },
-                error: function (err) {
-
                 }
-            });
-        }
 
-        function deletePurchaseGRNDetail(id) {
-            $.ajax({
-                url: "/SalesDelivery/Delete/" + id,
-                data: { },
-                dataType: "json",
-                success: function (data) {
-                    loadPurchaseGRNList();
-                },
-                error: function (data) {
-                    loadPurchaseGRNList();
-                }
-            });
-        };
+                function deletePurchaseGRNDetail(id) {
+                    $.ajax({
+                        url: "/SalesDelivery/Delete/" + id,
+                        data: { },
+                        dataType: "json",
+                        success: function (data) {
+                            loadPurchaseGRNList();
+                        },
+                        error: function (data) {
+                            loadPurchaseGRNList();
+                        }
+                    });
+                };
 
-        function GetCustomerList() {
-            $.ajax({
-                url: "/Sales/GetCustomerList",
-                data: {},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    $("#CustomerId").empty();
-                    var obj = JSON.parse(data);
-                    for (var i = 0; i < obj.customerList.length; ++i) {
-                        $("#CustomerId").append('<option value="' + obj.customerList[i].value + '">' + obj.customerList[i].text + '</option>');
-                    }
-                },
-                error: function (data) {
-                    alert(data);
+                function GetCustomerList() {
+                    $.ajax({
+                        url: "/Sales/GetCustomerList",
+                        data: {},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            $("#CustomerId").empty();
+                            var obj = JSON.parse(data);
+                            for (var i = 0; i < obj.customerList.length; ++i) {
+                                $("#CustomerId").append('<option value="' + obj.customerList[i].value + '">' + obj.customerList[i].text + '</option>');
+                            }
+                        },
+                        error: function (data) {
+                            alert(data);
+                        }
+                    });
                 }
-            });
-        }
 
-        function GetStoreList() {
-            $.ajax({
-                url: "/Report/GetStoreList",
-                data: {},
-                type: "GET",
-                dataType: "text",
-                success: function (data) {
-                    $("#StoreId").empty();
-                    var obj = JSON.parse(data);
-                    for (var i = 0; i < obj.storeList.length; ++i) {
-                        $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
-                    }
-                },
-                error: function (data) {
-                    alert(data);
+                function GetStoreList() {
+                    $.ajax({
+                        url: "/Report/GetStoreList",
+                        data: {},
+                        type: "GET",
+                        dataType: "text",
+                        success: function (data) {
+                            $("#StoreId").empty();
+                            var obj = JSON.parse(data);
+                            for (var i = 0; i < obj.storeList.length; ++i) {
+                                $("#StoreId").append('<option value="' + obj.storeList[i].value + '">' + obj.storeList[i].text + '</option>');
+                            }
+                        },
+                        error: function (data) {
+                            alert(data);
+                        }
+                    });
                 }
-            });
-        }
     </script>
 }

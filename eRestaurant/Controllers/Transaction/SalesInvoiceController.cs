@@ -252,5 +252,31 @@ namespace RocketPOS.Controllers.Transaction
                 FileDownloadName = "InvoiceReport.pdf"
             };
         }
+
+        public ActionResult View(long? id)
+        {
+            SalesInvoiceModel purchaseModel = new SalesInvoiceModel();
+            if (UserRolePermissionForPage.View == true)
+            {
+                if (id > 0)
+                {
+                    long purchaseInvoiceId = Convert.ToInt64(id);
+                    purchaseModel = _iSalesInvoiceService.GetViewSalesInvoiceFoodMenuById(purchaseInvoiceId);
+                }
+                else
+                {
+                    purchaseModel.ReferenceNo = _iSalesInvoiceService.ReferenceNumberFoodMenu().ToString();
+                    purchaseModel.SalesInvoiceDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                }
+                purchaseModel.CustomerList = _iDropDownService.GetCustomerList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                return View(purchaseModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+        }
     }
 }

@@ -71,7 +71,8 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:0%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-                            </thead>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Pdf")</th>
+</thead>
                             <tfoot>
                                 <tr role="row">
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Number")</th>
@@ -83,50 +84,59 @@
                                     <th style="width:10%" rowspan="1" colspan="1">@Html.DisplayName("Creator")</th>
                                     @*<th style="width:0%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-                            </tfoot>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Pdf")</th>
+</tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
                                     var tm = "#myModal" + item.Id;
                                     var mid = "myModal" + item.Id;
-                                    <tr role="row">
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.ReferenceNo)
-                                        </td>
-                                        @*<td>
-                                                @Html.DisplayFor(modelItem => item.POReferenceNo)
-                                            </td>*@
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Date, "{0:d}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.CustomerName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.StoreName)
-                                        </td>
-                                        <td class="text-right">
-                                            @Html.DisplayFor(modelItem => item.GrandTotal, "{0:N}")
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.Username)
-                                        </td>
-                                        @*<td>
-                                            <div class="form-button-action">
-                                                <a asp-action="SalesInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
-                                                <label> / </label>
-                                                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
-                                            </div>
-                                        </td>*@
-                                        <td>
-                                            <div class="form-button-action">
-                                                @if (@UserRolePermissionForPage.View == true)
-                                                {
-                                                    <a asp-action="GetInvoicePrint" asp-route-Id="@item.Id">View</a>
-                                                }
-                                            </div>
-                                        </td>
-                                    </tr>
+                                <tr role="row">
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ReferenceNo)
+                                    </td>
+                                    @*<td>
+            @Html.DisplayFor(modelItem => item.POReferenceNo)
+        </td>*@
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date, "{0:d}")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.CustomerName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StoreName)
+                                    </td>
+                                    <td class="text-right">
+                                        @Html.DisplayFor(modelItem => item.GrandTotal, "{0:N}")
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Username)
+                                    </td>
+                                    @*<td>
+            <div class="form-button-action">
+                <a asp-action="SalesInvoiceFoodMenu" asp-route-Id="@item.Id" asp-route-type="Edit">Edit</a>
+                <label> / </label>
+                <a href="#" data-toggle="modal" data-target="@tm">Delete</a>
+            </div>
+        </td>*@
+                                    <td>
+                                        <div class="form-button-action">
+                                            @if (@UserRolePermissionForPage.View == true)
+                                            {
+                                                <a asp-action="View" asp-route-Id="@item.Id">View</a>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            @if (@UserRolePermissionForPage.View == true)
+                                            {
+                                                <a asp-action="GetInvoicePrint" asp-route-Id="@item.Id">Pdf</a>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -209,7 +219,17 @@
                                 mRender: function (data, type, row) {
                                     var view = '';
                                     if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="/SalesInvoice/GetInvoicePrint/' + row.id + '">View</a></div>'
+                                        view = '<div class="form-button-action"><a href="/SalesInvoice/View/' + row.id + '">View</a></div>'
+                                    }
+                                    return view;
+                                },
+                            },
+                             {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/SalesInvoice/GetInvoicePrint/' + row.id + '">Pdf</a></div>'
                                     }
                                     return view;
                                 },

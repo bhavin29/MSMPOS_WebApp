@@ -162,5 +162,61 @@ namespace RocketPOS.Services
             }
             return model;
         }
+
+        public SalesDeliveryModel GetViewSalesDeliveryFoodMenuById(long purchaseGRNId)
+        {
+            SalesDeliveryModel purchaseModel = new SalesDeliveryModel();
+
+            var model = (from purchase in _iSalesDeliveryRepository.GetViewSalesDeliveryFoodMenuById(purchaseGRNId).ToList()
+                         select new SalesDeliveryModel()
+                         {
+                             Id = purchase.Id,
+                             ReferenceNo = purchase.ReferenceNo,
+                             CustomerId = purchase.CustomerId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             SalesDeliveryDate = purchase.SalesDeliveryDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes,
+                             CustomerName = purchase.CustomerName,
+                             StoreName = purchase.StoreName,
+                             SOReferenceNo = purchase.SOReferenceNo,
+                             SODate = purchase.SODate,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.salesDeliveryDetails = (from purchasedetails in _iSalesDeliveryRepository.GetViewSalesDeliveryFoodMenuDetails(purchaseGRNId)
+                                            select new SalesDeliveryDetailModel()
+                                            {
+                                                SalesDeliveryId = purchasedetails.SalesDeliveryId,
+                                                FoodMenuId = purchasedetails.FoodMenuId,
+                                                SOQTY = purchasedetails.SOQTY,
+                                                DeliveryQTY = purchasedetails.DeliveryQTY,
+                                                UnitPrice = purchasedetails.UnitPrice,
+                                                GrossAmount = purchasedetails.GrossAmount,
+                                                DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                DiscountAmount = purchasedetails.DiscountAmount,
+                                                TaxAmount = purchasedetails.TaxAmount,
+                                                TotalAmount = purchasedetails.TotalAmount,
+                                                IngredientName = purchasedetails.IngredientName,
+                                                FoodMenuName = purchasedetails.FoodMenuName,
+                                                ItemType = purchasedetails.ItemType,
+                                                UnitName = purchasedetails.UnitName,
+                                                VatableAmount = purchasedetails.VatableAmount,
+                                                NonVatableAmount = purchasedetails.NonVatableAmount
+                                            }).ToList();
+            }
+            return model;
+        }
     }
 }

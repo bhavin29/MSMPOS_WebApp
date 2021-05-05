@@ -317,5 +317,32 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { CustomerList = salesViewModel.CustomerList });
         }
 
+
+        public ActionResult View(long? id)
+        {
+            SalesModel purchaseModel = new SalesModel();
+            if (UserRolePermissionForPage.View == true)
+            {
+                if (id > 0)
+                {
+                    long purchaseId = Convert.ToInt64(id);
+                    purchaseModel = _iSalesService.GetViewSalesFoodMenuById(purchaseId);
+                }
+                else
+                {
+                    purchaseModel.Date = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                    purchaseModel.ReferenceNo = _iSalesService.ReferenceNumberFoodMenu().ToString();
+                }
+                purchaseModel.CustomerList = _iDropDownService.GetCustomerList();
+                purchaseModel.StoreList = _iDropDownService.GetStoreList();
+                purchaseModel.EmployeeList = _iDropDownService.GetEmployeeList();
+                return View(purchaseModel);
+            }
+            else
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+        }
+
     }
 }

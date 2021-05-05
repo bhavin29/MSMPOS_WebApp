@@ -48,14 +48,14 @@ namespace RocketPOS.Models
         public decimal Paid { get; set; }
         public string Message { get; set; }
         public string Notes { get; set; }
-        public string SupplierEmail { get; set; }
+        public string CustomerEmail { get; set; }
         public int InventoryType { get; set; }
         public int Status { get; set; }
         public DateTime DateInserted { get; set; }
         public string CustomerName { get; set; }
-        public string SupplierAddress1 { get; set; }
-        public string SupplierAddress2 { get; set; }
-        public string SupplierPhone { get; set; }
+        public string CustomerAddress1 { get; set; }
+        public string CustomerAddress2 { get; set; }
+        public string CustomerPhone { get; set; }
         public bool IsSendEmail { get; set; }
         public List<SalesDetailsModel> SalesDetails { get; set; }
         public int[] DeletedId { get; set; }

@@ -19,5 +19,7 @@ namespace RocketPOS.Interface.Services
         decimal GetFoodMenuLastPrice(int itemType, int foodMenuId);//
         SalesDeliveryModel GetPurchaseGRNFoodMenuByPurchaseId(long purchaseId);//
         int GetPurchaseIdByPOReference(string poReference);//
+
+        SalesDeliveryModel GetViewSalesDeliveryFoodMenuById(long purchaseGRNId);
     }
 }

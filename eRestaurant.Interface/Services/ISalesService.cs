@@ -18,5 +18,7 @@ namespace RocketPOS.Interface.Services
         decimal GetTaxByFoodMenuId(int foodMenuId, int ItemType);
         decimal GetFoodMenuLastPrice(int itemType, int foodMenuId);
         int ApprovePurchaseOrder(int id);//
+
+        SalesModel GetViewSalesFoodMenuById(long purchaseId);
     }
 }

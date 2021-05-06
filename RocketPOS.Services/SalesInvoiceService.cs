@@ -258,7 +258,7 @@ namespace RocketPOS.Services
                             <tr Height='50'>
                             	<td colspan=3>Invoice : " + salesInvoiceModel.ReferenceNo + @"</td>
                                 <td colspan=2></td>
-                            	<td colspan=2>Date : " + salesInvoiceModel.SalesInvoiceDate + @"</td>
+                            	<td colspan=2>Date : " + salesInvoiceModel.SalesInvoiceDate.ToShortDateString() + @"</td>
                             </tr>
                             <tr Height='30' class='noBorder'>
                             	<td colspan=3 ><b>Item</b></td>
@@ -272,18 +272,79 @@ namespace RocketPOS.Services
             {
                 sb.AppendFormat(@"<tr  Height='30' class='noBorder'><td colspan=3 >{0}</td><td width=50 >{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>", item.FoodMenuName, item.InvoiceQty , item.UnitName, item.UnitPrice, item.GrossAmount);
             }
-            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Gross Total</td><td >" + salesInvoiceModel.GrossAmount + "</td></tr>");
-            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Vatable</td><td >" + salesInvoiceModel.VatableAmount + "</td></tr>");
-            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Non Vatable</td><td >" + salesInvoiceModel.NonVatableAmount + "</td></tr>");
-            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Total Tax</td><td >" + salesInvoiceModel.TaxAmount + "</td></tr>");
-            sb.Append(@"<tr Height='30'><td colspan=5></td><td >Grand Total</td><td >" + salesInvoiceModel.TotalAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td colspan=5 rowspan=5 style='vertical-align:top; text-align : left;'><b>Remarks : </b>" + salesInvoiceModel.Notes + @"</td><td >Gross Total</td><td >" + salesInvoiceModel.GrossAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td >Vatable</td ><td >" + salesInvoiceModel.VatableAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td >Non Vatable</td><td >" + salesInvoiceModel.NonVatableAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td >Total Tax</td><td >" + salesInvoiceModel.TaxAmount + "</td></tr>");
+            sb.Append(@"<tr Height='30'><td >Grand Total</td><td >" + salesInvoiceModel.TotalAmount + "</td></tr>");
             sb.Append(@" <tr Height='30'>
-                            <td colspan='7'>Remarks :  "+ salesInvoiceModel.Notes  + @"</td>
+                            <td colspan='7'><b>Terms and Conditions: </b> </br> 1. Terms : Due on demand. 
+                            </br> 2. Receive all products in good conditon, goods once sold are not returnable unless prior agreements.
+                            </br> 3. Do not pay cash to any sales reps or delivery team, strictly PAYBILL/CHEQUE. 
+                            </br> 4. Goods supplied herein remain the sole property of BAPS until fully Paid. 
+                            </br> 5. Interest @ 2.5% monthly will be charged for all overdue accounts. 
+                            </td>
                             </tr>
                             </body>
                             </table>
                             </html>");
             return sb.ToString();
+        }
+
+        public SalesInvoiceModel GetViewSalesInvoiceFoodMenuById(long purchaseId)
+        {
+            var model = (from purchase in _iSalesInvoiceRepository.GetViewSalesInvoiceFoodMenuById(purchaseId).ToList()
+                         select new SalesInvoiceModel()
+                         {
+                             Id = purchase.Id,
+                             SalesId = purchase.SalesId,
+                             ReferenceNo = purchase.ReferenceNo,
+                             CustomerId = purchase.CustomerId,
+                             EmployeeId = purchase.EmployeeId,
+                             StoreId = purchase.StoreId,
+                             SalesInvoiceDate = purchase.SalesInvoiceDate,
+                             GrossAmount = purchase.GrossAmount,
+                             TaxAmount = purchase.TaxAmount,
+                             TotalAmount = purchase.TotalAmount,
+                             PaidAmount = purchase.PaidAmount,
+                             DueAmount = purchase.DueAmount,
+                             DeliveryNoteNumber = purchase.DeliveryNoteNumber,
+                             DeliveryDate = purchase.DeliveryDate,
+                             DriverName = purchase.DriverName,
+                             VehicleNumber = purchase.VehicleNumber,
+                             Notes = purchase.Notes,
+                             SalesStatus = purchase.SalesStatus,
+                             StoreName = purchase.StoreName,
+                             CustomerName = purchase.CustomerName,
+                             SOReferenceNo = purchase.SOReferenceNo,
+                             SODate = purchase.SODate,
+                             VatableAmount = purchase.VatableAmount,
+                             NonVatableAmount = purchase.NonVatableAmount
+                         }).SingleOrDefault();
+            if (model != null)
+            {
+                model.SalesInvoiceDetails = (from purchasedetails in _iSalesInvoiceRepository.GetViewSalesInvoiceFoodMenuDetails(purchaseId)
+                                                select new SalesInvoiceDetailModel()
+                                                {
+                                                    SalesInvoiceId = purchasedetails.SalesInvoiceId,
+                                                    FoodMenuId = purchasedetails.FoodMenuId,
+                                                    IngredientId = purchasedetails.IngredientId,
+                                                    SOQTY = purchasedetails.SOQTY,
+                                                    InvoiceQty = purchasedetails.InvoiceQty,
+                                                    UnitPrice = purchasedetails.UnitPrice,
+                                                    GrossAmount = purchasedetails.GrossAmount,
+                                                    DiscountPercentage = purchasedetails.DiscountPercentage,
+                                                    DiscountAmount = purchasedetails.DiscountAmount,
+                                                    TaxAmount = purchasedetails.TaxAmount,
+                                                    TotalAmount = purchasedetails.TotalAmount,
+                                                    IngredientName = purchasedetails.IngredientName,
+                                                    FoodMenuName = purchasedetails.FoodMenuName,
+                                                    UnitName = purchasedetails.UnitName,
+                                                    VatableAmount = purchasedetails.VatableAmount,
+                                                    NonVatableAmount = purchasedetails.NonVatableAmount
+                                                }).ToList();
+            }
+            return model;
         }
     }
 }

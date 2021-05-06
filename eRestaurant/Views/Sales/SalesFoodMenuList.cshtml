@@ -71,7 +71,7 @@
                                     <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                     <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                                    @*<th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>*@
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
@@ -84,7 +84,7 @@
                                     <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("Status")</th>
                                     <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Actions")</th>
                                     <th style="width:8%" rowspan="1" colspan="1">@Html.DisplayName("Invoices")</th>
-                                    @*<th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>*@
+                                    <th style="width:6%" rowspan="1" colspan="1">@Html.DisplayName("View")</th>
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -133,14 +133,14 @@
                                                 <a asp-action="SalesInvoiceBySalesId" asp-route-Id="@item.Id">Invoice </a>
                                             </div>
                                         </td>
-                                        @*<td>
+                                        <td>
                                             <div class="form-button-action">
                                                 @if (UserRolePermissionForPage.View == true)
                                                 {
                                                     <a asp-action="View" asp-route-Id="@item.Id">View</a>
                                                 }
                                             </div>
-                                        </td>*@
+                                        </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -249,7 +249,7 @@
                                     return invoiceGRN;
                                     },
                             },
-                            @*{
+                            {
                                 data: null,
                                 mRender: function (data, type, row) {
                                     var view = '';
@@ -258,7 +258,7 @@
                                     }
                                     return view;
                                 },
-                            },*@
+                            },
                         ],
                         columnDefs: [
                             {

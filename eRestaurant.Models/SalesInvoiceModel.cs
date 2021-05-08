@@ -68,6 +68,8 @@ namespace RocketPOS.Models
         public string OutletEmail { get; set; }
         public string InvoiceHeader { get; set; }
         public string InvoiceFooter { get; set; }
+        public bool CustomerTaxInclusive { get; set; }
+        
     }
     public class SalesInvoiceDetailModel
     {

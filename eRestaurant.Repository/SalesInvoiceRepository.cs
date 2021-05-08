@@ -537,7 +537,7 @@ namespace RocketPOS.Repository
             {
                 var query = " select SI.ReferenceNumber AS ReferenceNo,s.StoreName,si.SalesInvoiceDate,c.CustomerName,c.CustomerAddress1,c.CustomerAddress2,c.CustomerNumber,c.CustomerEmail " +
                             " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount,si.DeliveryNoteNumber,si.DeliveryDate,si.DriverName,si.VehicleNumber " +
-                            " ,O.OutletAddress1,O.OutletAddress2,O.OutletPhone,O.OutletEmail,O.InvoiceHeader,O.InvoiceFooter " +
+                            " ,O.OutletAddress1,O.OutletAddress2,O.OutletPhone,O.OutletEmail,O.InvoiceHeader,O.InvoiceFooter, C.TaxInclusive as CustomerTaxInclusive " +
                             " from SalesInvoice SI Inner Join Store S On s.Id=si.StoreId inner join Outlet O on O.Storeid = S.Id " +
                             " inner join Customer c on c.Id=si.CustomerId where si.Id= "+ id;
                 purchaseModelList = con.Query<SalesInvoiceModel>(query).AsList();

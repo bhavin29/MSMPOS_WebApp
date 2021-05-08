@@ -208,7 +208,8 @@ namespace RocketPOS.Services
                              OutletPhone = purchase.OutletPhone,
                              OutletEmail = purchase.OutletEmail,
                              InvoiceHeader = purchase.InvoiceHeader,
-                             InvoiceFooter = purchase.InvoiceFooter
+                             InvoiceFooter = purchase.InvoiceFooter,
+                             CustomerTaxInclusive = purchase.CustomerTaxInclusive
 
                          }).SingleOrDefault();
             if (model != null)
@@ -380,9 +381,12 @@ namespace RocketPOS.Services
                 if (j == noOfPages) {
                     strAmountWord = NumberToWords.ConvertAmount((double)salesInvoiceModel.TotalAmount) + " KENYAN SHILLINGS";
 
-                    VatableAmount = salesInvoiceModel.VatableAmount.ToString("0.00");
-                    NonVatableAmount = salesInvoiceModel.NonVatableAmount.ToString("0.00");
-                    TaxAmount = salesInvoiceModel.TaxAmount.ToString("0.00");
+                    if (salesInvoiceModel.CustomerTaxInclusive)
+                    {
+                        VatableAmount = salesInvoiceModel.VatableAmount.ToString("0.00");
+                        NonVatableAmount = salesInvoiceModel.NonVatableAmount.ToString("0.00");
+                        TaxAmount = salesInvoiceModel.TaxAmount.ToString("0.00");
+                    }
                     TotalAmount = salesInvoiceModel.TotalAmount.ToString("0.00");
                 }
 

@@ -52,6 +52,7 @@ namespace RocketPOS.Framework
         public static int CategoryId ;
         public static int FoodMenuId ;
         public static int OutletId;
+        public static string InvoiceTerms;
 
     }
 }

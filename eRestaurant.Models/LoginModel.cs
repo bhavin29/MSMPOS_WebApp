@@ -46,5 +46,7 @@ namespace RocketPOS.Models
         public string PurchaseApprovalEmail { get; set; }
         public int Timeoffset { get; set; }
         public int WebRoleId { get; set; }
+        public string InvoiceTerms { get; set; }
+        
     }
 }

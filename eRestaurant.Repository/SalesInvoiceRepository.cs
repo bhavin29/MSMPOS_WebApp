@@ -430,7 +430,8 @@ namespace RocketPOS.Repository
             {
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
-                var query = $"SELECT ISNULL(MAX(convert(int,ReferenceNumber)),0) + 1  FROM SalesInvoice where InventoryType=1 and ISDeleted=0;";
+
+                var query = $"SELECT RIGHT('00' + convert(varchar(8), isnull(count(*), 0) + 1), 12) FROM SalesInvoice where InventoryType = 1 and isdeleted = 0; ";
                 result = con.ExecuteScalar<string>(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (!string.IsNullOrEmpty(result))
                 {
@@ -535,7 +536,9 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = " select SI.ReferenceNumber AS ReferenceNo,s.StoreName,si.SalesInvoiceDate,c.CustomerName,c.CustomerAddress1,c.CustomerAddress2,c.CustomerNumber,c.CustomerEmail " +
-                            " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount from SalesInvoice SI Inner Join Store S On s.Id=si.StoreId " +
+                            " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount,si.DeliveryNoteNumber,si.DeliveryDate,si.DriverName,si.VehicleNumber " +
+                            " ,O.OutletAddress1,O.OutletAddress2,O.OutletPhone,O.OutletEmail,O.InvoiceHeader,O.InvoiceFooter " +
+                            " from SalesInvoice SI Inner Join Store S On s.Id=si.StoreId inner join Outlet O on O.Storeid = S.Id " +
                             " inner join Customer c on c.Id=si.CustomerId where si.Id= "+ id;
                 purchaseModelList = con.Query<SalesInvoiceModel>(query).AsList();
             }
@@ -547,7 +550,7 @@ namespace RocketPOS.Repository
             List<SalesInvoiceDetailModel> purchaseDetails = new List<SalesInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " select pin.Id as SalesInvoiceId,  (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType,  " +
+                var query = " select ROW_NUMBER() over ( Order by PIN.Id) as SrNumber,pin.Id as SalesInvoiceId,  (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType,  " +
                      " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then PIN.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId,   " +
                      " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,   " +
                      " pin.UnitPrice as UnitPrice, pin.SOQty,PIN.InvoiceQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount, pin.DiscountPercentage,pin.DiscountAmount  , pin.VatableAmount,pin.NonVatableAmount ," +

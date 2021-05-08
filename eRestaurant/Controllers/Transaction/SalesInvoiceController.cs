@@ -239,10 +239,10 @@ namespace RocketPOS.Controllers.Transaction
 
             var pdf = Pdf
                 .From(html)
-                .OfSize(PaperSize.A4)
+                .OfSize(PaperSize.Letter)
                 .WithTitle("Title")
                 .WithoutOutline()
-                .WithMargins(1.25.Centimeters())
+                .WithMargins(.25.Centimeters())
                 .Portrait()
                 .Comressed()
                 .Content();

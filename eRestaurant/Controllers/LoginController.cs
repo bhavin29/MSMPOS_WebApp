@@ -100,6 +100,7 @@ namespace RocketPOS.Controllers
                 LoginInfo.FoodMenuId = -1;
                 LoginInfo.CategoryId = -1;
                 LoginInfo.OutletId = -1;
+                LoginInfo.InvoiceTerms = loginModel.InvoiceTerms;
             }
             catch (Exception ex)
             {

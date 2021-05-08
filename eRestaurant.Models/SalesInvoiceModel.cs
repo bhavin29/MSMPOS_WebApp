@@ -62,9 +62,16 @@ namespace RocketPOS.Models
         public string CustomerAddress2 { get; set; }
         public string CustomerEmail { get; set; }
         public string StoreName { get; set; }
+        public string OutletAddress1 { get; set; }
+        public string OutletAddress2 { get; set; }
+        public string OutletPhone { get; set; }
+        public string OutletEmail { get; set; }
+        public string InvoiceHeader { get; set; }
+        public string InvoiceFooter { get; set; }
     }
     public class SalesInvoiceDetailModel
     {
+        public int SrNumber { get; set; }
         public int ItemType { get; set; }
         public int Id { get; set; }
         public int SalesInvoiceId { get; set; }

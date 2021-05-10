@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using OpenHtmlToPdf;
 using RocketPOS.Framework;
@@ -7,6 +8,7 @@ using RocketPOS.Models;
 using RocketPOS.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,13 +21,15 @@ namespace RocketPOS.Controllers.Transaction
         private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public SalesInvoiceController(ISalesInvoiceService salesInvoiceService,
+        public SalesInvoiceController(IHostingEnvironment hostingEnvironment, ISalesInvoiceService salesInvoiceService,
             IDropDownService idropDownService,
              ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService)
         {
+            _hostingEnvironment = hostingEnvironment;
             _iSalesInvoiceService = salesInvoiceService;
             _iDropDownService = idropDownService;
             _iCommonService = iCommonService;
@@ -38,7 +42,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             _iCommonService.GetPageWiseRoleRigths("SalesInvoice");
             List<SalesInvoiceViewModel> purchaseList = new List<SalesInvoiceViewModel>();
-            purchaseList = _iSalesInvoiceService.GetPurchaseInvoiceFoodMenuList().ToList();
+            //purchaseList = _iSalesInvoiceService.GetPurchaseInvoiceFoodMenuList().ToList();
             return View(purchaseList);
         }
 
@@ -230,27 +234,31 @@ namespace RocketPOS.Controllers.Transaction
             SalesInvoiceModel salesInvoiceModel = new SalesInvoiceModel();
             salesInvoiceModel = _iSalesInvoiceService.GetSalesInvoiceReportById(id);
             string html = _iSalesInvoiceService.GetInvoiceHtmlString(salesInvoiceModel);
-            //        const string html =
-            //"<!DOCTYPE html>" +
-            //"<html>" +
-            //"<head><meta charset='UTF-8'><title>Title</title></head>" +
-            //"<body></body>" +
-            //"</html>";
 
             var pdf = Pdf
-                .From(html)
-                .OfSize(PaperSize.Letter)
-                .WithTitle("Title")
-                .WithoutOutline()
-                .WithMargins(.25.Centimeters())
-                .Portrait()
-                .Comressed()
-                .Content();
+              .From(html)
+              .OfSize(PaperSize.Letter)
+              .WithTitle("Title")
+              .WithoutOutline()
+              .WithMargins(.25.Centimeters())
+              .Portrait()
+              .Comressed()
+              .Content();
 
-            return new FileContentResult(pdf, "application/pdf")
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string InvoicePath = Path.Combine(webRootPath, "Sales");
+            string FileNmae = InvoicePath + "\\SalesInvoice_" + DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset).ToString("MM/dd/yyyy HH:mm").Replace("/", "").Replace(" ", "").Replace(":", "").ToString() + ".pdf";
+
+            Stream myStream = new MemoryStream(pdf);
+
+            using (var fileStream = System.IO.File.Create(FileNmae))
             {
-                FileDownloadName = "InvoiceReport.pdf"
-            };
+                myStream.Seek(0, SeekOrigin.Begin);
+                myStream.CopyTo(fileStream);
+            }
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(FileNmae);
+            return File(FileBytes, "application/pdf");
         }
 
         public ActionResult View(long? id)

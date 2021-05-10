@@ -43,7 +43,7 @@ namespace RocketPOS.Controllers.Transaction
         {
             _iCommonService.GetPageWiseRoleRigths("PurchaseInvoiceFoodMenu");
             List<PurchaseInvoiceViewModel> purchaseList = new List<PurchaseInvoiceViewModel>();
-            purchaseList = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuList().ToList();
+            //purchaseList = _iPurchaseInvoiceService.GetPurchaseInvoiceFoodMenuList().ToList();
             return View(purchaseList);
         }
 

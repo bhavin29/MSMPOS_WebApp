@@ -132,7 +132,8 @@
                                         <div class="form-button-action">
                                             @if (@UserRolePermissionForPage.View == true)
                                             {
-                                                <a asp-action="GetInvoicePrint" asp-route-Id="@item.Id">Invoice</a>
+                                              /*  <a asp-action="GetInvoicePrint" asp-route-Id="@item.Id">Invoice</a>*/
+                                                <a  href="#" target="_blank" onclick="GetInvoicePrint(@item.Id)" >Invoice</a>
                                             }
                                         </div>
                                     </td>
@@ -167,6 +168,11 @@
 @section Scripts {
     <script>
         var SalesInvoiceFood = null;
+
+        function GetInvoicePrint(id) {
+            window.open('/SalesInvoice/GetReport?id=' + id, '_blank', "fullscreen=yes");
+        };
+
         $(document).ready(function () {
             var myDate = new Date();
             var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');

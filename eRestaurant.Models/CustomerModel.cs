@@ -26,6 +26,7 @@ namespace RocketPOS.Models
         public string CustomerImage { get; set; }
         public string FavDeliveryAddress { get; set; }
         public bool IsActive { get; set; }
+        [DisplayName("Tax")]
         public bool TaxInclusive { get; set; }
 
         public CustomerModel()

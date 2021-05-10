@@ -165,7 +165,7 @@ namespace RocketPOS.Controllers.Transaction
                     using (var stream = new FileStream(fullPath, FileMode.Create))
                     {
                         file.CopyTo(stream);
-                        stream.Position = 0;
+                        stream.Position = 0;    
                         if (sFileExtension == ".xls")
                         {
                             HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  

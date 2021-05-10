@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using OpenHtmlToPdf;
 using RocketPOS.Framework;
 using RocketPOS.Interface.Services;
 using RocketPOS.Models;
 using RocketPOS.Resources;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,19 +21,20 @@ namespace RocketPOS.Controllers.Transaction
         private readonly ICommonService _iCommonService;
         private readonly IStringLocalizer<RocketPOSResources> _sharedLocalizer;
         private readonly LocService _locService;
-        private readonly IEmailService _iEmailService;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public SalesDeliveryController(ISalesDeliveryService salesDeliveryService,
+        public SalesDeliveryController(IHostingEnvironment hostingEnvironment, ISalesDeliveryService salesDeliveryService,
             IDropDownService idropDownService,
             ICommonService iCommonService,
             IStringLocalizer<RocketPOSResources> sharedLocalizer,
             LocService locService,
             IEmailService emailService)
         {
+            _hostingEnvironment = hostingEnvironment;
             _iSalesDeliveryService = salesDeliveryService;
             _iDropDownService = idropDownService;
             _iCommonService = iCommonService;
-            _iEmailService = emailService;
+          //  _iEmailService = emailService;
             _sharedLocalizer = sharedLocalizer;
             _locService = locService;
         }
@@ -233,7 +237,40 @@ namespace RocketPOS.Controllers.Transaction
             return Json(new { purchaseId = purchaseId });
         }
 
-        public IActionResult View(int? id)
+        [HttpGet]
+        public ActionResult GetDeliveryPrint(int id,string reportName)
+        {
+            SalesDeliveryModel salesInvoiceModel = new SalesDeliveryModel();
+            salesInvoiceModel = _iSalesDeliveryService.GetSalesDeliveryReportById(id);
+            string html = _iSalesDeliveryService.GetDeliveryHtmlString(salesInvoiceModel, reportName);
+
+            var pdf = Pdf
+              .From(html)
+              .OfSize(PaperSize.Letter)
+              .WithTitle("Title")
+              .WithoutOutline()
+              .WithMargins(.25.Centimeters())
+              .Portrait()
+              .Comressed()
+              .Content();
+
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string InvoicePath = Path.Combine(webRootPath, "Sales");
+            string FileNmae = InvoicePath + "\\SalesDelivery_" + DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset).ToString("MM/dd/yyyy HH:mm").Replace("/", "").Replace(" ", "").Replace(":", "").ToString() + ".pdf";
+
+            Stream myStream = new MemoryStream(pdf);
+
+            using (var fileStream = System.IO.File.Create(FileNmae))
+            {
+                myStream.Seek(0, SeekOrigin.Begin);
+                myStream.CopyTo(fileStream);
+            }
+
+            byte[] FileBytes = System.IO.File.ReadAllBytes(FileNmae);
+            return File(FileBytes, "application/pdf");
+        }
+
+        public ActionResult View(long? id)
         {
             SalesDeliveryModel purchaseModel = new SalesDeliveryModel();
             if (UserRolePermissionForPage.View == true)

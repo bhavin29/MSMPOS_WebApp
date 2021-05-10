@@ -21,5 +21,8 @@ namespace RocketPOS.Interface.Services
         int GetPurchaseIdByPOReference(string poReference);//
 
         SalesDeliveryModel GetViewSalesDeliveryFoodMenuById(long purchaseGRNId);
+        SalesDeliveryModel GetSalesDeliveryReportById(long id);
+
+        string GetDeliveryHtmlString(SalesDeliveryModel salesInvoiceModel, string reportName);
     }
 }

@@ -65,23 +65,25 @@
                                 <tr role="row">
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Number")</th>
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Date")</th>
-                                    <th rowspan="1" colspan="1" style="width:25%">@Html.DisplayName("Customer")</th>
+                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Customer")</th>
                                     <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Store")</th>
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Amount")</th>
                                     <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Creator")</th>
                                     @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Actions")</th>*@
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
+                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Print")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Number")</th>
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Date")</th>
-                                    <th rowspan="1" colspan="1" style="width:25%">@Html.DisplayName("Supplier")</th>
+                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Supplier")</th>
                                     <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Store")</th>
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Amount")</th>
                                     <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Creator")</th>
                                     <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Actions")</th>
                                     @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>*@
+                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Print")</th>
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -122,6 +124,15 @@
                                                 }
                                             </div>
                                         </td>
+                                    <td>
+                                        <div class="form-button-action">
+                                            @if (@UserRolePermissionForPage.View == true)
+                                            {
+                                                <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'Note')">Note</a>
+                                                <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'List')">List</a>
+                                            }
+                                        </div>
+                                    </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -153,6 +164,10 @@
 @section Scripts {
     <script>
                 var SalesDeliveryFood = null;
+                function GetDeliveryPrint(id,rname) {
+                    window.open('/SalesDelivery/GetDeliveryPrint?id=' + id + '&reportName=' + rname , '_blank', "fullscreen=yes");
+                };
+
                 $(document).ready(function () {
                     var myDate = new Date();
                     var fdate = myDate.getFullYear() + '-' + ('01') + '-' + ('01');
@@ -208,7 +223,17 @@
                                             }
                                             return view;
                                         },
+                            },
+                             {
+                                data: null,
+                                mRender: function (data, type, row) {
+                                    var view = '';
+                                    if ("@UserRolePermissionForPage.View" == "True") {
+                                        view = '<div class="form-button-action"><a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=Note">Note</a> / <a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=List">List</a></div>'
                                     }
+                                    return view;
+                                },
+                            }
                                 ],
                                 columnDefs: [
                                     {

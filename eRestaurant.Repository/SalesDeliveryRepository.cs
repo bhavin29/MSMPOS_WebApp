@@ -534,6 +534,41 @@ namespace RocketPOS.Repository
             return result;
         }
 
+        public List<SalesDeliveryModel> GetSalesDeliveryReportById(long id)
+        {
+            List<SalesDeliveryModel> purchaseModelList = new List<SalesDeliveryModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select SI.ReferenceNumber AS ReferenceNo,s.StoreName,si.SalesDeliveryDate,c.CustomerName,c.CustomerAddress1,c.CustomerAddress2,c.CustomerNumber,c.CustomerEmail " +
+                            " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount,si.DeliveryNoteNumber,si.DeliveryDate,si.DriverName,si.VehicleNumber " +
+                            " ,O.OutletAddress1,O.OutletAddress2,O.OutletPhone,O.OutletEmail,O.InvoiceHeader,O.InvoiceFooter, C.TaxInclusive as CustomerTaxInclusive " +
+                            " from salesdelivery SI Inner Join Store S On s.Id=si.StoreId inner join Outlet O on O.Storeid = S.Id " +
+                            " inner join Customer c on c.Id=si.CustomerId where si.Id= "+ id;
+                purchaseModelList = con.Query<SalesDeliveryModel>(query).AsList();
+            }
+            return purchaseModelList;
+        }
+		
+		public List<SalesDeliveryDetailModel> GetSalesDeliveryReportFoodMenuDetails(long id)
+        {
+            List<SalesDeliveryDetailModel> purchaseDetails = new List<SalesDeliveryDetailModel>();
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " select ROW_NUMBER() over ( Order by PIN.Id) as SrNumber,pin.Id as SalesInvoiceId,  (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then 2 else 1 end) else 0 end) as ItemType,  " +
+                     " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then PIN.AssetItemId else pin.IngredientId end) else pin.FoodMenuId end) as FoodMenuId,   " +
+                     " (case when pin.FoodMenuId is null then (case when pin.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,   " +
+                     " pin.UnitPrice as UnitPrice, pin.SOQty,PIN.DeliveryQty , pin.GrossAmount,pin.TaxAmount,pin.TotalAmount, pin.DiscountPercentage,pin.DiscountAmount  , pin.VatableAmount,pin.NonVatableAmount ," +
+                     " (case when PIN.FoodMenuId is null then (case when PIN.IngredientId is null then UA.UnitName else UI.UnitName end) else UF.UnitName end) as UnitName" +
+                    " from salesdelivery as P  inner join salesdeliveryDetail as PIN on P.id = pin.SalesDeliveryId  " +
+                     " left join FoodMenu as f on pin.FoodMenuId = f.Id   left join Ingredient as I on pin.IngredientId = I.Id  left join Units As UI On UI.Id = I.IngredientUnitId  " +
+                     " left join AssetItem as AI on PIN.AssetItemId = AI.Id    left join Units As UF On UF.Id = F.UnitsId     left join Units As UA On UA.Id = AI.UnitId  " +
+                     " where P.id = "+id+" and pin.isdeleted = 0 and p.isdeleted = 0 ";
+
+                purchaseDetails = con.Query<SalesDeliveryDetailModel>(query).AsList();
+            }
+            return purchaseDetails;
+        }
+
         public List<SalesDeliveryDetailModel> GetViewSalesDeliveryFoodMenuDetails(long PurchaseGRNId)
         {
             List<SalesDeliveryDetailModel> purchaseDetails = new List<SalesDeliveryDetailModel>();
@@ -572,5 +607,6 @@ namespace RocketPOS.Repository
             }
             return purchaseModelList;
         }
+    
     }
 }

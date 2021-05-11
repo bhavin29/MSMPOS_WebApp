@@ -105,8 +105,9 @@ namespace RocketPOS.Repository
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "select SalesDelivery.Id as Id,SalesDelivery.SalesId, SalesDelivery.ReferenceNumber as ReferenceNo, convert(varchar(12),SalesDeliveryDate, 3) as [Date],Customer.CustomerName,S.Storename," +
-                    "SalesDelivery.TotalAMount,SalesDelivery.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username  " +
-                    "from SalesDelivery inner join Customer on SalesDelivery.CustomerId = Customer.Id inner join [User] U on U.Id=SalesDelivery.UserIdInserted  inner join employee e on e.id = u.employeeid inner join store S on S.Id = SalesDelivery.StoreId  where SalesDelivery.InventoryType=1 And SalesDelivery.Isdeleted = 0  " +
+                    " SalesDelivery.TotalAMount,SalesDelivery.DueAmount as Due ,isnull(E.Firstname,'') + ' '+  isnull(E.lastname,'') as Username,  " +
+                    " (case when salesdelivery.status=0 then 'Invoice' else '' end ) as Status " + 
+                    " from SalesDelivery inner join Customer on SalesDelivery.CustomerId = Customer.Id inner join [User] U on U.Id=SalesDelivery.UserIdInserted  inner join employee e on e.id = u.employeeid inner join store S on S.Id = SalesDelivery.StoreId  where SalesDelivery.InventoryType=1 And SalesDelivery.Isdeleted = 0  " +
                     " AND Convert(Date, SalesDeliveryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)  ";
 
                 if (customerId != 0)

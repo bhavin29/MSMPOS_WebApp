@@ -172,6 +172,7 @@ $('#addRow').on('click', function (e) {
             salesInvoiceId: $("#SalesInvoiceId").val(),
             salesStatus: $("#SalesStatus").val(),
             itemType: $("#ItemType").val(),
+            type: $("#Type").val(),
         });
         var attRowNode = '#' + recordid;
 
@@ -246,6 +247,7 @@ $(function () {
                     VehicleNumber: $("#VehicleNumber").val(),
                     Notes: $("#Notes").val(),
                     SalesStatus: $("#SalesStatus").val(),
+                    Type: $("#Type").val(),
                     SupplierList: [],
                     FoodMenuList: [],
                     SalesInvoiceDetails: dataArr,
@@ -308,6 +310,7 @@ $(function () {
                     Due: $("#DueAmount").val(),
                     Paid: $("#PaidAmount").val(),
                     Notes: $("#Notes").val(),
+                    Type: $("#Type").val(),
                     Status: 2,
                     SupplierList: [],
                     FoodMenuList: [],

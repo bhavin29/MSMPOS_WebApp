@@ -14,6 +14,7 @@ namespace RocketPOS.Models
         public int SalesInvoiceId { get; set; }
         public string ReferenceNo { get; set; }
         public string SOReferenceNo { get; set; }
+        public long SalesDeliveryId { get; set; }
         public long SalesId { get; set; }
         [DataType(DataType.Date)]
 
@@ -69,7 +70,7 @@ namespace RocketPOS.Models
         public string InvoiceHeader { get; set; }
         public string InvoiceFooter { get; set; }
         public bool CustomerTaxInclusive { get; set; }
-        
+        public string Type { get; set; }
     }
     public class SalesInvoiceDetailModel
     {

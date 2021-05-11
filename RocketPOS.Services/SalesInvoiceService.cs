@@ -106,9 +106,9 @@ namespace RocketPOS.Services
             return _iSalesInvoiceRepository.GetTaxByFoodMenuId(foodMenuId);
         }
 
-        public SalesInvoiceModel GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId)
+        public SalesInvoiceModel GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId, string type)
         {
-            var model = (from purchase in _iSalesInvoiceRepository.GetPurchaseInvoiceFoodMenuByPurchaseId(purchaseId).ToList()
+            var model = (from purchase in _iSalesInvoiceRepository.GetPurchaseInvoiceFoodMenuByPurchaseId(purchaseId, type).ToList()
                          select new SalesInvoiceModel()
                          {
                              Id = purchase.Id,
@@ -136,7 +136,7 @@ namespace RocketPOS.Services
                          }).SingleOrDefault();
             if (model != null)
             {
-                model.SalesInvoiceDetails = (from purchasedetails in _iSalesInvoiceRepository.GetPurchaseInvoiceFoodMenuDetailsPurchaseId(purchaseId)
+                model.SalesInvoiceDetails = (from purchasedetails in _iSalesInvoiceRepository.GetPurchaseInvoiceFoodMenuDetailsPurchaseId(purchaseId, type)
                                              select new SalesInvoiceDetailModel()
                                              {
                                                  SalesInvoiceId = purchasedetails.SalesInvoiceId,

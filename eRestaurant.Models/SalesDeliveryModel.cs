@@ -122,7 +122,7 @@ namespace RocketPOS.Models
         public string StoreName { get; set; }
         public int SalesId { get; set; }
         public string ReferenceNo { get; set; }
-
+        public string Status { get; set; }
         public string Date { get; set; }
         public string CustomerName { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.00}", ApplyFormatInEditMode = true)]

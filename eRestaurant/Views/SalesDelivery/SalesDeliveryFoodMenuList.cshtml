@@ -63,27 +63,27 @@
                         <table id="@SharedLocalizer.GetLocalizedHtmlString("SalesDeliveryFood")" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                             <thead>
                                 <tr role="row">
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Number")</th>
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Date")</th>
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Customer")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Number")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Date")</th>
+                                    <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Customer")</th>
                                     <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Store")</th>
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Amount")</th>
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Creator")</th>
-                                    @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Actions")</th>*@
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Print")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Amount")</th>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Creator")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Actions")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("View")</th>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Print")</th>
                             </thead>
                             <tfoot>
                                 <tr role="row">
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Number")</th>
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Date")</th>
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Supplier")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Number")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Date")</th>
+                                    <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Customer")</th>
                                     <th rowspan="1" colspan="1" style="width:20%">@Html.DisplayName("Store")</th>
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Amount")</th>
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Creator")</th>
-                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Actions")</th>
-                                    @*<th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("View")</th>*@
-                                    <th rowspan="1" colspan="1" style="width:15%">@Html.DisplayName("Print")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Amount")</th>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Creator")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("Actions")</th>
+                                    <th rowspan="1" colspan="1" style="width:8%">@Html.DisplayName("View")</th>
+                                    <th rowspan="1" colspan="1" style="width:10%">@Html.DisplayName("Print")</th>
                             </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
@@ -118,21 +118,26 @@
                                             </td>*@
                                         <td>
                                             <div class="form-button-action">
+                                                <a asp-action="SalesDeliveryBySalesId" asp-route-Id="@item.Id">Invoice </a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-button-action">
                                                 @if (@UserRolePermissionForPage.View == true)
                                                 {
                                                     <a asp-action="View" asp-route-Id="@item.Id">View   <i class="fa fa-edit"></i></a>
                                                 }
                                             </div>
                                         </td>
-                                    <td>
-                                        <div class="form-button-action">
-                                            @if (@UserRolePermissionForPage.View == true)
-                                            {
-                                                <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'Note')">Note</a>
-                                                <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'List')">List</a>
-                                            }
-                                        </div>
-                                    </td>
+                                        <td>
+                                            <div class="form-button-action">
+                                                @if (@UserRolePermissionForPage.View == true)
+                                                {
+                                                    <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'Note')">Note</a>
+                                                    <a href="#" target="_blank" onclick="GetDeliveryPrint(@item.Id,'List')">List</a>
+                                                }
+                                            </div>
+                                        </td>
                                     </tr>
                                     <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -217,23 +222,33 @@
                                     {
                                         data: null,
                                         mRender: function (data, type, row) {
+                                            var invoice = "";
+                                            if (row.status == 'Invoice') {
+                                                invoice = ' <div class="form-button-action"> <a href="/SalesInvoice/SalesInvoiceFoodMenu?purchaseId=' + row.id + '&type=delivery">Invoice</a> </div>'
+                                            }
+                                            return invoice;
+                                        },
+                                    },
+                                     {
+                                        data: null,
+                                        mRender: function (data, type, row) {
                                              var view = '';
                                             if ("@UserRolePermissionForPage.View" == "True") {
                                                 view = '<div class="form-button-action"><a href="/SalesDelivery/View/' + row.id + '">View</a></div>'
                                             }
                                             return view;
                                         },
-                            },
-                             {
-                                data: null,
-                                mRender: function (data, type, row) {
-                                    var view = '';
-                                    if ("@UserRolePermissionForPage.View" == "True") {
-                                        view = '<div class="form-button-action"><a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=Note">Note</a> / <a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=List">List</a></div>'
-                                    }
-                                    return view;
-                                },
-                            }
+                                    },
+                                    {  
+                                    data: null,
+                                    mRender: function (data, type, row) {
+                                        var view = '';
+                                        if ("@UserRolePermissionForPage.View" == "True") {
+                                            view = '<div class="form-button-action"><a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=Note">Note</a> / <a href="/SalesDelivery/GetDeliveryPrint?id=' + row.id + '&reportName=List">List</a></div>'
+                                        }
+                                        return view;
+                                    },
+                                }
                                 ],
                                 columnDefs: [
                                     {

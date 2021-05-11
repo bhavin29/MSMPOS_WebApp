@@ -23,11 +23,11 @@ namespace RocketPOS.Repository
         //  CustomerId
         //  SalesInvoiceDate
 
- //       SalesInvoiceDetail
+        //       SalesInvoiceDetail
 
- //SalesInvoiceId
- // SOQty
- // InvoiceQty
+        //SalesInvoiceId
+        // SOQty
+        // InvoiceQty
         public int DeletePurchaseInvoice(long purchaseInvoiceId)
         {
             int result = 0;
@@ -166,10 +166,21 @@ namespace RocketPOS.Repository
                              "  ,[Notes]          " +
                              "  ,[UserIdInserted]  " +
                              "  ,[DateInserted]   " +
-                             "  ,[IsDeleted] )     " +
-                             "   VALUES           " +
-                             "  (@SalesId,  " +
-                             "  @ReferenceNo,  " +
+                             "  ,[IsDeleted]      " +
+                             "  ,[SalesDeliveryId] )" +
+                             "   VALUES           ";
+
+                if (purchaseModel.Type == "delivery")
+                {
+                    query = query + "  (NULL,  ";
+
+                }
+                else
+                {
+                    query = query + "  (@SalesId,  ";
+                }
+
+                query = query + " @ReferenceNo,  " +
                              "   @InventoryType,      " +
                              "   @CustomerId,      " +
                              "   @StoreId,         " +
@@ -180,16 +191,28 @@ namespace RocketPOS.Repository
                              "   @TotalAmount,     " +
                              "   @VatableAmount,      " +
                              "   @NonVatableAmount,      " +
-                            "  @DeliveryNoteNumber," +
-                             "  @DeliveryDate," +
-                             "  @DriverName," +
-                             " @VehicleNumber," +
+                            "    @DeliveryNoteNumber," +
+                             "   @DeliveryDate," +
+                             "   @DriverName," +
+                             "   @VehicleNumber," +
                              "   @PaidAmount,      " +
                              "   @DueAmount,       " +
                              "   @Notes," +
                              "" + LoginInfo.Userid + "," +
-                             "   GetUtcDate(),    " +
-                             "   0); SELECT CAST(SCOPE_IDENTITY() as int); ";
+                             "   GetUtcDate(), 0,   ";
+
+                if (purchaseModel.Type == "delivery")
+                {
+                    query = query + "  @SalesId);  ";
+
+                }
+                else
+                {
+                    query = query + "  NULL);  ";
+                }
+
+                query = query + " SELECT CAST(SCOPE_IDENTITY() as int); ";
+
                 result = con.ExecuteScalar<int>(query, purchaseModel, sqltrans, 0, System.Data.CommandType.Text);
 
                 if (result > 0)
@@ -254,6 +277,8 @@ namespace RocketPOS.Repository
                         if (purchaseModel.SalesId > 0)
                             outResult = UpdatePurchaseOrderId(purchaseModel.SalesId);
 
+                        outResult = UpdateDeliveryOrderId(purchaseModel.SalesId);
+
                         if (purchaseModel.SalesId == 0)
                         {
                             CommonRepository commonRepository = new CommonRepository(_ConnectionString);
@@ -264,7 +289,6 @@ namespace RocketPOS.Repository
                             CommonRepository commonRepository = new CommonRepository(_ConnectionString);
                             string sResult = commonRepository.InventoryPush("SalesInvoice", result);
                         }
-
                     }
                     else
                     {
@@ -454,33 +478,65 @@ namespace RocketPOS.Repository
                 return con.ExecuteScalar<decimal>(query, null, sqltrans, 0, System.Data.CommandType.Text);
             }
         }
-        public List<SalesInvoiceModel> GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId)
+        public List<SalesInvoiceModel> GetPurchaseInvoiceFoodMenuByPurchaseId(long purchaseId, string type)
         {
             List<SalesInvoiceModel> purchaseModelList = new List<SalesInvoiceModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT 0 as Id,P.Id AS SalesId,P.StoreId,P.EmployeeId,P.ReferenceNo,P.SalesDate AS SalesInvoiceDate,Customer.CustomerName, Customer.Id as CustomerId,P.GrossAmount,P.TaxAmount,P.GrandTotal As TotalAmount, " +
-                            "P.DueAmount as Due,P.PaidAmount as Paid,null AS DeliveryNoteNumber,GETDATE() as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes,P.Status as SalesStatus, p.VatableAmount,p.NonVatableAmount  FROM Sales P inner join Customer on P.CustomerId = Customer.Id " +
-                            "Where P.InventoryType = 1 And P.Isdeleted = 0 And P.Id = " + purchaseId;
+                var query = "";
+                if (type == "delivery")
+                {
+                    query = " SELECT 0 as Id,P.Id AS SalesId,P.StoreId,P.EmployeeId,P.ReferenceNumber,P.SalesDeliveryDate AS SalesInvoiceDate,Customer.CustomerName, Customer.Id as CustomerId,P.GrossAmount,P.TaxAmount,P.TotalAmount As TotalAmount, " +
+                            " P.DueAmount as Due,P.PaidAmount as Paid,null AS DeliveryNoteNumber,GETDATE() as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes,P.Status as SalesStatus, p.VatableAmount,p.NonVatableAmount  " +
+                            " FROM SalesDelivery P inner join Customer on P.CustomerId = Customer.Id " +
+                            " Where P.InventoryType = 1 And P.Isdeleted = 0 And P.Id = " + purchaseId;
+
+                }
+                else
+                {
+                    query = " SELECT 0 as Id,P.Id AS SalesId,P.StoreId,P.EmployeeId,P.ReferenceNo,P.SalesDate AS SalesInvoiceDate,Customer.CustomerName, Customer.Id as CustomerId,P.GrossAmount,P.TaxAmount,P.GrandTotal As TotalAmount, " +
+                               " P.DueAmount as Due,P.PaidAmount as Paid,null AS DeliveryNoteNumber,GETDATE() as DeliveryDate,null as DriverName,null as VehicleNumber,P.Notes,P.Status as SalesStatus, p.VatableAmount,p.NonVatableAmount  " +
+                               " FROM Sales P inner join Customer on P.CustomerId = Customer.Id " +
+                               " Where P.InventoryType = 1 And P.Isdeleted = 0 And P.Id = " + purchaseId;
+                }
                 purchaseModelList = con.Query<SalesInvoiceModel>(query).AsList();
             }
             return purchaseModelList;
         }
-        public List<SalesInvoiceDetailModel> GetPurchaseInvoiceFoodMenuDetailsPurchaseId(long purchaseId)
+        public List<SalesInvoiceDetailModel> GetPurchaseInvoiceFoodMenuDetailsPurchaseId(long purchaseId, string type)
         {
             List<SalesInvoiceDetailModel> purchaseDetails = new List<SalesInvoiceDetailModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " Select 0 AS SalesInvoiceId," +
-                             " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
-                             " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then PD.AssetItemId else PD.IngredientId end) else PD.FoodMenuId end) as FoodMenuId, " +
-                             " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
-                            " pd.UnitPrice,PD.Qty AS SOQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
-                            " , pd.VatableAmount,pd.NonVatableAmount From Sales P Inner join SalesDetail PD On P.Id = PD.SalesId " +
-                             " left join FoodMenu as f on PD.FoodMenuId = f.Id " +
-                             " left join Ingredient as I on PD.IngredientId = I.Id " +
-                             "   left join AssetItem as AI on PD.AssetItemId = AI.Id  " +
-                            " Where P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                var query = "";
+                if (type == "delivery")
+                {
+                    query = " Select 0 AS SalesInvoiceId," +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then PD.AssetItemId else PD.IngredientId end) else PD.FoodMenuId end) as FoodMenuId, " +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
+                           " pd.UnitPrice,PD.SOQty AS SOQty,PD.DeliveryQty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                           " , pd.VatableAmount,pd.NonVatableAmount " +
+                           " From SalesDelivery P Inner join SalesDeliveryDetail PD On P.Id = PD.SalesDeliveryId " +
+                           " left join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                           " left join Ingredient as I on PD.IngredientId = I.Id " +
+                           " left join AssetItem as AI on PD.AssetItemId = AI.Id  " +
+                           " Where P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                }
+                else
+                {
+                    query = " Select 0 AS SalesInvoiceId," +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then 2 else 1 end) else 0 end) as ItemType, " +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then PD.AssetItemId else PD.IngredientId end) else PD.FoodMenuId end) as FoodMenuId, " +
+                           " (case when PD.FoodMenuId is null then (case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else f.FoodMenuName end) as FoodMenuName,  " +
+                           " pd.UnitPrice,PD.Qty AS SOQty,PD.Qty AS InvoiceQty,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.DiscountPercentage,PD.DiscountAmount " +
+                           " , pd.VatableAmount,pd.NonVatableAmount " +
+                           " From Sales P Inner join SalesDetail PD On P.Id = PD.SalesId " +
+                           " left join FoodMenu as f on PD.FoodMenuId = f.Id " +
+                           " left join Ingredient as I on PD.IngredientId = I.Id " +
+                           " left join AssetItem as AI on PD.AssetItemId = AI.Id  " +
+                           " Where P.isdeleted = 0 and pd.isdeleted = 0 And P.Id = " + purchaseId;
+                }
                 purchaseDetails = con.Query<SalesInvoiceDetailModel>(query).AsList();
             }
 
@@ -503,6 +559,28 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = $"update Sales set Status = 5 where id = " + purchaseId;
+                result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
+                if (result > 0)
+                {
+                    sqltrans.Commit();
+                }
+                else
+                {
+                    sqltrans.Rollback();
+                }
+            }
+            return result;
+        }
+
+        public int UpdateDeliveryOrderId(long purchaseId)
+        {
+            int result = 0;
+
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                con.Open();
+                SqlTransaction sqltrans = con.BeginTransaction();
+                var query = $"update SalesDelivery set Status = 1 where id = " + purchaseId;
                 result = con.Execute(query, null, sqltrans, 0, System.Data.CommandType.Text);
                 if (result > 0)
                 {
@@ -539,7 +617,7 @@ namespace RocketPOS.Repository
                             " ,si.Notes,si.GrossAmount ,si.TaxAmount,si.TotalAmount,si.NonVatableAmount,si.VatableAmount,si.DeliveryNoteNumber,si.DeliveryDate,si.DriverName,si.VehicleNumber " +
                             " ,O.OutletAddress1,O.OutletAddress2,O.OutletPhone,O.OutletEmail,O.InvoiceHeader,O.InvoiceFooter, C.TaxInclusive as CustomerTaxInclusive " +
                             " from SalesInvoice SI Inner Join Store S On s.Id=si.StoreId inner join Outlet O on O.Storeid = S.Id " +
-                            " inner join Customer c on c.Id=si.CustomerId where si.Id= "+ id;
+                            " inner join Customer c on c.Id=si.CustomerId where si.Id= " + id;
                 purchaseModelList = con.Query<SalesInvoiceModel>(query).AsList();
             }
             return purchaseModelList;
@@ -558,7 +636,7 @@ namespace RocketPOS.Repository
                      " from SalesInvoice as P  inner join SalesInvoiceDetail as PIN on P.id = pin.SalesInvoiceId  " +
                      " left join FoodMenu as f on pin.FoodMenuId = f.Id   left join Ingredient as I on pin.IngredientId = I.Id  left join Units As UI On UI.Id = I.IngredientUnitId  " +
                      " left join AssetItem as AI on PIN.AssetItemId = AI.Id    left join Units As UF On UF.Id = F.UnitsId     left join Units As UA On UA.Id = AI.UnitId  " +
-                     " where P.id = "+id+" and pin.isdeleted = 0 and p.isdeleted = 0 ";
+                     " where P.id = " + id + " and pin.isdeleted = 0 and p.isdeleted = 0 ";
 
                 purchaseDetails = con.Query<SalesInvoiceDetailModel>(query).AsList();
             }

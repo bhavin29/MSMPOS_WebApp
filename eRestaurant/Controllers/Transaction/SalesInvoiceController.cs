@@ -54,7 +54,16 @@ namespace RocketPOS.Controllers.Transaction
             {
                 if (purchaseId > 0)
                 {
-                    purchaseModel = _iSalesInvoiceService.GetPurchaseInvoiceFoodMenuByPurchaseId(Convert.ToInt64(purchaseId));
+                    if (type == "delivery")
+                    {
+                        purchaseModel = _iSalesInvoiceService.GetPurchaseInvoiceFoodMenuByPurchaseId(Convert.ToInt64(purchaseId), type);
+                        purchaseModel.Type = "delivery";
+                    }
+                    else
+                    {
+                        purchaseModel = _iSalesInvoiceService.GetPurchaseInvoiceFoodMenuByPurchaseId(Convert.ToInt64(purchaseId), type);
+                    }
+
                     purchaseModel.DeliveryDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
                     purchaseModel.ReferenceNo = _iSalesInvoiceService.ReferenceNumberFoodMenu().ToString();
                 }

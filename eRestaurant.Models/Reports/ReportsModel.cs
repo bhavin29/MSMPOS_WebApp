@@ -190,4 +190,36 @@ namespace RocketPOS.Models.Reports
         public decimal GrandTotal { get; set; }
         public Decimal CateringLevy { get; set; }
     }
+    public class WasteReportModel
+    {
+        public string StoreName { get; set; }
+        public int Storeid { get; set; }
+        public string Referencenumber { get; set; }
+        public string Wastedatetime { get; set; }
+        public string ProductName { get; set; }
+        public int FoodmenuId { get; set; }
+        public int IngredientId { get; set; }
+        public decimal IngredientQty { get; set; }
+        public decimal LossAmount { get; set; }
+    }
+    public class PurchaseReportModel
+    {
+        public string StoreName { get; set; }
+        public int Storeid { get; set; }
+        public string SupplierName { get; set; }
+        public int SupplierId { get; set; }
+        public string Referencenumber { get; set; }
+        public string PurchaseDate { get; set; }
+        public string ProductName { get; set; }
+        public int FoodmenuId { get; set; }
+        public int IngredientId { get; set; }
+        public int AssetItemId { get; set; }
+        public decimal IngredientQty { get; set; }
+        public decimal GrossAmount { get; set; }
+        public decimal TaxAmount { get; set; }
+        public decimal TotalAmount { get; set; }
+        public decimal VatableAmount { get; set; }
+        public decimal NonVatableAmount { get; set; }
+    }
+
 }

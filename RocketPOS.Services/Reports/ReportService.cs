@@ -214,5 +214,15 @@ namespace RocketPOS.Services.Reports
         {
             return _iReportRepository.GetModOfPaymentReport(fromDate, toDate, outletId);
         }
+        public List<WasteReportModel> GetWasteReport(string fromDate, string toDate, int storeId, string reporttype)
+        {
+            return _iReportRepository.GetWasteReport(fromDate, toDate, storeId,reporttype);
+
+        }
+        public List<PurchaseReportModel> GetPurchaseReport(string fromDate, string toDate, int storeId, string reporttype)
+        {
+            return _iReportRepository.GetPurchaseReport(fromDate, toDate, storeId, reporttype);
+        }
+
     }
 }

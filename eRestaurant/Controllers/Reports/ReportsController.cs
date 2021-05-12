@@ -487,6 +487,40 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.OutletId = LoginInfo.OutletId;
             return View(masterSalesReport);
         }
+        [HttpGet]
+        public ViewResult WasteDetailReport()
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+
+            masterSalesReport.StoreList = _iDropDownService.GetStoreList();
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.StoreId = LoginInfo.StoreId;
+            return View(masterSalesReport);
+        }
+        public ViewResult WasteSummaryReport()
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+
+            masterSalesReport.StoreList = _iDropDownService.GetStoreList();
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.StoreId = LoginInfo.StoreId;
+            return View(masterSalesReport);
+        }
+
+        public ViewResult PurchaseReport(string rname)
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+
+            ViewBag.Reportname = rname;
+            masterSalesReport.StoreList = _iDropDownService.GetStoreList();
+
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.StoreId = LoginInfo.StoreId;
+            return View(masterSalesReport);
+        }
 
         public ViewResult SalesByCategoryProduct(string rname)
         {
@@ -999,7 +1033,6 @@ namespace RocketPOS.Controllers.Reports
 
             return Json(new { modeofPaymentReportList = listObject });
         }
-
         public List<dynamic> GetListFromDT(Type className, DataTable dataTable)
         {
             List<dynamic> list = new List<dynamic>();
@@ -1016,7 +1049,6 @@ namespace RocketPOS.Controllers.Reports
             }
             return list;
         }
-
         public JsonResult GetCessCategoryList(string fromdate, string toDate, int categoryId, int foodMenuId, int outletId)
         {
             CessCategoryReportModel cessCategoryReportModels = new CessCategoryReportModel();
@@ -1204,8 +1236,7 @@ namespace RocketPOS.Controllers.Reports
             }
             return dataTable;
         }
-        public DataTable GetInversedDataTable(DataTable table, string columnX,
-         string columnY, string columnZ, string nullValue, bool sumValues)
+        public DataTable GetInversedDataTable(DataTable table, string columnX,string columnY, string columnZ, string nullValue, bool sumValues)
         {
             //Create a DataTable to Return
             DataTable returnTable = new DataTable();
@@ -1309,6 +1340,48 @@ namespace RocketPOS.Controllers.Reports
 
             return returnTable;
         }
+        public JsonResult GetPurchaseList(string fromdate, string toDate, int storeId, string rname)
+        {
+            List<PurchaseReportModel> purchaseReportModels = new List<PurchaseReportModel>();
+            DateTime newfromdate, newToDate;
+            if (fromdate != null)
+            {
+                newfromdate = fromdate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromdate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
+            LoginInfo.FromDate = fromdate;
+            LoginInfo.ToDate = toDate;
+            LoginInfo.StoreId = storeId;
 
+            purchaseReportModels = _iReportService.GetPurchaseReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), storeId, rname);
+            return Json(new { purchaseReportList = purchaseReportModels });
+        }
+
+        public JsonResult GetWasteList(string fromdate, string toDate, int storeId, string reportType)
+        {
+            List<WasteReportModel> wasteReportModels = new List<WasteReportModel>();
+            DateTime newfromdate, newToDate;
+            if (fromdate != null)
+            {
+                newfromdate = fromdate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromdate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
+            LoginInfo.FromDate = fromdate;
+            LoginInfo.ToDate = toDate;
+            LoginInfo.StoreId = storeId;
+
+            wasteReportModels = _iReportService.GetWasteReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), storeId,reportType);
+            return Json(new { wasteReportList = wasteReportModels });
+        }
     }
 }

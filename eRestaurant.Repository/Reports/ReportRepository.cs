@@ -27,14 +27,14 @@ namespace RocketPOS.Repository.Reports
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
                 var query = "";
-                 query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
-                            " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
-                            " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
-                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
-                            " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
-                            " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
-                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId " +
-                            " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <>0";
+                query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
+                           " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                           " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.Unitname," +
+                           " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
+                           " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
+                           " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
+                           " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId " +
+                           " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <>0";
 
                 //query = "SELECT S.StoreName,INV.Id,I.IngredientName as FoodMenuName,IC.IngredientCategoryName as FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty as OpeningQty, " +
                 //         " S.StoreName,INV.Id,I.Code as FoodMenuCode ,INV.StockQty,  " +
@@ -155,7 +155,7 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId,int itemType,int active,string reportDate)
+        public List<InventoryReportModel> GetInventoryStockList(int supplierId, int storeId, int itemType, int active, string reportDate)
         {
             List<InventoryReportModel> inventoryReportModel = new List<InventoryReportModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -171,15 +171,15 @@ namespace RocketPOS.Repository.Reports
                 return inventoryReportModel;
 
 
-                if (itemType == 0) 
+                if (itemType == 0)
                 {
-                        query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
-                                " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
-                                " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.UnitShortName as Unitname," +
-                                " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
-                                " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
-                                " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
-                                " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId ";
+                    query = " SELECT S.StoreName,INV.Id,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, INV.OpeningQty, " +
+                            " S.StoreName,INV.Id,F.FoodMenuCode,F.FoodMenuName as FoodMenuName,FMC.FoodMenuCategoryName ,INV.StockQty, " +
+                            " F.PurchasePrice, (INV.StockQty * F.PurchasePrice) as Amount , U.UnitShortName as Unitname," +
+                            " case  when INV.StockQty < 0 THEN 0 else 1 end as StockQtyText,F.AlterQty" +
+                            " FROM inventory INV INNER JOIN FoodMenu F ON INV.FoodMenuId = F.Id" +
+                            " INNER JOIN FoodMenuCategory FMC on FMC.Id = F.FoodCategoryId" +
+                            " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = F.UnitsId ";
                 }
                 else if (itemType == 1)
                 {
@@ -190,7 +190,7 @@ namespace RocketPOS.Repository.Reports
                              " FROM inventory INV INNER JOIN Ingredient I ON INV.IngredientId = I.Id " +
                              " INNER JOIN IngredientCategory IC on IC.Id = I.IngredientCategoryId " +
                              " inner join Store S on S.Id = INV.StoreId  inner join Units U on U.Id = I.IngredientUnitId ";
-                         //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
+                    //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
                 }
                 else if (itemType == 2)
                 {
@@ -204,18 +204,18 @@ namespace RocketPOS.Repository.Reports
                     //    " where INV.StockQty <> 0  or ISNULL(OpeningQty,0) <> 0;";
                 }
 
-                if (itemType == 0 & active==0)
+                if (itemType == 0 & active == 0)
                 {
                     query += " left join Outlet O on O.Storeid = S.Id " +
                                " right join Foodmenurate FMR on FMR.Foodmenuid = F.Id and FMR.outletid = O.Id  and FMR.IsActive=1";
-                 }
+                }
 
 
-                if (supplierId != 0 && itemType==0)
+                if (supplierId != 0 && itemType == 0)
                 {
                     query += "  inner join SupplierItem SI on SI.FoodMenuId = INV.FoodMenuId And SI.SupplierId = " + supplierId;
                 }
-                 else if (supplierId != 0 && itemType == 1)
+                else if (supplierId != 0 && itemType == 1)
                 {
                     query += "  inner join SupplierItem SI on SI.IngredientID = INV.IngredientID And SI.SupplierId = " + supplierId;
                 }
@@ -227,7 +227,7 @@ namespace RocketPOS.Repository.Reports
                 query = query + " where INV.StoreId = " + storeId;
 
                 if (itemType == 0)
-               {
+                {
                     query += "   ORDER BY  F.Foodmenuname,INV.StockQty desc ";
                 }
                 else if (itemType == 1)
@@ -294,7 +294,7 @@ namespace RocketPOS.Repository.Reports
             }
             return masterSalesReportModel;
         }
-        public List<DetailedDailyReportModel> GetDetailedDailyByDate(string Fromdate, string Todate,int outletId)
+        public List<DetailedDailyReportModel> GetDetailedDailyByDate(string Fromdate, string Todate, int outletId)
         {
             List<DetailedDailyReportModel> detailedDailyReportModels = new List<DetailedDailyReportModel>();
             using (var connection = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -319,7 +319,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join CustomerOrder CO On Co.MasterId=B.CustomerOrderId and CO.OutletId = " + outletId + " and B.OutletId = " + outletId +
                         " Inner Join CustomerOrderItem COI ON CO.MasterId =COI.CustomerOrderId and CO.OutletId = " + outletId + " and COI.OutletId = " + outletId +
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId " +
-                        " inner join BillDetail BD ON BD.BillId=B.MasterId and B.OutletId = " + outletId + " and BD.OutletId = " + outletId + 
+                        " inner join BillDetail BD ON BD.BillId=B.MasterId and B.OutletId = " + outletId + " and BD.OutletId = " + outletId +
                         " Inner join PaymentMethod PM On PM.Id=BD.PaymentMethodId " +
                         " Left Join Tax T On T.Id = COI.foodmenuvattaxid " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
@@ -370,7 +370,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -394,7 +394,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -413,12 +413,12 @@ namespace RocketPOS.Repository.Reports
                     Query = " select FMC.FoodMenuCategoryName,FM.FoodMenuName,Sum(COI.FoodMenuRate) As TotalUnitPrice,Sum(COI.FoodMenuQty) As TotalQty,Sum(COI.Price) As TotalPrice,Sum(COI.Discount)  As TotalDiscount,Sum(COI.FoodMenuVat) As TotalTax,Sum(COI.GrossAmount) As TotalGrossAmount, " +
                         "  cast(SUM(COI.GrossAmount) * 100.0 / SUM(SUM(COI.GrossAmount)) OVER ()  as numeric(18,2)) AS ValuePercentage " +
                         " from CustomerOrder CO " +
-                        " Inner Join CustomerOrderItem COI ON CO.MasterId =COI.CustomerOrderId and CO.OutletId = " + outletId + " and COI.OutletId = " + outletId + 
+                        " Inner Join CustomerOrderItem COI ON CO.MasterId =COI.CustomerOrderId and CO.OutletId = " + outletId + " and COI.OutletId = " + outletId +
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId " +
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -443,7 +443,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -469,7 +469,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -494,7 +494,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -519,7 +519,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -544,7 +544,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -554,7 +554,7 @@ namespace RocketPOS.Repository.Reports
                     }
 
                     Query += " group by CO.OrderType,FMC.FoodMenuCategoryName " +
-                      //  " WITH ROLLUP  " +
+                        //  " WITH ROLLUP  " +
                         " Order By CO.OrderType,FMC.FoodMenuCategoryName asc ";
                 }
 
@@ -569,7 +569,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -594,7 +594,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                     if (categoryId != 0)
+                    if (categoryId != 0)
                     {
                         Query += " And FMC.Id = " + categoryId;
                     }
@@ -644,7 +644,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                 if (categoryId != 0)
+                if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -673,7 +673,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                 if (categoryId != 0)
+                if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -702,7 +702,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                 if (categoryId != 0)
+                if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -755,7 +755,7 @@ namespace RocketPOS.Repository.Reports
                         " Inner Join FoodMenu FM On FM.Id = COI.FoodMenuId   Inner Join FoodMenuCategory FMC ON FMC.Id=FM.FoodCategoryId   " +
                         " Where CO.OutletId = " + outletId + " And  Convert(Date, CO.Orderdate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) ";
 
-                 if (categoryId != 0)
+                if (categoryId != 0)
                 {
                     Query += " And FMC.Id = " + categoryId;
                 }
@@ -765,8 +765,8 @@ namespace RocketPOS.Repository.Reports
                 }
 
                 Query += " group by DATEADD(DAY, -DATEDIFF(DAY, 0, Convert(Date, CO.Orderdate, 103)) % 7, Convert(Date, CO.Orderdate, 103)) ";// +
-                            // " Order By DATEADD(DAY, -DATEDIFF(DAY, 0, Convert(Date, CO.Orderdate, 103)) % 7, Convert(Date, CO.Orderdate, 103)) ";
-                           // "order by CO.Orderdate ";
+                                                                                                                                              // " Order By DATEADD(DAY, -DATEDIFF(DAY, 0, Convert(Date, CO.Orderdate, 103)) % 7, Convert(Date, CO.Orderdate, 103)) ";
+                                                                                                                                              // "order by CO.Orderdate ";
                 salesSummaryByWeek = db.Query<SalesSummaryByWeek>(Query).ToList();
 
 
@@ -811,7 +811,7 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId,string reporttype)
+        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId, string reporttype)
         {
             CessReportModel cessReport = new CessReportModel();
             using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -846,7 +846,7 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
-        public CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId,int outletId)
+        public CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
         {
             CessCategoryReportModel cessReport = new CessCategoryReportModel();
             using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -890,7 +890,7 @@ namespace RocketPOS.Repository.Reports
                 return cessReport;
             }
         }
-        public List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate,int outletId)
+        public List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId)
         {
             List<ModeofPaymentReportModel> modeofPaymentReportModel = new List<ModeofPaymentReportModel>();
             using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -901,13 +901,13 @@ namespace RocketPOS.Repository.Reports
                                     " INNER JOIN BillDetail BD ON B.MasterID = BD.BillId and B.OutletId = " + outletId + "and BD.OutletId = " + outletId +
                                     " INNER join PaymentMethod PM ON BD.PaymentMethodId = PM.ID " +
                                     " Where B.IsDeleted = 0 AND " +
-                                    " Convert(Date, BD.BillDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " + 
+                                    " Convert(Date, BD.BillDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " +
                                     " And B.BillStatus = 4 AND B.OutletId = " + outletId +
                                     " Group by convert(varchar(10), BD.BillDate,103),PaymentMethodName )" +
                                         "  union all" +
-                                    " (SELECT convert(varchar(10), B.BillDateTime,103) as BillDate, ' SALES' AS PaymentMethodName, SUM(TotalAmount) as Sales " + 
+                                    " (SELECT convert(varchar(10), B.BillDateTime,103) as BillDate, ' SALES' AS PaymentMethodName, SUM(TotalAmount) as Sales " +
                                     " from Bill B " +
-                                    " Where B.IsDeleted = 0  and Convert(Date, B.BillDateTime , 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " + 
+                                    " Where B.IsDeleted = 0  and Convert(Date, B.BillDateTime , 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " +
                                     " And B.BillStatus = 4 AND B.OutletId = " + outletId +
                                     " group by convert(varchar(10), B.BillDateTime, 103))" +
                                     " Order by convert(varchar(10), BD.BillDate, 103)";
@@ -939,7 +939,7 @@ namespace RocketPOS.Repository.Reports
                                 " sum(round(CO.VatableAmount, 0)) as CashSales, Sum(round(CO.NonVatableAmount, 0)) as ExemptedSales,sum(round(CO.TaxAmount, 0)) as OutputVAT " +
                                 " from Billdetail BD " +
                                 " INNER join PaymentMethodLedger PML on PML.PaymentMethodId = BD.PaymentMethodId and PML.OutletId = " + outletId +
-                                " Inner join Bill B on B.MasterID = BD.BillId and B.OutletId = " + outletId + " and BD.OutletId = " + outletId + 
+                                " Inner join Bill B on B.MasterID = BD.BillId and B.OutletId = " + outletId + " and BD.OutletId = " + outletId +
                                 " inner join CustomerOrder CO on CO.MasterID = B.CustomerOrderId  AND CO.OutletId = " + outletId +
                                 " Where Convert(Date, BD.BillDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103) " +
                                 " And B.BillStatus = 4 AND BD.OutletId = " + outletId +
@@ -949,6 +949,83 @@ namespace RocketPOS.Repository.Reports
             }
             return tallySalesVouchers;
         }
+
+        public List<WasteReportModel> GetWasteReport(string fromDate, string toDate, int storeId, string reporttype)
+        {
+            List<WasteReportModel> wasteReportModel = new List<WasteReportModel>();
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string Query = string.Empty;
+
+                if (reporttype != "Summary")
+                {
+                    Query = " select StoreName,Storeid,Referencenumber,CONVERT(VARCHAR(10),Wastedatetime,103) as Wastedatetime, " +
+                            " Case when FoodmenuId is null then I.IngredientName else FM.FoodMenuName end as ProductName,FoodmenuId,IngredientId, IngredientQty,LossAmount" +
+                            " from Waste W" +
+                            " inner join WasteIngredient WI on W.Id = WI.WasteId" +
+                            " inner join Store S on S.Id = W.Storeid" +
+                            " left outer join Foodmenu FM on FM.Id = WI.FoodmenuId" +
+                            " left outer join Ingredient I on I.Id = WI.IngredientId" +
+                            " Where Convert(Date, W.Wastedatetime, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND W.StoreId = " + storeId +
+                            " ORDER BY convert(varchar(10), W.Wastedatetime,103)";
+                    wasteReportModel = db.Query<WasteReportModel>(Query).ToList();
+                }
+                else
+                {
+                    Query = " select StoreName,Case when FoodmenuId is null then I.IngredientName else FM.FoodMenuName end as ProductName," +
+                            " Sum(IngredientQty) as IngredientQty,sum(LossAmount) as LossAmount " +
+                            " from Waste W" +
+                            " inner join WasteIngredient WI on W.Id = WI.WasteId" +
+                            " inner join Store S on S.Id = W.Storeid" +
+                            " left outer join Foodmenu FM on FM.Id = WI.FoodmenuId" +
+                            " left outer join Ingredient I on I.Id = WI.IngredientId" +
+                            " Where Convert(Date, W.Wastedatetime, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND W.StoreId = " + storeId +
+                            " Group by StoreName, FoodmenuId, IngredientName, FoodMenuName Order by ProductName";
+                    wasteReportModel = db.Query<WasteReportModel>(Query).ToList();
+                }
+
+                return wasteReportModel;
+            }
+        }
+
+        public List<PurchaseReportModel> GetPurchaseReport(string fromDate, string toDate, int storeId, string reporttype)
+        {
+            List<PurchaseReportModel> purchaseReportModels = new List<PurchaseReportModel>();
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string Query = string.Empty;
+
+                if (reporttype == "PurchaseInvoice")
+                {
+                    Query = " select ReferenceNumber,P.PurchaseInvoicDate as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
+                            " from PurchaseInvoice P " + 
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY convert(varchar(10), P.PurchaseInvoicDate,103)";
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+                else if (reporttype == "PurchaseInvoiceDetail")
+                {
+                    Query = " select ReferenceNumber,P.PurchaseInvoiceDate as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
+                            " (case when PD.FoodMenuId is null then(case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
+                            " FoodMenuId,IngredientId,AssetItemId, " +
+                            " InvoiceQty,UnitPrice,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.VatableAmount,PD.NonVatableAmount " +
+                            " from PurchaseInvoice P " +
+                            " Inner join PurchaseInvoiceDetail PD on P.ID = PD.PurchaseInvoiceId " +
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " left outer join Foodmenu FM on FM.Id = PD.FoodmenuId " +
+                            " left outer join Ingredient I on I.Id = PD.IngredientId " +
+                            " left outer join AssetItem AI on AI.Id = PD.AssetItemId " +
+                            " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND W.StoreId = " + storeId;
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+
+                return purchaseReportModels;
+            }
+        }
+
 
     }
 }

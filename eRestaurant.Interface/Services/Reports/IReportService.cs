@@ -33,5 +33,8 @@ namespace RocketPOS.Interface.Services.Reports
         CessReportModel GetCessReport(string fromDate, string toDate, int outletId,string reporttype);
         CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId);
         List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId);
+        List<WasteReportModel> GetWasteReport(string fromDate, string toDate, int storeId, string reporttype);
+        List<PurchaseReportModel> GetPurchaseReport(string fromDate, string toDate, int storeId, string reporttype);
+
     }
 }

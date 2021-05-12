@@ -190,7 +190,7 @@
                                         <h6>Sales By</h6>
                                         @*<a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SaleByCategorySectionReport"><span>Category Section</span></a>*@
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SaleByCategorySectionReport"><span>Section Catrgory</span></a>
-  
+
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SalesByCategoryProduct" asp-route-rname="SalesByCategoryProductQtyDesc"><span>Category Product qty desc</span></a>
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SalesByCategoryProduct" asp-route-rname="SalesByCategoryProductQtyAsc"><span>Category Product qty asc</span></a>
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SalesByCategoryProduct" asp-route-rname="SalesByCategoryProductAmountDesc"><span>Catrgory Product Amount desc</span></a>
@@ -202,19 +202,31 @@
 
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SalesBySectionProduct" asp-route-rname="SalesBySectionProductAmountDesc"><span>Section Product Amount desc</span></a>
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="SalesBySectionProduct" asp-route-rname="SalesBySectionProductQtyDesc"><span>Section Product qty desc</span></a>
-                                    </div>
-                                    <div class="col-md-4">
-                                        @*<h6>Daily</h6>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="ProductWiseSales">
-                                            <span>Product Wise Sales</span>
-                                        </a>
-                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="DetailedDailyByDate">
-                                            <span>Detailed Daily By Date</span>
-                                        </a>*@
                                         <h6>Tally</h6>
                                         <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="TallyVoucher">
                                             <span>Tally - Sales Voucher</span>
                                         </a>
+                                    </div>
+                                    <div class="col-md-4">
+                                        @*<h6>Daily</h6>
+        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="ProductWiseSales">
+            <span>Product Wise Sales</span>
+        </a>
+        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="DetailedDailyByDate">
+            <span>Detailed Daily By Date</span>
+        </a>*@
+                                        <h6>Transactions</h6>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseOrder"><span>Purchase Order</span></a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseOrderDetail"><span>Purchase Order Detail</span></a>
+
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseGRN"><span>Goods Receipt Notes</span></a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseGRNDetail"><span>Goods Receipt Notes Detail</span></a>
+
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseInvoice"><span>Purchase Invoice</span></a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="PurchaseReport" asp-route-rname="PurchaseInvoiceDetail"><span>Purchase Invoice Detail</span></a>
+
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="WasteSummaryReport"><span>Waste Summary</span></a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Report" asp-action="WasteDetailReport"><span>Waste Detail</span></a>
                                     </div>
                                 </div>
                             </div>

@@ -76,7 +76,7 @@
                             <th style="width:20%">@Html.DisplayName("Supplier")</th>
                             <th style="width:10%">@Html.DisplayName("Total")</th>
                             <th style="width:10%">@Html.DisplayName("Vatable")</th>
-                            <th style="width:10%">@Html.DisplayName("Non-Vat")</th>
+                            <th style="width:10%">@Html.DisplayName("Non-VAT")</th>
                             <th style="width:10%">@Html.DisplayName("VAT")</th>
                         </tr>
                     </thead>
@@ -88,7 +88,7 @@
                             <th style="width:20%">@Html.DisplayName("Supplier")</th>
                             <th style="width:10%">@Html.DisplayName("Total")</th>
                             <th style="width:10%">@Html.DisplayName("Vatable")</th>
-                            <th style="width:10%">@Html.DisplayName("Non-Vat")</th>
+                            <th style="width:10%">@Html.DisplayName("Non-VAT")</th>
                             <th style="width:10%">@Html.DisplayName("VAT")</th>
                         </tr>
                     </tfoot>
@@ -119,8 +119,6 @@
         var MasterSalesTable = null;
         $(document).ready(function () {
             MasterSalesTable = $('#@dataTableName').DataTable();
-
-
             $("#StoreId").select2();
         });
 
@@ -161,8 +159,8 @@
                         "columns": [
                             { "data": "purchaseDate", "name": "PurchaseDate", "autoWidth": true },
                             { "data": "referencenumber", "name": "Referencenumber", "autoWidth": true },
-                            { "data": "dtoreName", "name": "StoreName", "autoWidth": true },
-                            { "data": "dupplierName", "name": "SupplierName", "autoWidth": true },
+                            { "data": "storeName", "name": "StoreName", "autoWidth": true },
+                            { "data": "supplierName", "name": "SupplierName", "autoWidth": true },
                             { "data": "totalAmount", "name": "TotalAmount", "autoWidth": true },
                             { "data": "vatableAmount", "name": "VatableAmount", "autoWidth": true },
                             { "data": "nonVatableAmount", "name": "NonVatableAmount", "autoWidth": true },
@@ -174,8 +172,8 @@
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                             {
-                                targets: [4, 5, 6, 7], orderable: false,
-                                targets: [ 4, 5, 6, 7, orderable: false, class: "text-right",
+                                targets: [1,4, 5, 6, 7], orderable: false,
+                                targets: [ 1, 4, 5, 6, 7], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
@@ -196,7 +194,7 @@
                                     doc.styles.title.fontSize = 10;
                                     doc.content[0].text = 'Purchase Report' + '\n' + $("#StoreId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
                                     doc.content[0].alignment = 'left';
-                                    doc.content[1].table.widths = ['10%',  '20%', '20%', '10%', '10%', '10%', '10%', '10%'];
+                                    doc.content[1].table.widths = ['10%',  '10%', '20%', '20%', '10%', '10%', '10%', '10%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {

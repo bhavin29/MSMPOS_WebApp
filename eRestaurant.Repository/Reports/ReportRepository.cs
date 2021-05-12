@@ -997,17 +997,17 @@ namespace RocketPOS.Repository.Reports
 
                 if (reporttype == "PurchaseInvoice")
                 {
-                    Query = " select ReferenceNumber,P.PurchaseInvoicDate as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
+                    Query = " select ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
                             " from PurchaseInvoice P " + 
                             " Inner join Supplier SP on SP.Id = P.SupplierId " +
                             " Inner join Store S on S.Id = P.StoreId " +
                             " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
-                            " ORDER BY convert(varchar(10), P.PurchaseInvoicDate,103)";
+                            " ORDER BY convert(varchar(10), P.PurchaseInvoiceDate,103)";
                     purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
                 }
                 else if (reporttype == "PurchaseInvoiceDetail")
                 {
-                    Query = " select ReferenceNumber,P.PurchaseInvoiceDate as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
+                    Query = " select ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
                             " (case when PD.FoodMenuId is null then(case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
                             " FoodMenuId,IngredientId,AssetItemId, " +
                             " InvoiceQty,UnitPrice,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.VatableAmount,PD.NonVatableAmount " +

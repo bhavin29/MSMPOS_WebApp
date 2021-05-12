@@ -95,7 +95,7 @@ namespace RocketPOS.Controllers.Reports
             //purchaseReportModel = _iReportService.GetPurchaseReport(purchaseReportParamModel);
             return View(purchaseReportModel);
         }
-        [HttpGet]
+  /*      [HttpGet]
         public ActionResult PurchaseReport(string fromdate, string toDate)
         {
             List<PurchaseReportModel> purchaseReportList = new List<PurchaseReportModel>();
@@ -121,7 +121,8 @@ namespace RocketPOS.Controllers.Reports
             var jsonData = purchaseReportList.ToArray();
             //return Json(purchaseReportModel, json);
             return Json(new { draw = purchaseReportModel.draw, recordsFiltered = purchaseReportList.Count, recordsTotal = purchaseReportList.Count, data = jsonData });
-        }
+        }*/
+
         //public ViewResult OutletRegister()
         //{
         //    List<OutletRegisterReportModel> outletRegisterReportModel = new List<OutletRegisterReportModel>();

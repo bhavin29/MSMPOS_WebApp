@@ -9544,3 +9544,38 @@
 2021-05-12 15:31:30.2980 Info Adding target FileTarget(Name=alldata)
 2021-05-12 15:31:30.3211 Info Adding target FileTarget(Name=otherFile-web)
 2021-05-12 15:31:30.4583 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:43:20.9023 Info Message Template Auto Format enabled
+2021-05-12 17:43:20.9758 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:43:21.4106 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:43:21.5080 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:43:22.3514 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:46:38.7900 Info Message Template Auto Format enabled
+2021-05-12 17:46:38.8772 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:46:39.1215 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:46:39.2045 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:46:39.3877 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:52:16.5035 Info Message Template Auto Format enabled
+2021-05-12 17:52:16.5653 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:52:16.7558 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:52:16.8132 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:52:16.9242 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:53:52.1445 Info Message Template Auto Format enabled
+2021-05-12 17:53:52.2058 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:53:52.4249 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:53:52.4446 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:53:52.5533 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:56:24.5668 Info Message Template Auto Format enabled
+2021-05-12 17:56:24.6151 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:56:24.7838 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:56:24.8038 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:56:24.9039 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 17:57:49.3003 Info Message Template Auto Format enabled
+2021-05-12 17:57:49.3518 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 17:57:49.5237 Info Adding target FileTarget(Name=alldata)
+2021-05-12 17:57:49.5440 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 17:57:49.6468 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config
+2021-05-12 18:04:00.8773 Info Message Template Auto Format enabled
+2021-05-12 18:04:00.9276 Info Loading assembly: NLog.Web.AspNetCore
+2021-05-12 18:04:01.1325 Info Adding target FileTarget(Name=alldata)
+2021-05-12 18:04:01.1712 Info Adding target FileTarget(Name=otherFile-web)
+2021-05-12 18:04:01.2907 Info Validating config: TargetNames=alldata, otherFile-web, ConfigItems=45, FilePath=D:\Bhavin\MyProject\RocketPOS\SourceCode\Bhavin\RocketPOSWebApp\eRestaurant_Bhavin\eRestaurant\bin\Release\netcoreapp3.0\nlog.config

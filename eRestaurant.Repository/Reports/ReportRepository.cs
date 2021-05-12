@@ -995,19 +995,75 @@ namespace RocketPOS.Repository.Reports
             {
                 string Query = string.Empty;
 
+                if (reporttype == "PurchaseOrder")
+                {
+                    Query = " select P.Id as Id,ReferenceNo as ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.GrossAmount as TotalAmount,P.VatableAmount,P.NonVatableAmount " +
+                            " from Purchase P " +
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " Where Convert(Date, P.PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY P.PurchaseDate";
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+                else if (reporttype == "PurchaseOrderDetail")
+                {
+                    Query = " select PD.Id as Id,ReferenceNo as ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
+                            " (case when PD.FoodMenuId is null then(case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
+                            " FoodMenuId,IngredientId,AssetItemId, " +
+                            " Qty as InvoiceQty,UnitPrice,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.VatableAmount,PD.NonVatableAmount " +
+                            " from Purchase P " +
+                            " Inner join PurchaseDetail PD on P.ID = PD.PurchaseId " +
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " left outer join Foodmenu FM on FM.Id = PD.FoodmenuId " +
+                            " left outer join Ingredient I on I.Id = PD.IngredientId " +
+                            " left outer join AssetItem AI on AI.Id = PD.AssetItemId " +
+                            " Where Convert(Date, P.PurchaseDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY P.PurchaseDate asc ";
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+
+                if (reporttype == "PurchaseGRN")
+                {
+                    Query = " select P.Id as Id,ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseGRNDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
+                            " from PurchaseGRN P " +
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " Where Convert(Date, P.PurchaseGRNDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY P.PurchaseGRNDate";
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+                else if (reporttype == "PurchaseGRNDetail")
+                {
+                    Query = " select PD.Id as Id,ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseGRNDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
+                            " (case when PD.FoodMenuId is null then(case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
+                            " FoodMenuId,IngredientId,AssetItemId, " +
+                            " GRNQty as InvoiceQty,UnitPrice,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.VatableAmount,PD.NonVatableAmount " +
+                            " from PurchaseGRN P " +
+                            " Inner join PurchaseGRNDetail PD on P.ID = PD.PurchaseGRNId " +
+                            " Inner join Supplier SP on SP.Id = P.SupplierId " +
+                            " Inner join Store S on S.Id = P.StoreId " +
+                            " left outer join Foodmenu FM on FM.Id = PD.FoodmenuId " +
+                            " left outer join Ingredient I on I.Id = PD.IngredientId " +
+                            " left outer join AssetItem AI on AI.Id = PD.AssetItemId " +
+                            " Where Convert(Date, P.PurchaseGRNDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY P.PurchaseGRNDate";
+                    purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
+                }
+
                 if (reporttype == "PurchaseInvoice")
                 {
-                    Query = " select ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
+                    Query = " select P.Id as Id,ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId,P.GrossAmount,P.TaxAmount,P.TotalAmount,P.VatableAmount,P.NonVatableAmount " +
                             " from PurchaseInvoice P " + 
                             " Inner join Supplier SP on SP.Id = P.SupplierId " +
                             " Inner join Store S on S.Id = P.StoreId " +
                             " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
-                            " ORDER BY convert(varchar(10), P.PurchaseInvoiceDate,103)";
+                            " ORDER BY P.PurchaseInvoiceDate";
                     purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
                 }
                 else if (reporttype == "PurchaseInvoiceDetail")
                 {
-                    Query = " select ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
+                    Query = " select PD.Id as Id,ReferenceNumber,CONVERT(VARCHAR(10),P.PurchaseInvoiceDate,103) as PurchaseDate,SupplierName, SupplierId,Storename,P.StoreId, " +
                             " (case when PD.FoodMenuId is null then(case when PD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
                             " FoodMenuId,IngredientId,AssetItemId, " +
                             " InvoiceQty,UnitPrice,PD.GrossAmount,PD.TaxAmount,PD.TotalAmount,PD.VatableAmount,PD.NonVatableAmount " +
@@ -1018,7 +1074,8 @@ namespace RocketPOS.Repository.Reports
                             " left outer join Foodmenu FM on FM.Id = PD.FoodmenuId " +
                             " left outer join Ingredient I on I.Id = PD.IngredientId " +
                             " left outer join AssetItem AI on AI.Id = PD.AssetItemId " +
-                            " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND W.StoreId = " + storeId;
+                            " Where Convert(Date, P.PurchaseInvoiceDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   AND P.StoreId = " + storeId +
+                            " ORDER BY P.PurchaseInvoiceDate";
                     purchaseReportModels = db.Query<PurchaseReportModel>(Query).ToList();
                 }
 

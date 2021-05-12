@@ -522,6 +522,18 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.StoreId = LoginInfo.StoreId;
             return View(masterSalesReport);
         }
+        public ViewResult PurchaseDetailReport(string rname)
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+
+            ViewBag.Reportname = rname;
+            masterSalesReport.StoreList = _iDropDownService.GetStoreList();
+
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.StoreId = LoginInfo.StoreId;
+            return View(masterSalesReport);
+        }
 
         public ViewResult SalesByCategoryProduct(string rname)
         {

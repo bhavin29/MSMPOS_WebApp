@@ -204,6 +204,7 @@ namespace RocketPOS.Models.Reports
     }
     public class PurchaseReportModel
     {
+        public int Id { get; set; }
         public string StoreName { get; set; }
         public int Storeid { get; set; }
         public string SupplierName { get; set; }
@@ -214,7 +215,8 @@ namespace RocketPOS.Models.Reports
         public int FoodmenuId { get; set; }
         public int IngredientId { get; set; }
         public int AssetItemId { get; set; }
-        public decimal IngredientQty { get; set; }
+        public decimal InvoiceQty { get; set; }
+        public decimal UnitPrice { get; set; }
         public decimal GrossAmount { get; set; }
         public decimal TaxAmount { get; set; }
         public decimal TotalAmount { get; set; }

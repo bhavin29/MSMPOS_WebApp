@@ -12,17 +12,17 @@
     <div class="card-header container-fluid">
         <div class="row">
             <div class="col-md-10">
-                @if (ViewBag.Reportname == "PurchaseOrder")
+                @if (ViewBag.Reportname == "PurchaseOrderDetail")
                 {
-                    <h5 class="card-title">Purchase Order Report</h5>
+                    <h5 class="card-title">Purchase Order Detail Report</h5>
                 }
-                @if (ViewBag.Reportname == "PurchaseGRN")
+                @if (ViewBag.Reportname == "PurchaseGRNDetail")
                 {
-                    <h5 class="card-title">Good Receipt Note Report</h5>
+                    <h5 class="card-title">Good Receipt Note Detail Report</h5>
                 }
-                @if (ViewBag.Reportname == "PurchaseInvoice")
+                @if (ViewBag.Reportname == "PurchaseInvoiceDetail")
                 {
-                    <h5 class="card-title">Purchase Invoice Report</h5>
+                    <h5 class="card-title">Purchase Invoice Detail Report</h5>
                 }
             </div>
         </div>
@@ -70,26 +70,32 @@
                 <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
                     <thead role="row">
                         <tr>
-                            <th style="width:10%">@Html.DisplayName("Date")</th>
-                            <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:20%">@Html.DisplayName("Store")</th>
-                            <th style="width:20%">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%">@Html.DisplayName("Total")</th>
-                            <th style="width:10%">@Html.DisplayName("Vatable")</th>
-                            <th style="width:10%">@Html.DisplayName("Non-VAT")</th>
-                            <th style="width:10%">@Html.DisplayName("VAT")</th>
+                            <th style="width:8%">@Html.DisplayName("Date")</th>
+                            <th style="width:6%">@Html.DisplayName("Number")</th>
+                            <th style="width:12%">@Html.DisplayName("Store")</th>
+                            <th style="width:12%">@Html.DisplayName("Supplier")</th>
+                            <th style="width:18%">@Html.DisplayName("Product")</th>
+                            <th style="width:6%">@Html.DisplayName("Qty")</th>
+                            <th style="width:6%">@Html.DisplayName("Price")</th>
+                            <th style="width:8%">@Html.DisplayName("Total")</th>
+                            <th style="width:8%">@Html.DisplayName("Vatable")</th>
+                            <th style="width:8%">@Html.DisplayName("Non-VAT")</th>
+                            <th style="width:8%">@Html.DisplayName("VAT")</th>
                         </tr>
                     </thead>
                     <tfoot role="row">
                         <tr>
-                            <th style="width:10%">@Html.DisplayName("Date")</th>
-                            <th style="width:10%">@Html.DisplayName("Number")</th>
-                            <th style="width:20%">@Html.DisplayName("Store")</th>
-                            <th style="width:20%">@Html.DisplayName("Supplier")</th>
-                            <th style="width:10%">@Html.DisplayName("Total")</th>
-                            <th style="width:10%">@Html.DisplayName("Vatable")</th>
-                            <th style="width:10%">@Html.DisplayName("Non-VAT")</th>
-                            <th style="width:10%">@Html.DisplayName("VAT")</th>
+                            <th style="width:8%">@Html.DisplayName("Date")</th>
+                            <th style="width:6%">@Html.DisplayName("Number")</th>
+                            <th style="width:12%">@Html.DisplayName("Store")</th>
+                            <th style="width:12%">@Html.DisplayName("Supplier")</th>
+                            <th style="width:18%">@Html.DisplayName("Product")</th>
+                            <th style="width:6%">@Html.DisplayName("Qty")</th>
+                            <th style="width:6%">@Html.DisplayName("Price")</th>
+                            <th style="width:8%">@Html.DisplayName("Total")</th>
+                            <th style="width:8%">@Html.DisplayName("Vatable")</th>
+                            <th style="width:8%">@Html.DisplayName("Non-VAT")</th>
+                            <th style="width:8%">@Html.DisplayName("VAT")</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -163,6 +169,9 @@
                             { "data": "referencenumber", "name": "Referencenumber", "autoWidth": true },
                             { "data": "storeName", "name": "StoreName", "autoWidth": true },
                             { "data": "supplierName", "name": "SupplierName", "autoWidth": true },
+                            { "data": "productName", "name": "ProductName", "autoWidth": true },
+                            { "data": "invoiceQty", "name": "InvoiceQty", "autoWidth": true },
+                            { "data": "unitPrice", "name": "UnitPrice", "autoWidth": true },
                             { "data": "totalAmount", "name": "TotalAmount", "autoWidth": true },
                             { "data": "vatableAmount", "name": "VatableAmount", "autoWidth": true },
                             { "data": "nonVatableAmount", "name": "NonVatableAmount", "autoWidth": true },
@@ -170,40 +179,42 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [4, 5, 6, 7],
+                                targets: [5, 6, 7,8,9,10],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                             {
-                                targets: [4, 5, 6, 7], orderable: false,
-                                targets: [ 4, 5, 6, 7], orderable: false, class: "text-right",
+                                targets: [ 5, 6, 7, 8, 9, 10], orderable: false,
+                                targets: [ 5, 6, 7, 8, 9, 10], orderable: false, class: "text-right",
                             }
                         ],
                         dom: 'Bfrtip',
                         "buttons": [
                             {
                                 extend: 'pdf',
-                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7]},
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]},
                                 filename: function () {
                                     var d = new Date();
                                     var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                     var n = d.getTime();
-                                    return 'Purchase_Report' + date + '_' + n;
+                                    return 'Purchase_Detail_Report' + date + '_' + n;
                                 },
                                 customize: function (doc) {
                                     doc.pageMargins = [20, 20, 20, 20];
                                     doc.defaultStyle.fontSize = 8;
                                     doc.styles.tableHeader.fontSize = 8;
                                     doc.styles.title.fontSize = 10;
-                                    doc.content[0].text = 'Purchase Report' + '\n' + $("#StoreId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
+                                    doc.content[0].text = 'Purchase Detail Report' + '\n' + $("#StoreId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
                                     doc.content[0].alignment = 'left';
-                                    doc.content[1].table.widths = ['10%',  '20%', '20%', '10%', '10%', '10%', '10%', '10%'];
+                                    doc.content[1].table.widths = ['8%', '8%', '12%', '12%', '12%', '8%', '8%', '8%', '8%', '8%', '8%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {
-                                        doc.content[1].table.body[i][4].alignment = 'right';
                                         doc.content[1].table.body[i][5].alignment = 'right';
                                         doc.content[1].table.body[i][6].alignment = 'right';
                                         doc.content[1].table.body[i][7].alignment = 'right';
+                                        doc.content[1].table.body[i][8].alignment = 'right';
+                                        doc.content[1].table.body[i][9].alignment = 'right';
+                                        doc.content[1].table.body[i][10].alignment = 'right';
                                    }
 
                                     // Create a footer
@@ -226,7 +237,7 @@
                             extend: 'excel',
                                 customize: function (xlsx) {
                                     var sheet = xlsx.xl.worksheets['sheet1.xml'];
-                                    var thousandSepCols = [  'E', 'F', 'G','H'];
+                                    var thousandSepCols = [  'F', 'G','H','I','J','K'];
                                     for (i = 0; i < thousandSepCols.length; i++) {
                                         $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
                                     }
@@ -242,7 +253,7 @@
                                 var d = new Date();
                                 var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
                                 var n = d.getTime();
-                                return 'Purchase_Report' + date + '_' + n;
+                                return 'Purchase_Detail_Report' + date + '_' + n;
                             },
                         }],
                         "bLengthChange": true,

@@ -159,12 +159,12 @@
                                     doc.styles.title.fontSize = 10;
                                     doc.content[0].text = 'Waste Summary Report' + '\n' + $("#StoreId").children("option:selected").text() + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
                                     doc.content[0].alignment = 'left';
-                                    doc.content[1].table.widths = ['40%','40%', '10', '10%'];
+                                    doc.content[1].table.widths = ['40%','40%', '10%', '10%'];
 
                                     var rowCount = doc.content[1].table.body.length;
                                     for (i = 1; i < rowCount; i++) {
-                                        doc.content[1].table.body[i][4].alignment = 'right';
-                                        doc.content[1].table.body[i][5].alignment = 'right';
+                                        doc.content[1].table.body[i][2].alignment = 'right';
+                                        doc.content[1].table.body[i][3].alignment = 'right';
                                    }
 
                                     // Create a footer

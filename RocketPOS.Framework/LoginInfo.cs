@@ -53,6 +53,8 @@ namespace RocketPOS.Framework
         public static int FoodMenuId ;
         public static int OutletId;
         public static int StoreId;
+        public static int FromStoreId=0;
+        public static int ToStoreId=0;
         public static string InvoiceTerms;
 
     }

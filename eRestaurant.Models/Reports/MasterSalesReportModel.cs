@@ -23,6 +23,12 @@ namespace RocketPOS.Models.Reports
         public DateTime? toDate { get; set; }
         public int categoryId { get; set; }
         public int foodMenuId { get; set; }
+        public int FromStoreId { get; set; }
+        public string FromStoreName { get; set; }
+        public List<SelectListItem> FromStoreList { get; set; }
+        public int ToStoreId { get; set; }
+        public string ToStoreName { get; set; }
+        public List<SelectListItem> ToStoreList { get; set; }
     }
     public class MasterSalesReportModel
     {

@@ -1083,6 +1083,141 @@ namespace RocketPOS.Repository.Reports
             }
         }
 
+        public List<StockReportModel> GetStockReport(string fromDate, string toDate, int fromStoreId, int toStoreId, int itemType, int categoryId, int foodMenuId, string reporttype)
+        {
+            List<StockReportModel> stockReportModels = new List<StockReportModel>();
+            using (var db = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                string Query = string.Empty;
+ 
+                if (reporttype == "StockTransfer")
+                {
+                    Query = " select IT.Id,FromStoreid,FS.StoreName as FromStoreName,TS.Storename as ToStoreName, ToStoreid,ReferenceNumber, " +
+                            " CONVERT(VARCHAR(10),EntryDate,103) as EntryDate,IT.Notes, " +
+                            " (case when ITD.FoodMenuId is null then(case when ITD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
+                            " FoodMenuId,IngredientId,AssetItemId,Qty" +
+                            " from InventoryTransfer IT" +
+                            " inner join InventoryTransferDetail ITD on IT.Id = ITD.InventoryTransferId " +
+                            " inner join Store FS on FS.Id = IT.FromStoreId" +
+                            " inner join Store TS on TS.Id = IT.ToStoreId" +
+                            " left outer join Foodmenu FM on FM.Id = ITD.FoodmenuId " +
+                            " left outer join Ingredient I on I.Id = ITD.IngredientId" +
+                            " left outer join AssetItem AI on AI.Id = ITD.AssetItemId" +
+                            " left outer join FoodMenuCategory FMC on FMC.Id = FM.FoodCategoryId" +
+                            " left outer join Ingredient IC on IC.Id = I.IngredientCategoryId" +
+                            " left outer join AssetCategory AIC on AIC.Id = AI.AssetCategoryId" +
+                            " where IT.IsDeleted = 0 and ITD.IsDeleted = 0" +
+                            " AND Convert(Date, IT.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   ";
+                    
+                    //category id
+                    if (itemType == 0 && categoryId != 0)
+                    {
+                        Query += " AND FoodCategoryId =" +  categoryId ;
+                    }
+                    else if (itemType == 1 && categoryId != 0)
+                    {
+                        Query += " AND I.IngredientCategoryId = " + categoryId ;
+                    }
+                    else if (itemType == 2 && categoryId != 0)
+                    {
+                        Query += " AND AI.AssetCategoryId = " + categoryId ;
+                    }
+
+                    //Product id
+                    if (itemType == 0 && foodMenuId != 0)
+                    {
+                        Query += " AND FoodmenuId = " + foodMenuId;
+                    }
+                    else if (itemType == 1 && categoryId != 0)
+                    {
+                        Query += " AND IngredientId = " + foodMenuId;
+                    }
+                    else if (itemType == 2 && categoryId != 0)
+                    {
+                        Query += " AND AssetItemId = " + foodMenuId;
+                    }
+
+                    //Store Id
+                    if (fromStoreId !=0)
+                    {
+                        Query += " AND FromStoreid = " + fromStoreId;
+                    }
+
+                    if (toStoreId != 0)
+                    {
+                        Query += " AND ToStoreid = " + toStoreId;
+                    }
+
+                    Query += " ORDER BY IT.EntryDate";
+                }
+                else
+                {
+                    Query = " select IT.Id,Storeid as FromStoreId,FS.StoreName as FromStoreName, ReferenceNumber, " +
+                            " CONVERT(VARCHAR(10),EntryDate,103) as EntryDate,IT.Notes, " +
+                            " (case when ITD.FoodMenuId is null then(case when ITD.IngredientId is null then AI.AssetItemName else I.IngredientName end) else fM.FoodMenuName end) as ProductName, " +
+                            " FoodMenuId,IngredientId,AssetItemId,Qty" +
+                            " from InventoryAdjustment IT" +
+                            " inner join InventoryAdjustmentDetail ITD on IT.Id = ITD.InventoryAdjustmentId " +
+                            " inner join Store FS on FS.Id = IT.StoreId" +
+                            " left outer join Foodmenu FM on FM.Id = ITD.FoodmenuId " +
+                            " left outer join Ingredient I on I.Id = ITD.IngredientId" +
+                            " left outer join AssetItem AI on AI.Id = ITD.AssetItemId" +
+                            " left outer join FoodMenuCategory FMC on FMC.Id = FM.FoodCategoryId" +
+                            " left outer join Ingredient IC on IC.Id = I.IngredientCategoryId" +
+                            " left outer join AssetCategory AIC on AIC.Id = AI.AssetCategoryId" +
+                            " where IT.IsDeleted = 0 and ITD.IsDeleted = 0" +
+                            " AND Convert(Date, IT.EntryDate, 103)  between Convert(Date, '" + fromDate + "', 103)  and Convert(Date, '" + toDate + "' , 103)   ";
+ 
+                    if (reporttype == "StockIn")
+                    {
+                        Query += " AND IT.consumptionStatus = 1";
+                    }
+                    else
+                    {
+                        Query += " AND IT.consumptionStatus = 2";
+                    }
+
+                    //category id
+                    if (itemType == 0 && categoryId != 0)
+                    {
+                        Query += " AND FoodCategoryId =" + categoryId;
+                    }
+                    else if (itemType == 1 && categoryId != 0)
+                    {
+                        Query += " AND I.IngredientCategoryId = " + categoryId;
+                    }
+                    else if (itemType == 2 && categoryId != 0)
+                    {
+                        Query += " AND AI.AssetCategoryId = " + categoryId;
+                    }
+
+                    //Product id
+                    if (itemType == 0 && foodMenuId != 0)
+                    {
+                        Query += " AND FoodmenuId = " + foodMenuId;
+                    }
+                    else if (itemType == 1 && categoryId != 0)
+                    {
+                        Query += " AND IngredientId = " + foodMenuId;
+                    }
+                    else if (itemType == 2 && categoryId != 0)
+                    {
+                        Query += " AND AssetItemId = " + foodMenuId;
+                    }
+
+                    //Store Id
+                    if (fromStoreId != 0)
+                    {
+                        Query += " AND Storeid = " + fromStoreId;
+                    }
+
+                    Query += " ORDER BY IT.EntryDate";
+                }
+              
+                stockReportModels = db.Query<StockReportModel>(Query).ToList();
+                return stockReportModels;
+            }
+        }
 
     }
 }

@@ -1,0 +1,303 @@
+﻿@using Microsoft.Extensions.Localization;
+@model RocketPOS.Models.Reports.ReportParameterModel
+@inject IStringLocalizer<RocketPOS.Resources.RocketPOSResources> SharedLocalizer;
+@using  RocketPOS.Resources
+@inject LocService SharedLocalizer
+@{
+    ViewData["Title"] = @SharedLocalizer.GetLocalizedHtmlString("MasterSalesReport");
+    var dataTableName = @SharedLocalizer.GetLocalizedHtmlString("MasterSalesTable");
+}
+
+<div class="card">
+    <div class="card-header container-fluid">
+        <div class="row">
+            <div class="col-md-10">
+                    <h5 class="card-title">Stock Transfer Report</h5>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="card-body">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="fromDate" class="control-label">From Date</label>
+                            <input asp-for="fromDate" type="date" class="form-control" />
+                            <span asp-validation-for="fromDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label asp-for="toDate" class="control-label">To Date</label>
+                            <input asp-for="toDate" type="date" class="form-control" />
+                            <span asp-validation-for="toDate" class="text-danger"></span>
+
+                            <select Id="ItemType" hidden="hidden"
+                                    class="form-control">
+                                <option value="0">Menu Item</option>
+                                @*<option value="1">Stock Item</option>
+                                    <option value="2">Asset Item</option>*@
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Category</label>
+                            @if (Model != null)
+                            {
+                                <select asp-for="FoodCategoryId" class="form-control"
+                                        asp-items="@(new SelectList(Model.FoodCategoryList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Product</label>
+                            @if (Model != null)
+                            {
+                                <select asp-for="FoodMenuId" class="form-control"
+                                        asp-items="@(new SelectList(Model.FoodMenuList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">From Store</label>
+                            @if (Model != null)
+                            {
+                                <select asp-for="FromStoreId" class="form-control"
+                                        asp-items="@(new SelectList(Model.FromStoreList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">To Store</label>
+                            @if (Model != null)
+                            {
+                                <select asp-for="ToStoreId" class="form-control"
+                                        asp-items="@(new SelectList(Model.ToStoreList, "Value", "Text"))">
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a id="btnLoadData" onclick="return loadMasterSalesList();" style="margin-top: 22px" class="btn btn-outline-light" data-dismiss="modal">Load</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <div id="basic-datatables_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4">
+            <div class="col-sm-12">
+                <table id="MasterSalesTable" class="display table table-bordered table-hover dataTable" role="grid" aria-describedby="basic-datatables_info">
+                    <thead role="row">
+                        <tr>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:10%">@Html.DisplayName("Number")</th>
+                            <th style="width:22%">@Html.DisplayName("From Store")</th>
+                            <th style="width:23%">@Html.DisplayName("To Store")</th>
+                            <th style="width:25%">@Html.DisplayName("Product")</th>
+                            <th style="width:10%">@Html.DisplayName("Qty")</th>
+                        </tr>
+                    </thead>
+                    <tfoot role="row">
+                        <tr>
+                            <th style="width:10%">@Html.DisplayName("Date")</th>
+                            <th style="width:10%">@Html.DisplayName("Number")</th>
+                            <th style="width:22%">@Html.DisplayName("From Store")</th>
+                            <th style="width:23%">@Html.DisplayName("To Store")</th>
+                            <th style="width:25%">@Html.DisplayName("Product")</th>
+                            <th style="width:10%">@Html.DisplayName("Qty")</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="aModal" tabindex="-1" role="dialog" aria-labelledby="aModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="aModalLabel">Message</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="save" class="btn btn-primary ">Ok</button>
+                <button type="button" id="ok" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var MasterSalesTable = null;
+        $(document).ready(function () {
+            MasterSalesTable = $('#@dataTableName').DataTable();
+
+            $("#FromStoreId").select2();
+        });
+
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        var rname = getUrlVars()["rname"];
+
+        function loadMasterSalesList() {
+            var message = '';
+
+            if (message == '') {
+
+            $.ajaxSetup({ cache: false });
+                $.ajax({
+                    url: "/Report/GetStockList?fromdate=" + $("#fromDate").val() + "&toDate=" + $("#toDate").val() + "&fromStoreId=" + $("#FromStoreId").val() + "&toStoreId=" + $("#ToStoreId").val() + "&itemType=" + $("#ItemType").val() + "&categoryId=" + $("#FoodCategoryId").val() + "&foodMenuId=" + $("#FoodMenuId").val() + "&reporttype=" + rname,
+                dataType: "json",
+                type: "GET",
+                success: function (data) {
+                    if (MasterSalesTable != null) {
+                        MasterSalesTable.clear();
+                        MasterSalesTable.destroy();
+                    }
+                    MasterSalesTable = $("#MasterSalesTable").DataTable({
+                        "data": data.stockReportList,
+                        "columns": [
+                            { "data": "entryDate", "name": "EntryDate", "autoWidth": true },
+                            { "data": "referencenumber", "name": "Referencenumber", "autoWidth": true },
+                            { "data": "fromStoreName", "name": "FromStoreName", "autoWidth": true },
+                            { "data": "toStoreName", "name": "ToStoreName", "autoWidth": true },
+                            { "data": "productName", "name": "ProductName", "autoWidth": true },
+                            { "data": "qty", "name": "Qty", "autoWidth": true },
+                        ],
+                        columnDefs: [
+                            {
+                                targets: [1,5],
+                                render: $.fn.dataTable.render.number(',', '.', 2)
+                            },
+                            {
+                                targets: [ 1,5], orderable: false,
+                                targets: [ 1,5], orderable: false, class: "text-right",
+                            }
+                        ],
+                        dom: 'Bfrtip',
+                        "buttons": [
+                            {
+                                extend: 'pdf',
+                                exportOptions: { columns: [0, 1, 2, 3, 4, 5]},
+                                filename: function () {
+                                    var d = new Date();
+                                    var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                                    var n = d.getTime();
+                                    return 'Stock_Report' + date + '_' + n;
+                                },
+                                customize: function (doc) {
+                                    var Storename = '';
+                                    if ($("#FromStoreId").children("option:selected").text() == 'Select' || $("#ToStoreId").children("option:selected").text() == 'Select') {
+                                            Storename = '';
+                                        }
+                                        else {
+                                        Storename = 'from Store: ' + $("#FromStoreId").children("option:selected").text() + '     To Store: ' + $("#ToStoreId").children("option:selected").text()
+                                    }
+
+                                    doc.pageMargins = [20, 20, 20, 20];
+                                    doc.defaultStyle.fontSize = 8;
+                                    doc.styles.tableHeader.fontSize = 8;
+                                    doc.styles.title.fontSize = 10;
+                                    doc.content[0].text = 'Stock Report' + '\n' + Storename + '\nFrom Date: ' + $('#fromDate').val() + '      To Date: ' + $('#toDate').val();
+                                    doc.content[0].alignment = 'left';
+                                    doc.content[1].table.widths = ['10%', '10%', '22%', '23%', '25%', '10%'];
+
+                                    var rowCount = doc.content[1].table.body.length;
+                                    for (i = 1; i < rowCount; i++) {
+                                        doc.content[1].table.body[i][1].alignment = 'right';
+                                        doc.content[1].table.body[i][5].alignment = 'right';
+                                   }
+
+                                    // Create a footer
+                                    doc['footer'] = (function (page, pages) {
+                                        return {
+                                            columns: [
+                                                '',//'This is your left footer column',
+                                                {
+                                                    // This is the right column
+                                                    alignment: 'right',
+                                                    text: ['Page ', { text: page.toString() }, ' of ', { text: pages.toString() }]
+                                                }
+                                            ],
+                                            margin: [10, 0]
+                                        }
+                                    });
+                                        },
+                            },
+                            {
+                            extend: 'excel',
+                                customize: function (xlsx) {
+                                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                                    var thousandSepCols = [  'B', 'F'];
+                                    for (i = 0; i < thousandSepCols.length; i++) {
+                                        $('row c[r^=' + thousandSepCols[i] + ']:gt(0)', sheet).attr('s', '52');
+                                    }
+                                },
+                                customizeData: function (data) {
+                                    for (var i = 0; i < data.body.length; i++) {
+                                        for (var j = 1; j < data.body[i].length; j++) {
+                                            data.body[i][j] = '\u200C' + data.body[i][j];
+                                        }
+                                    }
+                                },
+                                filename: function () {
+                                var d = new Date();
+                                var date = d.getFullYear() + '_' + ('0' + (d.getMonth() + 1)).slice(-2) + '_' + ('0' + d.getDate()).slice(-2);
+                                var n = d.getTime();
+                                return 'Stock_Report' + date + '_' + n;
+                            },
+                        }],
+                        "bLengthChange": true,
+                        "bInfo": true,
+                        "bFilter": true,
+                        "ordering": true,
+                        "autoWidth": false,
+                        "orderCellsTop": true,
+                        "stateSave": false,
+                        "pageLength": 200,
+                        "lengthMenu": [
+                            [200, 500, 1000],
+                            ['200', '500', '1000']
+                        ],
+                    });
+                },
+                error: function (err) {
+
+                }
+            });
+            }
+            else if (message != '') {
+                $(".modal-body").text(message);
+                $("#save").hide();
+                jQuery.noConflict();
+                $("#aModal").modal('show');
+                return false;
+            }
+        }
+    </script>
+}

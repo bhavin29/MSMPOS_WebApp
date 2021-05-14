@@ -534,7 +534,45 @@ namespace RocketPOS.Controllers.Reports
             masterSalesReport.StoreId = LoginInfo.StoreId;
             return View(masterSalesReport);
         }
+        public ViewResult StockTransfer(string rname)
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
 
+            masterSalesReport.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            masterSalesReport.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            masterSalesReport.FromStoreList = _iDropDownService.GetStoreList();
+            masterSalesReport.ToStoreList = _iDropDownService.GetStoreList();
+
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.FoodCategoryId = LoginInfo.CategoryId;
+            masterSalesReport.FoodMenuId = LoginInfo.FoodMenuId;
+            
+            masterSalesReport.FromStoreId = LoginInfo.FromStoreId;
+            masterSalesReport.ToStoreId = LoginInfo.ToStoreId;
+
+            return View(masterSalesReport);
+        }
+
+        public ViewResult StockInOut(string rname)
+        {
+            ReportParameterModel masterSalesReport = new ReportParameterModel();
+            ViewBag.Reportname = rname;
+            masterSalesReport.FoodCategoryList = _iDropDownService.GetFoodMenuCategoryList();
+            masterSalesReport.FoodMenuList = _iDropDownService.GetFoodMenuList();
+            masterSalesReport.FromStoreList = _iDropDownService.GetStoreList();
+            masterSalesReport.ToStoreList = _iDropDownService.GetStoreList();
+
+            masterSalesReport.fromDate = Convert.ToDateTime(LoginInfo.FromDate);
+            masterSalesReport.toDate = Convert.ToDateTime(LoginInfo.ToDate);
+            masterSalesReport.FoodCategoryId = LoginInfo.CategoryId;
+            masterSalesReport.FoodMenuId = LoginInfo.FoodMenuId;
+
+            masterSalesReport.FromStoreId = LoginInfo.FromStoreId;
+            masterSalesReport.ToStoreId = LoginInfo.ToStoreId;
+
+            return View(masterSalesReport);
+        }
         public ViewResult SalesByCategoryProduct(string rname)
         {
             ReportParameterModel masterSalesReport = new ReportParameterModel();
@@ -1395,6 +1433,29 @@ namespace RocketPOS.Controllers.Reports
 
             wasteReportModels = _iReportService.GetWasteReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), storeId,reportType);
             return Json(new { wasteReportList = wasteReportModels });
+        }
+
+        public JsonResult GetStockList(string fromdate, string toDate, int fromStoreId, int toStoreId, int itemType, int categoryId, int foodMenuId, string reporttype)
+        {
+            List<StockReportModel> stockReportModels = new List<StockReportModel>();
+            DateTime newfromdate, newToDate;
+            if (fromdate != null)
+            {
+                newfromdate = fromdate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(fromdate);
+                newToDate = toDate == "01/01/0001" ? DateTime.Now : Convert.ToDateTime(toDate);
+            }
+            else
+            {
+                newfromdate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+                newToDate = DateTime.UtcNow.AddMinutes(LoginInfo.Timeoffset);
+            }
+            LoginInfo.FromDate = fromdate;
+            LoginInfo.ToDate = toDate;
+            LoginInfo.FromStoreId =fromStoreId;
+            LoginInfo.ToStoreId = toStoreId;
+
+            stockReportModels = _iReportService.GetStockReport(newfromdate.ToString("dd/MM/yyyy"), newToDate.ToString("dd/MM/yyyy"), fromStoreId, toStoreId, itemType, categoryId, foodMenuId, reporttype);
+            return Json(new { stockReportList = stockReportModels });
         }
     }
 }

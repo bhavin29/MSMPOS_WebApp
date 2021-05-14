@@ -61,48 +61,48 @@ namespace RocketPOS.Services.Reports
         }
 
         public List<DetailedDailyReportModel> GetDetailedDailyByDate(string Fromdate, string Todate, int outletId)
-        { 
-            return _iReportRepository.GetDetailedDailyByDate(Fromdate, Todate, outletId); 
+        {
+            return _iReportRepository.GetDetailedDailyByDate(Fromdate, Todate, outletId);
         }
         public List<DetailSaleSummaryModel> GetDetailSaleSummaryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetDetailSaleSummaryReport(fromDate, toDate, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetDetailSaleSummaryReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<ProductWiseSalesReportModel> GetProductWiseSales(string Fromdate, string Todate, string ReportType, int outletId)
-        { 
+        {
             return _iReportRepository.GetProductWiseSales(Fromdate, Todate, ReportType, outletId);
         }
         public List<SalesByCategoryProductModel> GetSaleByCategorySectionReport(string fromDate, string toDate, string reportName, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetSaleByCategorySectionReport(fromDate, toDate, reportName, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetSaleByCategorySectionReport(fromDate, toDate, reportName, categoryId, foodMenuId, outletId);
         }
         public List<TableStatisticsModel> GetTableStatisticsReport(string fromDate, string toDate, int outletId)
-        { 
-            return _iReportRepository.GetTableStatisticsReport(fromDate, toDate, outletId); 
+        {
+            return _iReportRepository.GetTableStatisticsReport(fromDate, toDate, outletId);
         }
         public List<SalesSummaryModel> GetSalesSummaryByFoodCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetSalesSummaryByFoodCategoryReport(fromDate, toDate, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetSalesSummaryByFoodCategoryReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<SalesSummaryByFoodCategoryFoodMenuModel> GetSalesSummaryByFoodCategoryFoodMenuReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetSalesSummaryByFoodCategoryFoodMenuReport(fromDate, toDate, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetSalesSummaryByFoodCategoryFoodMenuReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<SalesSummaryBySectionModel> GetSalesSummaryBySectionReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetSalesSummaryBySectionReport(fromDate, toDate, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetSalesSummaryBySectionReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<CustomerRewardModel> GetCustomerRewardReport(string fromDate, string toDate, string customerPhone, string customerName, int outletId)
-        { 
-            return _iReportRepository.GetCustomerRewardReport(fromDate, toDate, customerPhone, customerName, outletId); 
+        {
+            return _iReportRepository.GetCustomerRewardReport(fromDate, toDate, customerPhone, customerName, outletId);
         }
         public List<SalesSummaryByWeek> GetSalesSummaryByWeekReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
-        { 
-            return _iReportRepository.GetSalesSummaryByWeekReport(fromDate, toDate, categoryId, foodMenuId, outletId); 
+        {
+            return _iReportRepository.GetSalesSummaryByWeekReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<SalesSummaryByHours> GetSalesSummaryByHoursReport(string fromDate, string toDate, int outletId)
-        { 
-            return _iReportRepository.GetSalesSummaryByHoursReport(fromDate, toDate, outletId); 
+        {
+            return _iReportRepository.GetSalesSummaryByHoursReport(fromDate, toDate, outletId);
         }
 
         public List<TallySalesVoucherModel> GetSalesVoucherData(string fromDate, string toDate, int outletId)
@@ -202,13 +202,13 @@ namespace RocketPOS.Services.Reports
             }
         }
 
-        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId,string reporttype) 
+        public CessReportModel GetCessReport(string fromDate, string toDate, int outletId, string reporttype)
         {
             return _iReportRepository.GetCessReport(fromDate, toDate, outletId, reporttype);
         }
         public CessCategoryReportModel GetCessCategoryReport(string fromDate, string toDate, int categoryId, int foodMenuId, int outletId)
         {
-            return _iReportRepository.GetCessCategoryReport(fromDate, toDate, categoryId,  foodMenuId, outletId);
+            return _iReportRepository.GetCessCategoryReport(fromDate, toDate, categoryId, foodMenuId, outletId);
         }
         public List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId)
         {
@@ -216,7 +216,7 @@ namespace RocketPOS.Services.Reports
         }
         public List<WasteReportModel> GetWasteReport(string fromDate, string toDate, int storeId, string reporttype)
         {
-            return _iReportRepository.GetWasteReport(fromDate, toDate, storeId,reporttype);
+            return _iReportRepository.GetWasteReport(fromDate, toDate, storeId, reporttype);
 
         }
         public List<PurchaseReportModel> GetPurchaseReport(string fromDate, string toDate, int storeId, string reporttype)
@@ -224,5 +224,10 @@ namespace RocketPOS.Services.Reports
             return _iReportRepository.GetPurchaseReport(fromDate, toDate, storeId, reporttype);
         }
 
+        public List<StockReportModel> GetStockReport(string fromDate, string toDate, int fromStoreId, int toStoreId, int itemType, int categoryId, int foodMenuId, string reporttype)
+        {
+            return _iReportRepository.GetStockReport(fromDate, toDate, fromStoreId, toStoreId, itemType, categoryId, foodMenuId, reporttype);
+
+        }
     }
 }

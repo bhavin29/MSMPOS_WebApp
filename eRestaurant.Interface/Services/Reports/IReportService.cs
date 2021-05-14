@@ -35,6 +35,6 @@ namespace RocketPOS.Interface.Services.Reports
         List<ModeofPaymentReportModel> GetModOfPaymentReport(string fromDate, string toDate, int outletId);
         List<WasteReportModel> GetWasteReport(string fromDate, string toDate, int storeId, string reporttype);
         List<PurchaseReportModel> GetPurchaseReport(string fromDate, string toDate, int storeId, string reporttype);
-
+        List<StockReportModel> GetStockReport(string fromDate, string toDate, int fromStoreId, int toStoreId, int itemType, int categoryId, int foodMenuId, string reporttype);
     }
 }

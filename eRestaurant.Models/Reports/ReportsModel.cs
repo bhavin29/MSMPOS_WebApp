@@ -223,5 +223,21 @@ namespace RocketPOS.Models.Reports
         public decimal VatableAmount { get; set; }
         public decimal NonVatableAmount { get; set; }
     }
+    public class StockReportModel
+    {
+        public int Id { get; set; }
+        public string FromStoreName { get; set; }
+        public int FromStoreid { get; set; }
+        public string ToStoreName { get; set; }
+        public int ToStoreid { get; set; }
+        public string Referencenumber { get; set; }
+        public string EntryDate { get; set; }
+        public string Notes { get; set; }
+        public string ProductName { get; set; }
+        public int FoodmenuId { get; set; }
+        public int IngredientId { get; set; }
+        public int AssetItemId { get; set; }
+        public decimal Qty { get; set; }
+    }
 
 }

@@ -195,7 +195,7 @@
                         ],
                         columnDefs: [
                             {
-                                targets: [1,4],
+                                targets: [4],
                                 render: $.fn.dataTable.render.number(',', '.', 2)
                             },
                             {
@@ -275,7 +275,34 @@
                                 var n = d.getTime();
                                 return 'Stock_In_Out_Report' + date + '_' + n;
                             },
-                        }],
+                                footer: true
+                         }],
+                        "footerCallback": function (row, data, start, end, display) {
+                            var api = this.api(),
+                                data;
+
+                            // Remove the formatting to get integer data for summation
+                            var intVal = function (i) {
+                                return typeof i === 'string' ?
+                                    i.replace(/[\$,]/g, '') * 1 :
+                                    typeof i === 'number' ?
+                                        i : 0;
+                            };
+
+                            // Total over all pages
+                            total4 = api
+                                .column(4)
+                                .data()
+                                .reduce(function (a, b) {
+                                    return intVal(a) + intVal(b);
+                                }, 0);
+
+                            $(api.column(0).footer()).html('Total');
+                            $(api.column(1).footer()).html('');
+                            $(api.column(2).footer()).html('');
+                            $(api.column(3).footer()).html('');
+                            $(api.column(4).footer()).html(total4.toFixed(2));
+                        },
                         "bLengthChange": true,
                         "bInfo": true,
                         "bFilter": true,

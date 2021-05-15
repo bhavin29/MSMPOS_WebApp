@@ -138,6 +138,8 @@ namespace RocketPOS.Repository
         }
         public int InsertPurchaseInvoiceFoodMenu(SalesInvoiceModel purchaseModel)
         {
+            bool taxInclusive = GetCustomerTaxExampt((int)purchaseModel.CustomerId);
+
             int result = 0;
             int detailResult = 0;
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
@@ -185,13 +187,27 @@ namespace RocketPOS.Repository
                              "   @CustomerId,      " +
                              "   @StoreId,         " +
                              "   @EmployeeId,         " +
-                             "   @SalesInvoiceDate,    " +
-                             "   @GrossAmount,     " +
-                             "   @TaxAmount,     " +
-                             "   @TotalAmount,     " +
-                             "   @VatableAmount,      " +
-                             "   @NonVatableAmount,      " +
-                            "    @DeliveryNoteNumber," +
+                             "   @SalesInvoiceDate,    ";
+                if (taxInclusive == true)
+                {
+                    query = query + "   @GrossAmount,     " +
+                                  "   @TaxAmount,     " +
+                                  "   @TotalAmount,     " +
+                                  "   @VatableAmount,      " +
+                                  "   @NonVatableAmount,      ";
+
+                }
+                else
+                {
+                    query = query + "  @TotalAmount,     " +
+                                  "   0,     " +
+                                  "   @TotalAmount,     " +
+                                  "   0,      " +
+                                  "   0,      ";
+
+                }
+
+                query = query + "    @DeliveryNoteNumber," +
                              "   @DeliveryDate," +
                              "   @DriverName," +
                              "   @VehicleNumber," +
@@ -256,15 +272,32 @@ namespace RocketPOS.Repository
                         }
                         queryDetails = queryDetails + "" + item.SOQTY + "," +
                               item.InvoiceQty + "," +
-                              item.UnitPrice + "," +
-                              item.GrossAmount + "," +
-                              item.DiscountPercentage + "," +
-                              item.DiscountAmount + "," +
-                              item.TaxAmount + "," +
-                              item.TotalAmount + "," +
-                              item.VatableAmount + "," +
-                              item.NonVatableAmount + "," +
-                    LoginInfo.Userid + ",GetUtcDate(),0); SELECT CAST(ReferenceNumber as INT) from SalesInvoice where id = " + result + "; ";
+                              item.UnitPrice + ",";
+
+                        if (taxInclusive == true)
+                        {
+                            queryDetails = queryDetails +
+                                          item.GrossAmount + "," +
+                                          item.DiscountPercentage + "," +
+                                          item.DiscountAmount + "," +
+                                          item.TaxAmount + "," +
+                                          item.TotalAmount + "," +
+                                          item.VatableAmount + "," +
+                                          item.NonVatableAmount + ",";
+                        }
+                        else
+                        {
+                            queryDetails = queryDetails +
+                                           item.TotalAmount + "," +
+                                           item.DiscountPercentage + "," +
+                                           item.DiscountAmount + "," +
+                                            "0," +
+                                           item.TotalAmount + "," +
+                                            "0," +
+                                            "0,";
+                        }
+
+                        queryDetails = queryDetails + LoginInfo.Userid + ",GetUtcDate(),0); SELECT CAST(ReferenceNumber as INT) from SalesInvoice where id = " + result + "; ";
 
                         detailResult = con.ExecuteScalar<int>(queryDetails, null, sqltrans, 0, System.Data.CommandType.Text);
                     }
@@ -680,6 +713,17 @@ namespace RocketPOS.Repository
             }
 
             return purchaseDetails;
+        }
+
+        public bool GetCustomerTaxExampt(int customerId)
+        {
+            bool result;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select ISNULL(TaxInclusive,0) from customer where id = " + customerId;
+                result =(bool) con.ExecuteScalar(query);
+            }
+            return result;
         }
     }
 }

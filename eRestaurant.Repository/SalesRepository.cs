@@ -97,6 +97,8 @@ namespace RocketPOS.Repository
 
         public string InsertPurchaseFoodMenu(SalesModel purchaseModel)//
         {
+            bool taxInclusive = GetCustomerTaxExampt((int)purchaseModel.CustomerId);
+
             int result = 0;
             int detailResult = 0;
             string referenceNo = "";
@@ -139,16 +141,33 @@ namespace RocketPOS.Repository
                              "   @CustomerId,      " +
                              "   @StoreId,         " +
                              "   @EmployeeId,         " +
-                             "   @Date,    " +
-                             "   (@GrandTotal - @TaxAmount),     " +
+                             "   @Date,    ";
+
+
+                if (taxInclusive == true)
+                {
+                    query = query + "   (@GrandTotal - @TaxAmount),     " +
                              "   @DiscountAmount,     " +
                              "   @TaxAmount,       " +
                              "   @GrandTotal,      " +
                              "   @Paid,      " +
                              "   @Due,       " +
                              "   @VatableAmount,      " +
-                             "   @NonVatableAmount,      " +
-                             "   @Notes," +
+                             "   @NonVatableAmount,      ";
+                }
+                else
+                {
+                    query = query + "  @GrandTotal,     " +
+                          "   @DiscountAmount,     " +
+                          "  0,       " +
+                          "   @GrandTotal,      " +
+                          "   @Paid,      " +
+                          "   @Due,       " +
+                          "   0,      " +
+                          "   0,      ";
+                }
+
+                query = query + "   @Notes," +
                              "   @Status," +
                              "" + LoginInfo.Userid + "," +
                              "   GetUtcDate(),    " +
@@ -238,7 +257,10 @@ namespace RocketPOS.Repository
 
                         }
                         queryDetails = queryDetails + "" + item.UnitPrice + "," +
-                                                "" + item.Quantity + "," +
+                                                "" + item.Quantity + ",";
+                        if (taxInclusive == true)
+                        {
+                            queryDetails = queryDetails +
                                                 "" + (item.Total - item.TaxAmount) + "," +
                                                 "" + item.DiscountAmount + "," +
                                                 "" + item.DiscountPercentage + "," +
@@ -246,8 +268,23 @@ namespace RocketPOS.Repository
                                                 "" + item.TaxAmount + "," +
                                                 "" + item.Total + "," +
                                                 "" + item.VatableAmount + "," +
-                                                "" + item.NonVatableAmount + "," +
-                                                "" + LoginInfo.Userid + "," +
+                                                "" + item.NonVatableAmount + ",";
+                        }
+                        else
+                        {
+                            queryDetails = queryDetails +
+                                             "" + item.Total + "," +
+                                             "" + item.DiscountAmount + "," +
+                                             "" + item.DiscountPercentage + "," +
+                                              "0," +
+                                             "0," +
+                                             "" + item.Total + "," +
+                                             "0," +
+                                             "0,";
+
+                        }
+
+                        queryDetails = queryDetails + "" + LoginInfo.Userid + "," +
                                                 "   GetUtcDate(),    " +
                                                 "0);  SELECT SCOPE_IDENTITY();";
 
@@ -638,6 +675,16 @@ namespace RocketPOS.Repository
             }
 
             return purchaseDetails;
+        }
+        public bool GetCustomerTaxExampt(int customerId)
+        {
+            bool result;
+            using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
+            {
+                var query = " Select ISNULL(TaxInclusive,0) from customer where id = " + customerId;
+                result = (bool)con.ExecuteScalar(query);
+            }
+            return result;
         }
     }
 }

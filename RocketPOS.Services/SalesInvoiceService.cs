@@ -239,8 +239,6 @@ namespace RocketPOS.Services
 
         public string GetInvoiceHtmlString(SalesInvoiceModel salesInvoiceModel)
         {
-        //    NumberToWords numberToWords = new NumberToWords();
-
             var sb = new StringBuilder();
             decimal total = (decimal) salesInvoiceModel.SalesInvoiceDetails.Count;
             int totalRow = (int)total;
@@ -248,18 +246,20 @@ namespace RocketPOS.Services
 
             int noOfPages = (int) Math.Ceiling(rowCount);
             int limit = 15, start=0;
+            int logoTop = 35;
+
+            //HTML
+            sb.Append(@"<html><body style='font-family:Helvetica; font-size:16px;'>");
+
             for (int j = 1; j <= noOfPages; j++)
             {
-                //HTML
-                sb.Append(@"<html><body style='font-family:Helvetica; font-size:16px;'>");
-
                 //Header Start
                 string HtmlHeader = @"<table style='border:0px solid black;' width='1280' Height='200'>
                             <tr style='border:0px solid black;' align='center' Height='50'>
 	                        <td style='font-size:20px; border:0px solid black; vertical-align:top;padding-top:15px;'>
                             <div style='text-align:center; padding-top:20px; position: rela1tive;'>
-                           <img src='http://shayona.rocketpos.uk/img/clientlogo.jpg' width='350' height='140' style='position: absolute; left: 15px; top: 35px'>
-                            <div style='font-size:28px; font-weigth:bold'><b>" + salesInvoiceModel.InvoiceHeader + @"</b></div>
+                            <img src='http://shayona.rocketpos.uk/img/clientlogo.jpg' width='350' height='140' style='position: absolute; left: 15px; top: " + logoTop + @"px' >" +
+                            @"<div style='font-size:28px; font-weigth:bold'><b>" + salesInvoiceModel.InvoiceHeader + @"</b></div>
                             <div style='font-size:22px;'>" + salesInvoiceModel.OutletAddress1 +
                                 "</br>" + salesInvoiceModel.OutletAddress2 +
                                 "</br>" + salesInvoiceModel.OutletEmail +
@@ -268,7 +268,6 @@ namespace RocketPOS.Services
                                 "</td></tr></table>";
 
                 sb.Append(HtmlHeader);
-                //Header Finish
 
                 //Invoice Title
                 sb.Append(@"<table style='border-right:1px solid;border-left:1px solid;border-top:1px solid' width='1280' Height='35'>
@@ -428,10 +427,13 @@ namespace RocketPOS.Services
 
                 sb.Append(@"</td>
                         </tr>
-                        </table>");
+                        </table>"); 
 
                 //emplty row
                 sb.AppendFormat(@"<table style='border:0px solid;' Height='40'></table>");
+
+                //logo at header settings
+                logoTop = logoTop + 1654 + (j* 14) ; 
             }
 
             //end of body and html

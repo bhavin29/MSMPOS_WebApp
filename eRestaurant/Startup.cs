@@ -27,23 +27,28 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace RocketPOS
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<LocService>();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddDataProtection();
 
             services.AddControllersWithViews();
             services.Configure<ReadConfig>(Configuration.GetSection("Data"));
@@ -211,6 +216,15 @@ namespace RocketPOS
             services.AddScoped<ISalesInvoiceRepository, SalesInvoiceRepository>();
             services.AddScoped<ISalesInvoiceService, SalesInvoiceService>();
             services.AddHttpClient();
+
+
+            // ----- finally Add this DataProtection -----
+            var keysFolder = Path.Combine(WebHostEnvironment.ContentRootPath, "temp-keys");
+            services.AddDataProtection()
+                .SetApplicationName("RocketPOS")
+                .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

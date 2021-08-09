@@ -71,6 +71,9 @@
                                 @Html.DisplayName("Menu Item Type")
                             </th>
                             <th>
+                                @Html.DisplayName("Barcode")
+                            </th>
+                            <th>
                                 @Html.DisplayName("Action")
                             </th>
                         </tr>
@@ -93,7 +96,10 @@
                                 @Html.DisplayName("Menu Category")
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.FoodMenuType)
+                                @Html.DisplayName("Menu Item Type")
+                            </th>
+                            <th>
+                                @Html.DisplayName("Barcode")
                             </th>
                             <th>
                                 @Html.DisplayName("Action")
@@ -106,40 +112,43 @@
                             var tm = "#myModal" + item.Id;
                             var mid = "myModal" + item.Id;
 
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuCode)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UnitName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodVatTaxName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodCategoryName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FoodMenuType)
-                                </td>
-                                <td>
-                                    <div class="form-button-action">
-                                        @if (@UserRolePermissionForPage.Edit == true)
-                                        {
-                                            <a asp-action="FoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
-                                            <label> / </label>
-                                        }
-                                        @if (@UserRolePermissionForPage.Delete == true)
-                                        {
-                                            <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
-                                        }
-                                    </div>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodMenuCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodMenuName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodVatTaxName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodCategoryName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodMenuType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FoodMenuBarCode)
+                            </td>
+                            <td>
+                                <div class="form-button-action">
+                                    @if (@UserRolePermissionForPage.Edit == true)
+                                    {
+                                        <a asp-action="FoodMenu" asp-route-Id="@item.Id">Edit   <i class="fa fa-edit"></i></a>
+                                        <label> / </label>
+                                    }
+                                    @if (@UserRolePermissionForPage.Delete == true)
+                                    {
+                                        <a href="#" class="fa fa-trash-alt" data-toggle="modal" data-target="@tm">Delete   <i class="fa fa-times"></i></a>
+                                    }
+                                </div>
 
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                             <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

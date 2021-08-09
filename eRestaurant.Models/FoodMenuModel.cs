@@ -23,6 +23,7 @@ namespace RocketPOS.Models
 
         [DisplayName("Code")]
         public string FoodMenuCode { get; set; }
+        public string FoodMenuBarCode { get; set; }
         public string ColourCode { get; set; }
         public decimal PurchasePrice {get; set;}
         public string BigThumb { get; set; }

@@ -27,7 +27,7 @@ namespace RocketPOS.Repository
 
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = " SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName , FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                var query = " SELECT  FM.Id, FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName ,FoodMenuBarCode, FoodMenuType, FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             " SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             " FM.Position,  OutletId, FM.IsActive, U.UnitName,T.TaxName as FoodVatTaxName  " +
                             " FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id " +
@@ -57,7 +57,7 @@ namespace RocketPOS.Repository
             List<FoodMenuModel> foodManuModelList = new List<FoodMenuModel>();
             using (SqlConnection con = new SqlConnection(_ConnectionString.Value.ConnectionString))
             {
-                var query = "SELECT  FM.Id, FM.UnitsId,FM.FoodVatTaxId, FoodMenuType,FoodCategoryId,FoodMenuCategoryName AS FoodCategoryName,FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
+                var query = "SELECT  FM.Id, FM.UnitsId,FM.FoodVatTaxId, FoodMenuType,FoodCategoryId,FoodMenuBarCode, FoodMenuCategoryName AS FoodCategoryName,FoodMenuName, FoodMenuCode, ColourCode, BigThumb, MediumThumb, SmallThumb," +
                             "SalesPrice, PurchasePrice,FM.Notes, IsVegItem, IsBeverages, FoodVat, Foodcess, OfferIsAvailable, " +
                             "FM.Position,  OutletId, FM.IsActive FROM FoodMenu FM INNER JOIN FoodMenuCategory FMC on FM.FoodCategoryId = FMC.Id WHERE FM.IsDeleted = 0 and " +
                             " FM.Id = " + foodMenuId +
@@ -101,10 +101,10 @@ namespace RocketPOS.Repository
                 con.Open();
                 SqlTransaction sqltrans = con.BeginTransaction();
                 var query = "INSERT INTO FoodMenu " +
-                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuType,FoodMenuCode, PurchasePrice,SalesPrice, Notes, UnitsId,FoodVatTaxId," +
+                    "(  Id,FoodCategoryId, FoodMenuName, FoodMenuType,FoodMenuCode, FoodMenuBarCode,PurchasePrice,SalesPrice, Notes, UnitsId,FoodVatTaxId," +
                     " Position,  IsActive) " +
                     "Values " +
-                    "(" + MaxId + ",  @FoodCategoryId, upper(@FoodMenuName),@FoodMenuType, @FoodMenuCode, @PurchasePrice,@SalesPrice, @Notes,@UnitsId,@FoodVatTaxId," +
+                    "(" + MaxId + ",  @FoodCategoryId, upper(@FoodMenuName),@FoodMenuType, @FoodMenuCode, @FoodMenuBarCode,@PurchasePrice,@SalesPrice, @Notes,@UnitsId,@FoodVatTaxId," +
                   "@Position,  @IsActive);" +
                     " SELECT CAST(SCOPE_IDENTITY() as INT);";
 
@@ -162,6 +162,7 @@ namespace RocketPOS.Repository
                      "FoodMenuName=@FoodMenuName, " +
                      "FoodMenuType=@FoodMenuType, " +
                      "FoodMenuCode=@FoodMenuCode, " +
+                     "FoodMenuBarCode=@FoodMenuBarCode," + 
                      "PurchasePrice=@PurchasePrice, " +
                      " UnitsId = @UnitsId," +
                      " FoodVatTaxId =@FoodVatTaxId ," +

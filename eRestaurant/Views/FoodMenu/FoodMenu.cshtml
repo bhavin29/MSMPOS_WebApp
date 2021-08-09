@@ -145,6 +145,12 @@
                                             <span asp-validation-for="Notes" class="text-danger"></span>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label asp-for="FoodMenuBarCode" class="control-label">Barcode</label>
+                                            <input asp-for="FoodMenuBarCode" class="form-control" />
+                                            <span asp-validation-for="FoodMenuBarCode" class="text-danger"></span>
+                                        </div>
+
                                         @if (Model != null)
                                         {
                                             @if (Model.Id > 0)
